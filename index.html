@@ -2246,7 +2246,7 @@ textarea{resize:vertical;min-height:90px}
   <div class="footer__bottom">
     <div class="footer__bottom-inner">
       <div>
-        <p>© 2026 <strong style="color:var(--text-muted)">Universidad del WingFoil Argentina</strong> · Todos los derechos reservados</p>
+        <p>Copyright 2026 · <strong style="color:var(--text-muted)">Escuela de WingFoil Argentina</strong> · Todos los derechos reservados · Francisco Deane</p>
         <p class="footer__credit">Hecho con 🌊 por <strong>Francisco Deane</strong> · La libertad es volar sobre el agua</p>
       </div>
       <a href="https://www.instagram.com/clubkitewing/" target="_blank" rel="noopener" class="footer__ig-btn" aria-label="Instagram">
@@ -3322,7 +3322,7 @@ function loadML() {
   var pending = ML_QUERIES.length;
 
   ML_QUERIES.forEach(function(q) {
-    var url = 'https://api.mercadolibre.com/sites/MLA/search?q=' + encodeURIComponent(q) + '&limit=50';
+    var url = '/api/ml-search?q=' + encodeURIComponent(q) + '&limit=50';
     fetch(url)
       .then(function(r){ return r.ok ? r.json() : {results:[]}; })
       .then(function(data){
