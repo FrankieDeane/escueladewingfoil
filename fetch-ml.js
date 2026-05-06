@@ -123,14 +123,13 @@ async function main() {
 
   console.log(`  📦 ${allResults.length} publicaciones únicas encontradas`);
 
-  // Filtrar solo items activos con stock disponible
-  // La API de búsqueda de ML ya devuelve solo activos, pero filtramos por si acaso
+  // La API de búsqueda de ML ya devuelve solo publicaciones activas.
+  // Solo excluimos las explícitamente cerradas o pausadas.
   const activos = allResults.filter(item =>
-    item.available_quantity > 0 &&
-    (item.status === 'active' || !item.status)
+    item.status !== 'closed' && item.status !== 'paused'
   );
 
-  console.log(`  ✅ ${activos.length} publicaciones con stock disponible`);
+  console.log(`  ✅ ${activos.length} publicaciones activas`);
 
   const productos = activos.map(mapItem);
 
