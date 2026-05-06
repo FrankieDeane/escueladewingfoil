@@ -2246,7 +2246,7 @@ textarea{resize:vertical;min-height:90px}
   <div class="footer__bottom">
     <div class="footer__bottom-inner">
       <div>
-        <p>Copyright 2026 · <strong style="color:var(--text-muted)">Escuela de WingFoil Argentina</strong> · Todos los derechos reservados · Francisco Deane</p>
+        <p>Copyright 2026. <strong style="color:var(--text-muted)">Escuela de WingFoil Argentina</strong>. Todos los derechos reservados. Francisco Deane</p>
         <p class="footer__credit">Hecho con 🌊 por <strong>Francisco Deane</strong> · La libertad es volar sobre el agua</p>
       </div>
       <a href="https://www.instagram.com/clubkitewing/" target="_blank" rel="noopener" class="footer__ig-btn" aria-label="Instagram">
@@ -3321,10 +3321,14 @@ function loadML() {
   var allItems = [];
   var pending = ML_QUERIES.length;
 
+  var errors = [];
   ML_QUERIES.forEach(function(q) {
     var url = '/api/ml-search?q=' + encodeURIComponent(q) + '&limit=50';
     fetch(url)
-      .then(function(r){ return r.ok ? r.json() : {results:[]}; })
+      .then(function(r){
+        if (!r.ok) { errors.push(q + ':HTTP' + r.status); return {results:[]}; }
+        return r.json();
+      })
       .then(function(data){
         (data.results || []).forEach(function(item){
           if (!seenIds[item.id]) {
@@ -3333,7 +3337,7 @@ function loadML() {
           }
         });
       })
-      .catch(function(){})
+      .catch(function(e){ errors.push(q + ':' + e.message); })
       .finally(function(){
         pending--;
         if (pending === 0) onAllFetched();
@@ -3345,7 +3349,8 @@ function loadML() {
     productos.sort(function(a,b){ return b.fecha.localeCompare(a.fecha); });
 
     if (productos.length === 0) {
-      grid.innerHTML = '<div class="ml-empty"><span class="ml-empty__icon">⚠️</span><h3>No se pudieron cargar las publicaciones</h3><p>La API de Mercado Libre no respondió correctamente. Probá recargar la página en unos minutos.</p></div>';
+      var errDetail = errors.length ? '<small style="opacity:.6;display:block;margin-top:8px">' + errors.slice(0,2).join(' | ') + '</small>' : '';
+      grid.innerHTML = '<div class="ml-empty"><span class="ml-empty__icon">⚠️</span><h3>No se pudieron cargar las publicaciones</h3><p>La API de Mercado Libre no respondió correctamente. Probá recargar la página en unos minutos.</p>' + errDetail + '</div>';
       var countEl = document.getElementById('mlVisibleCount');
       if (countEl) countEl.textContent = '0';
       return;
