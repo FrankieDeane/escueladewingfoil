@@ -3256,7 +3256,7 @@ function renderML() {
 }
 
 var ML_QUERIES = ['wingfoil','wing foil','ala wingfoil','tabla wingfoil','foil wingfoil','mástil wingfoil'];
-var ML_CACHE_KEY = 'ml_cache_v1';
+var ML_CACHE_KEY = 'ml_cache_v3';
 var ML_CACHE_TTL = 6 * 60 * 60 * 1000; // 6 horas
 
 var MARCAS_LIST = ['duotone','naish','f-one','north','core','armstrong','slingshot','cabrinha','flysurfer','ozone','starboard','fanatic'];
@@ -3344,9 +3344,15 @@ function loadML() {
     var productos = allItems.map(mlMapItem);
     productos.sort(function(a,b){ return b.fecha.localeCompare(a.fecha); });
 
+    if (productos.length === 0) {
+      grid.innerHTML = '<div class="ml-empty"><span class="ml-empty__icon">⚠️</span><h3>No se pudieron cargar las publicaciones</h3><p>La API de Mercado Libre no respondió correctamente. Probá recargar la página en unos minutos.</p></div>';
+      var countEl = document.getElementById('mlVisibleCount');
+      if (countEl) countEl.textContent = '0';
+      return;
+    }
+
     var now = new Date();
     mlData = { productos: productos, actualizado: now.toISOString(), ts: Date.now() };
-
     try { localStorage.setItem(ML_CACHE_KEY, JSON.stringify(mlData)); } catch(e) {}
 
     setMLUpdated(now);
