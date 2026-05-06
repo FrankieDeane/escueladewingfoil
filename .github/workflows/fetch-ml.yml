@@ -1,0 +1,37 @@
+name: Actualizar publicaciones Mercado Libre
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # Cada 6 horas: 00:00, 06:00, 12:00, 18:00 UTC
+  workflow_dispatch:          # Ejecución manual desde GitHub Actions
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Correr script de ML
+        run: node fetch-ml.js
+
+      - name: Commit y push si hay cambios
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ml-data.json
+          git diff --staged --quiet || git commit -m "🔄 Actualizar publicaciones ML $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push origin main
