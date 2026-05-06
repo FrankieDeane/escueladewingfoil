@@ -29,7 +29,12 @@ const MARCAS = ['duotone','naish','f-one','north','core','armstrong','slingshot'
 async function fetchQuery(query, offset = 0) {
   const url = `https://api.mercadolibre.com/sites/${SITE}/search?q=${encodeURIComponent(query)}&limit=${LIMIT}&offset=${offset}`;
   try {
-    const res = await fetch(url, { headers: { 'Accept': 'application/json' }, timeout: 10000 });
+    const res = await fetch(url, {
+      headers: {
+        'Accept': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+      },
+    });
     if (!res.ok) {
       console.warn(`  ⚠️  HTTP ${res.status} en query "${query}" offset=${offset}`);
       return { results: [], total: 0 };
