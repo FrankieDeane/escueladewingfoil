@@ -910,6 +910,14 @@ textarea{resize:vertical;min-height:90px}
 .counter{font-variant-numeric:tabular-nums}
 
 /* ============================================================
+   TABS DE EQUIPOS
+============================================================ */
+.eq-tabs{display:flex;gap:8px;margin-bottom:32px;border-bottom:2px solid var(--border);padding-bottom:0}
+.eq-tab{padding:10px 22px;border-radius:10px 10px 0 0;font-weight:700;font-size:14px;color:var(--text-muted);border:2px solid transparent;border-bottom:none;margin-bottom:-2px;transition:all .2s;background:none}
+.eq-tab.active{background:var(--surface);border-color:var(--border);color:var(--primary);border-bottom-color:var(--surface)}
+.eq-tab__live{display:inline-block;background:var(--accent);color:#fff;font-size:10px;padding:1px 6px;border-radius:99px;margin-left:6px;vertical-align:middle;animation:pulse 2s infinite}
+.eq-panel{display:none}.eq-panel.active{display:block}
+/* ============================================================
    MERCADO LIBRE SECTION
 ============================================================ */
 .ml-section{background:var(--surface-2)}
@@ -1021,7 +1029,6 @@ textarea{resize:vertical;min-height:90px}
       <a href="#instructores">Instructores</a>
       <a href="#spots">Mapa</a>
       <a href="#equipos">Equipos</a>
-      <a href="#mercadolibre">🛒 Mercado Libre</a>
       <a href="#riders">Riders</a>
       <a href="#camaras"><span>📡 Cámaras en vivo</span><span class="arrow">›</span></a>
   <a href="#calculadora">Calculadora</a>
@@ -1059,7 +1066,6 @@ textarea{resize:vertical;min-height:90px}
   <a href="#calculadora"><span>🧮 Calculadora Equipo</span><span class="arrow">›</span></a>
   <a href="#instructores"><span>👨‍🏫 Instructores</span><span class="arrow">›</span></a>
   <a href="#equipos"><span>🛒 Equipos en venta</span><span class="arrow">›</span></a>
-  <a href="#mercadolibre"><span>🟡 Mercado Libre</span><span class="arrow">›</span></a>
   <a href="#riders"><span>🌟 Riders & Legends</span><span class="arrow">›</span></a>
   <a href="#glosario"><span>📖 Glosario</span><span class="arrow">›</span></a>
   <a href="#marcas"><span>🏷️ Marcas</span><span class="arrow">›</span></a>
@@ -1635,9 +1641,98 @@ textarea{resize:vertical;min-height:90px}
   <div class="container">
     <span class="eyebrow">Marketplace</span>
     <h2 class="section-title">Equipos en Venta</h2>
-    <p class="section-sub">Comprá y vendé equipos de wingfoil y kitesurf entre riders. Publicá gratis y contactá directo por WhatsApp.</p>
-    <p class="equipos-disclaimer">⚠️ La Universidad del WingFoil no es responsable de la venta de productos publicados. Las transacciones son entre particulares, bajo exclusiva responsabilidad de las partes.</p>
-    <div class="equipos-grid" id="equiposGrid">
+
+    <!-- PESTAÑAS -->
+    <div class="eq-tabs" id="eqTabs">
+      <button class="eq-tab active" data-tab="ml">🟡 Mercado Libre <span class="eq-tab__live">Live</span></button>
+      <button class="eq-tab" data-tab="comunidad">👥 Comunidad</button>
+    </div>
+
+    <!-- PANEL MERCADO LIBRE -->
+    <div class="eq-panel active" id="eqPanelML">
+      <p class="section-sub" style="margin-bottom:28px">Publicaciones activas de wingfoil en Mercado Libre Argentina. Se actualizan automáticamente cada 6 horas. Lo que no aparece, ya se vendió.</p>
+
+      <div class="ml-filters" id="mlCatFilters">
+        <button class="ml-filter active" data-cat="all">Todos</button>
+        <button class="ml-filter" data-cat="wing">🪂 Wings</button>
+        <button class="ml-filter" data-cat="tabla">🏄 Tablas</button>
+        <button class="ml-filter" data-cat="foil">🦈 Foils</button>
+        <button class="ml-filter" data-cat="kit">📦 Kits</button>
+        <div class="ml-filter-sep"></div>
+        <button class="ml-filter" data-cond="usado">Usado</button>
+        <button class="ml-filter" data-cond="nuevo">Nuevo</button>
+      </div>
+
+      <div class="ml-search-row">
+        <div class="ml-search-field">
+          <label for="mlSearchInput">Buscar en título</label>
+          <input type="text" id="mlSearchInput" placeholder="Ej: Duotone, 5m, tabla 100L..."/>
+        </div>
+        <div class="ml-search-field" style="max-width:200px">
+          <label for="mlMarcaFilter">Marca</label>
+          <select id="mlMarcaFilter">
+            <option value="">Todas las marcas</option>
+            <option value="duotone">Duotone</option>
+            <option value="naish">Naish</option>
+            <option value="f-one">F-One</option>
+            <option value="north">North</option>
+            <option value="core">Core</option>
+            <option value="armstrong">Armstrong</option>
+            <option value="slingshot">Slingshot</option>
+            <option value="cabrinha">Cabrinha</option>
+            <option value="starboard">Starboard</option>
+            <option value="fanatic">Fanatic</option>
+          </select>
+        </div>
+        <div class="ml-search-field" style="max-width:200px">
+          <label for="mlUbicFilter">Ubicación</label>
+          <select id="mlUbicFilter">
+            <option value="">Todo el país</option>
+            <option value="Buenos Aires">Buenos Aires</option>
+            <option value="Capital Federal">CABA</option>
+            <option value="Córdoba">Córdoba</option>
+            <option value="Rosario">Rosario / Santa Fe</option>
+            <option value="Mendoza">Mendoza</option>
+            <option value="Bariloche">Bariloche</option>
+            <option value="Neuquén">Neuquén</option>
+            <option value="Mar del Plata">Mar del Plata</option>
+            <option value="Corrientes">Corrientes</option>
+            <option value="Entre Ríos">Entre Ríos</option>
+          </select>
+        </div>
+        <div class="ml-search-field" style="max-width:200px">
+          <label for="mlOrdenFilter">Ordenar por</label>
+          <select id="mlOrdenFilter">
+            <option value="reciente">Más reciente</option>
+            <option value="precio_asc">Precio: menor primero</option>
+            <option value="precio_desc">Precio: mayor primero</option>
+          </select>
+        </div>
+        <button class="ml-btn-clear" id="mlClearBtn">Limpiar filtros</button>
+      </div>
+
+      <div class="ml-stats">
+        <div class="ml-count">Mostrando <strong id="mlVisibleCount">–</strong> publicaciones</div>
+        <div class="ml-updated">Actualizado: <span id="mlUpdatedAt">–</span></div>
+      </div>
+
+      <div class="ml-grid" id="mlGrid">
+        <div class="ml-loading">
+          <div class="ml-loading__spinner"></div>
+          <span>Cargando publicaciones...</span>
+        </div>
+      </div>
+
+      <div class="ml-disclaimer">
+        <strong>Aviso:</strong> Publicaciones de Mercado Libre Argentina, actualizadas automáticamente cada 6 horas. La Universidad del WingFoil no es responsable por las transacciones. Verificá el perfil del vendedor en ML antes de comprar.
+      </div>
+    </div>
+
+    <!-- PANEL COMUNIDAD -->
+    <div class="eq-panel" id="eqPanelComunidad">
+      <p class="section-sub">Comprá y vendé equipos de wingfoil y kitesurf entre riders. Publicá gratis y contactá directo por WhatsApp.</p>
+      <p class="equipos-disclaimer">⚠️ La Universidad del WingFoil no es responsable de la venta de productos publicados. Las transacciones son entre particulares, bajo exclusiva responsabilidad de las partes.</p>
+      <div class="equipos-grid" id="equiposGrid">
       <div class="equipo-card">
         <span class="equipo-card__badge">🪂 Ala / Wing</span>
         <div class="equipo-card__title">Duotone Echo 5m — 2023</div>
@@ -1700,100 +1795,9 @@ textarea{resize:vertical;min-height:90px}
         <details class="faq-item"><summary>¿Hay competencias?</summary><div class="faq-answer"><p>Sí, regatas todo el año organizadas por distintos clubes. Hablá con tu instructor para sumarte al circuito.</p></div></details>
         <details class="faq-item"><summary>¿La Universidad del WingFoil ofrece clases?</summary><div class="faq-answer"><p>Nosotros no — sí los instructores que se sumaron a la página. Los perfiles los publican los propios usuarios. Verificá credenciales antes de contratar.</p></div></details>
       </div>
-    </div>
+    </div><!-- /eq-panel comunidad -->
   </div>
 </section>
-
-
-
-<!-- ============================================================ MERCADO LIBRE ============================================================ -->
-<section class="section ml-section" id="mercadolibre">
-  <div class="container">
-    <span class="eyebrow">🟡 Mercado Libre · Live</span>
-    <h2 class="section-title">Equipos en Mercado Libre</h2>
-    <p class="section-sub">Publicaciones activas de wingfoil en Mercado Libre Argentina. Se actualizan automáticamente cada 6 horas. Lo que no aparece, ya se vendió.</p>
-
-    <!-- FILTROS DE CATEGORÍA -->
-    <div class="ml-filters" id="mlCatFilters">
-      <button class="ml-filter active" data-cat="all">Todos</button>
-      <button class="ml-filter" data-cat="wing">🪂 Wings</button>
-      <button class="ml-filter" data-cat="tabla">🏄 Tablas</button>
-      <button class="ml-filter" data-cat="foil">🦈 Foils</button>
-      <button class="ml-filter" data-cat="kit">📦 Kits</button>
-      <div class="ml-filter-sep"></div>
-      <button class="ml-filter" data-cond="usado">Usado</button>
-      <button class="ml-filter" data-cond="nuevo">Nuevo</button>
-    </div>
-
-    <!-- FILTROS DE BÚSQUEDA -->
-    <div class="ml-search-row">
-      <div class="ml-search-field">
-        <label for="mlSearchInput">Buscar en título</label>
-        <input type="text" id="mlSearchInput" placeholder="Ej: Duotone, 5m, tabla 100L..."/>
-      </div>
-      <div class="ml-search-field" style="max-width:200px">
-        <label for="mlMarcaFilter">Marca</label>
-        <select id="mlMarcaFilter">
-          <option value="">Todas las marcas</option>
-          <option value="duotone">Duotone</option>
-          <option value="naish">Naish</option>
-          <option value="f-one">F-One</option>
-          <option value="north">North</option>
-          <option value="core">Core</option>
-          <option value="armstrong">Armstrong</option>
-          <option value="slingshot">Slingshot</option>
-          <option value="cabrinha">Cabrinha</option>
-          <option value="starboard">Starboard</option>
-          <option value="fanatic">Fanatic</option>
-        </select>
-      </div>
-      <div class="ml-search-field" style="max-width:200px">
-        <label for="mlUbicFilter">Ubicación</label>
-        <select id="mlUbicFilter">
-          <option value="">Todo el país</option>
-          <option value="Buenos Aires">Buenos Aires</option>
-          <option value="Capital Federal">CABA</option>
-          <option value="Córdoba">Córdoba</option>
-          <option value="Rosario">Rosario / Santa Fe</option>
-          <option value="Mendoza">Mendoza</option>
-          <option value="Bariloche">Bariloche</option>
-          <option value="Neuquén">Neuquén</option>
-          <option value="Mar del Plata">Mar del Plata</option>
-          <option value="Corrientes">Corrientes</option>
-          <option value="Entre Ríos">Entre Ríos</option>
-        </select>
-      </div>
-      <div class="ml-search-field" style="max-width:200px">
-        <label for="mlOrdenFilter">Ordenar por</label>
-        <select id="mlOrdenFilter">
-          <option value="reciente">Más reciente</option>
-          <option value="precio_asc">Precio: menor primero</option>
-          <option value="precio_desc">Precio: mayor primero</option>
-        </select>
-      </div>
-      <button class="ml-btn-clear" id="mlClearBtn">Limpiar filtros</button>
-    </div>
-
-    <!-- STATS -->
-    <div class="ml-stats">
-      <div class="ml-count">Mostrando <strong id="mlVisibleCount">–</strong> publicaciones</div>
-      <div class="ml-updated">Actualizado: <span id="mlUpdatedAt">–</span></div>
-    </div>
-
-    <!-- GRID -->
-    <div class="ml-grid" id="mlGrid">
-      <div class="ml-loading">
-        <div class="ml-loading__spinner"></div>
-        <span>Cargando publicaciones...</span>
-      </div>
-    </div>
-
-    <div class="ml-disclaimer">
-      <strong>Aviso:</strong> Estas publicaciones son de Mercado Libre Argentina y se actualizan automáticamente cada 6 horas. La Universidad del WingFoil no es responsable por las transacciones. Siempre verificá el perfil del vendedor en ML antes de comprar.
-    </div>
-  </div>
-</section>
-
 
 <!-- ============================================================ MANIOBRAS ============================================================ -->
 <section class="section maniobras" id="maniobras">
@@ -3201,6 +3205,23 @@ document.addEventListener('keydown', function(e){
 });
 
 
+})();
+</script>
+
+<!-- ============================================================ TABS EQUIPOS JS ============================================================ -->
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.eq-tab');
+  tabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      tabs.forEach(function(t){ t.classList.remove('active'); });
+      tab.classList.add('active');
+      var target = tab.dataset.tab;
+      document.querySelectorAll('.eq-panel').forEach(function(p){ p.classList.remove('active'); });
+      var panel = target === 'ml' ? document.getElementById('eqPanelML') : document.getElementById('eqPanelComunidad');
+      if (panel) panel.classList.add('active');
+    });
+  });
 })();
 </script>
 
