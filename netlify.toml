@@ -1,0 +1,6 @@
+[build]
+  publish = "."
+
+[[edge_functions]]
+  path = "/api/ml-search"
+  function = "ml-search"
