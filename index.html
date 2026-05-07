@@ -55,6 +55,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
   <meta name="apple-mobile-web-app-title" content="WingFoil ARG"/>
   <link rel="apple-touch-icon" href="/icon-192.png"/>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
   <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700,800&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
 
   <style>
@@ -557,8 +558,13 @@ textarea{resize:vertical;min-height:90px}
 @media(max-width:520px){.disclaimer-box{padding:22px 18px;flex-direction:column;gap:12px}}
 
 /* 3D PARALLAX EFFECTS */
-.anatomy__visual{transform-style:preserve-3d;transition:transform .15s ease-out}
-.anatomy__visual:hover{transform:rotateY(2deg) rotateX(-1deg)}
+/* 3D canvas replaces SVG — disable legacy hover tilt */
+.anatomy__visual{transform-style:flat;transition:none}
+.anatomy__visual:hover{transform:none}
+#foilCanvas{border-radius:12px;display:block}
+/* Nav section background overlay */
+#navBgOverlay{position:fixed;inset:0;z-index:9;pointer-events:none;opacity:0;background-size:cover;background-position:center;transition:opacity .35s ease;will-change:opacity}
+#navBgOverlay::after{content:'';position:absolute;inset:0;background:rgba(2,10,22,.55)}
 .spot-card,.rider-card,.equipo-card,.instructor-card,.about__card,.step-card{transform-style:preserve-3d;will-change:transform}
 .spot-card__img,.rider-card__media{transform:translateZ(0)}
 
@@ -979,12 +985,6 @@ textarea{resize:vertical;min-height:90px}
 
 .ml-disclaimer{margin-top:24px;padding:14px 18px;background:rgba(0,180,216,.07);border-left:3px solid var(--primary);border-radius:8px;font-size:13px;color:var(--text-muted);line-height:1.6}
 .ml-disclaimer strong{color:var(--text)}
-.ml-direct{padding:32px 0;text-align:center}
-.ml-direct__titulo{font-size:18px;font-weight:700;margin-bottom:24px;color:var(--text)}
-.ml-direct__btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:20px}
-.ml-direct__btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:99px;background:var(--surface-2);border:2px solid var(--border);font-weight:700;font-size:14px;color:var(--text);transition:all .2s}
-.ml-direct__btn:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-glow)}
-.ml-direct__sub{font-size:13px;color:var(--text-muted)}
 
 @media(max-width:640px){
   .ml-search-row{gap:10px}
@@ -1083,6 +1083,9 @@ textarea{resize:vertical;min-height:90px}
     </a>
   </div>
 </nav>
+
+<!-- Nav section background overlay -->
+<div id="navBgOverlay" aria-hidden="true"></div>
 
 <!-- ============================================================ HERO ============================================================ -->
 <section class="hero" id="inicio">
@@ -1327,90 +1330,16 @@ textarea{resize:vertical;min-height:90px}
     <h2 class="section-title">Anatomía del <span style="color:var(--primary)">Foil</span></h2>
     <p class="section-sub">Tocá cada parte para entender qué hace y por qué importa. Antes de comprar equipo, es clave saber de qué hablan los riders.</p>
     <div class="anatomy__body">
-      <div class="anatomy__visual">
-        <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;background:linear-gradient(180deg,#e8f4fc 0%,#c4e3f5 60%,#9bcde7 100%);border-radius:8px;display:block;aspect-ratio:16/10" role="img" aria-label="Diagrama de las partes del foil de wingfoil">
-  <!-- water surface -->
-  <line x1="0" y1="180" x2="800" y2="180" stroke="rgba(0,100,140,.25)" stroke-width="1.5" stroke-dasharray="6,4"/>
-  <text x="780" y="174" text-anchor="end" font-size="11" fill="rgba(0,80,120,.55)" font-weight="600" letter-spacing="1">SUPERFICIE DEL AGUA</text>
-
-  <!-- BOARD -->
-  <ellipse cx="240" cy="135" rx="170" ry="12" fill="#f3f6fa" stroke="#1a3558" stroke-width="2"/>
-  <ellipse cx="240" cy="130" rx="170" ry="12" fill="#ffffff" stroke="#1a3558" stroke-width="2"/>
-  <text x="240" y="105" text-anchor="middle" font-size="13" font-weight="700" fill="#1a3558">TABLA</text>
-
-  <!-- BASE PLATE (1) -->
-  <rect x="180" y="142" width="80" height="14" rx="2" fill="#5a8fb5" stroke="#1a3558" stroke-width="1.5"/>
-  <rect x="195" y="138" width="10" height="6" fill="#1a3558"/>
-  <rect x="235" y="138" width="10" height="6" fill="#1a3558"/>
-
-  <!-- MAST (2) -->
-  <rect x="212" y="156" width="16" height="180" fill="url(#mastGrad)" stroke="#1a3558" stroke-width="1.5" rx="1"/>
-  <defs>
-    <linearGradient id="mastGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#3a6088"/>
-      <stop offset="50%" stop-color="#5a8fb5"/>
-      <stop offset="100%" stop-color="#3a6088"/>
-    </linearGradient>
-    <linearGradient id="wingGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#0a2542"/>
-      <stop offset="100%" stop-color="#1a3558"/>
-    </linearGradient>
-  </defs>
-
-  <!-- FUSELAGE (3) -->
-  <rect x="120" y="338" width="220" height="10" rx="3" fill="#3a6088" stroke="#0a2542" stroke-width="1.5"/>
-
-  <!-- FRONT WING (4) -->
-  <path d="M 50,358 Q 130,335 220,348 Q 130,372 50,358 Z" fill="url(#wingGrad)" stroke="#0a2542" stroke-width="1.5"/>
-  <path d="M 80,355 Q 130,348 180,353" stroke="rgba(255,255,255,.25)" stroke-width="1" fill="none"/>
-
-  <!-- STABILIZER (5) -->
-  <path d="M 280,346 Q 320,338 360,343 Q 320,355 280,346 Z" fill="#5a8fb5" stroke="#0a2542" stroke-width="1.5"/>
-
-  <!-- LABELS WITH NUMBERS -->
-  <g font-family="system-ui, sans-serif" font-weight="800" font-size="14">
-    <!-- 1: Base Plate -->
-    <line x1="220" y1="149" x2="370" y2="100" stroke="#0077a8" stroke-width="1" stroke-dasharray="3,2" opacity=".6"/>
-    <circle cx="380" cy="100" r="14" fill="#00b4d8" stroke="#fff" stroke-width="2"/>
-    <text x="380" y="105" text-anchor="middle" fill="#fff" font-size="13">1</text>
-    <text x="402" y="103" font-size="11" fill="#0a2542" font-weight="700">BASE PLATE</text>
-
-    <!-- 2: Mast -->
-    <line x1="228" y1="240" x2="370" y2="240" stroke="#0077a8" stroke-width="1" stroke-dasharray="3,2" opacity=".6"/>
-    <circle cx="380" cy="240" r="14" fill="#00b4d8" stroke="#fff" stroke-width="2"/>
-    <text x="380" y="245" text-anchor="middle" fill="#fff" font-size="13">2</text>
-    <text x="402" y="243" font-size="11" fill="#0a2542" font-weight="700">MÁSTIL</text>
-
-    <!-- 3: Fuselage -->
-    <line x1="340" y1="343" x2="500" y2="320" stroke="#0077a8" stroke-width="1" stroke-dasharray="3,2" opacity=".6"/>
-    <circle cx="510" cy="320" r="14" fill="#00b4d8" stroke="#fff" stroke-width="2"/>
-    <text x="510" y="325" text-anchor="middle" fill="#fff" font-size="13">3</text>
-    <text x="532" y="323" font-size="11" fill="#0a2542" font-weight="700">FUSELAJE</text>
-
-    <!-- 4: Front Wing -->
-    <line x1="130" y1="360" x2="60" y2="430" stroke="#0077a8" stroke-width="1" stroke-dasharray="3,2" opacity=".6"/>
-    <circle cx="50" cy="440" r="14" fill="#00b4d8" stroke="#fff" stroke-width="2"/>
-    <text x="50" y="445" text-anchor="middle" fill="#fff" font-size="13">4</text>
-    <text x="72" y="443" font-size="11" fill="#0a2542" font-weight="700">ALA DELANTERA</text>
-
-    <!-- 5: Stabilizer -->
-    <line x1="320" y1="350" x2="500" y2="430" stroke="#0077a8" stroke-width="1" stroke-dasharray="3,2" opacity=".6"/>
-    <circle cx="510" cy="440" r="14" fill="#00b4d8" stroke="#fff" stroke-width="2"/>
-    <text x="510" y="445" text-anchor="middle" fill="#fff" font-size="13">5</text>
-    <text x="532" y="443" font-size="11" fill="#0a2542" font-weight="700">ESTABILIZADOR</text>
-  </g>
-
-  <!-- bubbles for atmosphere -->
-  <circle cx="80" cy="400" r="3" fill="rgba(255,255,255,.4)"/>
-  <circle cx="700" cy="380" r="2" fill="rgba(255,255,255,.4)"/>
-  <circle cx="640" cy="450" r="2.5" fill="rgba(255,255,255,.5)"/>
-  <circle cx="180" cy="460" r="2" fill="rgba(255,255,255,.4)"/>
-</svg>
-        <button class="foil-dot" data-part="0" aria-label="Base plate" style="left:27%;top:30%"><span class="foil-dot__ring"></span><span class="foil-dot__core">1</span></button>
-        <button class="foil-dot" data-part="1" aria-label="Mástil" style="left:27%;top:50%"><span class="foil-dot__ring"></span><span class="foil-dot__core">2</span></button>
-        <button class="foil-dot" data-part="2" aria-label="Fuselaje" style="left:29%;top:69%"><span class="foil-dot__ring"></span><span class="foil-dot__core">3</span></button>
-        <button class="foil-dot" data-part="3" aria-label="Ala delantera" style="left:14%;top:73%"><span class="foil-dot__ring"></span><span class="foil-dot__core">4</span></button>
-        <button class="foil-dot" data-part="4" aria-label="Estabilizador" style="left:40%;top:70%"><span class="foil-dot__ring"></span><span class="foil-dot__core">5</span></button>
+      <div class="anatomy__visual" style="padding:0;cursor:grab">
+        <canvas id="foilCanvas" style="width:100%;display:block;cursor:inherit;touch-action:none" aria-label="Foil 3D interactivo"></canvas>
+        <div id="foilLabels" style="position:absolute;inset:0;pointer-events:none">
+          <button class="foil-dot" data-part="0" aria-label="Base plate" style="pointer-events:all"><span class="foil-dot__ring"></span><span class="foil-dot__core">1</span></button>
+          <button class="foil-dot" data-part="1" aria-label="Mástil" style="pointer-events:all"><span class="foil-dot__ring"></span><span class="foil-dot__core">2</span></button>
+          <button class="foil-dot" data-part="2" aria-label="Fuselaje" style="pointer-events:all"><span class="foil-dot__ring"></span><span class="foil-dot__core">3</span></button>
+          <button class="foil-dot" data-part="3" aria-label="Ala delantera" style="pointer-events:all"><span class="foil-dot__ring"></span><span class="foil-dot__core">4</span></button>
+          <button class="foil-dot" data-part="4" aria-label="Estabilizador" style="pointer-events:all"><span class="foil-dot__ring"></span><span class="foil-dot__core">5</span></button>
+        </div>
+        <p style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);margin:0;font-size:11px;color:rgba(255,255,255,.4);letter-spacing:.05em;white-space:nowrap;pointer-events:none">Arrastrá para rotar · Tocá los números</p>
       </div>
       <div class="anatomy__parts" id="foilParts">
         <div class="foil-part active" data-part="0"><div class="foil-part__header"><span class="foil-part__num">1</span><span class="foil-part__name">Base Plate</span></div><p class="foil-part__desc">Se atornilla al box de la tabla. Es el puente entre rider y foil. Su rigidez y compatibilidad (Tuttle, Deep Tuttle, US Box) define la transmisión de potencia.</p></div>
@@ -3370,20 +3299,9 @@ async function loadML() {
     productos.sort(function(a,b){ return b.fecha.localeCompare(a.fecha); });
 
     if (productos.length === 0) {
-      grid.innerHTML =
-        '<div class="ml-direct">' +
-          '<p class="ml-direct__titulo">Buscá wingfoil directamente en Mercado Libre Argentina</p>' +
-          '<div class="ml-direct__btns">' +
-            '<a class="ml-direct__btn" href="https://listado.mercadolibre.com.ar/deportes-fitness/wingfoil" target="_blank" rel="noopener">🔍 Todos los equipos</a>' +
-            '<a class="ml-direct__btn" href="https://listado.mercadolibre.com.ar/deportes-fitness/ala-wing-wingfoil" target="_blank" rel="noopener">🪂 Wings / Alas</a>' +
-            '<a class="ml-direct__btn" href="https://listado.mercadolibre.com.ar/deportes-fitness/tabla-wingfoil" target="_blank" rel="noopener">🏄 Tablas</a>' +
-            '<a class="ml-direct__btn" href="https://listado.mercadolibre.com.ar/deportes-fitness/foil-wingfoil" target="_blank" rel="noopener">🦈 Foils</a>' +
-            '<a class="ml-direct__btn" href="https://listado.mercadolibre.com.ar/deportes-fitness/kit-wingfoil" target="_blank" rel="noopener">📦 Kits completos</a>' +
-          '</div>' +
-          '<p class="ml-direct__sub">Los resultados se abren en Mercado Libre con los filtros ya aplicados.</p>' +
-        '</div>';
+      grid.innerHTML = '<p style="padding:48px 24px;text-align:center;color:var(--text-muted);font-size:15px">No hay publicaciones disponibles en este momento. Volvé a intentar más tarde.</p>';
       var countEl = document.getElementById('mlVisibleCount');
-      if (countEl) countEl.textContent = '–';
+      if (countEl) countEl.textContent = '0';
       return;
     }
 
@@ -3483,6 +3401,198 @@ if (mlClearBtn) {
 // Cargar al inicio
 loadML();
 
+})();
+</script>
+
+<!-- Three.js for 3D foil -->
+<script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
+<script>
+// ===== 3D FOIL ANATOMY =====
+(function() {
+  var canvas = document.getElementById('foilCanvas');
+  if (!canvas || typeof THREE === 'undefined') return;
+
+  var container = canvas.parentElement;
+  var labelsDiv = document.getElementById('foilLabels');
+
+  function getW() { return container.clientWidth || 600; }
+
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(0x040e1a, 1);
+  renderer.shadowMap.enabled = false;
+
+  var scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0x040e1a, 18, 30);
+
+  var camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+  camera.position.set(3.8, 2.0, 5.0);
+  camera.lookAt(0, 0.3, 0);
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0x3366bb, 1.0));
+  var sun = new THREE.DirectionalLight(0xffffff, 1.6);
+  sun.position.set(5, 10, 6);
+  scene.add(sun);
+  var rim = new THREE.DirectionalLight(0x0099ff, 0.45);
+  rim.position.set(-4, -2, -4);
+  scene.add(rim);
+
+  // Water surface
+  var waterMat = new THREE.MeshStandardMaterial({ color: 0x005577, transparent: true, opacity: 0.38, side: THREE.DoubleSide, roughness: 0.9 });
+  var water = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), waterMat);
+  water.rotation.x = -Math.PI / 2;
+  water.position.y = 0.07;
+  scene.add(water);
+
+  // Foil group
+  var fg = new THREE.Group();
+  scene.add(fg);
+
+  var mBoard   = new THREE.MeshStandardMaterial({ color: 0xe8f0ff, roughness: 0.4, metalness: 0.1 });
+  var mBase    = new THREE.MeshStandardMaterial({ color: 0x5a8fb5, roughness: 0.35, metalness: 0.4 });
+  var mMast    = new THREE.MeshStandardMaterial({ color: 0x2a5580, roughness: 0.18, metalness: 0.8 });
+  var mFuse    = new THREE.MeshStandardMaterial({ color: 0x1a3558, roughness: 0.3, metalness: 0.6 });
+  var mWing    = new THREE.MeshStandardMaterial({ color: 0x0d1f36, roughness: 0.25, metalness: 0.55 });
+  var mStab    = new THREE.MeshStandardMaterial({ color: 0x3a6088, roughness: 0.35, metalness: 0.45 });
+
+  function mesh(geo, mat, x, y, z) {
+    var m = new THREE.Mesh(geo, mat);
+    m.position.set(x, y, z);
+    fg.add(m);
+    return m;
+  }
+
+  mesh(new THREE.BoxGeometry(3.2, 0.18, 0.85), mBoard,  0,  1.55,  0);    // tabla
+  mesh(new THREE.BoxGeometry(0.65, 0.09, 0.38), mBase,  0,  0.90,  0);    // base plate (1)
+  mesh(new THREE.BoxGeometry(0.13, 1.65, 0.055), mMast, 0,  0.05,  0);    // mástil (2)
+  mesh(new THREE.BoxGeometry(0.09, 0.09, 1.95), mFuse,  0, -0.82, -0.1);  // fuselaje (3)
+  mesh(new THREE.BoxGeometry(2.8, 0.048, 0.52),  mWing, 0, -0.90,  0.65); // ala del (4)
+  mesh(new THREE.BoxGeometry(1.1, 0.04, 0.22),   mStab, 0, -0.90, -1.05); // estab (5)
+
+  // 3D label anchor positions (local to fg)
+  var anchors = [
+    new THREE.Vector3( 0.45,  0.90,  0.25),  // 1 base plate
+    new THREE.Vector3( 0.12,  0.30,  0.05),  // 2 mast mid
+    new THREE.Vector3( 0.10, -0.82, -0.10),  // 3 fuselage
+    new THREE.Vector3(-1.35, -0.90,  0.65),  // 4 front wing tip
+    new THREE.Vector3( 0.65, -0.90, -1.05),  // 5 stabilizer
+  ];
+
+  var dots = labelsDiv ? Array.from(labelsDiv.querySelectorAll('.foil-dot')) : [];
+  var tmp = new THREE.Vector3();
+
+  function updateLabels() {
+    var cw = canvas.clientWidth;
+    var ch = canvas.clientHeight;
+    anchors.forEach(function(a, i) {
+      if (!dots[i]) return;
+      tmp.copy(a);
+      fg.localToWorld(tmp);
+      tmp.project(camera);
+      var x = (tmp.x * 0.5 + 0.5) * cw;
+      var y = (-tmp.y * 0.5 + 0.5) * ch;
+      var ok = tmp.z < 1 && x > 10 && x < cw - 10 && y > 10 && y < ch - 10;
+      dots[i].style.visibility = ok ? 'visible' : 'hidden';
+      dots[i].style.left = x + 'px';
+      dots[i].style.top  = y + 'px';
+    });
+  }
+
+  // Drag orbit
+  var drag = false, px = 0, py = 0, ry = -0.4, rx = 0.15, auto = true;
+
+  canvas.addEventListener('mousedown', function(e) {
+    drag = true; auto = false; px = e.clientX; py = e.clientY;
+    canvas.style.cursor = 'grabbing'; e.preventDefault();
+  });
+  window.addEventListener('mousemove', function(e) {
+    if (!drag) return;
+    ry += (e.clientX - px) * 0.013; rx += (e.clientY - py) * 0.009;
+    rx = Math.max(-1.0, Math.min(0.8, rx));
+    px = e.clientX; py = e.clientY;
+  });
+  window.addEventListener('mouseup', function() { drag = false; if (canvas) canvas.style.cursor = 'grab'; });
+
+  canvas.addEventListener('touchstart', function(e) {
+    drag = true; auto = false; px = e.touches[0].clientX; py = e.touches[0].clientY;
+  }, { passive: true });
+  canvas.addEventListener('touchmove', function(e) {
+    if (!drag || !e.touches[0]) return;
+    ry += (e.touches[0].clientX - px) * 0.013; rx += (e.touches[0].clientY - py) * 0.009;
+    rx = Math.max(-1.0, Math.min(0.8, rx));
+    px = e.touches[0].clientX; py = e.touches[0].clientY;
+    e.preventDefault();
+  }, { passive: false });
+  canvas.addEventListener('touchend', function() { drag = false; });
+
+  function resize() {
+    if (!container) return;
+    var w = container.clientWidth || 600;
+    var h = Math.round(w * 0.625);
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  var t = 0;
+  (function loop() {
+    requestAnimationFrame(loop);
+    t += 0.016;
+    if (auto) ry += 0.003;
+    fg.rotation.y = ry;
+    fg.rotation.x = rx;
+    water.position.y = 0.07 + Math.sin(t * 0.5) * 0.04;
+    renderer.render(scene, camera);
+    updateLabels();
+  })();
+})();
+</script>
+
+<script>
+// ===== NAV SECTION BACKGROUND IMAGES =====
+(function() {
+  var overlay = document.getElementById('navBgOverlay');
+  if (!overlay) return;
+
+  var pool = [
+    'https://source.unsplash.com/1920x1080/?wingfoil',
+    'https://source.unsplash.com/1920x1080/?wingfoil,ocean',
+    'https://source.unsplash.com/1920x1080/?wingfoil,wave',
+    'https://source.unsplash.com/1920x1080/?wingfoil,sport',
+    'https://source.unsplash.com/1920x1080/?kiteboarding,water',
+    'https://source.unsplash.com/1920x1080/?surfing,ocean,action',
+    'https://source.unsplash.com/1920x1080/?foilboard,water',
+    'https://source.unsplash.com/1920x1080/?windsurf,ocean',
+  ];
+
+  var idx = 0;
+  var timer = null;
+
+  function showBg(url) {
+    overlay.style.backgroundImage = 'url(' + url + ')';
+    overlay.style.opacity = '1';
+    clearTimeout(timer);
+    timer = setTimeout(function() {
+      overlay.style.opacity = '0';
+    }, 700);
+  }
+
+  function onNavClick() {
+    var url = pool[idx % pool.length];
+    idx++;
+    // Preload then show
+    var img = new Image();
+    img.onload = function() { showBg(url); };
+    img.onerror = function() { showBg(pool[0]); };
+    img.src = url;
+  }
+
+  document.querySelectorAll('.nav-desktop a, .nav-drawer a').forEach(function(a) {
+    a.addEventListener('click', onNavClick);
+  });
 })();
 </script>
 
