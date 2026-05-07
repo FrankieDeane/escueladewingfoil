@@ -3306,7 +3306,7 @@ function mlMapItem(item) {
   };
 }
 
-function loadML() {
+async function loadML() {
   var grid = document.getElementById('mlGrid');
   if (!grid) return;
 
@@ -3322,6 +3322,21 @@ function loadML() {
   } catch(e) {}
 
   grid.innerHTML = '<div class="ml-loading"><div class="ml-loading__spinner"></div><span>Cargando publicaciones de Mercado Libre...</span></div>';
+
+  // Primero intentar ml-data.json (actualizado cada hora por GitHub Actions)
+  try {
+    var r = await fetch('ml-data.json?v=' + Date.now());
+    if (r.ok) {
+      var data = await r.json();
+      if (data.productos && data.productos.length > 0) {
+        mlData = { productos: data.productos, actualizado: data.actualizado, ts: Date.now() };
+        try { localStorage.setItem(ML_CACHE_KEY, JSON.stringify(mlData)); } catch(e) {}
+        setMLUpdated(new Date(data.actualizado));
+        renderML();
+        return;
+      }
+    }
+  } catch(e) {}
 
   var seenIds = {};
   var allItems = [];
