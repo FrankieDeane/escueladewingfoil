@@ -128,7 +128,7 @@ async function scrapeHardwind(browser) {
       id: 'hw-' + (i.href.split('/').filter(Boolean).pop() || Math.random().toString(36).slice(2)),
       titulo: i.titulo,
       precio: cleanPrice(i.priceText),
-      moneda: 'EUR',
+      moneda: 'ARS',
       condicion: 'nuevo',
       categoria: detectCategoria(i.titulo),
       marca: detectMarca(i.titulo),
