@@ -204,24 +204,118 @@ async function scrapeHardwind(browser) {
   }
 }
 
+// ── Facebook Marketplace (requiere cookies de sesión) ─────────────────────
+async function scrapeFacebook(browser) {
+  const rawCookies = process.env.FB_COOKIES;
+  if (!rawCookies) {
+    console.log('  ⚠  FB_COOKIES no configurado — salteando Facebook Marketplace');
+    return [];
+  }
+
+  let cookies;
+  try {
+    cookies = JSON.parse(rawCookies);
+  } catch(e) {
+    console.error('  ✗ FB_COOKIES no es JSON válido:', e.message);
+    return [];
+  }
+
+  const context = await browser.newContext({
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+    locale: 'es-AR',
+  });
+
+  try {
+    // Inyectar cookies de sesión
+    await context.addCookies(cookies);
+    const page = await context.newPage();
+
+    await page.goto(
+      'https://www.facebook.com/marketplace/106073429424644/search/?query=wingfoil',
+      { waitUntil: 'domcontentloaded', timeout: 50000 }
+    );
+    await page.waitForTimeout(5000);
+
+    const items = await page.evaluate(() => {
+      const results = [];
+      // Facebook Marketplace usa divs con roles y aria-labels
+      const cards = document.querySelectorAll(
+        '[aria-label="Collection of Marketplace items"] > div, ' +
+        '[data-testid="marketplace_feed_item"], ' +
+        'div[class*="x9f619"] a[href*="/marketplace/item/"]'
+      );
+
+      cards.forEach(card => {
+        const linkEl = card.tagName === 'A'
+          ? card
+          : card.querySelector('a[href*="/marketplace/item/"]');
+        if (!linkEl) return;
+
+        const href = linkEl.href.startsWith('http')
+          ? linkEl.href
+          : 'https://www.facebook.com' + linkEl.getAttribute('href');
+
+        // Título: primer span o div con texto visible
+        const spans = card.querySelectorAll('span[dir], span');
+        let titulo = '', priceText = '';
+        spans.forEach(s => {
+          const t = s.textContent.trim();
+          if (!t || t.length < 3) return;
+          if (/^\$/.test(t) || /^\d/.test(t)) { if (!priceText) priceText = t; }
+          else if (!titulo && t.length > 4) titulo = t;
+        });
+
+        const imgEl = card.querySelector('img');
+        const img = imgEl?.src || '';
+
+        if (titulo && href) results.push({ titulo, priceText, href, img });
+      });
+      return results;
+    });
+
+    console.log(`  ✓ Facebook Marketplace: ${items.length} publicaciones`);
+    return items.map(i => ({
+      id: 'fb-' + (i.href.match(/\/item\/(\d+)/) || ['','0'])[1],
+      titulo: i.titulo,
+      precio: cleanPrice(i.priceText),
+      moneda: 'ARS',
+      condicion: 'usado',
+      categoria: detectCategoria(i.titulo),
+      marca: detectMarca(i.titulo),
+      imagen: i.img,
+      url: i.href,
+      fuente: 'Facebook Marketplace',
+      fecha: new Date().toISOString().split('T')[0],
+    }));
+  } catch(e) {
+    console.error(`  ✗ Facebook Marketplace: ${e.message}`);
+    return [];
+  } finally {
+    await context.close();
+  }
+}
+
 async function main() {
-  console.log('🌐 Scrapeando GPX Store y Hardwind con Chrome...');
+  console.log('🌐 Scrapeando tiendas de wingfoil con Chrome...');
   const browser = await chromium.launch({
     headless: true,
     args: ['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage','--disable-blink-features=AutomationControlled'],
   });
 
-  let gpxItems = [], hwItems = [];
+  let gpxItems = [], hwItems = [], fbItems = [];
   try {
-    // Scrapear en paralelo
-    [gpxItems, hwItems] = await Promise.all([scrapeGPX(browser), scrapeHardwind(browser)]);
+    [gpxItems, hwItems, fbItems] = await Promise.all([
+      scrapeGPX(browser),
+      scrapeHardwind(browser),
+      scrapeFacebook(browser),
+    ]);
   } finally {
     await browser.close();
   }
 
   const seenIds = new Set();
   const productos = [];
-  for (const item of [...gpxItems, ...hwItems]) {
+  for (const item of [...gpxItems, ...hwItems, ...fbItems]) {
     if (item.titulo && !seenIds.has(item.id)) {
       seenIds.add(item.id);
       productos.push(item);
@@ -233,10 +327,10 @@ async function main() {
   const output = { actualizado: new Date().toISOString(), total: productos.length, productos };
   writeFileSync('store-data.json', JSON.stringify(output, null, 2), 'utf8');
   console.log(`\n💾 Guardados: ${productos.length} productos en store-data.json`);
-  console.log(`   GPX Store: ${gpxItems.length} | Hardwind: ${hwItems.length}`);
+  console.log(`   GPX: ${gpxItems.length} | Hardwind: ${hwItems.length} | Facebook: ${fbItems.length}`);
   if (productos.length === 0) {
     console.warn('⚠️  0 productos — revisar selectores o estructura de las páginas');
-    process.exit(1); // Falla el workflow para que sea visible en Actions
+    process.exit(1);
   }
 }
 
