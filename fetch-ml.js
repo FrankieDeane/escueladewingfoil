@@ -1,10 +1,10 @@
-// fetch-ml.js — scraper Playwright para tiendas argentinas/españolas de wingfoil
-// Corre en GitHub Actions cada 2 horas y guarda store-data.json
+// fetch-ml.js — scraper Playwright para GPX Store (Shopify) y Hardwind (WooCommerce)
+// Corre en GitHub Actions cada 2 horas, guarda store-data.json
 
 import { chromium } from 'playwright';
 import { writeFileSync } from 'fs';
 
-const MARCAS = ['duotone','naish','f-one','north','core','armstrong','slingshot','cabrinha','flysurfer','ozone','starboard','fanatic','liquid force','manera','rrd','nobile'];
+const MARCAS = ['duotone','naish','f-one','north','core','armstrong','slingshot','cabrinha','flysurfer','ozone','starboard','fanatic','liquid force','manera','rrd','nobile','manera'];
 
 function detectCategoria(titulo) {
   const t = titulo.toLowerCase();
@@ -17,58 +17,95 @@ function detectCategoria(titulo) {
 
 function detectMarca(titulo) {
   const t = titulo.toLowerCase();
-  for (const m of MARCAS) {
-    if (t.includes(m)) return m;
-  }
+  for (const m of MARCAS) if (t.includes(m)) return m;
   return '';
 }
 
 function cleanPrice(str) {
   if (!str) return 0;
-  const m = str.match(/[\d.,]+/);
-  if (!m) return 0;
-  const s = m[0].replace(/\.(?=\d{3})/g, '').replace(',', '.');
-  return parseFloat(s) || 0;
+  // Handle formats: $1.200.000 / 1200000 / 1.200,50
+  const s = str.replace(/[^\d.,]/g, '');
+  // If has dots as thousands separator (e.g. 1.200.000 or 1.200,50)
+  const lastComma = s.lastIndexOf(',');
+  const lastDot   = s.lastIndexOf('.');
+  let normalized;
+  if (lastComma > lastDot) {
+    // comma is decimal separator: 1.200,50 → 1200.50
+    normalized = s.replace(/\./g, '').replace(',', '.');
+  } else {
+    // dot is decimal separator or thousands: 1,200.50 or 1.200.000
+    normalized = s.replace(/,/g, '');
+  }
+  return parseFloat(normalized) || 0;
 }
 
+// ── GPX Store (Shopify) ────────────────────────────────────────────────────
 async function scrapeGPX(browser) {
   const page = await browser.newPage();
   try {
     await page.setExtraHTTPHeaders({ 'Accept-Language': 'es-AR,es;q=0.9' });
+    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
     await page.goto('https://gpxstore.com/outlet', { waitUntil: 'domcontentloaded', timeout: 50000 });
-    await page.waitForTimeout(3500);
+    await page.waitForTimeout(4000);
 
     const items = await page.evaluate(() => {
       const results = [];
-      // Shopify / custom — try multiple selector patterns
+      // Shopify Dawn/Debut theme card selectors
       const CARD_SELS = [
-        '.product-card','li.grid__item','[data-product-card]','[class*="product-card"]',
-        '.grid-product','[class*="ProductCard"]','.product-item','[class*="product_card"]',
+        'li.grid__item',
+        '.product-card',
+        '[data-product-card]',
+        '[class*="product-card"]',
+        '.grid-product',
+        '.collection-grid__item',
       ];
       let cards = [];
       for (const s of CARD_SELS) {
         const found = [...document.querySelectorAll(s)];
         if (found.length >= 2) { cards = found; break; }
       }
+
       cards.forEach(card => {
-        const titleEl = card.querySelector('[class*="title"],[class*="name"],h2,h3,h4');
-        const priceEl = card.querySelector('[class*="price"]:not([class*="compare"]):not([class*="was"]):not([class*="original"]),.money');
-        const linkEl  = card.querySelector('a[href]');
-        const imgEl   = card.querySelector('img');
+        // Title: Shopify Dawn uses .card__heading a or .card__heading h3
+        const titleEl = card.querySelector(
+          '.card__heading a, .card__heading h3, .card__heading, ' +
+          '[class*="card__title"], [class*="card-title"], ' +
+          '[class*="product-title"], [class*="product_title"], ' +
+          '[class*="title"] a, h2 a, h3 a, h2, h3'
+        );
         if (!titleEl) return;
         const titulo = titleEl.textContent.trim();
         if (!titulo || titulo.length < 3) return;
-        const href = linkEl ? (linkEl.href.startsWith('http') ? linkEl.href : 'https://gpxstore.com' + linkEl.getAttribute('href')) : '';
-        const img = imgEl?.src || imgEl?.getAttribute('data-src') || imgEl?.getAttribute('data-lazy-src') || '';
-        const priceText = priceEl?.textContent?.trim() || '';
-        results.push({ titulo, priceText, href, img });
+
+        // Price: Shopify uses .price__regular .price-item or span.money
+        const priceEl = card.querySelector(
+          '.price-item--sale, .price-item--regular, span.money, ' +
+          '.price__sale, .price__regular, [class*="price-item"], ' +
+          '[class*="price"]:not([class*="compare"]):not([class*="was"]):not(del)'
+        );
+
+        // Link
+        const linkEl = card.querySelector(
+          'a.full-unstyled-link, a[href*="/products/"], a.card__heading, a[href]'
+        );
+        const href = linkEl
+          ? (linkEl.href.startsWith('http') ? linkEl.href : 'https://gpxstore.com' + linkEl.getAttribute('href'))
+          : '';
+        if (!href) return;
+
+        // Image: lazy-loaded in Shopify
+        const imgEl = card.querySelector('img');
+        const img = imgEl?.src && !imgEl.src.includes('cdn.shopify.com/s/files/1/0') ? imgEl.src
+          : imgEl?.getAttribute('data-src') || imgEl?.getAttribute('data-lazy-src') || imgEl?.src || '';
+
+        results.push({ titulo, priceText: priceEl?.textContent?.trim() || '', href, img });
       });
       return results;
     });
 
     console.log(`  ✓ GPX Store: ${items.length} productos`);
-    return items.filter(i => i.href).map(i => ({
-      id: 'gpx-' + (i.href.split('/').filter(Boolean).pop() || Math.random().toString(36).slice(2)),
+    return items.map(i => ({
+      id: 'gpx-' + i.href.split('/products/').pop().split('?')[0].replace(/\//g,''),
       titulo: i.titulo,
       precio: cleanPrice(i.priceText),
       moneda: 'ARS',
@@ -88,44 +125,66 @@ async function scrapeGPX(browser) {
   }
 }
 
+// ── Hardwind Argentina (WooCommerce) ──────────────────────────────────────
 async function scrapeHardwind(browser) {
   const page = await browser.newPage();
   try {
-    await page.setExtraHTTPHeaders({ 'Accept-Language': 'es-ES,es;q=0.9' });
+    await page.setExtraHTTPHeaders({ 'Accept-Language': 'es-AR,es;q=0.9' });
+    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
     await page.goto('https://hardwind.com/wing/', { waitUntil: 'domcontentloaded', timeout: 50000 });
-    await page.waitForTimeout(3500);
+    await page.waitForTimeout(4000);
 
     const items = await page.evaluate(() => {
       const results = [];
-      // WooCommerce first, then generic
+      // WooCommerce standard selectors
       const CARD_SELS = [
-        'li.product','ul.products li','.woocommerce-LoopProduct',
-        '[class*="product-item"]','[class*="product_item"]','.product-card',
+        'li.product.type-product',
+        'li.product',
+        'ul.products li',
+        '.woocommerce-loop-product',
+        '[class*="product-item"]',
+        '.product-card',
       ];
       let cards = [];
       for (const s of CARD_SELS) {
         const found = [...document.querySelectorAll(s)];
         if (found.length >= 2) { cards = found; break; }
       }
+
       cards.forEach(card => {
-        const titleEl = card.querySelector('.woocommerce-loop-product__title,[class*="title"],[class*="name"],h2,h3,h4');
-        const priceEl = card.querySelector('.woocommerce-Price-amount,.price ins .amount,.price>.amount,[class*="price"]:not(del):not([class*="compare"])');
-        const linkEl  = card.querySelector('a[href]');
-        const imgEl   = card.querySelector('img');
+        // WooCommerce title
+        const titleEl = card.querySelector(
+          'h2.woocommerce-loop-product__title, .woocommerce-loop-product__title, ' +
+          '[class*="product__title"], [class*="product-title"], h2, h3'
+        );
         if (!titleEl) return;
         const titulo = titleEl.textContent.trim();
         if (!titulo || titulo.length < 3) return;
-        const href = linkEl ? (linkEl.href.startsWith('http') ? linkEl.href : 'https://hardwind.com' + linkEl.getAttribute('href')) : '';
-        const img = imgEl?.src || imgEl?.getAttribute('data-src') || imgEl?.getAttribute('data-lazy-src') || '';
-        const priceText = priceEl?.textContent?.trim() || '';
-        results.push({ titulo, priceText, href, img });
+
+        // WooCommerce price: prefer sale price (ins), fallback to regular
+        const salePriceEl   = card.querySelector('.price ins .woocommerce-Price-amount, .price ins .amount, .price ins bdi');
+        const regularPriceEl = card.querySelector('.price .woocommerce-Price-amount, .price .amount, .price bdi');
+        const priceEl = salePriceEl || regularPriceEl;
+
+        // Link
+        const linkEl = card.querySelector('a.woocommerce-LoopProduct-link, a[href]');
+        const href = linkEl
+          ? (linkEl.href.startsWith('http') ? linkEl.href : 'https://hardwind.com' + linkEl.getAttribute('href'))
+          : '';
+        if (!href) return;
+
+        // Image
+        const imgEl = card.querySelector('img.attachment-woocommerce_thumbnail, img[data-src], img');
+        const img = imgEl?.getAttribute('data-src') || imgEl?.getAttribute('data-lazy-src') || imgEl?.src || '';
+
+        results.push({ titulo, priceText: priceEl?.textContent?.trim() || '', href, img });
       });
       return results;
     });
 
     console.log(`  ✓ Hardwind: ${items.length} productos`);
-    return items.filter(i => i.href).map(i => ({
-      id: 'hw-' + (i.href.split('/').filter(Boolean).pop() || Math.random().toString(36).slice(2)),
+    return items.map(i => ({
+      id: 'hw-' + i.href.split('/').filter(Boolean).pop(),
       titulo: i.titulo,
       precio: cleanPrice(i.priceText),
       moneda: 'ARS',
@@ -146,19 +205,16 @@ async function scrapeHardwind(browser) {
 }
 
 async function main() {
-  console.log('🌐 Scrapeando tiendas de wingfoil con Chrome...');
-
+  console.log('🌐 Scrapeando GPX Store y Hardwind con Chrome...');
   const browser = await chromium.launch({
     headless: true,
-    args: ['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage'],
+    args: ['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage','--disable-blink-features=AutomationControlled'],
   });
 
   let gpxItems = [], hwItems = [];
   try {
-    [gpxItems, hwItems] = await Promise.all([
-      scrapeGPX(browser),
-      scrapeHardwind(browser),
-    ]);
+    // Scrapear en paralelo
+    [gpxItems, hwItems] = await Promise.all([scrapeGPX(browser), scrapeHardwind(browser)]);
   } finally {
     await browser.close();
   }
@@ -166,7 +222,7 @@ async function main() {
   const seenIds = new Set();
   const productos = [];
   for (const item of [...gpxItems, ...hwItems]) {
-    if (!seenIds.has(item.id) && item.titulo) {
+    if (item.titulo && !seenIds.has(item.id)) {
       seenIds.add(item.id);
       productos.push(item);
     }
@@ -176,8 +232,12 @@ async function main() {
 
   const output = { actualizado: new Date().toISOString(), total: productos.length, productos };
   writeFileSync('store-data.json', JSON.stringify(output, null, 2), 'utf8');
-  console.log(`\n💾 Listo: ${productos.length} productos guardados en store-data.json`);
-  if (productos.length === 0) console.warn('⚠️  0 productos — verificar selectores de las tiendas');
+  console.log(`\n💾 Guardados: ${productos.length} productos en store-data.json`);
+  console.log(`   GPX Store: ${gpxItems.length} | Hardwind: ${hwItems.length}`);
+  if (productos.length === 0) {
+    console.warn('⚠️  0 productos — revisar selectores o estructura de las páginas');
+    process.exit(1); // Falla el workflow para que sea visible en Actions
+  }
 }
 
 main();
