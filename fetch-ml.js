@@ -1,51 +1,16 @@
-// fetch-ml.js
-// Busca publicaciones activas de wingfoil en Mercado Libre Argentina.
-// Las publicaciones vendidas o cerradas no aparecen en la búsqueda de ML,
-// por lo que cada ejecución refleja solo el stock disponible en ese momento.
-// Se ejecuta automáticamente cada 6 horas via GitHub Actions.
+// fetch-ml.js — scraper con Playwright (Chrome real, no detectable como bot)
+// Corre en GitHub Actions cada hora y guarda ml-data.json
 
-import fetch from 'node-fetch';
+import { chromium } from 'playwright';
 import { writeFileSync } from 'fs';
 
-const SITE = 'MLA'; // Argentina
-const QUERIES = [
-  'wingfoil',
-  'wing foil',
-  'foil wing',
-  'ala wingfoil',
-  'tabla wingfoil',
-  'foil wingfoil',
-  'mástil wingfoil',
-  'wingfoil duotone',
-  'wingfoil naish',
-  'wingfoil f-one',
-  'wingfoil north',
-  'wingfoil core',
+const MARCAS = ['duotone','naish','f-one','north','core','armstrong','slingshot','cabrinha','flysurfer','ozone','starboard','fanatic'];
+
+const URLS = [
+  'https://listado.mercadolibre.com.ar/deportes-fitness/wingfoil_OrderId_PRICE_NoIndex_True',
+  'https://listado.mercadolibre.com.ar/deportes-fitness/wingfoil_Desde_51_NoIndex_True',
+  'https://listado.mercadolibre.com.ar/deportes-fitness/wingfoil_Desde_101_NoIndex_True',
 ];
-
-const LIMIT = 50; // resultados por query (máx ML: 50)
-const MARCAS = ['duotone','naish','f-one','north','core','armstrong','slingshot','cabrinha','flysurfer','ozone','code','starboard','fanatic'];
-
-async function fetchQuery(query, offset = 0) {
-  const url = `https://api.mercadolibre.com/sites/${SITE}/search?q=${encodeURIComponent(query)}&limit=${LIMIT}&offset=${offset}`;
-  try {
-    const res = await fetch(url, {
-      headers: {
-        'Accept': 'application/json',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-      },
-    });
-    if (!res.ok) {
-      console.warn(`  ⚠️  HTTP ${res.status} en query "${query}" offset=${offset}`);
-      return { results: [], total: 0 };
-    }
-    const data = await res.json();
-    return { results: data.results || [], total: data.paging?.total || 0 };
-  } catch (e) {
-    console.error(`  ✗ Error en query "${query}":`, e.message);
-    return { results: [], total: 0 };
-  }
-}
 
 function detectCategoria(titulo) {
   const t = titulo.toLowerCase();
@@ -56,94 +21,106 @@ function detectCategoria(titulo) {
   return 'otro';
 }
 
-function detectMarca(titulo, attributes) {
+function detectMarca(titulo) {
   const t = titulo.toLowerCase();
   for (const m of MARCAS) {
     if (t.includes(m)) return m;
   }
-  const attrMarca = (attributes || []).find(a => a.id === 'BRAND');
-  return attrMarca ? (attrMarca.value_name || '').toLowerCase() : '';
+  return '';
 }
 
-function mapItem(item) {
-  const titulo = item.title || '';
-  const moneda = item.currency_id === 'USD' ? 'USD' : 'ARS';
-  const ubicacion = item.seller_address
-    ? [item.seller_address.city?.name, item.seller_address.state?.name].filter(Boolean).join(', ')
-    : '';
+async function scrapePage(browser, url) {
+  const page = await browser.newPage();
+  try {
+    await page.setExtraHTTPHeaders({ 'Accept-Language': 'es-AR,es;q=0.9' });
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 40000 });
+    await page.waitForTimeout(2500);
 
-  return {
-    id: item.id,
-    titulo,
-    precio: item.price || 0,
-    moneda,
-    condicion: item.condition === 'new' ? 'nuevo' : 'usado',
-    categoria: detectCategoria(titulo),
-    marca: detectMarca(titulo, item.attributes),
-    ubicacion,
-    imagen: item.thumbnail ? item.thumbnail.replace(/\-I\.jpg$/, '-O.jpg') : '',
-    url: item.permalink,
-    fecha: item.date_created ? item.date_created.split('T')[0] : '',
-    vendedor_id: item.seller?.id || '',
-    ventas_completadas: item.sold_quantity || 0,
-  };
+    const items = await page.evaluate(() => {
+      const results = [];
+      const cards = document.querySelectorAll('.ui-search-layout__item, .andes-card');
+      cards.forEach(card => {
+        const linkEl = card.querySelector('a[href*="MLA"]');
+        const titleEl = card.querySelector('.ui-search-item__title, .poly-component__title');
+        const priceInt = card.querySelector('.andes-money-amount__fraction');
+        const currencyEl = card.querySelector('.andes-money-amount__currency-symbol');
+        const imgEl = card.querySelector('img');
+        const locationEl = card.querySelector('.ui-search-item__location, .poly-component__location');
+        const condEl = card.querySelector('.ui-search-item__highlight-label__title, .poly-component__condition');
+
+        if (!linkEl || !titleEl) return;
+
+        const href = linkEl.href || '';
+        const titulo = titleEl.textContent?.trim() || '';
+        const rawPrice = (priceInt?.textContent || '0').replace(/\./g, '').replace(',', '.');
+        const precio = parseFloat(rawPrice) || 0;
+        const sym = currencyEl?.textContent?.trim() || '';
+        const moneda = (sym === 'U$S' || sym === 'USD' || sym === 'US$') ? 'USD' : 'ARS';
+        const imagen = imgEl?.src || imgEl?.getAttribute('data-src') || '';
+        const ubicacion = locationEl?.textContent?.trim() || '';
+        const condicion = (condEl?.textContent || '').toLowerCase().includes('nuevo') ? 'nuevo' : 'usado';
+        const idMatch = href.match(/(MLA-?\d+)/);
+        const id = idMatch ? idMatch[1].replace('-', '') : href;
+
+        if (titulo && href) results.push({ id, titulo, precio, moneda, condicion, imagen, url: href, ubicacion });
+      });
+      return results;
+    });
+
+    console.log(`  ✓ ${items.length} items en ${url}`);
+    return items;
+  } catch (e) {
+    console.error(`  ✗ Error en ${url}: ${e.message}`);
+    return [];
+  } finally {
+    await page.close();
+  }
 }
 
 async function main() {
-  console.log('🔍 Buscando publicaciones activas de wingfoil en Mercado Libre Argentina...');
+  console.log('🌐 Iniciando Chrome para scrapear Mercado Libre Argentina...');
+
+  const browser = await chromium.launch({
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+  });
 
   const seenIds = new Set();
-  const allResults = [];
+  const allItems = [];
 
-  for (const query of QUERIES) {
-    console.log(`  → "${query}"`);
-    // Primera página
-    const { results, total } = await fetchQuery(query, 0);
-    for (const item of results) {
+  for (const url of URLS) {
+    console.log(`→ ${url}`);
+    const items = await scrapePage(browser, url);
+    for (const item of items) {
       if (!seenIds.has(item.id)) {
         seenIds.add(item.id);
-        allResults.push(item);
+        allItems.push(item);
       }
     }
-
-    // Si hay más de LIMIT resultados, traer segunda página
-    if (total > LIMIT) {
-      await new Promise(r => setTimeout(r, 300));
-      const { results: results2 } = await fetchQuery(query, LIMIT);
-      for (const item of results2) {
-        if (!seenIds.has(item.id)) {
-          seenIds.add(item.id);
-          allResults.push(item);
-        }
-      }
-    }
-
-    await new Promise(r => setTimeout(r, 300));
+    await new Promise(r => setTimeout(r, 1500));
   }
 
-  console.log(`  📦 ${allResults.length} publicaciones únicas encontradas`);
+  await browser.close();
 
-  // La API de búsqueda de ML ya devuelve solo publicaciones activas.
-  // Solo excluimos las explícitamente cerradas o pausadas.
-  const activos = allResults.filter(item =>
-    item.status !== 'closed' && item.status !== 'paused'
-  );
+  const productos = allItems.map(item => ({
+    id: item.id,
+    titulo: item.titulo,
+    precio: item.precio,
+    moneda: item.moneda,
+    condicion: item.condicion,
+    categoria: detectCategoria(item.titulo),
+    marca: detectMarca(item.titulo),
+    ubicacion: item.ubicacion,
+    imagen: item.imagen,
+    url: item.url,
+    fecha: new Date().toISOString().split('T')[0],
+  }));
 
-  console.log(`  ✅ ${activos.length} publicaciones activas`);
+  productos.sort((a, b) => (a.precio || 0) - (b.precio || 0));
 
-  const productos = activos.map(mapItem);
-
-  // Ordenar: más recientes primero
-  productos.sort((a, b) => b.fecha.localeCompare(a.fecha));
-
-  const output = {
-    actualizado: new Date().toISOString(),
-    total: productos.length,
-    productos,
-  };
-
+  const output = { actualizado: new Date().toISOString(), total: productos.length, productos };
   writeFileSync('ml-data.json', JSON.stringify(output, null, 2), 'utf8');
-  console.log(`💾 ml-data.json guardado con ${productos.length} productos activos`);
+  console.log(`\n💾 Listo: ${productos.length} publicaciones guardadas en ml-data.json`);
 }
 
 main();

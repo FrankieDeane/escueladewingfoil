@@ -2,8 +2,8 @@ name: Actualizar publicaciones Mercado Libre
 
 on:
   schedule:
-    - cron: '0 */6 * * *'   # Cada 6 horas: 00:00, 06:00, 12:00, 18:00 UTC
-  workflow_dispatch:          # Ejecución manual desde GitHub Actions
+    - cron: '0 * * * *'   # Cada hora
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -25,7 +25,10 @@ jobs:
       - name: Instalar dependencias
         run: npm install
 
-      - name: Correr script de ML
+      - name: Instalar Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Scrapear Mercado Libre
         run: node fetch-ml.js
 
       - name: Commit y push si hay cambios
