@@ -1,0 +1,45 @@
+name: Recordatorio renovar cookies Facebook
+
+on:
+  schedule:
+    # Corre el día 1 de enero, abril, julio y octubre (cada 90 días aprox.)
+    - cron: '0 9 1 1,4,7,10 *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Crear issue de recordatorio
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const today = new Date().toLocaleDateString('es-AR', { year:'numeric', month:'long', day:'numeric' });
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🔑 Renovar cookies de Facebook Marketplace — ' + today,
+              labels: [],
+              body: `## Recordatorio trimestral: renovar cookies de Facebook
+
+            Las cookies de sesión de Facebook expiran cada ~90 días.
+            Si no las renovás, el scraper deja de traer publicaciones de Marketplace.
+
+            ### Pasos para renovar
+
+            1. **Abrí Chrome** e ingresá a [facebook.com](https://www.facebook.com) con tu cuenta.
+            2. **Instalá la extensión** [EditThisCookie](https://chrome.google.com/webstore/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg) si no la tenés.
+            3. Con la pestaña de Facebook abierta, hacé click en el ícono de EditThisCookie y seleccioná **Exportar** (ícono de flecha hacia abajo). Copia el JSON.
+            4. Andá a **GitHub → Settings → Secrets and variables → Actions**.
+            5. Buscá el secret \`FB_COOKIES\` y hacé click en **Update**.
+            6. Pegá el nuevo JSON de cookies y guardá.
+            7. Volvé a **Actions → "Actualizar tiendas wingfoil" → Run workflow** para verificar que funciona.
+
+            > **Nota:** El secret debe llamarse exactamente \`FB_COOKIES\` (solo mayúsculas, guión bajo, sin espacios).
+
+            Una vez renovadas, cerrá este issue.`
+            });
+            console.log('Issue de recordatorio creado.');
