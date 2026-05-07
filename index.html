@@ -979,6 +979,12 @@ textarea{resize:vertical;min-height:90px}
 
 .ml-disclaimer{margin-top:24px;padding:14px 18px;background:rgba(0,180,216,.07);border-left:3px solid var(--primary);border-radius:8px;font-size:13px;color:var(--text-muted);line-height:1.6}
 .ml-disclaimer strong{color:var(--text)}
+.ml-direct{padding:32px 0;text-align:center}
+.ml-direct__titulo{font-size:18px;font-weight:700;margin-bottom:24px;color:var(--text)}
+.ml-direct__btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:20px}
+.ml-direct__btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:99px;background:var(--surface-2);border:2px solid var(--border);font-weight:700;font-size:14px;color:var(--text);transition:all .2s}
+.ml-direct__btn:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-glow)}
+.ml-direct__sub{font-size:13px;color:var(--text-muted)}
 
 @media(max-width:640px){
   .ml-search-row{gap:10px}
@@ -3349,10 +3355,20 @@ function loadML() {
     productos.sort(function(a,b){ return b.fecha.localeCompare(a.fecha); });
 
     if (productos.length === 0) {
-      var errDetail = errors.length ? '<small style="opacity:.6;display:block;margin-top:8px">' + errors.slice(0,2).join(' | ') + '</small>' : '';
-      grid.innerHTML = '<div class="ml-empty"><span class="ml-empty__icon">⚠️</span><h3>No se pudieron cargar las publicaciones</h3><p>La API de Mercado Libre no respondió correctamente. Probá recargar la página en unos minutos.</p>' + errDetail + '</div>';
+      grid.innerHTML =
+        '<div class="ml-direct">' +
+          '<p class="ml-direct__titulo">Buscá wingfoil directamente en Mercado Libre Argentina</p>' +
+          '<div class="ml-direct__btns">' +
+            '<a class="ml-direct__btn" href="https://listado.mercadolibre.com.ar/deportes-fitness/wingfoil" target="_blank" rel="noopener">🔍 Todos los equipos</a>' +
+            '<a class="ml-direct__btn" href="https://listado.mercadolibre.com.ar/deportes-fitness/ala-wing-wingfoil" target="_blank" rel="noopener">🪂 Wings / Alas</a>' +
+            '<a class="ml-direct__btn" href="https://listado.mercadolibre.com.ar/deportes-fitness/tabla-wingfoil" target="_blank" rel="noopener">🏄 Tablas</a>' +
+            '<a class="ml-direct__btn" href="https://listado.mercadolibre.com.ar/deportes-fitness/foil-wingfoil" target="_blank" rel="noopener">🦈 Foils</a>' +
+            '<a class="ml-direct__btn" href="https://listado.mercadolibre.com.ar/deportes-fitness/kit-wingfoil" target="_blank" rel="noopener">📦 Kits completos</a>' +
+          '</div>' +
+          '<p class="ml-direct__sub">Los resultados se abren en Mercado Libre con los filtros ya aplicados.</p>' +
+        '</div>';
       var countEl = document.getElementById('mlVisibleCount');
-      if (countEl) countEl.textContent = '0';
+      if (countEl) countEl.textContent = '–';
       return;
     }
 
