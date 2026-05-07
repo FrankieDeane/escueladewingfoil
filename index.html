@@ -1574,6 +1574,52 @@ textarea{resize:vertical;min-height:90px}
     <span class="eyebrow">Marketplace</span>
     <h2 class="section-title">Equipos en Venta</h2>
 
+    <!-- TIENDAS ONLINE -->
+    <div id="eqPanelTiendas">
+      <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin-bottom:8px">🏪 Tiendas</h3>
+      <p class="section-sub" style="margin-bottom:20px">Productos de GPX Store y Hardwind Argentina. Se actualizan cada 2 horas.</p>
+
+      <div class="ml-filters" id="mlCatFilters">
+        <button class="ml-filter active" data-cat="all">Todos</button>
+        <button class="ml-filter" data-cat="wing">🪂 Wings</button>
+        <button class="ml-filter" data-cat="tabla">🏄 Tablas</button>
+        <button class="ml-filter" data-cat="foil">🦈 Foils</button>
+        <button class="ml-filter" data-cat="kit">📦 Kits</button>
+        <div class="ml-filter-sep"></div>
+        <button class="ml-filter" data-fuente="GPX Store">GPX Store</button>
+        <button class="ml-filter" data-fuente="Hardwind">Hardwind</button>
+      </div>
+
+      <div class="ml-search-row">
+        <div class="ml-search-field">
+          <label for="mlSearchInput">Buscar</label>
+          <input type="text" id="mlSearchInput" placeholder="Ej: Duotone, 5m, foil..."/>
+        </div>
+        <div class="ml-search-field" style="max-width:200px">
+          <label for="mlOrdenFilter">Ordenar</label>
+          <select id="mlOrdenFilter">
+            <option value="precio_asc">Precio: menor primero</option>
+            <option value="precio_desc">Precio: mayor primero</option>
+          </select>
+        </div>
+        <button class="ml-btn-clear" id="mlClearBtn">Limpiar</button>
+      </div>
+
+      <div class="ml-stats">
+        <div class="ml-count">Mostrando <strong id="mlVisibleCount">–</strong> productos</div>
+        <div class="ml-updated">Actualizado: <span id="mlUpdatedAt">–</span></div>
+      </div>
+
+      <div class="ml-grid" id="mlGrid">
+        <div class="ml-loading"><div class="ml-loading__spinner"></div><span>Cargando productos...</span></div>
+      </div>
+
+      <div class="ml-disclaimer" style="margin-bottom:56px">
+        Productos de GPX Store y Hardwind Argentina, actualizados automáticamente cada 2 horas. Verificá stock y precios directamente en cada tienda.
+      </div>
+    </div>
+
+    <!-- COMUNIDAD -->
     <div id="eqPanelComunidad">
       <p class="section-sub">Comprá y vendé equipos de wingfoil y kitesurf entre riders. Publicá gratis y contactá directo por WhatsApp.</p>
       <p class="equipos-disclaimer">⚠️ La Universidad del WingFoil no es responsable de la venta de productos publicados. Las transacciones son entre particulares, bajo exclusiva responsabilidad de las partes.</p>
@@ -3090,6 +3136,138 @@ document.addEventListener('keydown', function(e){
 </script>
 
 
+
+<!-- ===== TIENDAS JS ===== -->
+<script>
+(function(){
+var storeData = { productos: [], actualizado: '' };
+var storeFilters = { cat: 'all', fuente: '', texto: '', orden: 'precio_asc' };
+
+var CATEGORIA_LABELS = { wing:'🪂 Wing', tabla:'🏄 Tabla', foil:'🦈 Foil', kit:'📦 Kit', otro:'📦 Equipo' };
+var EMOJI_CAT = { wing:'🪂', tabla:'🏄', foil:'🦈', kit:'📦', otro:'📦' };
+
+function formatPrecio(precio, moneda) {
+  if (!precio) return 'Consultar';
+  var sym = moneda === 'USD' ? 'USD ' : moneda === 'EUR' ? '€ ' : '$ ';
+  return sym + precio.toLocaleString('es-AR');
+}
+
+function renderTiendas() {
+  var grid = document.getElementById('mlGrid');
+  if (!grid) return;
+  var productos = storeData.productos.filter(function(p) {
+    if (storeFilters.cat !== 'all' && p.categoria !== storeFilters.cat) return false;
+    if (storeFilters.fuente && p.fuente !== storeFilters.fuente) return false;
+    if (storeFilters.texto) {
+      if (!p.titulo.toLowerCase().includes(storeFilters.texto.toLowerCase())) return false;
+    }
+    return true;
+  });
+  var ps = productos.slice();
+  if (storeFilters.orden === 'precio_asc') ps.sort(function(a,b){ return (a.precio||0)-(b.precio||0); });
+  else if (storeFilters.orden === 'precio_desc') ps.sort(function(a,b){ return (b.precio||0)-(a.precio||0); });
+
+  var countEl = document.getElementById('mlVisibleCount');
+  if (countEl) countEl.textContent = ps.length;
+
+  if (ps.length === 0) {
+    grid.innerHTML = '<div class="ml-empty"><span class="ml-empty__icon">🔍</span><h3>Sin resultados</h3><p>Cambiá los filtros o revisá más tarde.</p></div>';
+    return;
+  }
+  grid.innerHTML = ps.map(function(p) {
+    var imgHtml = p.imagen
+      ? '<img src="'+p.imagen+'" alt="'+p.titulo.replace(/"/g,'')+'" loading="lazy" onerror="this.style.display=\'none\'">'
+      : '<div class="ml-card__img-fallback">'+(EMOJI_CAT[p.categoria]||'📦')+'</div>';
+    var fuenteTag = p.fuente ? '<span class="ml-card__tag" style="color:var(--accent)">🏪 '+p.fuente+'</span>' : '';
+    var marcaTag = p.marca ? '<span class="ml-card__tag">'+p.marca.charAt(0).toUpperCase()+p.marca.slice(1)+'</span>' : '';
+    return '<article class="ml-card reveal">'+
+      '<div class="ml-card__img">'+imgHtml+
+        '<span class="ml-card__badge ml-card__badge--'+p.categoria+'">'+(CATEGORIA_LABELS[p.categoria]||'Equipo')+'</span>'+
+      '</div>'+
+      '<div class="ml-card__body">'+
+        '<div class="ml-card__titulo">'+p.titulo+'</div>'+
+        '<div class="ml-card__precio">'+formatPrecio(p.precio, p.moneda)+'<small>'+p.moneda+'</small></div>'+
+        '<div class="ml-card__meta">'+fuenteTag+marcaTag+'</div>'+
+        '<div class="ml-card__footer">'+
+          '<a class="ml-card__btn ml-card__btn--ml" href="'+p.url+'" target="_blank" rel="noopener">Ver en tienda →</a>'+
+        '</div>'+
+      '</div>'+
+    '</article>';
+  }).join('');
+  setTimeout(function(){ grid.querySelectorAll('.reveal').forEach(function(c){ c.classList.add('is-visible'); }); }, 50);
+}
+
+async function loadTiendas() {
+  var grid = document.getElementById('mlGrid');
+  if (!grid) return;
+  var CACHE_KEY = 'store_cache_v1';
+  var CACHE_TTL = 2 * 60 * 60 * 1000;
+  try {
+    var cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+    if (cached && cached.ts && (Date.now()-cached.ts) < CACHE_TTL && cached.productos && cached.productos.length > 0) {
+      storeData = cached;
+      setUpdated(new Date(cached.ts));
+      renderTiendas();
+      return;
+    }
+  } catch(e) {}
+
+  try {
+    var r = await fetch('store-data.json?v='+Date.now());
+    if (r.ok) {
+      var data = await r.json();
+      if (data.productos && data.productos.length > 0) {
+        storeData = { productos: data.productos, actualizado: data.actualizado, ts: Date.now() };
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify(storeData)); } catch(e) {}
+        setUpdated(new Date(data.actualizado));
+        renderTiendas();
+        return;
+      }
+    }
+  } catch(e) {}
+
+  grid.innerHTML = '<p style="padding:40px 20px;text-align:center;color:var(--text-muted)">Aún no hay productos disponibles. El workflow de actualización corre cada 2 horas.</p>';
+  var c = document.getElementById('mlVisibleCount'); if (c) c.textContent = '0';
+}
+
+function setUpdated(d) {
+  var el = document.getElementById('mlUpdatedAt');
+  if (el) el.textContent = d.toLocaleDateString('es-AR')+' '+d.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});
+}
+
+// Filtros
+var catFilters = document.getElementById('mlCatFilters');
+if (catFilters) {
+  catFilters.addEventListener('click', function(e) {
+    var btn = e.target.closest('.ml-filter'); if (!btn) return;
+    if (btn.dataset.cat !== undefined) {
+      catFilters.querySelectorAll('[data-cat]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active'); storeFilters.cat = btn.dataset.cat;
+    }
+    if (btn.dataset.fuente !== undefined) {
+      var was = btn.classList.contains('active');
+      catFilters.querySelectorAll('[data-fuente]').forEach(function(b){ b.classList.remove('active'); });
+      if (!was) { btn.classList.add('active'); storeFilters.fuente = btn.dataset.fuente; }
+      else { storeFilters.fuente = ''; }
+    }
+    renderTiendas();
+  });
+}
+var si = document.getElementById('mlSearchInput');
+if (si) { var st; si.addEventListener('input', function(){ clearTimeout(st); st = setTimeout(function(){ storeFilters.texto = si.value.trim(); renderTiendas(); }, 300); }); }
+var so = document.getElementById('mlOrdenFilter');
+if (so) { so.addEventListener('change', function(){ storeFilters.orden = so.value; renderTiendas(); }); }
+var sc = document.getElementById('mlClearBtn');
+if (sc) { sc.addEventListener('click', function(){
+  storeFilters = { cat:'all', fuente:'', texto:'', orden:'precio_asc' };
+  if (catFilters) { catFilters.querySelectorAll('.ml-filter').forEach(function(b){ b.classList.remove('active'); }); var a=catFilters.querySelector('[data-cat="all"]'); if(a) a.classList.add('active'); }
+  if (si) si.value = ''; if (so) so.value = 'precio_asc';
+  renderTiendas();
+}); }
+
+loadTiendas();
+})();
+</script>
 
 <!-- Three.js for 3D foil -->
 <script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>

@@ -1,4 +1,4 @@
-name: Actualizar publicaciones Mercado Libre
+name: Actualizar tiendas wingfoil
 
 on:
   schedule:
@@ -28,8 +28,14 @@ jobs:
       - name: Instalar Chromium
         run: npx playwright install chromium --with-deps
 
-      - name: Scrapear Mercado Libre
+      - name: Scrapear GPX Store y Hardwind
         run: node fetch-ml.js
+
+      - name: Mostrar resultado
+        if: always()
+        run: |
+          echo "=== store-data.json ==="
+          cat store-data.json | head -40
 
       - name: Commit y push si hay cambios
         run: |
