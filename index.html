@@ -565,6 +565,11 @@ textarea{resize:vertical;min-height:90px}
 /* Nav section background overlay */
 #navBgOverlay{position:fixed;inset:0;z-index:9;pointer-events:none;opacity:0;background-size:cover;background-position:center;transition:opacity .35s ease;will-change:opacity}
 #navBgOverlay::after{content:'';position:absolute;inset:0;background:rgba(2,10,22,.55)}
+/* Article dialog */
+#articleFoil::backdrop{background:rgba(2,10,22,.7);backdrop-filter:blur(4px)}
+#articleFoil h3{color:var(--text)}
+#articleFoil p,#articleFoil li{color:var(--text-muted);line-height:1.75;font-size:15px}
+#articleFoil strong{color:var(--text)}
 .spot-card,.rider-card,.equipo-card,.instructor-card,.about__card,.step-card{transform-style:preserve-3d;will-change:transform}
 .spot-card__img,.rider-card__media{transform:translateZ(0)}
 
@@ -1576,13 +1581,13 @@ textarea{resize:vertical;min-height:90px}
 
     <!-- PESTAÑAS -->
     <div class="eq-tabs" id="eqTabs">
-      <button class="eq-tab active" data-tab="ml">🟡 Mercado Libre <span class="eq-tab__live">Live</span></button>
+      <button class="eq-tab active" data-tab="ml">🏪 Tiendas Online <span class="eq-tab__live">Live</span></button>
       <button class="eq-tab" data-tab="comunidad">👥 Comunidad</button>
     </div>
 
-    <!-- PANEL MERCADO LIBRE -->
+    <!-- PANEL TIENDAS ONLINE -->
     <div class="eq-panel active" id="eqPanelML">
-      <p class="section-sub" style="margin-bottom:28px">Publicaciones activas de wingfoil en Mercado Libre Argentina. Se actualizan automáticamente cada 6 horas. Lo que no aparece, ya se vendió.</p>
+      <p class="section-sub" style="margin-bottom:28px">Productos disponibles en GPX Store y Hardwind. Se actualizan automáticamente cada 2 horas.</p>
 
       <div class="ml-filters" id="mlCatFilters">
         <button class="ml-filter active" data-cat="all">Todos</button>
@@ -1591,72 +1596,40 @@ textarea{resize:vertical;min-height:90px}
         <button class="ml-filter" data-cat="foil">🦈 Foils</button>
         <button class="ml-filter" data-cat="kit">📦 Kits</button>
         <div class="ml-filter-sep"></div>
-        <button class="ml-filter" data-cond="usado">Usado</button>
-        <button class="ml-filter" data-cond="nuevo">Nuevo</button>
+        <button class="ml-filter" data-fuente="GPX Store">GPX Store</button>
+        <button class="ml-filter" data-fuente="Hardwind">Hardwind</button>
       </div>
 
       <div class="ml-search-row">
         <div class="ml-search-field">
           <label for="mlSearchInput">Buscar en título</label>
-          <input type="text" id="mlSearchInput" placeholder="Ej: Duotone, 5m, tabla 100L..."/>
-        </div>
-        <div class="ml-search-field" style="max-width:200px">
-          <label for="mlMarcaFilter">Marca</label>
-          <select id="mlMarcaFilter">
-            <option value="">Todas las marcas</option>
-            <option value="duotone">Duotone</option>
-            <option value="naish">Naish</option>
-            <option value="f-one">F-One</option>
-            <option value="north">North</option>
-            <option value="core">Core</option>
-            <option value="armstrong">Armstrong</option>
-            <option value="slingshot">Slingshot</option>
-            <option value="cabrinha">Cabrinha</option>
-            <option value="starboard">Starboard</option>
-            <option value="fanatic">Fanatic</option>
-          </select>
-        </div>
-        <div class="ml-search-field" style="max-width:200px">
-          <label for="mlUbicFilter">Ubicación</label>
-          <select id="mlUbicFilter">
-            <option value="">Todo el país</option>
-            <option value="Buenos Aires">Buenos Aires</option>
-            <option value="Capital Federal">CABA</option>
-            <option value="Córdoba">Córdoba</option>
-            <option value="Rosario">Rosario / Santa Fe</option>
-            <option value="Mendoza">Mendoza</option>
-            <option value="Bariloche">Bariloche</option>
-            <option value="Neuquén">Neuquén</option>
-            <option value="Mar del Plata">Mar del Plata</option>
-            <option value="Corrientes">Corrientes</option>
-            <option value="Entre Ríos">Entre Ríos</option>
-          </select>
+          <input type="text" id="mlSearchInput" placeholder="Ej: Duotone, 5m, foil 1500cm²..."/>
         </div>
         <div class="ml-search-field" style="max-width:200px">
           <label for="mlOrdenFilter">Ordenar por</label>
           <select id="mlOrdenFilter">
-            <option value="reciente">Más reciente</option>
             <option value="precio_asc">Precio: menor primero</option>
             <option value="precio_desc">Precio: mayor primero</option>
+            <option value="reciente">Más reciente</option>
           </select>
         </div>
         <button class="ml-btn-clear" id="mlClearBtn">Limpiar filtros</button>
       </div>
 
       <div class="ml-stats">
-        <div class="ml-count">Mostrando <strong id="mlVisibleCount">–</strong> publicaciones</div>
+        <div class="ml-count">Mostrando <strong id="mlVisibleCount">–</strong> productos</div>
         <div class="ml-updated">Actualizado: <span id="mlUpdatedAt">–</span></div>
       </div>
 
       <div class="ml-grid" id="mlGrid">
         <div class="ml-loading">
           <div class="ml-loading__spinner"></div>
-          <span>Cargando publicaciones...</span>
+          <span>Cargando productos...</span>
         </div>
       </div>
 
       <div class="ml-disclaimer">
-        <strong>Aviso:</strong> Publicaciones de Mercado Libre Argentina, actualizadas automáticamente cada 6 horas. La Universidad del WingFoil no es responsable por las transacciones. Verificá el perfil del vendedor en ML antes de comprar.
+        <strong>Aviso:</strong> Productos de GPX Store (Argentina) y Hardwind (España), actualizados cada 2 horas. La Escuela de WingFoil Argentina no es responsable por las transacciones. Verificá stock y precios directamente en cada tienda.
       </div>
     </div>
 
@@ -1872,18 +1845,104 @@ textarea{resize:vertical;min-height:90px}
     <p class="section-sub">Estamos preparando contenido en profundidad para cada etapa de tu aprendizaje. Pronto disponibles.</p>
     <div class="blog-grid">
 
-      <article class="blog-card">
-        <div class="blog-card__cover"><span>🏄</span></div>
+      <article class="blog-card" id="blogCardFoil" style="cursor:pointer" onclick="document.getElementById('articleFoil').showModal()">
+        <div class="blog-card__cover" style="background:linear-gradient(135deg,#041828,#0b3a5c)"><span>🦈</span></div>
         <div class="blog-card__body">
           <span class="blog-card__cat">Guía completa</span>
           <h3 class="blog-card__title">Cómo elegir tu primer foil</h3>
           <p class="blog-card__excerpt">Lo que nadie te cuenta antes de comprar. Diferencias entre alas, mástiles y fuselajes para cada tipo de rider.</p>
           <div class="blog-card__meta">
-            <span class="blog-card__soon">Próximamente</span>
+            <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--primary)">Leer artículo →</span>
             <span>· 12 min lectura</span>
           </div>
         </div>
       </article>
+
+      <!-- ARTICLE MODAL -->
+      <dialog id="articleFoil" style="max-width:760px;width:94vw;max-height:90vh;overflow-y:auto;border-radius:16px;border:1px solid var(--border);background:var(--surface);color:var(--text);padding:0;box-shadow:0 32px 80px rgba(0,0,0,.5)">
+        <div style="position:sticky;top:0;z-index:2;background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary)">Guía completa · 12 min lectura</span>
+          <button onclick="document.getElementById('articleFoil').close()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:22px;line-height:1;padding:4px 8px">&times;</button>
+        </div>
+        <div style="padding:36px 32px 48px">
+          <h2 style="font-family:'Clash Display',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;line-height:1.15;margin-bottom:12px">Cómo elegir tu primer foil</h2>
+          <p style="color:var(--text-muted);font-size:14px;margin-bottom:36px">Por el equipo de Escuela de WingFoil Argentina · Mayo 2026</p>
+
+          <p>Antes de gastar USD 1.500 en tu primer equipo, hay algo que nadie te dice claramente: el foil <em>no es una sola cosa</em>. Es un sistema de 5 partes que deben ser compatibles entre sí, y cada decisión afecta cómo vas a progresar. Esta guía te explica cómo elegir cada parte según tu nivel, tu peso y el agua donde vas a navegar.</p>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">1. Antes de elegir el foil: elegí el ala correcta</h3>
+          <p>El ala (wing) determina el rango de viento en que vas a volar. Si empezás con un ala chica vas a frustrarte porque necesitás mucho viento. La recomendación para iniciantes en el Río de la Plata (vientos de 15-20 kn):</p>
+          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
+            <li><strong>Peso &lt;70 kg:</strong> ala de 5–6 m²</li>
+            <li><strong>Peso 70–90 kg:</strong> ala de 6–7 m²</li>
+            <li><strong>Peso &gt;90 kg:</strong> ala de 7–8 m²</li>
+          </ul>
+          <p>Marcas recomendadas para iniciantes: <strong>Duotone Echo, F-One Swing, Naish Matador</strong>. Son alas estables, con buen depower y fácil de manejar con poco brazo.</p>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">2. El foil: tamaño del ala delantera</h3>
+          <p>La <strong>ala delantera</strong> (front wing) es la pieza que genera la sustentación. A mayor superficie, más lift con menos velocidad — ideal para principiantes. Pero ojo: más área = más estabilidad y menor velocidad máxima.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0">
+            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
+              <div style="font-size:22px;font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif">1.800–2.500 cm²</div>
+              <div style="font-size:13px;color:var(--text-muted);margin-top:4px">Principiante · Despega lento · Muy estable</div>
+            </div>
+            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
+              <div style="font-size:22px;font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif">1.200–1.800 cm²</div>
+              <div style="font-size:13px;color:var(--text-muted);margin-top:4px">Intermedio · Más rápido · Más maniobrable</div>
+            </div>
+          </div>
+          <p>Si sos principiante, buscá un ala de <strong>mínimo 1.500 cm²</strong>. Alas populares para iniciantes: Armstrong A-Wing HA 1850, Lift eFoil 150, Duotone Spirit 1850.</p>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">3. El mástil: la altura importa más de lo que creés</h3>
+          <p>El mástil conecta la tabla con el sistema de vuelo. Altura recomendada según nivel:</p>
+          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
+            <li><strong>Principiante:</strong> 60–70 cm. Menos altura = más fácil de controlar, menos consecuencias de las caídas.</li>
+            <li><strong>Intermedio:</strong> 75–85 cm. Mejor clearance en olas y aguas movidas.</li>
+            <li><strong>Avanzado:</strong> 90–95 cm. Para surfear olas de mayor tamaño.</li>
+          </ul>
+          <p>Los mástiles de <strong>carbono</strong> son más rígidos y transmiten mejor el feedback del foil. Los de aluminio son más baratos pero pesan más y flex más — aceptables para empezar.</p>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">4. El fuselaje: largo vs corto</h3>
+          <p>El fuselaje une el mástil con las alas. No te compliques en esto al principio: un fuselaje de <strong>60–75 cm</strong> es versátil para todo. Los fuselajes cortos (40–50 cm) aumentan la agilidad pero reducen estabilidad — no para principiantes.</p>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">5. La tabla: tan importante como el foil</h3>
+          <p>Muchos principiantes subestiman esto. Para aprender, necesitás una tabla <strong>grande y de mucho volumen</strong>:</p>
+          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
+            <li><strong>Peso &lt;70 kg:</strong> mínimo 90–100 L</li>
+            <li><strong>Peso 70–90 kg:</strong> mínimo 100–120 L</li>
+            <li><strong>Peso &gt;90 kg:</strong> mínimo 120–140 L</li>
+          </ul>
+          <p>Una tabla grande da más estabilidad al subirse, más tiempo para generar velocidad y más margen para errores. Al progresar podés bajar a 60–70 L.</p>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">6. Compatibilidad entre partes — el error más costoso</h3>
+          <p>El sistema de conexión entre mástil y tabla tiene tres estándares:</p>
+          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
+            <li><strong>Tuttle Box:</strong> el más común en tablas económicas</li>
+            <li><strong>Deep Tuttle:</strong> más rígido, para foils de mayor carga</li>
+            <li><strong>US Box:</strong> universal, permite ajustar posición del foil</li>
+          </ul>
+          <p><strong>Antes de comprar</strong>: confirmá que el box de tu tabla es compatible con el mástil que vas a usar. Muchos kits usados vienen con adaptadores, pero vale la pena chequearlo.</p>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">7. ¿Kit nuevo o usado?</h3>
+          <p>Para empezar, un kit <strong>usado en buen estado</strong> es la mejor opción. Vas a caer mucho al principio y el equipo va a recibir golpes. No tiene sentido estrenar carbono premium en las primeras sesiones.</p>
+          <div style="background:var(--primary-glow);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:20px;margin:20px 0">
+            <strong style="color:var(--primary)">Presupuesto orientativo (Argentina, 2026)</strong><br>
+            <span style="color:var(--text-muted);font-size:14px;line-height:1.8">Kit usado completo (tabla + foil + ala): USD 1.000–1.500<br>Kit nuevo completo: USD 2.500–3.500<br>Neopreno + casco + chaleco: ARS 150.000–250.000</span>
+          </div>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Resumen: checklist antes de comprar</h3>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">
+            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Ala del tamaño correcto para mi peso y el viento local</label>
+            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Ala delantera ≥1.500 cm² (principiante)</label>
+            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Mástil 60–70 cm (primer año)</label>
+            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Tabla con volumen suficiente para mi peso</label>
+            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Compatibilidad de box verificada</label>
+            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Casco + chaleco + neopreno (obligatorio)</label>
+          </div>
+
+          <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">¿Dudas? Consultá a los instructores en la sección <a href="#instructores" onclick="document.getElementById('articleFoil').close()" style="color:var(--primary)">Instructores</a> o en el grupo de WhatsApp de la comunidad.</p>
+        </div>
+      </dialog>
 
       <article class="blog-card">
         <div class="blog-card__cover"><span>⚖️</span></div>
@@ -3112,7 +3171,7 @@ document.addEventListener('keydown', function(e){
 (function(){
 
 var mlData = { productos: [], actualizado: '' };
-var mlFilters = { cat: 'all', cond: '', marca: '', ubicacion: '', texto: '', orden: 'reciente' };
+var mlFilters = { cat: 'all', fuente: '', texto: '', orden: 'precio_asc' };
 
 var CATEGORIA_LABELS = { wing:'🪂 Wing', tabla:'🏄 Tabla', foil:'🦈 Foil', kit:'📦 Kit', otro:'📦 Equipo' };
 var EMOJI_CAT = { wing:'🪂', tabla:'🏄', foil:'🦈', kit:'📦', otro:'📦' };
@@ -3129,9 +3188,7 @@ function renderML() {
 
   var productos = mlData.productos.filter(function(p) {
     if (mlFilters.cat !== 'all' && p.categoria !== mlFilters.cat) return false;
-    if (mlFilters.cond && p.condicion !== mlFilters.cond) return false;
-    if (mlFilters.marca && !p.marca.includes(mlFilters.marca)) return false;
-    if (mlFilters.ubicacion && (!p.ubicacion || !p.ubicacion.toLowerCase().includes(mlFilters.ubicacion.toLowerCase()))) return false;
+    if (mlFilters.fuente && p.fuente !== mlFilters.fuente) return false;
     if (mlFilters.texto) {
       var t = mlFilters.texto.toLowerCase();
       if (!p.titulo.toLowerCase().includes(t)) return false;
@@ -3157,27 +3214,25 @@ function renderML() {
 
   grid.innerHTML = productos.map(function(p) {
     var badgeClass = 'ml-card__badge--' + p.categoria;
-    var condClass = 'ml-card__cond--' + p.condicion;
     var imgHtml = p.imagen
       ? '<img src="' + p.imagen + '" alt="' + p.titulo.replace(/"/g,'') + '" loading="lazy" onerror="this.parentNode.innerHTML=\'<div class=ml-card__img-fallback>' + (EMOJI_CAT[p.categoria]||'📦') + '</div>\'">'
       : '<div class="ml-card__img-fallback">' + (EMOJI_CAT[p.categoria]||'📦') + '</div>';
 
     var tags = [];
     if (p.marca) tags.push(p.marca.charAt(0).toUpperCase()+p.marca.slice(1));
-    if (p.ubicacion) tags.push('📍 '+p.ubicacion);
     var tagsHtml = tags.map(function(t){ return '<span class="ml-card__tag">'+t+'</span>'; }).join('');
+    var fuenteHtml = p.fuente ? '<span class="ml-card__tag" style="background:rgba(0,180,216,.12);color:var(--accent);border-color:rgba(0,180,216,.25)">🏪 '+p.fuente+'</span>' : '';
 
     return '<article class="ml-card reveal">' +
       '<div class="ml-card__img">' + imgHtml +
         '<span class="ml-card__badge ' + badgeClass + '">' + (CATEGORIA_LABELS[p.categoria]||'Equipo') + '</span>' +
-        '<span class="ml-card__cond ' + condClass + '">' + p.condicion + '</span>' +
       '</div>' +
       '<div class="ml-card__body">' +
         '<div class="ml-card__titulo">' + p.titulo + '</div>' +
         '<div class="ml-card__precio">' + formatPrecio(p.precio, p.moneda) + '<small>' + p.moneda + '</small></div>' +
-        '<div class="ml-card__meta">' + tagsHtml + '</div>' +
+        '<div class="ml-card__meta">' + fuenteHtml + tagsHtml + '</div>' +
         '<div class="ml-card__footer">' +
-          '<a class="ml-card__btn ml-card__btn--ml" href="' + p.url + '" target="_blank" rel="noopener noreferrer">Ver en Mercado Libre →</a>' +
+          '<a class="ml-card__btn ml-card__btn--ml" href="' + p.url + '" target="_blank" rel="noopener noreferrer">Ver en tienda →</a>' +
         '</div>' +
       '</div>' +
     '</article>';
@@ -3190,59 +3245,17 @@ function renderML() {
   }, 50);
 }
 
-var ML_QUERIES = ['wingfoil','wing foil','ala wingfoil','tabla wingfoil','foil wingfoil','mástil wingfoil'];
-var ML_CACHE_KEY = 'ml_cache_v3';
-var ML_CACHE_TTL = 6 * 60 * 60 * 1000; // 6 horas
-
-var MARCAS_LIST = ['duotone','naish','f-one','north','core','armstrong','slingshot','cabrinha','flysurfer','ozone','starboard','fanatic'];
-
-function mlDetectCategoria(titulo) {
-  var t = titulo.toLowerCase();
-  if (/kit|combo|completo/.test(t)) return 'kit';
-  if (/\bwing\b|\bala\b/.test(t) && !/tabla|foil|mástil|mastil|fuselaje|plano/.test(t)) return 'wing';
-  if (/tabla/.test(t)) return 'tabla';
-  if (/foil|mástil|mastil|fuselaje|plano|estabilizador/.test(t)) return 'foil';
-  return 'otro';
-}
-
-function mlDetectMarca(titulo, attributes) {
-  var t = titulo.toLowerCase();
-  for (var i = 0; i < MARCAS_LIST.length; i++) {
-    if (t.indexOf(MARCAS_LIST[i]) !== -1) return MARCAS_LIST[i];
-  }
-  var attrMarca = (attributes || []).find(function(a){ return a.id === 'BRAND'; });
-  return attrMarca ? (attrMarca.value_name || '').toLowerCase() : '';
-}
-
-function mlMapItem(item) {
-  var titulo = item.title || '';
-  var moneda = item.currency_id === 'USD' ? 'USD' : 'ARS';
-  var ubicacion = item.seller_address
-    ? [item.seller_address.city && item.seller_address.city.name, item.seller_address.state && item.seller_address.state.name].filter(Boolean).join(', ')
-    : '';
-  return {
-    id: item.id,
-    titulo: titulo,
-    precio: item.price || 0,
-    moneda: moneda,
-    condicion: item.condition === 'new' ? 'nuevo' : 'usado',
-    categoria: mlDetectCategoria(titulo),
-    marca: mlDetectMarca(titulo, item.attributes),
-    ubicacion: ubicacion,
-    imagen: item.thumbnail ? item.thumbnail.replace(/-I\.jpg$/, '-O.jpg') : '',
-    url: item.permalink,
-    fecha: item.date_created ? item.date_created.split('T')[0] : '',
-  };
-}
+var STORE_CACHE_KEY = 'store_cache_v1';
+var STORE_CACHE_TTL = 2 * 60 * 60 * 1000; // 2 horas
 
 async function loadML() {
   var grid = document.getElementById('mlGrid');
   if (!grid) return;
 
-  // Intentar caché de localStorage
+  // Caché localStorage
   try {
-    var cached = JSON.parse(localStorage.getItem(ML_CACHE_KEY) || 'null');
-    if (cached && cached.ts && (Date.now() - cached.ts) < ML_CACHE_TTL && cached.productos && cached.productos.length > 0) {
+    var cached = JSON.parse(localStorage.getItem(STORE_CACHE_KEY) || 'null');
+    if (cached && cached.ts && (Date.now() - cached.ts) < STORE_CACHE_TTL && cached.productos && cached.productos.length > 0) {
       mlData = cached;
       setMLUpdated(new Date(cached.ts));
       renderML();
@@ -3250,16 +3263,15 @@ async function loadML() {
     }
   } catch(e) {}
 
-  grid.innerHTML = '<div class="ml-loading"><div class="ml-loading__spinner"></div><span>Cargando publicaciones de Mercado Libre...</span></div>';
+  grid.innerHTML = '<div class="ml-loading"><div class="ml-loading__spinner"></div><span>Cargando productos de tiendas...</span></div>';
 
-  // Primero intentar ml-data.json (actualizado cada hora por GitHub Actions)
   try {
-    var r = await fetch('ml-data.json?v=' + Date.now());
+    var r = await fetch('store-data.json?v=' + Date.now());
     if (r.ok) {
       var data = await r.json();
       if (data.productos && data.productos.length > 0) {
         mlData = { productos: data.productos, actualizado: data.actualizado, ts: Date.now() };
-        try { localStorage.setItem(ML_CACHE_KEY, JSON.stringify(mlData)); } catch(e) {}
+        try { localStorage.setItem(STORE_CACHE_KEY, JSON.stringify(mlData)); } catch(e) {}
         setMLUpdated(new Date(data.actualizado));
         renderML();
         return;
@@ -3267,56 +3279,19 @@ async function loadML() {
     }
   } catch(e) {}
 
-  var seenIds = {};
-  var allItems = [];
-  var pending = ML_QUERIES.length;
-
-  var errors = [];
-  ML_QUERIES.forEach(function(q) {
-    var url = '/api/ml-search?q=' + encodeURIComponent(q) + '&limit=50';
-    fetch(url)
-      .then(function(r){
-        if (!r.ok) { errors.push(q + ':HTTP' + r.status); return {results:[]}; }
-        return r.json();
-      })
-      .then(function(data){
-        (data.results || []).forEach(function(item){
-          if (!seenIds[item.id]) {
-            seenIds[item.id] = true;
-            allItems.push(item);
-          }
-        });
-      })
-      .catch(function(e){ errors.push(q + ':' + e.message); })
-      .finally(function(){
-        pending--;
-        if (pending === 0) onAllFetched();
-      });
-  });
-
-  function onAllFetched() {
-    var productos = allItems.map(mlMapItem);
-    productos.sort(function(a,b){ return b.fecha.localeCompare(a.fecha); });
-
-    if (productos.length === 0) {
-      grid.innerHTML = '<p style="padding:48px 24px;text-align:center;color:var(--text-muted);font-size:15px">No hay publicaciones disponibles en este momento. Volvé a intentar más tarde.</p>';
-      var countEl = document.getElementById('mlVisibleCount');
-      if (countEl) countEl.textContent = '0';
-      return;
-    }
-
-    var now = new Date();
-    mlData = { productos: productos, actualizado: now.toISOString(), ts: Date.now() };
-    try { localStorage.setItem(ML_CACHE_KEY, JSON.stringify(mlData)); } catch(e) {}
-
-    setMLUpdated(now);
-    renderML();
-  }
+  grid.innerHTML = '<p style="padding:48px 24px;text-align:center;color:var(--text-muted);font-size:15px">No hay productos disponibles en este momento. Volvé a intentar más tarde.</p>';
+  var countEl = document.getElementById('mlVisibleCount');
+  if (countEl) countEl.textContent = '0';
 
   function setMLUpdated(d) {
     var updEl = document.getElementById('mlUpdatedAt');
     if (updEl) updEl.textContent = d.toLocaleDateString('es-AR') + ' ' + d.toLocaleTimeString('es-AR', {hour:'2-digit',minute:'2-digit'});
   }
+}
+
+function setMLUpdated(d) {
+  var updEl = document.getElementById('mlUpdatedAt');
+  if (updEl) updEl.textContent = d.toLocaleDateString('es-AR') + ' ' + d.toLocaleTimeString('es-AR', {hour:'2-digit',minute:'2-digit'});
 }
 
 // Filtros de categoría y condición
@@ -3330,11 +3305,11 @@ if (catFilters) {
       btn.classList.add('active');
       mlFilters.cat = btn.dataset.cat;
     }
-    if (btn.dataset.cond !== undefined) {
+    if (btn.dataset.fuente !== undefined) {
       var wasActive = btn.classList.contains('active');
-      catFilters.querySelectorAll('[data-cond]').forEach(function(b){ b.classList.remove('active'); });
-      if (!wasActive) { btn.classList.add('active'); mlFilters.cond = btn.dataset.cond; }
-      else { mlFilters.cond = ''; }
+      catFilters.querySelectorAll('[data-fuente]').forEach(function(b){ b.classList.remove('active'); });
+      if (!wasActive) { btn.classList.add('active'); mlFilters.fuente = btn.dataset.fuente; }
+      else { mlFilters.fuente = ''; }
     }
     renderML();
   });
@@ -3353,24 +3328,6 @@ if (mlSearchInput) {
   });
 }
 
-// Filtro de marca
-var mlMarcaFilter = document.getElementById('mlMarcaFilter');
-if (mlMarcaFilter) {
-  mlMarcaFilter.addEventListener('change', function() {
-    mlFilters.marca = mlMarcaFilter.value;
-    renderML();
-  });
-}
-
-// Filtro de ubicación
-var mlUbicFilter = document.getElementById('mlUbicFilter');
-if (mlUbicFilter) {
-  mlUbicFilter.addEventListener('change', function() {
-    mlFilters.ubicacion = mlUbicFilter.value;
-    renderML();
-  });
-}
-
 // Ordenar
 var mlOrdenFilter = document.getElementById('mlOrdenFilter');
 if (mlOrdenFilter) {
@@ -3384,16 +3341,14 @@ if (mlOrdenFilter) {
 var mlClearBtn = document.getElementById('mlClearBtn');
 if (mlClearBtn) {
   mlClearBtn.addEventListener('click', function() {
-    mlFilters = { cat: 'all', cond: '', marca: '', ubicacion: '', texto: '', orden: 'reciente' };
+    mlFilters = { cat: 'all', fuente: '', texto: '', orden: 'precio_asc' };
     if (catFilters) {
       catFilters.querySelectorAll('.ml-filter').forEach(function(b){ b.classList.remove('active'); });
       var allBtn = catFilters.querySelector('[data-cat="all"]');
       if (allBtn) allBtn.classList.add('active');
     }
     if (mlSearchInput) mlSearchInput.value = '';
-    if (mlMarcaFilter) mlMarcaFilter.value = '';
-    if (mlUbicFilter) mlUbicFilter.value = '';
-    if (mlOrdenFilter) mlOrdenFilter.value = 'reciente';
+    if (mlOrdenFilter) mlOrdenFilter.value = 'precio_asc';
     renderML();
   });
 }
