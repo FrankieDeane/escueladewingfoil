@@ -920,11 +920,6 @@ textarea{resize:vertical;min-height:90px}
 /* ============================================================
    TABS DE EQUIPOS
 ============================================================ */
-.eq-tabs{display:flex;gap:8px;margin-bottom:32px;border-bottom:2px solid var(--border);padding-bottom:0}
-.eq-tab{padding:10px 22px;border-radius:10px 10px 0 0;font-weight:700;font-size:14px;color:var(--text-muted);border:2px solid transparent;border-bottom:none;margin-bottom:-2px;transition:all .2s;background:none}
-.eq-tab.active{background:var(--surface);border-color:var(--border);color:var(--primary);border-bottom-color:var(--surface)}
-.eq-tab__live{display:inline-block;background:var(--accent);color:#fff;font-size:10px;padding:1px 6px;border-radius:99px;margin-left:6px;vertical-align:middle;animation:pulse 2s infinite}
-.eq-panel{display:none}.eq-panel.active{display:block}
 /* ============================================================
    MERCADO LIBRE SECTION
 ============================================================ */
@@ -1579,62 +1574,7 @@ textarea{resize:vertical;min-height:90px}
     <span class="eyebrow">Marketplace</span>
     <h2 class="section-title">Equipos en Venta</h2>
 
-    <!-- PESTAÑAS -->
-    <div class="eq-tabs" id="eqTabs">
-      <button class="eq-tab active" data-tab="ml">🏪 Tiendas Online <span class="eq-tab__live">Live</span></button>
-      <button class="eq-tab" data-tab="comunidad">👥 Comunidad</button>
-    </div>
-
-    <!-- PANEL TIENDAS ONLINE -->
-    <div class="eq-panel active" id="eqPanelML">
-      <p class="section-sub" style="margin-bottom:28px">Productos disponibles en GPX Store y Hardwind. Se actualizan automáticamente cada 2 horas.</p>
-
-      <div class="ml-filters" id="mlCatFilters">
-        <button class="ml-filter active" data-cat="all">Todos</button>
-        <button class="ml-filter" data-cat="wing">🪂 Wings</button>
-        <button class="ml-filter" data-cat="tabla">🏄 Tablas</button>
-        <button class="ml-filter" data-cat="foil">🦈 Foils</button>
-        <button class="ml-filter" data-cat="kit">📦 Kits</button>
-        <div class="ml-filter-sep"></div>
-        <button class="ml-filter" data-fuente="GPX Store">GPX Store</button>
-        <button class="ml-filter" data-fuente="Hardwind">Hardwind</button>
-      </div>
-
-      <div class="ml-search-row">
-        <div class="ml-search-field">
-          <label for="mlSearchInput">Buscar en título</label>
-          <input type="text" id="mlSearchInput" placeholder="Ej: Duotone, 5m, foil 1500cm²..."/>
-        </div>
-        <div class="ml-search-field" style="max-width:200px">
-          <label for="mlOrdenFilter">Ordenar por</label>
-          <select id="mlOrdenFilter">
-            <option value="precio_asc">Precio: menor primero</option>
-            <option value="precio_desc">Precio: mayor primero</option>
-            <option value="reciente">Más reciente</option>
-          </select>
-        </div>
-        <button class="ml-btn-clear" id="mlClearBtn">Limpiar filtros</button>
-      </div>
-
-      <div class="ml-stats">
-        <div class="ml-count">Mostrando <strong id="mlVisibleCount">–</strong> productos</div>
-        <div class="ml-updated">Actualizado: <span id="mlUpdatedAt">–</span></div>
-      </div>
-
-      <div class="ml-grid" id="mlGrid">
-        <div class="ml-loading">
-          <div class="ml-loading__spinner"></div>
-          <span>Cargando productos...</span>
-        </div>
-      </div>
-
-      <div class="ml-disclaimer">
-        <strong>Aviso:</strong> Productos de GPX Store (Argentina) y Hardwind (España), actualizados cada 2 horas. La Escuela de WingFoil Argentina no es responsable por las transacciones. Verificá stock y precios directamente en cada tienda.
-      </div>
-    </div>
-
-    <!-- PANEL COMUNIDAD -->
-    <div class="eq-panel" id="eqPanelComunidad">
+    <div id="eqPanelComunidad">
       <p class="section-sub">Comprá y vendé equipos de wingfoil y kitesurf entre riders. Publicá gratis y contactá directo por WhatsApp.</p>
       <p class="equipos-disclaimer">⚠️ La Universidad del WingFoil no es responsable de la venta de productos publicados. Las transacciones son entre particulares, bajo exclusiva responsabilidad de las partes.</p>
       <div class="equipos-grid" id="equiposGrid">
@@ -1700,7 +1640,7 @@ textarea{resize:vertical;min-height:90px}
         <details class="faq-item"><summary>¿Hay competencias?</summary><div class="faq-answer"><p>Sí, regatas todo el año organizadas por distintos clubes. Hablá con tu instructor para sumarte al circuito.</p></div></details>
         <details class="faq-item"><summary>¿La Universidad del WingFoil ofrece clases?</summary><div class="faq-answer"><p>Nosotros no — sí los instructores que se sumaron a la página. Los perfiles los publican los propios usuarios. Verificá credenciales antes de contratar.</p></div></details>
       </div>
-    </div><!-- /eq-panel comunidad -->
+    </div><!-- /eqPanelComunidad -->
   </div>
 </section>
 
@@ -3149,215 +3089,7 @@ document.addEventListener('keydown', function(e){
 })();
 </script>
 
-<!-- ============================================================ TABS EQUIPOS JS ============================================================ -->
-<script>
-(function(){
-  var tabs = document.querySelectorAll('.eq-tab');
-  tabs.forEach(function(tab) {
-    tab.addEventListener('click', function() {
-      tabs.forEach(function(t){ t.classList.remove('active'); });
-      tab.classList.add('active');
-      var target = tab.dataset.tab;
-      document.querySelectorAll('.eq-panel').forEach(function(p){ p.classList.remove('active'); });
-      var panel = target === 'ml' ? document.getElementById('eqPanelML') : document.getElementById('eqPanelComunidad');
-      if (panel) panel.classList.add('active');
-    });
-  });
-})();
-</script>
 
-<!-- ============================================================ MERCADO LIBRE JS ============================================================ -->
-<script>
-(function(){
-
-var mlData = { productos: [], actualizado: '' };
-var mlFilters = { cat: 'all', fuente: '', texto: '', orden: 'precio_asc' };
-
-var CATEGORIA_LABELS = { wing:'🪂 Wing', tabla:'🏄 Tabla', foil:'🦈 Foil', kit:'📦 Kit', otro:'📦 Equipo' };
-var EMOJI_CAT = { wing:'🪂', tabla:'🏄', foil:'🦈', kit:'📦', otro:'📦' };
-
-function formatPrecio(precio, moneda) {
-  if (!precio) return '–';
-  var sym = moneda === 'USD' ? 'USD ' : '$ ';
-  return sym + precio.toLocaleString('es-AR');
-}
-
-function renderML() {
-  var grid = document.getElementById('mlGrid');
-  if (!grid) return;
-
-  var productos = mlData.productos.filter(function(p) {
-    if (mlFilters.cat !== 'all' && p.categoria !== mlFilters.cat) return false;
-    if (mlFilters.fuente && p.fuente !== mlFilters.fuente) return false;
-    if (mlFilters.texto) {
-      var t = mlFilters.texto.toLowerCase();
-      if (!p.titulo.toLowerCase().includes(t)) return false;
-    }
-    return true;
-  });
-
-  // Ordenar
-  productos = productos.slice();
-  if (mlFilters.orden === 'precio_asc') {
-    productos.sort(function(a,b){ return (a.precio||0)-(b.precio||0); });
-  } else if (mlFilters.orden === 'precio_desc') {
-    productos.sort(function(a,b){ return (b.precio||0)-(a.precio||0); });
-  }
-
-  var countEl = document.getElementById('mlVisibleCount');
-  if (countEl) countEl.textContent = productos.length;
-
-  if (productos.length === 0) {
-    grid.innerHTML = '<div class="ml-empty"><span class="ml-empty__icon">🔍</span><h3>No hay resultados</h3><p>Probá cambiando los filtros o limpiándolos para ver todas las publicaciones.</p></div>';
-    return;
-  }
-
-  grid.innerHTML = productos.map(function(p) {
-    var badgeClass = 'ml-card__badge--' + p.categoria;
-    var imgHtml = p.imagen
-      ? '<img src="' + p.imagen + '" alt="' + p.titulo.replace(/"/g,'') + '" loading="lazy" onerror="this.parentNode.innerHTML=\'<div class=ml-card__img-fallback>' + (EMOJI_CAT[p.categoria]||'📦') + '</div>\'">'
-      : '<div class="ml-card__img-fallback">' + (EMOJI_CAT[p.categoria]||'📦') + '</div>';
-
-    var tags = [];
-    if (p.marca) tags.push(p.marca.charAt(0).toUpperCase()+p.marca.slice(1));
-    var tagsHtml = tags.map(function(t){ return '<span class="ml-card__tag">'+t+'</span>'; }).join('');
-    var fuenteHtml = p.fuente ? '<span class="ml-card__tag" style="background:rgba(0,180,216,.12);color:var(--accent);border-color:rgba(0,180,216,.25)">🏪 '+p.fuente+'</span>' : '';
-
-    return '<article class="ml-card reveal">' +
-      '<div class="ml-card__img">' + imgHtml +
-        '<span class="ml-card__badge ' + badgeClass + '">' + (CATEGORIA_LABELS[p.categoria]||'Equipo') + '</span>' +
-      '</div>' +
-      '<div class="ml-card__body">' +
-        '<div class="ml-card__titulo">' + p.titulo + '</div>' +
-        '<div class="ml-card__precio">' + formatPrecio(p.precio, p.moneda) + '<small>' + p.moneda + '</small></div>' +
-        '<div class="ml-card__meta">' + fuenteHtml + tagsHtml + '</div>' +
-        '<div class="ml-card__footer">' +
-          '<a class="ml-card__btn ml-card__btn--ml" href="' + p.url + '" target="_blank" rel="noopener noreferrer">Ver en tienda →</a>' +
-        '</div>' +
-      '</div>' +
-    '</article>';
-  }).join('');
-
-  // Trigger reveal animations on new cards
-  var newCards = grid.querySelectorAll('.reveal');
-  setTimeout(function(){
-    newCards.forEach(function(c){ c.classList.add('is-visible'); });
-  }, 50);
-}
-
-var STORE_CACHE_KEY = 'store_cache_v1';
-var STORE_CACHE_TTL = 2 * 60 * 60 * 1000; // 2 horas
-
-async function loadML() {
-  var grid = document.getElementById('mlGrid');
-  if (!grid) return;
-
-  // Caché localStorage
-  try {
-    var cached = JSON.parse(localStorage.getItem(STORE_CACHE_KEY) || 'null');
-    if (cached && cached.ts && (Date.now() - cached.ts) < STORE_CACHE_TTL && cached.productos && cached.productos.length > 0) {
-      mlData = cached;
-      setMLUpdated(new Date(cached.ts));
-      renderML();
-      return;
-    }
-  } catch(e) {}
-
-  grid.innerHTML = '<div class="ml-loading"><div class="ml-loading__spinner"></div><span>Cargando productos de tiendas...</span></div>';
-
-  try {
-    var r = await fetch('store-data.json?v=' + Date.now());
-    if (r.ok) {
-      var data = await r.json();
-      if (data.productos && data.productos.length > 0) {
-        mlData = { productos: data.productos, actualizado: data.actualizado, ts: Date.now() };
-        try { localStorage.setItem(STORE_CACHE_KEY, JSON.stringify(mlData)); } catch(e) {}
-        setMLUpdated(new Date(data.actualizado));
-        renderML();
-        return;
-      }
-    }
-  } catch(e) {}
-
-  grid.innerHTML = '<p style="padding:48px 24px;text-align:center;color:var(--text-muted);font-size:15px">No hay productos disponibles en este momento. Volvé a intentar más tarde.</p>';
-  var countEl = document.getElementById('mlVisibleCount');
-  if (countEl) countEl.textContent = '0';
-
-  function setMLUpdated(d) {
-    var updEl = document.getElementById('mlUpdatedAt');
-    if (updEl) updEl.textContent = d.toLocaleDateString('es-AR') + ' ' + d.toLocaleTimeString('es-AR', {hour:'2-digit',minute:'2-digit'});
-  }
-}
-
-function setMLUpdated(d) {
-  var updEl = document.getElementById('mlUpdatedAt');
-  if (updEl) updEl.textContent = d.toLocaleDateString('es-AR') + ' ' + d.toLocaleTimeString('es-AR', {hour:'2-digit',minute:'2-digit'});
-}
-
-// Filtros de categoría y condición
-var catFilters = document.getElementById('mlCatFilters');
-if (catFilters) {
-  catFilters.addEventListener('click', function(e) {
-    var btn = e.target.closest('.ml-filter');
-    if (!btn) return;
-    if (btn.dataset.cat !== undefined) {
-      catFilters.querySelectorAll('[data-cat]').forEach(function(b){ b.classList.remove('active'); });
-      btn.classList.add('active');
-      mlFilters.cat = btn.dataset.cat;
-    }
-    if (btn.dataset.fuente !== undefined) {
-      var wasActive = btn.classList.contains('active');
-      catFilters.querySelectorAll('[data-fuente]').forEach(function(b){ b.classList.remove('active'); });
-      if (!wasActive) { btn.classList.add('active'); mlFilters.fuente = btn.dataset.fuente; }
-      else { mlFilters.fuente = ''; }
-    }
-    renderML();
-  });
-}
-
-// Búsqueda de texto
-var mlSearchInput = document.getElementById('mlSearchInput');
-if (mlSearchInput) {
-  var searchTimer;
-  mlSearchInput.addEventListener('input', function() {
-    clearTimeout(searchTimer);
-    searchTimer = setTimeout(function(){
-      mlFilters.texto = mlSearchInput.value.trim();
-      renderML();
-    }, 300);
-  });
-}
-
-// Ordenar
-var mlOrdenFilter = document.getElementById('mlOrdenFilter');
-if (mlOrdenFilter) {
-  mlOrdenFilter.addEventListener('change', function() {
-    mlFilters.orden = mlOrdenFilter.value;
-    renderML();
-  });
-}
-
-// Limpiar filtros
-var mlClearBtn = document.getElementById('mlClearBtn');
-if (mlClearBtn) {
-  mlClearBtn.addEventListener('click', function() {
-    mlFilters = { cat: 'all', fuente: '', texto: '', orden: 'precio_asc' };
-    if (catFilters) {
-      catFilters.querySelectorAll('.ml-filter').forEach(function(b){ b.classList.remove('active'); });
-      var allBtn = catFilters.querySelector('[data-cat="all"]');
-      if (allBtn) allBtn.classList.add('active');
-    }
-    if (mlSearchInput) mlSearchInput.value = '';
-    if (mlOrdenFilter) mlOrdenFilter.value = 'precio_asc';
-    renderML();
-  });
-}
-
-// Cargar al inicio
-loadML();
-
-})();
-</script>
 
 <!-- Three.js for 3D foil -->
 <script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
