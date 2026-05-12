@@ -431,6 +431,10 @@ textarea{resize:vertical;min-height:90px}
 .foto-preview__remove{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.7);color:#fff;border:none;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;line-height:1}
 
 /* EQUIPOS */
+.eq-tabs{display:flex;gap:8px;margin-bottom:24px;border-bottom:1px solid var(--border);padding-bottom:0}
+.eq-tab{padding:10px 22px;background:none;border:none;border-bottom:2px solid transparent;font-size:14px;font-weight:700;color:var(--text-muted);cursor:pointer;font-family:inherit;transition:all .2s;margin-bottom:-1px}
+.eq-tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.eq-tab:hover{color:var(--text)}
 .equipos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;margin-bottom:48px}
 .equipo-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;transition:all .25s;perspective:1000px}
 .equipo-card:hover{transform:translateY(-3px) rotateX(2deg);box-shadow:var(--shadow-md);border-color:var(--primary)}
@@ -1577,7 +1581,13 @@ textarea{resize:vertical;min-height:90px}
   <div class="container">
     <span class="eyebrow">Comunidad</span>
     <h2 class="section-title">Equipos en Venta</h2>
-    <p class="section-sub">Comprá y vendé equipos de wingfoil y kitesurf entre riders. Publicá gratis y contactá directo por WhatsApp.</p>
+    <p class="section-sub">Comprá y vendé equipos entre riders o encontrá publicaciones en Mercado Libre.</p>
+
+    <!-- TABS -->
+    <div class="eq-tabs" id="eqTabs">
+      <button class="eq-tab active" data-tab="comunidad">👥 Entre riders</button>
+      <button class="eq-tab" data-tab="ml">🛒 Mercado Libre</button>
+    </div>
 
     <!-- COMUNIDAD -->
     <div id="eqPanelComunidad">
@@ -1647,6 +1657,31 @@ textarea{resize:vertical;min-height:90px}
         <details class="faq-item"><summary>¿La Escuela de Wingfoil ofrece clases?</summary><div class="faq-answer"><p>Nosotros no — sí los instructores que se sumaron a la página. Los perfiles los publican los propios usuarios. Verificá credenciales antes de contratar.</p></div></details>
       </div>
     </div><!-- /eqPanelComunidad -->
+
+    <!-- MERCADO LIBRE -->
+    <div id="eqPanelML" style="display:none">
+      <div class="ml-search-row">
+        <div class="ml-search-field">
+          <label for="mlQuery">Buscar</label>
+          <input type="text" id="mlQuery" placeholder="wingfoil, duotone, foil..." value="wingfoil"/>
+        </div>
+        <div class="ml-search-field" style="flex:0 0 160px">
+          <label for="mlCondicion">Condición</label>
+          <select id="mlCondicion">
+            <option value="">Todos</option>
+            <option value="new">Nuevo</option>
+            <option value="used">Usado</option>
+          </select>
+        </div>
+        <div class="ml-search-field" style="flex:0 0 140px">
+          <label>&nbsp;</label>
+          <button id="mlSearchBtn" class="btn btn--primary" style="width:100%;padding:11px 14px">Buscar →</button>
+        </div>
+      </div>
+      <div id="mlStatus" style="font-size:13px;color:var(--text-muted);margin-bottom:16px"></div>
+      <div class="equipos-grid" id="mlGrid"></div>
+    </div><!-- /eqPanelML -->
+
   </div>
 </section>
 
@@ -3508,6 +3543,100 @@ if (sc) { sc.addEventListener('click', function(){
 }); }
 
 loadTiendas();
+
+// ===== TABS equipos =====
+var eqTabs = document.getElementById('eqTabs');
+if (eqTabs) {
+  eqTabs.addEventListener('click', function(e) {
+    var btn = e.target.closest('.eq-tab'); if (!btn) return;
+    eqTabs.querySelectorAll('.eq-tab').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var tab = btn.dataset.tab;
+    document.getElementById('eqPanelComunidad').style.display = tab === 'comunidad' ? '' : 'none';
+    document.getElementById('eqPanelML').style.display = tab === 'ml' ? '' : 'none';
+    if (tab === 'ml' && !mlLoaded) fetchML();
+  });
+}
+
+// ===== MERCADO LIBRE fetch =====
+var mlLoaded = false;
+
+function detectCatML(titulo) {
+  var t = titulo.toLowerCase();
+  if (/kit|combo|completo|set\b/.test(t)) return 'kit';
+  if (/\bwing\b|\bala\b/.test(t) && !/tabla|foil|mástil|mastil|fuselaje|board/.test(t)) return 'wing';
+  if (/tabla|board/.test(t) && !/foil/.test(t)) return 'tabla';
+  if (/foil|mástil|mastil|fuselaje|plano|hydrofoil/.test(t)) return 'foil';
+  return 'otro';
+}
+
+function renderML(items) {
+  var grid = document.getElementById('mlGrid');
+  var status = document.getElementById('mlStatus');
+  var CAT_LABELS = { wing:'🪂 Wing', tabla:'🏄 Tabla', foil:'🦈 Foil', kit:'📦 Kit', otro:'📦 Equipo' };
+  var CAT_EMOJI  = { wing:'🪂', tabla:'🏄', foil:'🦈', kit:'📦', otro:'📦' };
+  if (!items || !items.length) {
+    grid.innerHTML = '<p style="padding:40px 20px;text-align:center;color:var(--text-muted)">Sin resultados. Probá otro término.</p>';
+    if (status) status.textContent = '';
+    return;
+  }
+  if (status) status.textContent = items.length + ' publicaciones encontradas en Mercado Libre Argentina';
+  grid.innerHTML = items.map(function(p) {
+    var cat = detectCatML(p.title);
+    var cond = p.condition === 'new' ? 'nuevo' : 'usado';
+    var condClass = p.condition === 'new' ? 'nuevo' : 'usado';
+    var price = p.price ? '$ ' + p.price.toLocaleString('es-AR') : 'Consultar';
+    var img = (p.thumbnail||'').replace('I.jpg','O.jpg'); // full size thumb
+    var imgHtml = img
+      ? '<img src="'+img+'" alt="'+p.title.replace(/"/g,'')+'" loading="lazy" onerror="this.style.display=\'none\'">'
+      : '<div class="ml-card__img-fallback">'+(CAT_EMOJI[cat]||'📦')+'</div>';
+    return '<article class="ml-card">'+
+      '<div class="ml-card__img">'+imgHtml+
+        '<span class="ml-card__badge ml-card__badge--'+cat+'">'+(CAT_LABELS[cat]||'Equipo')+'</span>'+
+        '<span class="ml-card__cond ml-card__cond--'+condClass+'">'+cond+'</span>'+
+      '</div>'+
+      '<div class="ml-card__body">'+
+        '<div class="ml-card__titulo">'+p.title+'</div>'+
+        '<div class="ml-card__precio">'+price+'<small>ARS</small></div>'+
+        '<div class="ml-card__meta">'+
+          (p.seller && p.seller.nickname ? '<span class="ml-card__tag">👤 '+p.seller.nickname+'</span>' : '')+
+          (p.address && p.address.state_name ? '<span class="ml-card__tag">📍 '+p.address.state_name+'</span>' : '')+
+        '</div>'+
+        '<div class="ml-card__footer">'+
+          '<a class="ml-card__btn ml-card__btn--ml" href="'+p.permalink+'" target="_blank" rel="noopener">Ver en Mercado Libre →</a>'+
+        '</div>'+
+      '</div>'+
+    '</article>';
+  }).join('');
+}
+
+function fetchML() {
+  var grid = document.getElementById('mlGrid');
+  var status = document.getElementById('mlStatus');
+  var query = (document.getElementById('mlQuery').value.trim() || 'wingfoil');
+  var cond = document.getElementById('mlCondicion').value;
+  if (status) status.textContent = 'Buscando en Mercado Libre...';
+  grid.innerHTML = '<p style="padding:40px 20px;text-align:center;color:var(--text-muted)">Cargando...</p>';
+  var url = '/api/ml-search?q=' + encodeURIComponent(query) + '&limit=48' + (cond ? '&condition='+cond : '');
+  fetch(url)
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      var items = data.results || [];
+      if (cond) items = items.filter(function(p){ return p.condition === cond; });
+      renderML(items);
+      mlLoaded = true;
+    })
+    .catch(function(){
+      if (status) status.textContent = 'Error al conectar con Mercado Libre. Intentá de nuevo.';
+      grid.innerHTML = '';
+    });
+}
+
+var mlBtn = document.getElementById('mlSearchBtn');
+if (mlBtn) mlBtn.addEventListener('click', function(){ mlLoaded = false; fetchML(); });
+var mlQueryInput = document.getElementById('mlQuery');
+if (mlQueryInput) mlQueryInput.addEventListener('keydown', function(e){ if(e.key==='Enter'){ mlLoaded=false; fetchML(); } });
+
 })();
 </script>
 
