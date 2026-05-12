@@ -3658,19 +3658,12 @@ function fetchML() {
       });
   }
 
-  // Try edge function first (Netlify server → ML API, no CORS issues)
+  // ML API da 403 desde el browser (CORS/origin block), usar solo el edge function proxy
   var edgeUrl = '/api/ml-search?q=' + encodeURIComponent(query) + '&limit=48' + (cond ? '&cond=' + cond : '');
-  tryFetch(edgeUrl, 8000, function(data) {
+  tryFetch(edgeUrl, 10000, function(data) {
     var items = data && data.results && data.results.length ? data.results : null;
     if (items) { renderML(items); mlLoaded = true; return; }
-
-    // Fallback: direct ML API (public, supports CORS from browsers)
-    var mlUrl = 'https://api.mercadolibre.com/sites/MLA/search?q=' + encodeURIComponent(query) + '&limit=48' + condParam;
-    tryFetch(mlUrl, 8000, function(data2) {
-      var items2 = data2 && data2.results && data2.results.length ? data2.results : null;
-      if (items2) { renderML(items2); mlLoaded = true; return; }
-      showFallback();
-    });
+    showFallback();
   });
 }
 
