@@ -880,6 +880,16 @@ textarea{resize:vertical;min-height:90px}
 .spot-expanded__tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
 .spot-expanded__tag{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;background:rgba(0,180,216,.18);color:#00cfed;border-radius:99px;border:1px solid rgba(0,180,216,.35)}
 .spot-expanded__coming{margin-top:8px;background:linear-gradient(135deg,rgba(0,180,216,.1),rgba(247,127,0,.1));border:1px dashed rgba(255,255,255,.2);border-radius:12px;padding:18px 22px}
+.spot-expanded__section-title{font-family:'Clash Display',sans-serif;font-size:18px;font-weight:800;color:#fff;margin:28px 0 12px;letter-spacing:-.01em}
+.spot-expanded__section-text{font-size:14px;line-height:1.75;color:rgba(255,255,255,.8);background:rgba(255,255,255,.04);border-radius:10px;padding:16px 18px;border-left:3px solid var(--primary)}
+.spot-expanded__school{display:flex;gap:12px;margin-bottom:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden}
+.spot-expanded__school img{width:88px;height:88px;object-fit:cover;flex-shrink:0}
+.spot-expanded__school-body{padding:10px 12px 10px 0;min-width:0}
+.spot-expanded__school-name{font-size:14px;font-weight:700;color:#fff;margin-bottom:4px}
+.spot-expanded__school-desc{font-size:12px;color:rgba(255,255,255,.7);line-height:1.5;margin-bottom:6px}
+.spot-expanded__school-acc{display:inline-block;font-size:11px;font-weight:700;color:#00cfed;background:rgba(0,180,216,.15);padding:3px 10px;border-radius:99px;border:1px solid rgba(0,180,216,.3)}
+.spot-expanded__gallery{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.spot-expanded__gallery img{width:100%;height:110px;object-fit:cover;border-radius:10px}
 .spot-expanded__coming-label{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#ffd93d;margin-bottom:10px}
 .spot-expanded__coming-label::before{content:'⏳'}
 .spot-expanded__coming-list{list-style:none;padding:0;margin:0;display:grid;gap:6px}
@@ -2242,7 +2252,7 @@ textarea{resize:vertical;min-height:90px}
           <div class="spot-expanded__tags" id="spotExpandedTags"></div>
         </div>
       </div>
-      <div class="spot-expanded__coming">
+      <div id="spotExpandedComing" class="spot-expanded__coming">
         <span class="spot-expanded__coming-label">Próximamente en este spot</span>
         <ul class="spot-expanded__coming-list">
           <li>Descripción extendida con detalles del lugar</li>
@@ -2252,6 +2262,7 @@ textarea{resize:vertical;min-height:90px}
           <li>Galería de fotos de la comunidad</li>
         </ul>
       </div>
+      <div id="spotExpandedExtended"></div>
     </div>
   </div>
 </div>
@@ -3280,8 +3291,8 @@ function openSpotExpanded(s){
   document.getElementById('spotExpandedProv').textContent = s.prov;
   document.getElementById('spotExpandedDesc').textContent = s.d;
   document.getElementById('spotExpandedWind').textContent = s.w;
-  document.getElementById('spotExpandedLevel').textContent = levelLabels[s.lv] || s.lv;
-  
+  document.getElementById('spotExpandedLevel').textContent = s.lvLabel || levelLabels[s.lv] || s.lv;
+
   var typeBadge = document.getElementById('spotExpandedType');
   if(s.cable){
     typeBadge.textContent = '🛶 Cable Park';
@@ -3290,16 +3301,55 @@ function openSpotExpanded(s){
     typeBadge.textContent = '🏄 WingFoil';
     typeBadge.classList.remove('cable');
   }
-  
+
   var img = document.getElementById('spotExpandedImg');
   img.src = s.img;
   img.alt = 'Foto de ' + s.n;
-  
+
   var tagsContainer = document.getElementById('spotExpandedTags');
   tagsContainer.innerHTML = s.tags.map(function(t){
     return '<span class="spot-expanded__tag">' + t + '</span>';
   }).join('');
-  
+
+  // Extended content (months, howTo, schools, gallery)
+  var coming = document.getElementById('spotExpandedComing');
+  var extended = document.getElementById('spotExpandedExtended');
+  if(s.months || s.howTo || s.schools || s.gallery){
+    if(coming) coming.style.display = 'none';
+    var html = '';
+    if(s.months){
+      html += '<h3 class="spot-expanded__section-title">📅 Mejores meses</h3>';
+      html += '<div class="spot-expanded__section-text">'+s.months+'</div>';
+    }
+    if(s.howTo){
+      html += '<h3 class="spot-expanded__section-title">🚗 Cómo llegar y estacionar</h3>';
+      html += '<div class="spot-expanded__section-text">'+s.howTo+'</div>';
+    }
+    if(s.schools && s.schools.length){
+      html += '<h3 class="spot-expanded__section-title">🏫 Escuelas y puntos de acceso</h3>';
+      s.schools.forEach(function(sc){
+        html += '<div class="spot-expanded__school">'+
+          '<img src="'+sc.img+'" alt="'+sc.n+'" loading="lazy"/>'+
+          '<div class="spot-expanded__school-body">'+
+            '<div class="spot-expanded__school-name">'+sc.n+'</div>'+
+            '<div class="spot-expanded__school-desc">'+sc.d+'</div>'+
+            '<span class="spot-expanded__school-acc">'+sc.acc+'</span>'+
+          '</div>'+
+        '</div>';
+      });
+    }
+    if(s.gallery && s.gallery.length){
+      html += '<h3 class="spot-expanded__section-title">📸 Galería de la comunidad</h3>';
+      html += '<div class="spot-expanded__gallery">'+
+        s.gallery.map(function(g){ return '<img src="'+g+'" loading="lazy"/>'; }).join('')+
+      '</div>';
+    }
+    if(extended) extended.innerHTML = html;
+  } else {
+    if(coming) coming.style.display = '';
+    if(extended) extended.innerHTML = '';
+  }
+
   spotExpanded.classList.add('show');
   document.body.style.overflow = 'hidden';
 }
