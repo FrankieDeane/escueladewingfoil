@@ -1,26 +1,30 @@
 export default async function handler(request) {
   const url = new URL(request.url);
-  const query = url.searchParams.get('q') || 'wingfoil';
-  const limit = url.searchParams.get('limit') || '50';
+  const query = url.searchParams.get('q') || 'wing foil';
+  const limit = url.searchParams.get('limit') || '48';
+  const cond = url.searchParams.get('cond') || '';
 
-  const mlUrl = `https://api.mercadolibre.com/sites/MLA/search?q=${encodeURIComponent(query)}&limit=${limit}`;
+  // ML Argentina condition numeric IDs
+  const condMap = { new: '2230284', used: '2230581' };
+  const condParam = cond && condMap[cond] ? `&ITEM_CONDITION=${condMap[cond]}` : '';
+
+  const mlUrl = `https://api.mercadolibre.com/sites/MLA/search?q=${encodeURIComponent(query)}&limit=${limit}${condParam}`;
 
   try {
-    const res = await fetch(mlUrl, {
-      headers: { 'Accept': 'application/json' },
-    });
+    const res = await fetch(mlUrl);
+    if (!res.ok) throw new Error(`ML API ${res.status}`);
     const data = await res.json();
 
     return new Response(JSON.stringify(data), {
-      status: res.ok ? 200 : 502,
+      status: 200,
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
-        'Cache-Control': 'public, max-age=21600',
+        'Cache-Control': 'public, max-age=3600',
       },
     });
   } catch (e) {
-    return new Response(JSON.stringify({ results: [], paging: { total: 0 } }), {
+    return new Response(JSON.stringify({ results: [], paging: { total: 0 }, error: e.message }), {
       status: 502,
       headers: {
         'Content-Type': 'application/json',

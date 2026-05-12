@@ -1663,7 +1663,7 @@ textarea{resize:vertical;min-height:90px}
       <div class="ml-search-row">
         <div class="ml-search-field">
           <label for="mlQuery">Buscar</label>
-          <input type="text" id="mlQuery" placeholder="wingfoil, duotone, foil..." value="wingfoil"/>
+          <input type="text" id="mlQuery" placeholder="wing foil, duotone, foil..." value="wing foil"/>
         </div>
         <div class="ml-search-field" style="flex:0 0 160px">
           <label for="mlCondicion">Condición</label>
@@ -3613,38 +3613,55 @@ function renderML(items) {
 function fetchML() {
   var grid = document.getElementById('mlGrid');
   var status = document.getElementById('mlStatus');
-  var query = (document.getElementById('mlQuery').value.trim() || 'wingfoil');
+  var query = (document.getElementById('mlQuery').value.trim() || 'wing foil');
   var cond = document.getElementById('mlCondicion').value;
   if (status) status.textContent = 'Buscando en Mercado Libre...';
   grid.innerHTML = '<p style="padding:40px 20px;text-align:center;color:var(--text-muted)">Cargando...</p>';
 
-  // Llamada directa al API público de ML (soporta CORS desde browsers)
-  var mlUrl = 'https://api.mercadolibre.com/sites/MLA/search?q=' + encodeURIComponent(query) + '&limit=48' + (cond ? '&ITEM_CONDITION=' + cond : '');
+  // ML condition numeric IDs for Argentina
+  var condMap = { 'new': '2230284', 'used': '2230581' };
+  var condParam = cond && condMap[cond] ? '&ITEM_CONDITION=' + condMap[cond] : '';
 
-  fetch(mlUrl, { headers: { 'Accept': 'application/json' } })
+  function onItems(items, fromCond) {
+    // Client-side filter when condition couldn't be passed to API
+    if (fromCond && items.length) items = items.filter(function(p){ return p.condition === fromCond; });
+    renderML(items);
+    mlLoaded = true;
+  }
+
+  function showFallback() {
+    var mlSearchUrl = 'https://listado.mercadolibre.com.ar/' + encodeURIComponent(query).replace(/%20/g, '-');
+    if (status) status.innerHTML = 'No se pudo conectar. <a href="' + mlSearchUrl + '" target="_blank" rel="noopener" style="color:var(--primary)">Buscar en Mercado Libre →</a>';
+    grid.innerHTML = '<p style="padding:40px 20px;text-align:center;color:var(--text-muted)">Usá el link de arriba para ver publicaciones en Mercado Libre.</p>';
+  }
+
+  // Try edge function first (runs on Netlify servers, avoids CORS)
+  var edgeUrl = '/api/ml-search?q=' + encodeURIComponent(query) + '&limit=48' + (cond ? '&cond=' + cond : '');
+  fetch(edgeUrl)
     .then(function(r) {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
+      if (!r.ok) throw new Error('edge ' + r.status);
       return r.json();
     })
     .then(function(data) {
       var items = data.results || [];
-      renderML(items);
-      mlLoaded = true;
+      if (!items.length) throw new Error('edge empty');
+      onItems(items, null);
     })
-    .catch(function(err) {
-      // Fallback al edge function propio
-      var url = '/api/ml-search?q=' + encodeURIComponent(query) + '&limit=48';
-      fetch(url)
-        .then(function(r){ return r.json(); })
-        .then(function(data){
-          var items = data.results || [];
-          if (cond) items = items.filter(function(p){ return p.condition === cond; });
-          renderML(items);
-          mlLoaded = true;
+    .catch(function() {
+      // Fallback: direct browser call to ML public API (supports CORS)
+      var mlUrl = 'https://api.mercadolibre.com/sites/MLA/search?q=' + encodeURIComponent(query) + '&limit=48' + condParam;
+      fetch(mlUrl)
+        .then(function(r) {
+          if (!r.ok) throw new Error('ml ' + r.status);
+          return r.json();
         })
-        .catch(function(){
-          if (status) status.textContent = 'Error al conectar con Mercado Libre. Intentá de nuevo.';
-          grid.innerHTML = '';
+        .then(function(data) {
+          var items = data.results || [];
+          if (!items.length) throw new Error('ml empty');
+          onItems(items, null);
+        })
+        .catch(function() {
+          showFallback();
         });
     });
 }
