@@ -2452,8 +2452,9 @@ function renderSpotsGrid(prov){
   var grid=document.getElementById('spotsGrid');
   if(!grid)return;
   var list=prov==='all'?SPOTS:(prov==='cable'?SPOTS.filter(function(s){return s.cable}):SPOTS.filter(function(s){return s.p===prov&&!s.cable}));
-  grid.innerHTML=list.map(function(s){
-    return '<article class="spot-card">'+
+  grid.innerHTML=list.map(function(s,i){
+    var idx=SPOTS.indexOf(s);
+    return '<article class="spot-card'+(s.months?' spot-card--extended':'')+'">'+
       '<div class="spot-card__img">'+
         '<img src="'+s.img+'" alt="'+s.n+' - spot de '+(s.cable?'wakeboard cable park':'wingfoil')+' en '+s.prov+' Argentina" loading="lazy" onerror="this.parentNode.innerHTML=\'<div class=spot-img-fallback>'+(s.cable?'🛶':'🏄')+'</div>\'">'+
         '<span class="spot-card__badge">'+(s.cable?'🛶 Cable':'🏄 WingFoil')+'</span>'+
@@ -2464,12 +2465,82 @@ function renderSpotsGrid(prov){
         '<p class="spot-card__desc">'+s.d+'</p>'+
         '<div class="spot-card__meta">'+s.tags.map(function(t){return '<span class="spot-tag">'+t+'</span>'}).join('')+'</div>'+
         '<div class="spot-wind">💨 '+s.w+'</div>'+
+        (s.months?'<button onclick="openSpotDetail('+idx+')" style="display:block;width:100%;margin-top:10px;padding:9px 14px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer">Ver detalles completos →</button>':'')+
         '<a href="https://www.windguru.cz/search.php?searchTerm='+encodeURIComponent(s.n.split(' — ')[0])+'" target="_blank" rel="noopener" class="spot-windguru">🌬️ Ver pronóstico de viento <span>↗</span></a>'+
       '</div>'+
     '</article>';
   }).join('');
   if(typeof add3D==='function')add3D('.spot-card');
 }
+
+function openSpotDetail(idx){
+  var s=SPOTS[idx];
+  if(!s)return;
+  var lvIcon=s.lv==='b'?'🟢':s.lv==='i'?'🔵':s.lv==='a'?'🔴':'🟡';
+  var lvText=s.lvLabel||(s.lv==='b'?'Principiante':s.lv==='i'?'Intermedio':s.lv==='a'?'Avanzado':'Cable Park');
+  var modal=document.getElementById('spotDetailModal');
+  if(!modal){
+    modal=document.createElement('dialog');
+    modal.id='spotDetailModal';
+    modal.style.cssText='max-width:760px;width:94vw;max-height:90vh;overflow-y:auto;border-radius:16px;border:1px solid var(--border);background:var(--surface);color:var(--text);padding:0;box-shadow:0 32px 80px rgba(0,0,0,.5)';
+    document.body.appendChild(modal);
+  }
+  var schoolsHtml='';
+  if(s.schools&&s.schools.length){
+    schoolsHtml='<h3 style="font-family:\'Clash Display\',sans-serif;font-size:18px;font-weight:800;margin:28px 0 12px">🏫 Escuelas y puntos de acceso</h3>'+
+      s.schools.map(function(sc){
+        return '<div style="display:flex;gap:12px;margin-bottom:14px;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;overflow:hidden">'+
+          '<img src="'+sc.img+'" alt="'+sc.n+'" style="width:90px;height:90px;object-fit:cover;flex-shrink:0" loading="lazy"/>'+
+          '<div style="padding:10px 12px 10px 0;min-width:0">'+
+            '<div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px">'+sc.n+'</div>'+
+            '<div style="font-size:13px;color:var(--text-muted);line-height:1.5;margin-bottom:6px">'+sc.d+'</div>'+
+            '<div style="display:inline-block;font-size:11px;font-weight:700;color:var(--primary);background:var(--primary-glow);padding:3px 10px;border-radius:99px">'+sc.acc+'</div>'+
+          '</div>'+
+        '</div>';
+      }).join('');
+  }
+  var galleryHtml='';
+  if(s.gallery&&s.gallery.length){
+    galleryHtml='<h3 style="font-family:\'Clash Display\',sans-serif;font-size:18px;font-weight:800;margin:28px 0 12px">📸 Galería de la comunidad</h3>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
+      s.gallery.map(function(g){return '<img src="'+g+'" loading="lazy" style="width:100%;height:110px;object-fit:cover;border-radius:10px"/>'}).join('')+
+      '</div>';
+  }
+  modal.innerHTML=
+    '<div style="position:sticky;top:0;z-index:2;background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between">'+
+      '<span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary)">🏄 '+s.prov+' · '+lvIcon+' '+lvText+'</span>'+
+      '<button onclick="document.getElementById(\'spotDetailModal\').close()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:22px;line-height:1;padding:4px 8px">&times;</button>'+
+    '</div>'+
+    '<div style="padding:0">'+
+      '<img src="'+s.img+'" alt="'+s.n+'" style="width:100%;height:220px;object-fit:cover;display:block" loading="lazy"/>'+
+      '<div style="padding:28px 28px 0">'+
+        '<h2 style="font-family:\'Clash Display\',sans-serif;font-size:clamp(24px,4vw,36px);font-weight:800;line-height:1.15;margin-bottom:8px">'+s.n+'</h2>'+
+        '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">'+s.tags.map(function(t){return '<span style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;background:var(--surface-2);border:1px solid var(--border)">'+t+'</span>'}).join('')+'</div>'+
+        '<p style="color:var(--text-muted);font-size:15px;line-height:1.7;margin-bottom:20px">'+s.d+'</p>'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px">'+
+          '<div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center">'+
+            '<div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px">Viento</div>'+
+            '<div style="font-size:13px;font-weight:700">💨 '+s.w+'</div>'+
+          '</div>'+
+          '<div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center">'+
+            '<div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px">Nivel</div>'+
+            '<div style="font-size:13px;font-weight:700">'+lvIcon+' '+lvText+'</div>'+
+          '</div>'+
+          '<div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center">'+
+            '<div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px">Pronóstico</div>'+
+            '<div style="font-size:13px;font-weight:700"><a href="https://www.windguru.cz/search.php?searchTerm='+encodeURIComponent(s.n.split(' — ')[0])+'" target="_blank" rel="noopener" style="color:var(--primary)">Windguru ↗</a></div>'+
+          '</div>'+
+        '</div>'+
+        (s.months?'<h3 style="font-family:\'Clash Display\',sans-serif;font-size:18px;font-weight:800;margin:0 0 10px">📅 Mejores meses</h3><p style="color:var(--text-muted);font-size:14px;line-height:1.7;margin-bottom:0">'+s.months+'</p>':'')+
+        (s.howTo?'<h3 style="font-family:\'Clash Display\',sans-serif;font-size:18px;font-weight:800;margin:28px 0 10px">🚗 Cómo llegar y estacionar</h3><p style="color:var(--text-muted);font-size:14px;line-height:1.7;margin-bottom:0">'+s.howTo+'</p>':'')+
+        schoolsHtml+
+        galleryHtml+
+        '<div style="height:32px"></div>'+
+      '</div>'+
+    '</div>';
+  modal.showModal();
+}
+
 var ptabs=document.getElementById('spotsProvinceTabs');
 if(ptabs){
   renderSpotsGrid('all');
