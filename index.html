@@ -3617,18 +3617,35 @@ function fetchML() {
   var cond = document.getElementById('mlCondicion').value;
   if (status) status.textContent = 'Buscando en Mercado Libre...';
   grid.innerHTML = '<p style="padding:40px 20px;text-align:center;color:var(--text-muted)">Cargando...</p>';
-  var url = '/api/ml-search?q=' + encodeURIComponent(query) + '&limit=48' + (cond ? '&condition='+cond : '');
-  fetch(url)
-    .then(function(r){ return r.json(); })
-    .then(function(data){
+
+  // Llamada directa al API público de ML (soporta CORS desde browsers)
+  var mlUrl = 'https://api.mercadolibre.com/sites/MLA/search?q=' + encodeURIComponent(query) + '&limit=48' + (cond ? '&ITEM_CONDITION=' + cond : '');
+
+  fetch(mlUrl, { headers: { 'Accept': 'application/json' } })
+    .then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function(data) {
       var items = data.results || [];
-      if (cond) items = items.filter(function(p){ return p.condition === cond; });
       renderML(items);
       mlLoaded = true;
     })
-    .catch(function(){
-      if (status) status.textContent = 'Error al conectar con Mercado Libre. Intentá de nuevo.';
-      grid.innerHTML = '';
+    .catch(function(err) {
+      // Fallback al edge function propio
+      var url = '/api/ml-search?q=' + encodeURIComponent(query) + '&limit=48';
+      fetch(url)
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          var items = data.results || [];
+          if (cond) items = items.filter(function(p){ return p.condition === cond; });
+          renderML(items);
+          mlLoaded = true;
+        })
+        .catch(function(){
+          if (status) status.textContent = 'Error al conectar con Mercado Libre. Intentá de nuevo.';
+          grid.innerHTML = '';
+        });
     });
 }
 
