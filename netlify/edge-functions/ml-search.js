@@ -11,7 +11,15 @@ export default async function handler(request) {
   const mlUrl = `https://api.mercadolibre.com/sites/MLA/search?q=${encodeURIComponent(query)}&limit=${limit}${condParam}`;
 
   try {
-    const res = await fetch(mlUrl);
+    const res = await fetch(mlUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        'Accept': 'application/json, text/plain, */*',
+        'Accept-Language': 'es-AR,es;q=0.9,en;q=0.8',
+        'Referer': 'https://www.mercadolibre.com.ar/',
+        'Origin': 'https://www.mercadolibre.com.ar',
+      },
+    });
     if (!res.ok) throw new Error(`ML API ${res.status}`);
     const data = await res.json();
 
