@@ -3622,48 +3622,56 @@ function fetchML() {
   var condMap = { 'new': '2230284', 'used': '2230581' };
   var condParam = cond && condMap[cond] ? '&ITEM_CONDITION=' + condMap[cond] : '';
 
-  function onItems(items, fromCond) {
-    // Client-side filter when condition couldn't be passed to API
-    if (fromCond && items.length) items = items.filter(function(p){ return p.condition === fromCond; });
-    renderML(items);
+  function showFallback() {
+    var mlSearchUrl = 'https://listado.mercadolibre.com.ar/' + query.trim().replace(/\s+/g, '-');
+    if (status) status.textContent = '';
+    grid.innerHTML =
+      '<div style="grid-column:1/-1;background:var(--surface-2);border:1.5px solid var(--border);border-radius:16px;padding:40px 32px;text-align:center">' +
+        '<div style="font-size:40px;margin-bottom:16px">🛒</div>' +
+        '<div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">Ver publicaciones en Mercado Libre</div>' +
+        '<div style="font-size:14px;color:var(--text-muted);margin-bottom:24px">Encontrá wings, tablas, foils y kits de wingfoil en Argentina</div>' +
+        '<a href="' + mlSearchUrl + '" target="_blank" rel="noopener" class="btn btn--primary" style="display:inline-flex;align-items:center;gap:8px;font-size:15px;padding:14px 28px">' +
+          'Buscar "' + query + '" en Mercado Libre →' +
+        '</a>' +
+        '<div style="margin-top:20px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">' +
+          '<a href="https://listado.mercadolibre.com.ar/wing-foil" target="_blank" rel="noopener" style="font-size:13px;color:var(--primary);text-decoration:none;padding:6px 14px;border:1px solid var(--border);border-radius:99px">🪂 Wings</a>' +
+          '<a href="https://listado.mercadolibre.com.ar/tabla-wing-foil" target="_blank" rel="noopener" style="font-size:13px;color:var(--primary);text-decoration:none;padding:6px 14px;border:1px solid var(--border);border-radius:99px">🏄 Tablas</a>' +
+          '<a href="https://listado.mercadolibre.com.ar/hydrofoil-kitesurf" target="_blank" rel="noopener" style="font-size:13px;color:var(--primary);text-decoration:none;padding:6px 14px;border:1px solid var(--border);border-radius:99px">🦈 Foils</a>' +
+          '<a href="https://listado.mercadolibre.com.ar/kit-wing-foil" target="_blank" rel="noopener" style="font-size:13px;color:var(--primary);text-decoration:none;padding:6px 14px;border:1px solid var(--border);border-radius:99px">📦 Kits</a>' +
+        '</div>' +
+      '</div>';
     mlLoaded = true;
   }
 
-  function showFallback() {
-    var mlSearchUrl = 'https://listado.mercadolibre.com.ar/' + encodeURIComponent(query).replace(/%20/g, '-');
-    if (status) status.innerHTML = 'No se pudo conectar. <a href="' + mlSearchUrl + '" target="_blank" rel="noopener" style="color:var(--primary)">Buscar en Mercado Libre →</a>';
-    grid.innerHTML = '<p style="padding:40px 20px;text-align:center;color:var(--text-muted)">Usá el link de arriba para ver publicaciones en Mercado Libre.</p>';
+  function tryFetch(url, timeoutMs, callback) {
+    var done = false;
+    var timer = setTimeout(function() {
+      if (!done) { done = true; callback(null); }
+    }, timeoutMs);
+    fetch(url)
+      .then(function(r) { return r.ok ? r.json() : Promise.reject('http ' + r.status); })
+      .then(function(data) {
+        if (!done) { done = true; clearTimeout(timer); callback(data); }
+      })
+      .catch(function() {
+        if (!done) { done = true; clearTimeout(timer); callback(null); }
+      });
   }
 
-  // Try edge function first (runs on Netlify servers, avoids CORS)
+  // Try edge function first (Netlify server → ML API, no CORS issues)
   var edgeUrl = '/api/ml-search?q=' + encodeURIComponent(query) + '&limit=48' + (cond ? '&cond=' + cond : '');
-  fetch(edgeUrl)
-    .then(function(r) {
-      if (!r.ok) throw new Error('edge ' + r.status);
-      return r.json();
-    })
-    .then(function(data) {
-      var items = data.results || [];
-      if (!items.length) throw new Error('edge empty');
-      onItems(items, null);
-    })
-    .catch(function() {
-      // Fallback: direct browser call to ML public API (supports CORS)
-      var mlUrl = 'https://api.mercadolibre.com/sites/MLA/search?q=' + encodeURIComponent(query) + '&limit=48' + condParam;
-      fetch(mlUrl)
-        .then(function(r) {
-          if (!r.ok) throw new Error('ml ' + r.status);
-          return r.json();
-        })
-        .then(function(data) {
-          var items = data.results || [];
-          if (!items.length) throw new Error('ml empty');
-          onItems(items, null);
-        })
-        .catch(function() {
-          showFallback();
-        });
+  tryFetch(edgeUrl, 8000, function(data) {
+    var items = data && data.results && data.results.length ? data.results : null;
+    if (items) { renderML(items); mlLoaded = true; return; }
+
+    // Fallback: direct ML API (public, supports CORS from browsers)
+    var mlUrl = 'https://api.mercadolibre.com/sites/MLA/search?q=' + encodeURIComponent(query) + '&limit=48' + condParam;
+    tryFetch(mlUrl, 8000, function(data2) {
+      var items2 = data2 && data2.results && data2.results.length ? data2.results : null;
+      if (items2) { renderML(items2); mlLoaded = true; return; }
+      showFallback();
     });
+  });
 }
 
 var mlBtn = document.getElementById('mlSearchBtn');
