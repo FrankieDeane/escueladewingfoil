@@ -1782,7 +1782,7 @@ textarea{resize:vertical;min-height:90px}
     <div class="blog-grid">
 
       <article class="blog-card" id="blogCardFoil" style="cursor:pointer" onclick="document.getElementById('articleFoil').showModal()">
-        <div class="blog-card__cover" style="background:linear-gradient(135deg,#041828,#0b3a5c)"><span>🦈</span></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://source.unsplash.com/zFc3PKRXEzM/800x450" alt="Persona surfeando con foil en el océano" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat">Guía completa</span>
           <h3 class="blog-card__title">Cómo elegir tu primer foil</h3>
@@ -1801,6 +1801,7 @@ textarea{resize:vertical;min-height:90px}
           <button onclick="document.getElementById('articleFoil').close()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:22px;line-height:1;padding:4px 8px">&times;</button>
         </div>
         <div style="padding:36px 32px 48px">
+          <img src="https://source.unsplash.com/zFc3PKRXEzM/760x380" alt="Persona surfeando con foil en el océano" style="width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:28px" loading="lazy"/>
           <h2 style="font-family:'Clash Display',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;line-height:1.15;margin-bottom:12px">Cómo elegir tu primer foil</h2>
           <p style="color:var(--text-muted);font-size:14px;margin-bottom:36px">Por el equipo de Escuela de Wingfoil · Mayo 2026</p>
 
@@ -1962,7 +1963,7 @@ textarea{resize:vertical;min-height:90px}
 
       <article class="blog-card" id="blogCardViento" style="cursor:pointer" onclick="document.getElementById('articleViento').showModal()">
         <div class="blog-card__cover" style="padding:0;overflow:hidden">
-          <img src="https://source.unsplash.com/Ze4tsZkbmKQ/800x450" alt="Surfer leyendo el viento" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/>
+          <img src="https://source.unsplash.com/CjCsrWsVYJ0/800x450" alt="Surfer leyendo el viento" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/>
         </div>
         <div class="blog-card__body">
           <span class="blog-card__cat">Técnica</span>
@@ -1982,7 +1983,7 @@ textarea{resize:vertical;min-height:90px}
           <button onclick="document.getElementById('articleViento').close()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:22px;line-height:1;padding:4px 8px">&times;</button>
         </div>
         <div style="padding:36px 32px 48px">
-          <img src="https://source.unsplash.com/Ze4tsZkbmKQ/760x380" alt="Rider leyendo el viento" style="width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:28px" loading="lazy"/>
+          <img src="https://source.unsplash.com/CjCsrWsVYJ0/760x380" alt="Rider leyendo el viento" style="width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:28px" loading="lazy"/>
           <h2 style="font-family:'Clash Display',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;line-height:1.15;margin-bottom:12px">Cómo leer el viento como un pro</h2>
           <p style="color:var(--text-muted);font-size:14px;margin-bottom:36px">Por el equipo de Escuela de Wingfoil · Mayo 2026</p>
 
@@ -2345,7 +2346,7 @@ textarea{resize:vertical;min-height:90px}
 
 // ============ SPOTS DATA ============
 var SPOTS=[
-  {p:'bsas',prov:'BS AS',n:'San Isidro',d:'El spot más activo del GBA. Río de la Plata flat, viento termal S/SO de tarde.',w:'S/SO 12-25 kn',lv:'b',tags:['Río','Flat water'],x:215,y:240,lat:-34.4738,lng:-58.5054,img:'https://cvsi.org.ar/wp-content/uploads/2022/04/Kite-1-1600x800-1-1024x512.jpg'},
+  {p:'bsas',prov:'BS AS',n:'San Isidro',d:'El spot más activo del GBA. Río de la Plata flat, viento termal S/SO de tarde. La zona incluye varios puntos de acceso al agua entre Martínez y Acassuso, con comunidad activa de wingfoil y kite todo el año.',w:'S/SO 12-25 kn',lv:'b',lvLabel:'Principiante a Avanzado',tags:['Río','Flat water','Comunidad activa'],x:215,y:240,lat:-34.4738,lng:-58.5054,img:'https://cvsi.org.ar/wp-content/uploads/2022/04/Kite-1-1600x800-1-1024x512.jpg',months:'Los mejores meses son <strong>octubre a marzo</strong> (temporada alta). El viento termal del S/SO aparece de tarde (13 a 19 hs) con más consistencia en verano, llegando a 15-22 kn. En invierno también hay días buenos pero el agua está más fría y el viento menos predecible.',howTo:'<strong>Cómo llegar:</strong> Por la Autopista Panamericana, salida San Isidro/Acassuso. También accesible en tren Mitre línea Tigre (estaciones Acassuso o San Isidro). <strong>Estacionamiento:</strong> En Perú Beach hay playa de estacionamiento paga. En La Plazita de Martínez el estacionamiento es en la calle (Av. del Libertador y bajadas). En el CASI solo socios/autorizados.',schools:[{n:'Wingfoil y Kite Perú Beach',d:'Escuela en playa privada en Acassuso. Acceso directo al río, equipos propios para alquiler y clases grupales e individuales. Instalaciones con vestuarios y bar.',img:'https://images.unsplash.com/photo-1666175497584-dab60dcf1419?q=80&w=600&auto=format&fit=crop',acc:'Acceso pago por día o con membresía.'},{n:'Puerto Tablas',d:'Spot y club náutico con zona específica para windfoil, wingfoil y kite. Buena infraestructura, instructores certificados y alquiler de equipos. Ideal para principiantes por el acceso controlado al agua.',img:'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=600&auto=format&fit=crop&q=60',acc:'Acceso por membresía o pase diario.'},{n:'El Ombú',d:'Punto de lanzamiento clásico de la zona con pequeña playa sobre el Río de la Plata. Comunidad establecida, se pueden ver riders de todos los niveles. Espacio para armar equipo en la orilla.',img:'https://images.unsplash.com/photo-1666175497141-ef62a9c65558?w=600&auto=format&fit=crop&q=60',acc:'Acceso libre.'},{n:'La Playita del CASI',d:'Playa privada del Club Atlético San Isidro, una de las mejores del corredor. Agua plana, salida limpia, muy bien organizado. Para acceder sin ser socio del club hay que entrar con autorización de una escuela afiliada.',img:'https://images.unsplash.com/photo-1615840956750-3262c5fffb62?w=600&auto=format&fit=crop&q=60',acc:'Solo con autorización de escuela afiliada o socio del club.'},{n:'La Plazita de Martínez',d:'Pequeño espacio público sobre el río en Martínez adonde va mucha gente a salir sin pagar acceso a club. Menos infraestructura que los spots privados pero es el más libre y accesible. Comunidad informal muy activa, buen ambiente.',img:'https://images.unsplash.com/photo-1760506067710-c740a40c23ea?w=600&auto=format&fit=crop&q=60',acc:'Acceso público y gratuito.'}],gallery:['https://cvsi.org.ar/wp-content/uploads/2022/04/Kite-1-1600x800-1-1024x512.jpg','https://images.unsplash.com/photo-1666175497562-ccb66e6c373b?w=600&auto=format&fit=crop&q=60','https://images.unsplash.com/photo-1666175497141-ef62a9c65558?w=600&auto=format&fit=crop&q=60','https://images.unsplash.com/photo-1730134427096-c167c128e119?w=600&auto=format&fit=crop&q=60']},
   {p:'bsas',prov:'BS AS',n:'Mar del Plata — Waikiki',d:'Costa atlántica con olas. Nivel intermedio-avanzado.',w:'S/SE 15-30 kn',lv:'i',tags:['Atlántico','Olas'],x:228,y:298,lat:-38.0167,lng:-57.5333,img:'https://www.lanacion.com.ar/resizer/v2/en-waikiki-mar-del-EKJUNPYS2NGCNDBVUOPROLTROQ.jpeg?auth=1fc2af0beb4fccd55d0e51389c68d51a0fd50c26e892efc896174d16d0a6855a&width=1200&height=800&quality=70&smart=true'},
   {p:'bsas',prov:'BS AS',n:'Pinamar — La Frontera',d:'Spot familiar. Viento S/SE constante, agua limpia.',w:'S/SE 12-22 kn',lv:'b',tags:['Atlántico','Familia'],x:225,y:280,lat:-37.1075,lng:-56.8617,img:'https://www.infobae.com/resizer/v2/K6JPISHRHJA6JC5NABNE7ZZ2PQ.jpg?auth=ba66c5cf9f245474ea21b4641a2bc2601caf37d6ac01e8e16e5adee48057af20&smart=true&width=350&height=197&quality=85'},
   {p:'bsas',prov:'BS AS',n:'Chascomús — Laguna',d:'Laguna de agua dulce, plana. Viento termal estable de tarde.',w:'S 10-20 kn',lv:'b',tags:['Laguna','Flat water'],x:200,y:265,lat:-35.5731,lng:-58.0264,img:'https://tn.com.ar/resizer/v2/ni-chascomus-ni-lobos-la-playa-de-rio-que-esta-a-2-horas-de-buenos-aires-ideal-para-ir-estas-vacaciones-fotos-turismo-san-pedro-WEGKSMXG7JGL5AHB4N7I5KZ6QU.png?auth=2fd5cdedad81ccc4049aa95f33b985c80a30fe518b2fab2df8eb2c837be4a465&width=1440'},
@@ -2456,7 +2457,7 @@ function renderSpotsGrid(prov){
       '<div class="spot-card__img">'+
         '<img src="'+s.img+'" alt="'+s.n+' - spot de '+(s.cable?'wakeboard cable park':'wingfoil')+' en '+s.prov+' Argentina" loading="lazy" onerror="this.parentNode.innerHTML=\'<div class=spot-img-fallback>'+(s.cable?'🛶':'🏄')+'</div>\'">'+
         '<span class="spot-card__badge">'+(s.cable?'🛶 Cable':'🏄 WingFoil')+'</span>'+
-        '<span class="spot-card__level spot-card__level--'+s.lv+'">'+LV[s.lv]+'</span>'+
+        '<span class="spot-card__level spot-card__level--'+s.lv+'">'+(s.lvLabel||LV[s.lv])+'</span>'+
       '</div>'+
       '<div class="spot-card__body">'+
         '<h3 class="spot-card__name">'+s.n+'</h3>'+
@@ -2512,15 +2513,44 @@ function renderMapPins(){
 
 function showSpotDetail(s){
   if(!detailPanel)return;
-  detailPanel.innerHTML=
+  var lvIcon=s.lv==='b'?'🟢':s.lv==='i'?'🔵':s.lv==='a'?'🔴':'🟡';
+  var lvText=s.lvLabel||(s.lv==='b'?'Principiante':s.lv==='i'?'Intermedio':s.lv==='a'?'Avanzado':'Cable Park');
+  var html=
     '<div class="detail-img"><img src="'+s.img+'" alt="'+s.n+'" onerror="this.parentNode.innerHTML=\'<div class=detail-img-fallback>'+(s.cable?'🛶':'🏄')+'</div>\'"></div>'+
     '<div><div class="detail-prov">📍 '+s.prov+'</div><div class="detail-name">'+s.n+'</div></div>'+
     '<div class="detail-desc">'+s.d+'</div>'+
     '<div class="detail-stats">'+
       '<div class="dstat"><div class="dstat-label">Viento</div><div class="dstat-val">💨 '+s.w+'</div></div>'+
-      '<div class="dstat"><div class="dstat-label">Nivel</div><div class="dstat-val">'+(s.lv==='b'?'🟢 Principiante':s.lv==='i'?'🔵 Intermedio':s.lv==='a'?'🔴 Avanzado':'🟡 Cable Park')+'</div></div>'+
+      '<div class="dstat"><div class="dstat-label">Nivel</div><div class="dstat-val">'+lvIcon+' '+lvText+'</div></div>'+
     '</div>'+
     '<div class="detail-tags">'+s.tags.map(function(t){return '<span class="dtag">'+t+'</span>'}).join('')+'</div>';
+  if(s.months){
+    html+='<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)"><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">📅 Mejores meses</div><div style="font-size:13px;color:var(--text-muted);line-height:1.6">'+s.months+'</div></div>';
+  }
+  if(s.howTo){
+    html+='<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)"><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">🚗 Cómo llegar</div><div style="font-size:13px;color:var(--text-muted);line-height:1.6">'+s.howTo+'</div></div>';
+  }
+  if(s.schools&&s.schools.length){
+    html+='<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)"><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:10px">🏫 Escuelas y accesos</div>';
+    s.schools.forEach(function(sc){
+      html+='<div style="display:flex;gap:10px;margin-bottom:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;overflow:hidden">'+
+        '<img src="'+sc.img+'" alt="'+sc.n+'" style="width:72px;height:72px;object-fit:cover;flex-shrink:0" loading="lazy"/>'+
+        '<div style="padding:8px 10px 8px 0;min-width:0">'+
+          '<div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px">'+sc.n+'</div>'+
+          '<div style="font-size:12px;color:var(--text-muted);line-height:1.5;margin-bottom:4px">'+sc.d+'</div>'+
+          '<div style="font-size:11px;font-weight:600;color:var(--primary)">'+sc.acc+'</div>'+
+        '</div>'+
+      '</div>';
+    });
+    html+='</div>';
+  }
+  if(s.gallery&&s.gallery.length){
+    html+='<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)"><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:10px">📸 Galería de la comunidad</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">'+
+      s.gallery.map(function(g){return '<img src="'+g+'" loading="lazy" style="width:100%;height:80px;object-fit:cover;border-radius:8px"/>'}).join('')+
+      '</div></div>';
+  }
+  detailPanel.innerHTML=html;
 }
 
 var mapCtrls=document.getElementById('mapCtrls');
@@ -3026,7 +3056,7 @@ if('serviceWorker' in navigator){
 
 // ============ MANIOBRAS CATALOG ============
 var MANIOBRAS = [
-  {n:'Foileo',sub:'Take off / Touch up',cat:'basic',catLabel:'Básica',diff:1,img:'https://images.unsplash.com/photo-1666175497562-ccb66e6c373b?w=600&auto=format&fit=crop&q=60',vid:'3Ymmdz2yv_0',d:'La primera vez que la tabla despega del agua y empezás a volar. El logro principal del primer mes.'},
+  {n:'Foileo',sub:'Take off / Touch up',cat:'basic',catLabel:'Básica',diff:1,img:'https://images.unsplash.com/photo-1666175497562-ccb66e6c373b?w=600&auto=format&fit=crop&q=60',vid:'KyizUfMxboU',d:'La primera vez que la tabla despega del agua y empezás a volar. El logro principal del primer mes.'},
   {n:'Pumpear',sub:'Pumping',cat:'basic',catLabel:'Básica',diff:1,img:'https://images.unsplash.com/photo-1666175497141-ef62a9c65558?w=600&auto=format&fit=crop&q=60',vid:'8TZgz8xgo_k',d:'Generar velocidad bombeando el ala y/o las piernas. Fundamental para arrancar y mantener el foileo.'},
   {n:'Upwind',sub:'Vuelta al origen',cat:'basic',catLabel:'Básica',diff:2,img:'https://images.unsplash.com/photo-1730134427096-c167c128e119?w=600&auto=format&fit=crop&q=60',vid:'7M3Cqw9dm9M',d:'Navegar contra el viento para volver al punto de partida. Lo segundo más importante después del foileo.'},
   {n:'Touch down controlado',sub:'Aterrizaje suave',cat:'basic',catLabel:'Básica',diff:2,img:'https://images.unsplash.com/photo-1615840956750-3262c5fffb62?w=600&auto=format&fit=crop&q=60',vid:'Osn3w7CmItE',d:'Volver a tocar el agua sin perder velocidad ni caerse. Permite recuperar y seguir.'},
