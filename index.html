@@ -138,6 +138,8 @@ input,textarea,select{font:inherit;color:inherit}
 @media(max-width:900px){.nav-desktop{display:none}}
 
 .header__actions{display:flex;align-items:center;gap:6px}
+.header__cta-inst{display:none;font-size:12px;font-weight:700;letter-spacing:.04em}
+@media(max-width:900px){.header__cta-inst{display:inline-flex}}
 [data-theme='light'] .icon-moon{display:none}
 [data-theme='dark'] .icon-sun{display:none}
 
@@ -1051,6 +1053,7 @@ textarea{resize:vertical;min-height:90px}
   <a href="#calculadora">Calculadora</a>
     </nav>
     <div class="header__actions">
+      <a href="#instructores" class="btn btn--sm btn--primary header__cta-inst">👨‍🏫 Instructores</a>
       <a href="https://www.instagram.com/clubkitewing/" target="_blank" rel="noopener" class="btn-icon" aria-label="Instagram">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></svg>
       </a>
