@@ -1,7 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
   <rect width="36" height="36" rx="8" fill="#040e1a"/>
-  <path d="M18 16 C14 10 7 8 2 10 C7 11 12 13 15 17 Z" fill="#00b4d8" opacity=".9"/>
-  <path d="M18 16 C22 10 29 8 34 10 C29 11 24 13 21 17 Z" fill="#00b4d8" opacity=".75"/>
-  <path d="M18 16 C20 19 18 20 20 19 L21 17 C20 18 18 18.5 16 17.5 Z" fill="#00b4d8"/>
-  <circle cx="21.5" cy="16" r="2" fill="#00b4d8"/>
+  <!-- Left wing - bold sweep -->
+  <path d="M18 18 C13 9 4 6 0 9 C4 14 12 17 15 21 Z" fill="#00b4d8"/>
+  <!-- Right wing - bold sweep -->
+  <path d="M18 18 C23 9 32 6 36 9 C32 14 24 17 21 21 Z" fill="#00b4d8" opacity=".85"/>
+  <!-- Mast -->
+  <line x1="18" y1="21" x2="18" y2="28" stroke="#00b4d8" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Foil -->
+  <line x1="12" y1="28" x2="24" y2="28" stroke="#00b4d8" stroke-width="2.5" stroke-linecap="round"/>
 </svg>
