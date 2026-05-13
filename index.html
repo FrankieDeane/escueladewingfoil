@@ -2758,6 +2758,8 @@ if(instrForm){
     var ks=document.getElementById('chk-kitesurf').checked;
     var msg=document.getElementById('instrFormMsg');
     if(!nombre||!apellido||!wa||!ub){msg.hidden=false;msg.className='form-msg form-msg--err';msg.textContent='Completá los campos obligatorios.';return}
+    var deportes=[wf?'wingfoil':'',ks?'kitesurf':''].filter(Boolean).join(',');
+    fetch('/api/instructors',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({nombre:nombre,apellido:apellido,whatsapp:wa,ubicacion:ub,bio:bio,deportes:deportes}).toString()}).catch(function(){});
     var avatar=instrFotoData?'<img class="instructor-card__photo" src="'+instrFotoData+'" alt="">':'<div class="instructor-card__photo">🏄</div>';
     var sports='';
     if(wf)sports+='<span class="sport-tag">🏄 Wingfoil</span>';
@@ -2813,6 +2815,7 @@ if(equipoForm){
     var wa=document.getElementById('eq-wa').value.trim();
     var msg=document.getElementById('equipoMsg');
     if(!tipo||!marca||!precio||!ub||!desc||!wa){msg.innerHTML='<div class="form-msg form-msg--err">Completá todos los campos.</div>';return}
+    fetch('/api/equipos',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({tipo:tipo,marca:marca,precio:precio,ubicacion:ub,descripcion:desc,whatsapp:wa}).toString()}).catch(function(){});
     var fotosHtml='';
     if(fotosData.length)fotosHtml='<div class="equipo-card__fotos">'+fotosData.map(function(src){return '<img src="'+src+'" alt="">'}).join('')+'</div>';
     var precioNum=parseInt(precio.replace(/[^0-9]/g,''));
@@ -3543,6 +3546,63 @@ if (sc) { sc.addEventListener('click', function(){
 }); }
 
 loadTiendas();
+
+// ============ HTML ESCAPE ============
+function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ============ LOAD INSTRUCTORS ============
+async function loadInstructors(){
+  var grid=document.getElementById('instructorsGrid');
+  if(!grid)return;
+  try{
+    var r=await fetch('/api/instructors');
+    if(!r.ok)return;
+    var list=await r.json();
+    list.forEach(function(d){
+      var sports='';
+      (d.deportes||'').split(',').forEach(function(s){
+        if(s==='wingfoil')sports+='<span class="sport-tag">🏄 Wingfoil</span>';
+        if(s==='kitesurf')sports+='<span class="sport-tag">🪁 Kitesurf</span>';
+      });
+      var card=document.createElement('div');
+      card.className='instructor-card';
+      card.innerHTML='<div class="instructor-card__photo">🏄</div>'+
+        '<div class="instructor-card__name">'+escHtml(d.nombre)+' '+escHtml(d.apellido)+'</div>'+
+        '<div class="instructor-card__loc">📍 '+escHtml(d.ubicacion)+'</div>'+
+        (sports?'<div class="instructor-card__sports">'+sports+'</div>':'')+
+        (d.bio?'<p class="instructor-card__bio">'+escHtml(d.bio)+'</p>':'')+
+        '<a class="instructor-card__wa" href="https://wa.me/'+(d.whatsapp||'').replace(/[^0-9]/g,'')+'" target="_blank" rel="noopener">WhatsApp</a>';
+      grid.appendChild(card);
+    });
+  }catch(e){}
+}
+
+// ============ LOAD EQUIPOS ============
+async function loadEquipos(){
+  var grid=document.getElementById('equiposGrid');
+  if(!grid)return;
+  try{
+    var r=await fetch('/api/equipos');
+    if(!r.ok)return;
+    var list=await r.json();
+    list.forEach(function(d){
+      var precioNum=parseInt((d.precio||'').replace(/[^0-9]/g,''));
+      var precioFmt=isNaN(precioNum)?escHtml(d.precio):'$ '+precioNum.toLocaleString('es-AR');
+      var card=document.createElement('div');
+      card.className='equipo-card';
+      card.innerHTML='<span class="equipo-card__badge">'+escHtml(d.tipo)+'</span>'+
+        '<div class="equipo-card__title">'+escHtml(d.marca)+'</div>'+
+        '<div class="equipo-card__precio">'+precioFmt+'</div>'+
+        '<p class="equipo-card__desc">'+escHtml(d.descripcion)+'</p>'+
+        '<div class="equipo-card__meta">📍 '+escHtml(d.ubicacion)+'</div>'+
+        '<a class="equipo-card__wa" href="https://wa.me/'+(d.whatsapp||'').replace(/[^0-9]/g,'')+'" target="_blank" rel="noopener">Contactar</a>';
+      grid.appendChild(card);
+    });
+  }catch(e){}
+}
+
+loadInstructors();
+loadEquipos();
 
 // ===== TABS equipos =====
 var eqTabs = document.getElementById('eqTabs');
