@@ -88,9 +88,10 @@ async function scrapeGPX(browser) {
         const linkEl = card.querySelector(
           'a.full-unstyled-link, a[href*="/products/"], a.card__heading, a[href]'
         );
-        const href = linkEl
-          ? (linkEl.href.startsWith('http') ? linkEl.href : 'https://gpxstore.com' + linkEl.getAttribute('href'))
-          : '';
+        const rawHref = linkEl ? linkEl.getAttribute('href') : null;
+        const href = rawHref && rawHref.startsWith('http')
+          ? rawHref
+          : (rawHref && rawHref.startsWith('/') ? 'https://gpxstore.com' + rawHref : null);
         if (!href) return;
 
         // Image: lazy-loaded in Shopify
@@ -168,9 +169,10 @@ async function scrapeHardwind(browser) {
 
         // Link
         const linkEl = card.querySelector('a.woocommerce-LoopProduct-link, a[href]');
-        const href = linkEl
-          ? (linkEl.href.startsWith('http') ? linkEl.href : 'https://hardwind.com' + linkEl.getAttribute('href'))
-          : '';
+        const rawHref = linkEl ? linkEl.getAttribute('href') : null;
+        const href = rawHref && rawHref.startsWith('http')
+          ? rawHref
+          : (rawHref && rawHref.startsWith('/') ? 'https://hardwind.com' + rawHref : null);
         if (!href) return;
 
         // Image

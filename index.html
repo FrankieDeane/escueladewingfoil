@@ -3469,7 +3469,7 @@ function renderTiendas() {
         '<div class="ml-card__precio">'+formatPrecio(p.precio, p.moneda)+'<small>'+p.moneda+'</small></div>'+
         '<div class="ml-card__meta">'+fuenteTag+marcaTag+'</div>'+
         '<div class="ml-card__footer">'+
-          '<a class="ml-card__btn ml-card__btn--ml" href="'+p.url+'" target="_blank" rel="noopener">Ver en tienda →</a>'+
+          (p.url && /^https?:\/\//.test(p.url) ? '<a class="ml-card__btn ml-card__btn--ml" href="'+p.url+'" target="_blank" rel="noopener">Ver en tienda →</a>' : '')+
         '</div>'+
       '</div>'+
     '</article>';
@@ -3663,7 +3663,7 @@ function renderML(items) {
           (p.address && p.address.state_name ? '<span class="ml-card__tag">📍 '+p.address.state_name+'</span>' : '')+
         '</div>'+
         '<div class="ml-card__footer">'+
-          '<a class="ml-card__btn ml-card__btn--ml" href="'+p.permalink+'" target="_blank" rel="noopener">Ver en Mercado Libre →</a>'+
+          (p.permalink && /^https?:\/\//.test(p.permalink) ? '<a class="ml-card__btn ml-card__btn--ml" href="'+p.permalink+'" target="_blank" rel="noopener">Ver en Mercado Libre →</a>' : '')+
         '</div>'+
       '</div>'+
     '</article>';
