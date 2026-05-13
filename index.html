@@ -2758,6 +2758,8 @@ if(instrForm){
     var ks=document.getElementById('chk-kitesurf').checked;
     var msg=document.getElementById('instrFormMsg');
     if(!nombre||!apellido||!wa||!ub){msg.hidden=false;msg.className='form-msg form-msg--err';msg.textContent='Completá los campos obligatorios.';return}
+    var deportes=[wf?'wingfoil':'',ks?'kitesurf':''].filter(Boolean).join(',');
+    fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({'form-name':'instructor-form','nombre':nombre,'apellido':apellido,'whatsapp':wa,'ubicacion':ub,'bio':bio,'deportes':deportes}).toString()}).catch(function(){});
     var avatar=instrFotoData?'<img class="instructor-card__photo" src="'+instrFotoData+'" alt="">':'<div class="instructor-card__photo">🏄</div>';
     var sports='';
     if(wf)sports+='<span class="sport-tag">🏄 Wingfoil</span>';
@@ -2813,6 +2815,7 @@ if(equipoForm){
     var wa=document.getElementById('eq-wa').value.trim();
     var msg=document.getElementById('equipoMsg');
     if(!tipo||!marca||!precio||!ub||!desc||!wa){msg.innerHTML='<div class="form-msg form-msg--err">Completá todos los campos.</div>';return}
+    fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({'form-name':'equipo-form','tipo':tipo,'marca':marca,'precio':precio,'ubicacion':ub,'descripcion':desc,'whatsapp':wa}).toString()}).catch(function(){});
     var fotosHtml='';
     if(fotosData.length)fotosHtml='<div class="equipo-card__fotos">'+fotosData.map(function(src){return '<img src="'+src+'" alt="">'}).join('')+'</div>';
     var precioNum=parseInt(precio.replace(/[^0-9]/g,''));
