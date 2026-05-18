@@ -451,6 +451,26 @@ textarea{resize:vertical;min-height:90px}
 .equipo-card__wa:hover{background:#1da851}
 
 .equipos-disclaimer{background:color-mix(in oklab,var(--accent-warm),transparent 88%);border:1px solid color-mix(in oklab,var(--accent-warm),transparent 60%);border-radius:10px;padding:16px 20px;font-size:13px;color:var(--text-muted);line-height:1.7;margin-bottom:36px;max-width:none}
+.eq-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.eq-filter{padding:6px 16px;border-radius:99px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--text-muted);transition:all .2s;font-family:inherit}
+.eq-filter:hover{border-color:var(--primary);color:var(--primary)}
+.eq-filter.active{background:var(--primary);border-color:var(--primary);color:var(--text-inverse)}
+.meta-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:all .25s;display:flex;flex-direction:column}
+.meta-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--primary)}
+.meta-card__img{height:180px;position:relative;overflow:hidden;background:var(--surface-2)}
+.meta-card__img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.meta-card:hover .meta-card__img img{transform:scale(1.06)}
+.meta-card__badge{position:absolute;top:10px;left:10px;padding:4px 10px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+.meta-card__badge--wing{background:rgba(0,180,216,.9);color:#fff}
+.meta-card__badge--tabla{background:rgba(34,196,110,.9);color:#fff}
+.meta-card__badge--foil{background:rgba(232,90,90,.9);color:#fff}
+.meta-card__badge--equipo{background:rgba(233,196,106,.9);color:#1a1000}
+.meta-card__body{padding:18px;display:flex;flex-direction:column;gap:8px;flex-grow:1}
+.meta-card__titulo{font-size:14px;font-weight:700;color:var(--text);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.meta-card__precio{font-family:'Clash Display',sans-serif;font-size:22px;font-weight:800;color:var(--primary);letter-spacing:-.02em}
+.meta-card__footer{margin-top:auto;padding-top:12px;border-top:1px solid var(--border)}
+.meta-card__btn{display:inline-flex;align-items:center;justify-content:center;width:100%;padding:10px 14px;border-radius:6px;font-size:12px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;transition:all .2s;text-decoration:none;background:rgba(24,119,242,.12);border:1.5px solid rgba(24,119,242,.35);color:#1877f2}
+.meta-card__btn:hover{background:rgba(24,119,242,.22);border-color:#1877f2}
 
 /* FAQ */
 .faq-wrap{margin-top:64px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:clamp(24px,4vw,48px)}
@@ -1589,6 +1609,7 @@ textarea{resize:vertical;min-height:90px}
     <div class="eq-tabs" id="eqTabs">
       <button class="eq-tab active" data-tab="comunidad">👥 Entre riders</button>
       <button class="eq-tab" data-tab="ml">🛒 Mercado Libre</button>
+      <button class="eq-tab" data-tab="meta">🟦 Meta</button>
     </div>
 
     <!-- COMUNIDAD -->
@@ -1660,8 +1681,34 @@ textarea{resize:vertical;min-height:90px}
       </div>
     </div><!-- /eqPanelComunidad -->
 
+    <!-- META -->
+    <div id="eqPanelMeta" style="display:none">
+      <div class="eq-filters" id="metaFilters">
+        <button class="eq-filter active" data-cat="all">Todos</button>
+        <button class="eq-filter" data-cat="tabla">🏄 Tabla</button>
+        <button class="eq-filter" data-cat="wing">🪂 Wing</button>
+        <button class="eq-filter" data-cat="foil">🦈 Foil</button>
+        <button class="eq-filter" data-cat="equipo">📦 Equipo</button>
+      </div>
+      <div class="equipos-grid" id="metaGrid">
+        <!-- Meta product cards go here — updated every 15 days -->
+        <div style="grid-column:1/-1;background:var(--surface-2);border:1.5px solid var(--border);border-radius:16px;padding:40px 32px;text-align:center">
+          <div style="font-size:40px;margin-bottom:16px">🟦</div>
+          <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">Productos de Meta</div>
+          <div style="font-size:14px;color:var(--text-muted)">Las publicaciones de Meta se actualizan cada 15 días.</div>
+        </div>
+      </div>
+    </div><!-- /eqPanelMeta -->
+
     <!-- MERCADO LIBRE -->
     <div id="eqPanelML" style="display:none">
+      <div class="eq-filters" id="mlFilters">
+        <button class="eq-filter active" data-mlcat="all">Todos</button>
+        <button class="eq-filter" data-mlcat="tabla">🏄 Tabla</button>
+        <button class="eq-filter" data-mlcat="wing">🪂 Wing</button>
+        <button class="eq-filter" data-mlcat="foil">🦈 Foil</button>
+        <button class="eq-filter" data-mlcat="equipo">📦 Equipo</button>
+      </div>
       <div class="ml-search-row">
         <div class="ml-search-field">
           <label for="mlQuery">Buscar</label>
@@ -3616,7 +3663,39 @@ if (eqTabs) {
     var tab = btn.dataset.tab;
     document.getElementById('eqPanelComunidad').style.display = tab === 'comunidad' ? '' : 'none';
     document.getElementById('eqPanelML').style.display = tab === 'ml' ? '' : 'none';
+    document.getElementById('eqPanelMeta').style.display = tab === 'meta' ? '' : 'none';
     if (tab === 'ml' && !mlLoaded) fetchML();
+  });
+}
+
+// ===== META filters =====
+var metaFilters = document.getElementById('metaFilters');
+if (metaFilters) {
+  metaFilters.addEventListener('click', function(e) {
+    var btn = e.target.closest('.eq-filter'); if (!btn) return;
+    metaFilters.querySelectorAll('.eq-filter').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var cat = btn.dataset.cat;
+    document.querySelectorAll('#metaGrid .meta-card').forEach(function(card) {
+      card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
+    });
+  });
+}
+
+// ===== ML quick-filters =====
+var mlFiltersEl = document.getElementById('mlFilters');
+if (mlFiltersEl) {
+  var ML_FILTER_QUERIES = { tabla: 'tabla wing foil', wing: 'wing foil ala', foil: 'hydrofoil wingfoil', equipo: 'kit wing foil completo' };
+  mlFiltersEl.addEventListener('click', function(e) {
+    var btn = e.target.closest('.eq-filter'); if (!btn) return;
+    mlFiltersEl.querySelectorAll('.eq-filter').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var cat = btn.dataset.mlcat;
+    var queryInput = document.getElementById('mlQuery');
+    if (queryInput && cat !== 'all') queryInput.value = ML_FILTER_QUERIES[cat] || 'wing foil';
+    else if (queryInput) queryInput.value = 'wing foil';
+    mlLoaded = false;
+    fetchML();
   });
 }
 
