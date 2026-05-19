@@ -734,6 +734,14 @@ textarea{resize:vertical;min-height:90px}
 .anatomy__visual{transform-style:flat;transition:none}
 .anatomy__visual:hover{transform:none}
 #foilCanvas{border-radius:12px;display:block}
+/* WING ANATOMY SVG DIAGRAM */
+.anatomy__visual--light{background:#f4f8fc;border-color:rgba(0,0,0,.13);box-shadow:0 4px 28px rgba(0,0,0,.18)}
+#wingDiagram{display:block;width:100%}
+.wing-num{cursor:pointer}
+.wing-num .wing-num-bg{fill:#0a1830;transition:fill .18s}
+.wing-num:hover .wing-num-bg{fill:#1a6090}
+.wing-num.active .wing-num-bg{fill:#00b4d8}
+.wing-num text{pointer-events:none}
 /* Nav section background overlay */
 #navBgOverlay{position:fixed;inset:0;z-index:9;pointer-events:none;opacity:0;background-size:cover;background-position:center;transition:opacity .35s ease;will-change:opacity}
 #navBgOverlay::after{content:'';position:absolute;inset:0;background:rgba(2,10,22,.55)}
@@ -1546,17 +1554,140 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h2 class="section-title">Anatomía del <span style="color:var(--primary)">Ala de Wing</span></h2>
     <p class="section-sub">El ala es lo que te propulsa. Entendé sus partes antes de comprar o alquilar: cada componente tiene un rol clave en tu control y seguridad.</p>
     <div class="anatomy__body">
-      <div class="anatomy__visual" style="padding:0;cursor:grab">
-        <canvas id="wingCanvas" style="width:100%;display:block;cursor:inherit;touch-action:none;background:#040e1a" aria-label="Ala de wing foil 3D interactivo"></canvas>
-        <div id="wingLabels" style="position:absolute;inset:0;pointer-events:none">
-          <button class="foil-dot" data-wing-part="0" aria-label="Borde de ataque" style="pointer-events:all"><span class="foil-dot__ring"></span><span class="foil-dot__core">1</span></button>
-          <button class="foil-dot" data-wing-part="1" aria-label="Quilla" style="pointer-events:all"><span class="foil-dot__ring"></span><span class="foil-dot__core">2</span></button>
-          <button class="foil-dot" data-wing-part="2" aria-label="Vela" style="pointer-events:all"><span class="foil-dot__ring"></span><span class="foil-dot__core">3</span></button>
-          <button class="foil-dot" data-wing-part="3" aria-label="Manijas" style="pointer-events:all"><span class="foil-dot__ring"></span><span class="foil-dot__core">4</span></button>
-          <button class="foil-dot" data-wing-part="4" aria-label="Tips" style="pointer-events:all"><span class="foil-dot__ring"></span><span class="foil-dot__core">5</span></button>
-          <button class="foil-dot" data-wing-part="5" aria-label="Borde de salida" style="pointer-events:all"><span class="foil-dot__ring"></span><span class="foil-dot__core">6</span></button>
-        </div>
-        <p style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);margin:0;font-size:11px;color:rgba(255,255,255,.4);letter-spacing:.05em;white-space:nowrap;pointer-events:none">Arrastrá para rotar · Tocá los números</p>
+      <div class="anatomy__visual anatomy__visual--light" style="padding:14px 16px 10px">
+        <svg id="wingDiagram" viewBox="0 0 700 440" xmlns="http://www.w3.org/2000/svg" aria-label="Diagrama anatómico del ala de wing foil">
+          <defs>
+            <linearGradient id="wLE" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ffb448"/><stop offset="36%" stop-color="#e05510"/><stop offset="100%" stop-color="#7a2800"/>
+            </linearGradient>
+            <linearGradient id="wST" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#dd7022"/><stop offset="55%" stop-color="#b84008"/><stop offset="100%" stop-color="#5a1800"/>
+            </linearGradient>
+            <radialGradient id="wCP" cx="50%" cy="28%" r="62%">
+              <stop offset="0%" stop-color="rgba(60,128,245,0.74)"/><stop offset="100%" stop-color="rgba(8,32,128,0.82)"/>
+            </radialGradient>
+            <radialGradient id="wTIP" cx="38%" cy="34%" r="55%">
+              <stop offset="0%" stop-color="#ff9944"/><stop offset="100%" stop-color="#c04008"/>
+            </radialGradient>
+            <filter id="wDRP"><feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="rgba(0,0,0,.18)"/></filter>
+            <filter id="wDRP2"><feDropShadow dx="2" dy="5" stdDeviation="5" flood-color="rgba(0,0,0,.12)"/></filter>
+          </defs>
+
+          <!-- Background -->
+          <rect width="700" height="440" fill="#f4f8fc"/>
+          <text x="350" y="432" text-anchor="middle" fill="#dde4f0" font-size="10.5" font-weight="700" font-family="system-ui" letter-spacing="0.22em">ANATOMÍA · ALA DE WING FOIL</text>
+
+          <!-- Canopy shadow -->
+          <path d="M 80 216 Q 215 112 350 75 Q 485 112 620 216 L 540 290 Q 445 314 350 316 Q 255 314 160 290 Z"
+                fill="rgba(0,0,0,.07)" transform="translate(5,8)"/>
+
+          <!-- Canopy fill -->
+          <path d="M 80 216 Q 215 112 350 75 Q 485 112 620 216 L 540 290 Q 445 314 350 316 Q 255 314 160 290 Z"
+                fill="url(#wCP)"/>
+
+          <!-- TE seam -->
+          <path d="M 160 290 Q 255 316 350 318 Q 445 316 540 290"
+                fill="none" stroke="#1a1a2e" stroke-width="4.5" stroke-linecap="round"/>
+
+          <!-- Side seams (tip → TE) -->
+          <path d="M 80 216 Q 120 253 160 290" fill="none" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
+          <path d="M 620 216 Q 580 253 540 290" fill="none" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
+
+          <!-- Strut shadow -->
+          <path d="M 350 78 Q 350.5 194 351 314" fill="none" stroke="rgba(0,0,0,.16)" stroke-width="18" stroke-linecap="round"/>
+          <!-- Strut main -->
+          <path d="M 350 78 Q 350.5 194 351 314" fill="none" stroke="url(#wST)" stroke-width="14" stroke-linecap="round"/>
+          <!-- Strut highlight -->
+          <path d="M 350 81 Q 350.5 194 351 311" fill="none" stroke="rgba(255,150,60,.28)" stroke-width="5" stroke-linecap="round"/>
+
+          <!-- LE shadow -->
+          <path d="M 80 216 Q 215 112 350 75 Q 485 112 620 216"
+                fill="none" stroke="rgba(0,0,0,.18)" stroke-width="26" stroke-linecap="round"/>
+          <!-- LE main tube -->
+          <path d="M 80 216 Q 215 112 350 75 Q 485 112 620 216"
+                fill="none" stroke="url(#wLE)" stroke-width="21" stroke-linecap="round" filter="url(#wDRP2)"/>
+          <!-- LE specular highlight -->
+          <path d="M 83 213 Q 216 110 350 73 Q 484 110 617 213"
+                fill="none" stroke="rgba(255,205,105,.58)" stroke-width="7" stroke-linecap="round"/>
+
+          <!-- Handles (3 cylindrical grip bars) -->
+          <rect x="334" y="143" width="33" height="10" rx="5" fill="#888" opacity=".93"/>
+          <rect x="334" y="143" width="18" height="4"  rx="2" fill="rgba(255,255,255,.42)"/>
+          <rect x="334" y="185" width="33" height="10" rx="5" fill="#777" opacity=".88"/>
+          <rect x="334" y="185" width="18" height="4"  rx="2" fill="rgba(255,255,255,.36)"/>
+          <rect x="335" y="224" width="31" height="10" rx="5" fill="#666" opacity=".84"/>
+          <rect x="335" y="224" width="16" height="4"  rx="2" fill="rgba(255,255,255,.30)"/>
+
+          <!-- Tips -->
+          <circle cx="80"  cy="216" r="18" fill="url(#wTIP)" filter="url(#wDRP)"/>
+          <ellipse cx="74" cy="211" rx="8" ry="5" fill="rgba(255,205,100,.42)" transform="rotate(-12,74,211)"/>
+          <circle cx="620" cy="216" r="18" fill="url(#wTIP)" filter="url(#wDRP)"/>
+          <ellipse cx="614" cy="211" rx="8" ry="5" fill="rgba(255,205,100,.42)" transform="rotate(-12,614,211)"/>
+
+          <!-- ═══════════════ CALLOUT LINES (dashed) ═══════════════ -->
+          <!-- 1 LE → top bubble -->
+          <circle cx="350" cy="75"  r="4" fill="#0a1830"/>
+          <line x1="350" y1="71" x2="350" y2="45" stroke="#8899bb" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <!-- 2 Strut → right bubble -->
+          <circle cx="352" cy="192" r="4" fill="#0a1830"/>
+          <line x1="356" y1="192" x2="422" y2="177" stroke="#8899bb" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <!-- 3 Canopy → left bubble -->
+          <circle cx="230" cy="187" r="4" fill="#0a1830"/>
+          <line x1="226" y1="187" x2="155" y2="162" stroke="#8899bb" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <!-- 4 Handles → right bubble -->
+          <circle cx="368" cy="203" r="4" fill="#0a1830"/>
+          <line x1="372" y1="205" x2="436" y2="222" stroke="#8899bb" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <!-- 5 Tips → bottom-left bubble -->
+          <circle cx="80"  cy="216" r="4" fill="#0a1830"/>
+          <line x1="76" y1="220" x2="50" y2="277" stroke="#8899bb" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <!-- 6 TE → bottom bubble -->
+          <circle cx="350" cy="318" r="4" fill="#0a1830"/>
+          <line x1="350" y1="322" x2="350" y2="366" stroke="#8899bb" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+          <!-- ═══════════════ NUMBER BUBBLES (clickable) ═══════════════ -->
+          <!-- 1 Borde de Ataque -->
+          <g class="wing-num" data-part="0">
+            <circle class="wing-num-bg" cx="350" cy="32" r="13"/>
+            <text x="350" y="37" text-anchor="middle" fill="#fff" font-size="12" font-weight="900" font-family="system-ui">1</text>
+          </g>
+          <text x="367" y="30" fill="#0a1830" font-size="11" font-weight="700" font-family="system-ui">Borde de Ataque</text>
+
+          <!-- 2 Quilla / Strut -->
+          <g class="wing-num" data-part="1">
+            <circle class="wing-num-bg" cx="436" cy="174" r="13"/>
+            <text x="436" y="179" text-anchor="middle" fill="#fff" font-size="12" font-weight="900" font-family="system-ui">2</text>
+          </g>
+          <text x="452" y="171" fill="#0a1830" font-size="11" font-weight="700" font-family="system-ui">Quilla / Strut</text>
+
+          <!-- 3 Vela (Canopy) -->
+          <g class="wing-num" data-part="2">
+            <circle class="wing-num-bg" cx="143" cy="159" r="13"/>
+            <text x="143" y="164" text-anchor="middle" fill="#fff" font-size="12" font-weight="900" font-family="system-ui">3</text>
+          </g>
+          <text x="127" y="156" text-anchor="end" fill="#0a1830" font-size="11" font-weight="700" font-family="system-ui">Vela (Canopy)</text>
+
+          <!-- 4 Manijas -->
+          <g class="wing-num" data-part="3">
+            <circle class="wing-num-bg" cx="449" cy="219" r="13"/>
+            <text x="449" y="224" text-anchor="middle" fill="#fff" font-size="12" font-weight="900" font-family="system-ui">4</text>
+          </g>
+          <text x="465" y="217" fill="#0a1830" font-size="11" font-weight="700" font-family="system-ui">Manijas</text>
+
+          <!-- 5 Tips / Puntas -->
+          <g class="wing-num" data-part="4">
+            <circle class="wing-num-bg" cx="47" cy="280" r="13"/>
+            <text x="47" y="285" text-anchor="middle" fill="#fff" font-size="12" font-weight="900" font-family="system-ui">5</text>
+          </g>
+          <text x="47" y="301" text-anchor="middle" fill="#0a1830" font-size="11" font-weight="700" font-family="system-ui">Tips</text>
+
+          <!-- 6 Borde de Salida -->
+          <g class="wing-num" data-part="5">
+            <circle class="wing-num-bg" cx="350" cy="369" r="13"/>
+            <text x="350" y="374" text-anchor="middle" fill="#fff" font-size="12" font-weight="900" font-family="system-ui">6</text>
+          </g>
+          <text x="350" y="393" text-anchor="middle" fill="#0a1830" font-size="11" font-weight="700" font-family="system-ui">Borde de Salida</text>
+        </svg>
+        <p style="text-align:center;margin:6px 0 0;font-size:11px;color:#8899bb;letter-spacing:.06em">Tocá cada número para ver los detalles</p>
       </div>
       <div class="anatomy__parts" id="wingParts">
         <div class="foil-part active" data-wing-part="0"><div class="foil-part__header"><span class="foil-part__num">1</span><span class="foil-part__name">Borde de Ataque</span></div><p class="foil-part__desc">El tubo inflable principal que da forma y rigidez al ala. Cuanto más rígido, más eficiente la transferencia de potencia. Siempre chequeá la presión antes de salir al agua.</p></div>
@@ -2987,13 +3118,13 @@ foilDots.forEach(function(d,i){d.addEventListener('click',function(){activateFoi
 
 // ============ WING ANATOMY ============
 var wingParts=document.querySelectorAll('#anatomia-ala .foil-part');
-var wingDots=document.querySelectorAll('#wingLabels .foil-dot');
+var wingNums=document.querySelectorAll('#wingDiagram .wing-num');
 function activateWing(i){
   wingParts.forEach(function(p,j){p.classList.toggle('active',j===i)});
-  wingDots.forEach(function(d,j){d.classList.toggle('active',j===i)});
+  wingNums.forEach(function(g,j){g.classList.toggle('active',j===i)});
 }
 wingParts.forEach(function(p,i){p.addEventListener('click',function(){activateWing(i)})});
-wingDots.forEach(function(d,i){d.addEventListener('click',function(){activateWing(i)})})
+wingNums.forEach(function(g,i){g.addEventListener('click',function(){activateWing(i)})})
 
 // ============ SPOTS GRID ============
 var LV={b:'Principiante',i:'Intermedio',a:'Avanzado',c:'Cable Park'};
@@ -4331,255 +4462,6 @@ if (mlQueryInput) mlQueryInput.addEventListener('keydown', function(e){ if(e.key
 })();
 </script>
 
-<script>
-// ===== 3D WING FOIL ANATOMY (v2 — parametric canopy + improved geometry) =====
-(function() {
-  var canvas = document.getElementById('wingCanvas');
-  if (!canvas || typeof THREE === 'undefined') return;
-
-  var container = canvas.parentElement;
-  var labelsDiv = document.getElementById('wingLabels');
-
-  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setClearColor(0x040e1a, 1);
-  renderer.shadowMap.enabled = false;
-
-  var scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(0x040e1a, 26, 42);
-
-  // Camera — slightly above, angled to show wing from front-right
-  var camera = new THREE.PerspectiveCamera(46, 1, 0.1, 100);
-  camera.position.set(4.6, 3.0, 5.8);
-  camera.lookAt(0, 0.05, 0);
-
-  // Lights — key from top-front, orange rim from behind, cool fill below
-  scene.add(new THREE.AmbientLight(0x1a3388, 1.0));
-  var key = new THREE.DirectionalLight(0xfff5ee, 2.4);
-  key.position.set(2, 10, 7);
-  scene.add(key);
-  var rim = new THREE.DirectionalLight(0xff6600, 0.85);
-  rim.position.set(-6, 0, -5);
-  scene.add(rim);
-  var fill = new THREE.DirectionalLight(0x2255cc, 0.45);
-  fill.position.set(0, -6, 2);
-  scene.add(fill);
-  var topFill = new THREE.DirectionalLight(0xffffff, 0.3);
-  topFill.position.set(0, 5, -3);
-  scene.add(topFill);
-
-  var wg = new THREE.Group();
-  scene.add(wg);
-
-  // Materials
-  var mLE = new THREE.MeshStandardMaterial({
-    color: 0xd45010, roughness: 0.16, metalness: 0.04,
-    emissive: 0x200800, emissiveIntensity: 0.35
-  });
-  var mStrut = new THREE.MeshStandardMaterial({
-    color: 0xb04008, roughness: 0.20, metalness: 0.04,
-    emissive: 0x160300, emissiveIntensity: 0.28
-  });
-  var mCanopyTop = new THREE.MeshStandardMaterial({
-    color: 0x1040c8, roughness: 0.60, metalness: 0.0,
-    side: THREE.FrontSide, transparent: true, opacity: 0.92,
-    emissive: 0x040e30, emissiveIntensity: 0.45
-  });
-  var mCanopyBot = new THREE.MeshStandardMaterial({
-    color: 0x0c2888, roughness: 0.70, metalness: 0.0,
-    side: THREE.BackSide, transparent: true, opacity: 0.88,
-    emissive: 0x020810, emissiveIntensity: 0.3
-  });
-  var mHandle = new THREE.MeshStandardMaterial({
-    color: 0xcccccc, roughness: 0.30, metalness: 0.75,
-    emissive: 0x111111, emissiveIntensity: 0.15
-  });
-  var mTip = new THREE.MeshStandardMaterial({
-    color: 0xf07020, roughness: 0.12, metalness: 0.04,
-    emissive: 0x280a00, emissiveIntensity: 0.45
-  });
-  var mEdge = new THREE.MeshStandardMaterial({
-    color: 0x020c1c, roughness: 0.85, metalness: 0.0, side: THREE.DoubleSide
-  });
-
-  // ── LEADING EDGE (arc tube from tip to tip through forward peak) ──
-  var leCurve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(-2.65, 0,    -0.22),
-    new THREE.Vector3(-2.05, 0.04,  0.26),
-    new THREE.Vector3(-1.35, 0.13,  0.90),
-    new THREE.Vector3(-0.55, 0.20,  1.44),
-    new THREE.Vector3( 0,    0.22,  1.62),
-    new THREE.Vector3( 0.55, 0.20,  1.44),
-    new THREE.Vector3( 1.35, 0.13,  0.90),
-    new THREE.Vector3( 2.05, 0.04,  0.26),
-    new THREE.Vector3( 2.65, 0,    -0.22),
-  ]);
-  wg.add(new THREE.Mesh(new THREE.TubeGeometry(leCurve, 72, 0.125, 16, false), mLE));
-
-  // ── STRUT (front-to-back central boom) ──
-  var strutCurve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(0, 0.17, 1.32),
-    new THREE.Vector3(0, 0.11, 0.44),
-    new THREE.Vector3(0, 0.05, -0.55),
-  ]);
-  wg.add(new THREE.Mesh(new THREE.TubeGeometry(strutCurve, 28, 0.083, 12, false), mStrut));
-
-  // ── CANOPY (parametric mesh with proper wing planform + billow) ──
-  // Wing shape: LE arc + quadratic TE taper. Chord → 0 at both tips.
-  //   zLE(s) = 1.62 − 1.84·s²      (parabola, matches LE tube)
-  //   zTE(s) = −0.62 + 0.40·s²     (tapers toward LE at tips)
-  //   yLE(s) = 0.22·(1−s²)         (matches LE tube elevation)
-  //   yCamber = 0.09·chordFrac·sin(π·v)  (billow: max at 50% chord)
-  (function buildCanopy() {
-    var US = 56, VS = 28;
-    var pos = [], norm = [], uv = [], idx = [];
-
-    function wp(u, v) {
-      var s   = u * 2 - 1;
-      var ss  = s * s;
-      var zLE = 1.62 - 1.84 * ss;
-      var zTE = -0.62 + 0.40 * ss;
-      var yLE = 0.22 * (1 - ss);
-      if (zTE >= zLE - 0.01) { return [s * 2.65, yLE * v, zLE]; }
-      var z   = zTE + v * (zLE - zTE);
-      var yB  = v * yLE;
-      var cf  = (zLE - zTE) / 2.24;
-      var yC  = 0.09 * cf * Math.sin(Math.PI * v);
-      return [s * 2.65, yB + yC, z];
-    }
-
-    for (var i = 0; i <= US; i++) {
-      for (var j = 0; j <= VS; j++) {
-        var p = wp(i / US, j / VS);
-        pos.push(p[0], p[1], p[2]);
-        norm.push(0, 1, 0);
-        uv.push(i / US, j / VS);
-      }
-    }
-    for (var i = 0; i < US; i++) {
-      for (var j = 0; j < VS; j++) {
-        var a = i * (VS + 1) + j, b = a + 1, c = a + VS + 1, d = c + 1;
-        idx.push(a, c, b, b, c, d);
-      }
-    }
-    var geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-    geo.setAttribute('normal',   new THREE.Float32BufferAttribute(norm, 3));
-    geo.setAttribute('uv',       new THREE.Float32BufferAttribute(uv, 2));
-    geo.setIndex(idx);
-    geo.computeVertexNormals();
-    wg.add(new THREE.Mesh(geo, mCanopyTop));
-    wg.add(new THREE.Mesh(geo, mCanopyBot));
-  })();
-
-  // ── HANDLES (cylindrical grip bars across strut) ──
-  [[0, 0.18, 0.93], [0, 0.12, 0.23], [0, 0.07, -0.20]].forEach(function(p) {
-    var h = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.32, 12), mHandle);
-    h.rotation.z = Math.PI / 2;
-    h.position.set(p[0], p[1], p[2]);
-    wg.add(h);
-  });
-
-  // ── TIPS (rounded sphere cap at each LE end) ──
-  [[-2.65, 0, -0.22], [2.65, 0, -0.22]].forEach(function(p) {
-    var t = new THREE.Mesh(new THREE.SphereGeometry(0.152, 18, 14), mTip);
-    t.position.set(p[0], p[1], p[2]);
-    wg.add(t);
-  });
-
-  // ── TRAILING EDGE (thin seam tape along TE) ──
-  var teCurve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(-1.95, 0.006, -0.475),
-    new THREE.Vector3(-0.95, 0.003, -0.582),
-    new THREE.Vector3( 0,    0.000, -0.620),
-    new THREE.Vector3( 0.95, 0.003, -0.582),
-    new THREE.Vector3( 1.95, 0.006, -0.475),
-  ]);
-  wg.add(new THREE.Mesh(new THREE.TubeGeometry(teCurve, 28, 0.018, 8, false), mEdge));
-
-  // Side seam edges (tip → TE junction)
-  [-1, 1].forEach(function(sd) {
-    var seCurve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(sd * 2.65, 0,    -0.22),
-      new THREE.Vector3(sd * 2.38, 0.003, -0.34),
-      new THREE.Vector3(sd * 1.95, 0.006, -0.475),
-    ]);
-    wg.add(new THREE.Mesh(new THREE.TubeGeometry(seCurve, 12, 0.014, 8, false), mEdge));
-  });
-
-  // ── LABEL ANCHORS ──
-  var wingAnchors = [
-    new THREE.Vector3( 0,    0.28,  1.62),   // 1 LE peak
-    new THREE.Vector3( 0.12, 0.13,  0.44),   // 2 strut
-    new THREE.Vector3(-1.15, 0.09,  0.44),   // 3 canopy
-    new THREE.Vector3( 0.22, 0.19,  0.93),   // 4 handles
-    new THREE.Vector3( 2.65, 0.12, -0.22),   // 5 right tip
-    new THREE.Vector3( 0.5,  0.01, -0.62),   // 6 TE
-  ];
-
-  var dots = labelsDiv ? Array.from(labelsDiv.querySelectorAll('.foil-dot')) : [];
-  var tmp  = new THREE.Vector3();
-
-  function updateWingLabels() {
-    var cw = canvas.clientWidth, ch = canvas.clientHeight;
-    wingAnchors.forEach(function(a, i) {
-      if (!dots[i]) return;
-      tmp.copy(a); wg.localToWorld(tmp); tmp.project(camera);
-      var x = ( tmp.x * 0.5 + 0.5) * cw;
-      var y = (-tmp.y * 0.5 + 0.5) * ch;
-      var ok = tmp.z < 1 && x > 14 && x < cw - 14 && y > 14 && y < ch - 14;
-      dots[i].style.visibility = ok ? 'visible' : 'hidden';
-      dots[i].style.left = x + 'px';
-      dots[i].style.top  = y + 'px';
-    });
-  }
-
-  // Drag orbit
-  var drag = false, px = 0, py = 0, ry = -0.38, rx = 0.30, auto = true;
-  canvas.addEventListener('mousedown', function(e) {
-    drag = true; auto = false; px = e.clientX; py = e.clientY;
-    canvas.style.cursor = 'grabbing'; e.preventDefault();
-  });
-  window.addEventListener('mousemove', function(e) {
-    if (!drag) return;
-    ry += (e.clientX - px) * 0.013; rx += (e.clientY - py) * 0.009;
-    rx = Math.max(-1.0, Math.min(0.8, rx));
-    px = e.clientX; py = e.clientY;
-  });
-  window.addEventListener('mouseup', function() { drag = false; if (canvas) canvas.style.cursor = 'grab'; });
-  canvas.addEventListener('touchstart', function(e) {
-    drag = true; auto = false; px = e.touches[0].clientX; py = e.touches[0].clientY;
-  }, { passive: true });
-  canvas.addEventListener('touchmove', function(e) {
-    if (!drag || !e.touches[0]) return;
-    ry += (e.touches[0].clientX - px) * 0.013; rx += (e.touches[0].clientY - py) * 0.009;
-    rx = Math.max(-1.0, Math.min(0.8, rx));
-    px = e.touches[0].clientX; py = e.touches[0].clientY;
-    e.preventDefault();
-  }, { passive: false });
-  canvas.addEventListener('touchend', function() { drag = false; });
-
-  function resize() {
-    if (!container) return;
-    var w = container.clientWidth || 600;
-    var h = Math.round(w * 0.625);
-    renderer.setSize(w, h);
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-  }
-  window.addEventListener('resize', resize);
-  resize();
-
-  (function loop() {
-    requestAnimationFrame(loop);
-    if (auto) ry += 0.003;
-    wg.rotation.y = ry;
-    wg.rotation.x = rx;
-    renderer.render(scene, camera);
-    updateWingLabels();
-  })();
-})();
-</script>
 
 <script>
 // ===== SCROLL-BASED SECTION BACKGROUND IMAGES =====
