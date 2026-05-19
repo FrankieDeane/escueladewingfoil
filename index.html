@@ -3913,6 +3913,19 @@ async function loadInstructors(){
         (d.bio?'<p class="instructor-card__bio">'+escHtml(d.bio)+'</p>':'')+
         '<a class="instructor-card__wa" href="https://wa.me/'+(d.whatsapp||'').replace(/[^0-9]/g,'')+'" target="_blank" rel="noopener">WhatsApp</a>';
       grid.appendChild(card);
+      var schemaEl=document.createElement('script');
+      schemaEl.type='application/ld+json';
+      schemaEl.textContent=JSON.stringify({
+        '@context':'https://schema.org',
+        '@type':'Person',
+        'name':(d.nombre||'')+' '+(d.apellido||''),
+        'jobTitle':'Instructor de Wingfoil',
+        'knowsAbout':(d.deportes||'').split(',').map(function(s){return s.trim()==='wingfoil'?'Wingfoil':s.trim()==='kitesurf'?'Kitesurf':s.trim()}).filter(Boolean),
+        'areaServed':{'@type':'City','name':d.ubicacion||'Argentina'},
+        'description':d.bio||'Instructor certificado de wingfoil en Argentina.',
+        'url':'https://www.escueladewingfoil.com.ar/#instructores'
+      });
+      document.head.appendChild(schemaEl);
     });
   }catch(e){}
 }
