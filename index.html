@@ -1539,6 +1539,44 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 
+<!-- ============================================================ ANATOMÍA DEL ALA DE WING ============================================================ -->
+<section class="section anatomy" id="anatomia-ala">
+  <div class="container">
+    <span class="eyebrow">Guía visual interactiva</span>
+    <h2 class="section-title">Anatomía del <span style="color:var(--primary)">Ala de Wing</span></h2>
+    <p class="section-sub">El ala es lo que te propulsa. Entendé sus partes antes de comprar o alquilar: cada componente tiene un rol clave en tu control y seguridad.</p>
+    <div class="anatomy__body">
+      <div class="anatomy__visual" style="padding:0;cursor:grab">
+        <canvas id="wingCanvas" style="width:100%;display:block;cursor:inherit;touch-action:none;background:#040e1a" aria-label="Ala de wing foil 3D interactivo"></canvas>
+        <div id="wingLabels" style="position:absolute;inset:0;pointer-events:none">
+          <button class="foil-dot" data-wing-part="0" aria-label="Borde de ataque" style="pointer-events:all"><span class="foil-dot__ring"></span><span class="foil-dot__core">1</span></button>
+          <button class="foil-dot" data-wing-part="1" aria-label="Quilla" style="pointer-events:all"><span class="foil-dot__ring"></span><span class="foil-dot__core">2</span></button>
+          <button class="foil-dot" data-wing-part="2" aria-label="Vela" style="pointer-events:all"><span class="foil-dot__ring"></span><span class="foil-dot__core">3</span></button>
+          <button class="foil-dot" data-wing-part="3" aria-label="Manijas" style="pointer-events:all"><span class="foil-dot__ring"></span><span class="foil-dot__core">4</span></button>
+          <button class="foil-dot" data-wing-part="4" aria-label="Tips" style="pointer-events:all"><span class="foil-dot__ring"></span><span class="foil-dot__core">5</span></button>
+          <button class="foil-dot" data-wing-part="5" aria-label="Borde de salida" style="pointer-events:all"><span class="foil-dot__ring"></span><span class="foil-dot__core">6</span></button>
+        </div>
+        <p style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);margin:0;font-size:11px;color:rgba(255,255,255,.4);letter-spacing:.05em;white-space:nowrap;pointer-events:none">Arrastrá para rotar · Tocá los números</p>
+      </div>
+      <div class="anatomy__parts" id="wingParts">
+        <div class="foil-part active" data-wing-part="0"><div class="foil-part__header"><span class="foil-part__num">1</span><span class="foil-part__name">Borde de Ataque</span></div><p class="foil-part__desc">El tubo inflable principal que da forma y rigidez al ala. Cuanto más rígido, más eficiente la transferencia de potencia. Siempre chequeá la presión antes de salir al agua.</p></div>
+        <div class="foil-part" data-wing-part="1"><div class="foil-part__header"><span class="foil-part__num">2</span><span class="foil-part__name">Quilla (Strut)</span></div><p class="foil-part__desc">El tubo inflable central que corre de adelante hacia atrás y sostiene las manijas. Es el punto de contacto directo entre tus manos y el ala, y define cómo transferís la potencia.</p></div>
+        <div class="foil-part" data-wing-part="2"><div class="foil-part__header"><span class="foil-part__num">3</span><span class="foil-part__name">Vela (Canopy)</span></div><p class="foil-part__desc">La tela que captura el viento y genera el empuje. Su forma determina el perfil aerodinámico. Revisá siempre que no tenga roturas ni costuras despegadas antes de cada sesión.</p></div>
+        <div class="foil-part" data-wing-part="3"><div class="foil-part__header"><span class="foil-part__num">4</span><span class="foil-part__name">Manijas (Handles)</span></div><p class="foil-part__desc">Los agarres fijados a la quilla. Distintas posiciones de mano cambian tu leverage sobre el ala. Algunos modelos incluyen manijas de neoprene suave y barras rígidas de fibra.</p></div>
+        <div class="foil-part" data-wing-part="4"><div class="foil-part__header"><span class="foil-part__num">5</span><span class="foil-part__name">Tips (Puntas)</span></div><p class="foil-part__desc">Los extremos del borde de ataque. Muchas alas incluyen una bolsita de arena o lastre para que el ala descanse en el agua sin que la arrastre el viento. Nunca pisés los tips.</p></div>
+        <div class="foil-part" data-wing-part="5"><div class="foil-part__header"><span class="foil-part__num">6</span><span class="foil-part__name">Borde de Salida</span></div><p class="foil-part__desc">El borde trasero del ala. En alas de rendimiento es muy fino para reducir turbulencias. No lo doblés ni pisés — afecta directamente el flujo de viento y la eficiencia del ala.</p></div>
+      </div>
+    </div>
+    <div class="anatomy__stats">
+      <div class="foil-stat"><div class="foil-stat__val">3–7 m²</div><div class="foil-stat__label">Superficie según<br>peso y viento</div></div>
+      <div class="foil-stat"><div class="foil-stat__val">5–7 kPa</div><div class="foil-stat__label">Presión ideal<br>de inflado</div></div>
+      <div class="foil-stat"><div class="foil-stat__val">2–3 kg</div><div class="foil-stat__label">Peso del ala<br>completa</div></div>
+      <div class="foil-stat"><div class="foil-stat__val">12+ kn</div><div class="foil-stat__label">Viento mínimo<br>para foilear</div></div>
+    </div>
+  </div>
+</section>
+
+
 <!-- ============================================================ SPOTS ============================================================ -->
 <section class="section" id="spots">
   <div class="container">
@@ -2788,6 +2826,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <ul role="list">
             <li><a href="#videos">Videos por nivel</a></li>
             <li><a href="#anatomia">Anatomía del foil</a></li>
+            <li><a href="#anatomia-ala">Anatomía del ala</a></li>
             <li><a href="#calculadora">Calculadora equipo</a></li>
             <li><a href="#glosario">Glosario</a></li>
             <li><a href="#riders">Riders & Legends</a></li>
@@ -2937,14 +2976,24 @@ document.querySelectorAll('.video-tab').forEach(function(t){
 });
 
 // ============ FOIL ANATOMY ============
-var foilParts=document.querySelectorAll('.foil-part');
-var foilDots=document.querySelectorAll('.foil-dot');
+var foilParts=document.querySelectorAll('#anatomia .foil-part');
+var foilDots=document.querySelectorAll('#anatomia .foil-dot');
 function activateFoil(i){
   foilParts.forEach(function(p,j){p.classList.toggle('active',j===i)});
   foilDots.forEach(function(d,j){d.classList.toggle('active',j===i)});
 }
 foilParts.forEach(function(p,i){p.addEventListener('click',function(){activateFoil(i)})});
 foilDots.forEach(function(d,i){d.addEventListener('click',function(){activateFoil(i)})});
+
+// ============ WING ANATOMY ============
+var wingParts=document.querySelectorAll('#anatomia-ala .foil-part');
+var wingDots=document.querySelectorAll('#wingLabels .foil-dot');
+function activateWing(i){
+  wingParts.forEach(function(p,j){p.classList.toggle('active',j===i)});
+  wingDots.forEach(function(d,j){d.classList.toggle('active',j===i)});
+}
+wingParts.forEach(function(p,i){p.addEventListener('click',function(){activateWing(i)})});
+wingDots.forEach(function(d,i){d.addEventListener('click',function(){activateWing(i)})})
 
 // ============ SPOTS GRID ============
 var LV={b:'Principiante',i:'Intermedio',a:'Avanzado',c:'Cable Park'};
@@ -3586,7 +3635,8 @@ if(mBread && mBreadCurrent && 'IntersectionObserver' in window){
     'testimonios':'💬 Comunidad',
     'que-es':'🤔 ¿Qué es?',
     'videos':'🎬 Videos',
-    'anatomia':'🦈 Anatomía',
+    'anatomia':'🦈 Anatomía del Foil',
+    'anatomia-ala':'🪁 Anatomía del Ala',
     'instructores':'👨‍🏫 Instructores',
     'spots':'🗺️ Aguas argentinas',
     'camaras':'📡 Cámaras en vivo',
@@ -4282,6 +4332,180 @@ if (mlQueryInput) mlQueryInput.addEventListener('keydown', function(e){ if(e.key
 </script>
 
 <script>
+// ===== 3D WING FOIL ANATOMY =====
+(function() {
+  var canvas = document.getElementById('wingCanvas');
+  if (!canvas || typeof THREE === 'undefined') return;
+
+  var container = canvas.parentElement;
+  var labelsDiv = document.getElementById('wingLabels');
+
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(0x040e1a, 1);
+  renderer.shadowMap.enabled = false;
+
+  var scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0x040e1a, 22, 38);
+
+  var camera = new THREE.PerspectiveCamera(44, 1, 0.1, 100);
+  camera.position.set(5.5, 3.8, 4.5);
+  camera.lookAt(0, 0.1, 0);
+
+  scene.add(new THREE.AmbientLight(0x2244aa, 1.1));
+  var sun = new THREE.DirectionalLight(0xffffff, 1.9);
+  sun.position.set(4, 9, 5);
+  scene.add(sun);
+  var rim = new THREE.DirectionalLight(0xff7722, 0.5);
+  rim.position.set(-5, -1, -4);
+  scene.add(rim);
+  var fill = new THREE.DirectionalLight(0x0066cc, 0.35);
+  fill.position.set(0, -4, 3);
+  scene.add(fill);
+
+  var wg = new THREE.Group();
+  scene.add(wg);
+
+  var mLE     = new THREE.MeshStandardMaterial({ color: 0xd45c10, roughness: 0.22, metalness: 0.08 });
+  var mStrut  = new THREE.MeshStandardMaterial({ color: 0xaa4208, roughness: 0.28, metalness: 0.08 });
+  var mCanopy = new THREE.MeshStandardMaterial({ color: 0x1535a0, roughness: 0.75, metalness: 0.0, side: THREE.DoubleSide, transparent: true, opacity: 0.88 });
+  var mHandle = new THREE.MeshStandardMaterial({ color: 0x999999, roughness: 0.45, metalness: 0.55 });
+  var mTip    = new THREE.MeshStandardMaterial({ color: 0xf07020, roughness: 0.18, metalness: 0.05 });
+  var mTE     = new THREE.MeshStandardMaterial({ color: 0x081428, roughness: 0.65, metalness: 0.05, side: THREE.DoubleSide });
+
+  // Leading edge — arc from left tip to right tip via forward peak
+  var leCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-2.65, 0, -0.22),
+    new THREE.Vector3(-1.9,  0.06, 0.52),
+    new THREE.Vector3(-0.9,  0.16, 1.28),
+    new THREE.Vector3( 0,    0.22, 1.62),
+    new THREE.Vector3( 0.9,  0.16, 1.28),
+    new THREE.Vector3( 1.9,  0.06, 0.52),
+    new THREE.Vector3( 2.65, 0,   -0.22),
+  ]);
+  wg.add(new THREE.Mesh(new THREE.TubeGeometry(leCurve, 48, 0.115, 12, false), mLE));
+
+  // Strut — central spar front to back
+  var strutCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(0, 0.14, 1.28),
+    new THREE.Vector3(0, 0.09, 0.38),
+    new THREE.Vector3(0, 0.04, -0.58),
+  ]);
+  wg.add(new THREE.Mesh(new THREE.TubeGeometry(strutCurve, 20, 0.082, 10, false), mStrut));
+
+  // Canopy — wing-shaped flat surface in XZ plane
+  var cShape = new THREE.Shape();
+  cShape.moveTo(-2.52, -0.22);
+  cShape.quadraticCurveTo(-1.45, 0.88, 0, 1.55);
+  cShape.quadraticCurveTo( 1.45, 0.88, 2.52, -0.22);
+  cShape.lineTo( 0.82, -0.58);
+  cShape.lineTo( 0,    -0.60);
+  cShape.lineTo(-0.82, -0.58);
+  cShape.closePath();
+  var cGeo = new THREE.ShapeGeometry(cShape, 24);
+  var cMesh = new THREE.Mesh(cGeo, mCanopy);
+  cMesh.rotation.x = -Math.PI / 2;
+  cMesh.position.y = 0.025;
+  wg.add(cMesh);
+
+  // Handles — 3 grip bars on strut
+  [[0, 0.16, 0.88], [0, 0.11, 0.18], [0, 0.06, -0.24]].forEach(function(pos) {
+    var h = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.055, 0.065), mHandle);
+    h.position.set(pos[0], pos[1], pos[2]);
+    wg.add(h);
+  });
+
+  // Tips — rounded caps at LE ends
+  [[-2.65, 0, -0.22], [2.65, 0, -0.22]].forEach(function(pos) {
+    var t = new THREE.Mesh(new THREE.SphereGeometry(0.155, 14, 10), mTip);
+    t.position.set(pos[0], pos[1], pos[2]);
+    wg.add(t);
+  });
+
+  // Trailing edge — thin curved bar
+  var teCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-0.88, 0.015, -0.57),
+    new THREE.Vector3( 0,    0.015, -0.60),
+    new THREE.Vector3( 0.88, 0.015, -0.57),
+  ]);
+  wg.add(new THREE.Mesh(new THREE.TubeGeometry(teCurve, 16, 0.026, 8, false), mTE));
+
+  // Label anchor 3D positions (local to wg)
+  var wingAnchors = [
+    new THREE.Vector3( 0,     0.28, 1.62),   // 1 LE center peak
+    new THREE.Vector3( 0.12,  0.12, 0.38),   // 2 strut mid
+    new THREE.Vector3(-1.3,   0.06, 0.52),   // 3 canopy left area
+    new THREE.Vector3( 0.2,   0.18, 0.88),   // 4 handles
+    new THREE.Vector3( 2.65,  0.12,-0.22),   // 5 right tip
+    new THREE.Vector3( 0.5,   0.05,-0.58),   // 6 trailing edge
+  ];
+
+  var dots = labelsDiv ? Array.from(labelsDiv.querySelectorAll('.foil-dot')) : [];
+  var tmp  = new THREE.Vector3();
+
+  function updateWingLabels() {
+    var cw = canvas.clientWidth, ch = canvas.clientHeight;
+    wingAnchors.forEach(function(a, i) {
+      if (!dots[i]) return;
+      tmp.copy(a);
+      wg.localToWorld(tmp);
+      tmp.project(camera);
+      var x = (tmp.x *  0.5 + 0.5) * cw;
+      var y = (-tmp.y * 0.5 + 0.5) * ch;
+      var ok = tmp.z < 1 && x > 14 && x < cw - 14 && y > 14 && y < ch - 14;
+      dots[i].style.visibility = ok ? 'visible' : 'hidden';
+      dots[i].style.left = x + 'px';
+      dots[i].style.top  = y + 'px';
+    });
+  }
+
+  var drag = false, px = 0, py = 0, ry = -0.35, rx = 0.28, auto = true;
+  canvas.addEventListener('mousedown', function(e) {
+    drag = true; auto = false; px = e.clientX; py = e.clientY;
+    canvas.style.cursor = 'grabbing'; e.preventDefault();
+  });
+  window.addEventListener('mousemove', function(e) {
+    if (!drag) return;
+    ry += (e.clientX - px) * 0.013; rx += (e.clientY - py) * 0.009;
+    rx = Math.max(-1.0, Math.min(0.8, rx));
+    px = e.clientX; py = e.clientY;
+  });
+  window.addEventListener('mouseup', function() { drag = false; if (canvas) canvas.style.cursor = 'grab'; });
+  canvas.addEventListener('touchstart', function(e) {
+    drag = true; auto = false; px = e.touches[0].clientX; py = e.touches[0].clientY;
+  }, { passive: true });
+  canvas.addEventListener('touchmove', function(e) {
+    if (!drag || !e.touches[0]) return;
+    ry += (e.touches[0].clientX - px) * 0.013; rx += (e.touches[0].clientY - py) * 0.009;
+    rx = Math.max(-1.0, Math.min(0.8, rx));
+    px = e.touches[0].clientX; py = e.touches[0].clientY;
+    e.preventDefault();
+  }, { passive: false });
+  canvas.addEventListener('touchend', function() { drag = false; });
+
+  function resize() {
+    if (!container) return;
+    var w = container.clientWidth || 600;
+    var h = Math.round(w * 0.625);
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  (function loop() {
+    requestAnimationFrame(loop);
+    if (auto) ry += 0.003;
+    wg.rotation.y = ry;
+    wg.rotation.x = rx;
+    renderer.render(scene, camera);
+    updateWingLabels();
+  })();
+})();
+</script>
+
+<script>
 // ===== SCROLL-BASED SECTION BACKGROUND IMAGES =====
 (function() {
   var overlay = document.getElementById('navBgOverlay');
@@ -4294,6 +4518,7 @@ if (mlQueryInput) mlQueryInput.addEventListener('keydown', function(e){ if(e.key
     'que-es':      'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=1920&auto=format&fit=crop&q=60',
     'videos':      'https://images.unsplash.com/photo-1760506067709-e1dd845943d2?w=1920&auto=format&fit=crop&q=60',
     'anatomia':    'https://images.unsplash.com/photo-1666175497584-dab60dcf1419?w=1920&auto=format&fit=crop&q=60',
+    'anatomia-ala':'https://images.unsplash.com/photo-1666175497584-dab60dcf1419?w=1920&auto=format&fit=crop&q=60',
     'spots':       'https://images.unsplash.com/photo-1508193638397-1c4234db14d8?w=1920&auto=format&fit=crop&q=60',
     'camaras':     'https://images.unsplash.com/photo-1730134427096-c167c128e119?w=1920&auto=format&fit=crop&q=60',
     'calculadora': 'https://images.unsplash.com/photo-1666175497141-ef62a9c65558?w=1920&auto=format&fit=crop&q=60',
