@@ -734,14 +734,8 @@ textarea{resize:vertical;min-height:90px}
 .anatomy__visual{transform-style:flat;transition:none}
 .anatomy__visual:hover{transform:none}
 #foilCanvas{border-radius:12px;display:block}
-/* WING ANATOMY SVG DIAGRAM */
-.anatomy__visual--light{background:#f4f8fc;border-color:rgba(0,0,0,.13);box-shadow:0 4px 28px rgba(0,0,0,.18)}
-#wingDiagram{display:block;width:100%}
-.wing-num{cursor:pointer}
-.wing-num .wing-num-bg{fill:#0a1830;transition:fill .18s}
-.wing-num:hover .wing-num-bg{fill:#1a6090}
-.wing-num.active .wing-num-bg{fill:#00b4d8}
-.wing-num text{pointer-events:none}
+/* WING ANATOMY IMAGE DOTS */
+.wing-img-dot{position:absolute;transform:translate(-50%,-50%)}
 /* Nav section background overlay */
 #navBgOverlay{position:fixed;inset:0;z-index:9;pointer-events:none;opacity:0;background-size:cover;background-position:center;transition:opacity .35s ease;will-change:opacity}
 #navBgOverlay::after{content:'';position:absolute;inset:0;background:rgba(2,10,22,.55)}
@@ -1554,140 +1548,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h2 class="section-title">Anatomía del <span style="color:var(--primary)">Ala de Wing</span></h2>
     <p class="section-sub">El ala es lo que te propulsa. Entendé sus partes antes de comprar o alquilar: cada componente tiene un rol clave en tu control y seguridad.</p>
     <div class="anatomy__body">
-      <div class="anatomy__visual anatomy__visual--light" style="padding:14px 16px 10px">
-        <svg id="wingDiagram" viewBox="0 0 700 440" xmlns="http://www.w3.org/2000/svg" aria-label="Diagrama anatómico del ala de wing foil">
-          <defs>
-            <linearGradient id="wLE" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#ffb448"/><stop offset="36%" stop-color="#e05510"/><stop offset="100%" stop-color="#7a2800"/>
-            </linearGradient>
-            <linearGradient id="wST" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#dd7022"/><stop offset="55%" stop-color="#b84008"/><stop offset="100%" stop-color="#5a1800"/>
-            </linearGradient>
-            <radialGradient id="wCP" cx="50%" cy="28%" r="62%">
-              <stop offset="0%" stop-color="rgba(60,128,245,0.74)"/><stop offset="100%" stop-color="rgba(8,32,128,0.82)"/>
-            </radialGradient>
-            <radialGradient id="wTIP" cx="38%" cy="34%" r="55%">
-              <stop offset="0%" stop-color="#ff9944"/><stop offset="100%" stop-color="#c04008"/>
-            </radialGradient>
-            <filter id="wDRP"><feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="rgba(0,0,0,.18)"/></filter>
-            <filter id="wDRP2"><feDropShadow dx="2" dy="5" stdDeviation="5" flood-color="rgba(0,0,0,.12)"/></filter>
-          </defs>
-
-          <!-- Background -->
-          <rect width="700" height="440" fill="#f4f8fc"/>
-          <text x="350" y="432" text-anchor="middle" fill="#dde4f0" font-size="10.5" font-weight="700" font-family="system-ui" letter-spacing="0.22em">ANATOMÍA · ALA DE WING FOIL</text>
-
-          <!-- Canopy shadow -->
-          <path d="M 80 216 Q 215 112 350 75 Q 485 112 620 216 L 540 290 Q 445 314 350 316 Q 255 314 160 290 Z"
-                fill="rgba(0,0,0,.07)" transform="translate(5,8)"/>
-
-          <!-- Canopy fill -->
-          <path d="M 80 216 Q 215 112 350 75 Q 485 112 620 216 L 540 290 Q 445 314 350 316 Q 255 314 160 290 Z"
-                fill="url(#wCP)"/>
-
-          <!-- TE seam -->
-          <path d="M 160 290 Q 255 316 350 318 Q 445 316 540 290"
-                fill="none" stroke="#1a1a2e" stroke-width="4.5" stroke-linecap="round"/>
-
-          <!-- Side seams (tip → TE) -->
-          <path d="M 80 216 Q 120 253 160 290" fill="none" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
-          <path d="M 620 216 Q 580 253 540 290" fill="none" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
-
-          <!-- Strut shadow -->
-          <path d="M 350 78 Q 350.5 194 351 314" fill="none" stroke="rgba(0,0,0,.16)" stroke-width="18" stroke-linecap="round"/>
-          <!-- Strut main -->
-          <path d="M 350 78 Q 350.5 194 351 314" fill="none" stroke="url(#wST)" stroke-width="14" stroke-linecap="round"/>
-          <!-- Strut highlight -->
-          <path d="M 350 81 Q 350.5 194 351 311" fill="none" stroke="rgba(255,150,60,.28)" stroke-width="5" stroke-linecap="round"/>
-
-          <!-- LE shadow -->
-          <path d="M 80 216 Q 215 112 350 75 Q 485 112 620 216"
-                fill="none" stroke="rgba(0,0,0,.18)" stroke-width="26" stroke-linecap="round"/>
-          <!-- LE main tube -->
-          <path d="M 80 216 Q 215 112 350 75 Q 485 112 620 216"
-                fill="none" stroke="url(#wLE)" stroke-width="21" stroke-linecap="round" filter="url(#wDRP2)"/>
-          <!-- LE specular highlight -->
-          <path d="M 83 213 Q 216 110 350 73 Q 484 110 617 213"
-                fill="none" stroke="rgba(255,205,105,.58)" stroke-width="7" stroke-linecap="round"/>
-
-          <!-- Handles (3 cylindrical grip bars) -->
-          <rect x="334" y="143" width="33" height="10" rx="5" fill="#888" opacity=".93"/>
-          <rect x="334" y="143" width="18" height="4"  rx="2" fill="rgba(255,255,255,.42)"/>
-          <rect x="334" y="185" width="33" height="10" rx="5" fill="#777" opacity=".88"/>
-          <rect x="334" y="185" width="18" height="4"  rx="2" fill="rgba(255,255,255,.36)"/>
-          <rect x="335" y="224" width="31" height="10" rx="5" fill="#666" opacity=".84"/>
-          <rect x="335" y="224" width="16" height="4"  rx="2" fill="rgba(255,255,255,.30)"/>
-
-          <!-- Tips -->
-          <circle cx="80"  cy="216" r="18" fill="url(#wTIP)" filter="url(#wDRP)"/>
-          <ellipse cx="74" cy="211" rx="8" ry="5" fill="rgba(255,205,100,.42)" transform="rotate(-12,74,211)"/>
-          <circle cx="620" cy="216" r="18" fill="url(#wTIP)" filter="url(#wDRP)"/>
-          <ellipse cx="614" cy="211" rx="8" ry="5" fill="rgba(255,205,100,.42)" transform="rotate(-12,614,211)"/>
-
-          <!-- ═══════════════ CALLOUT LINES (dashed) ═══════════════ -->
-          <!-- 1 LE → top bubble -->
-          <circle cx="350" cy="75"  r="4" fill="#0a1830"/>
-          <line x1="350" y1="71" x2="350" y2="45" stroke="#8899bb" stroke-width="1.5" stroke-dasharray="4 3"/>
-          <!-- 2 Strut → right bubble -->
-          <circle cx="352" cy="192" r="4" fill="#0a1830"/>
-          <line x1="356" y1="192" x2="422" y2="177" stroke="#8899bb" stroke-width="1.5" stroke-dasharray="4 3"/>
-          <!-- 3 Canopy → left bubble -->
-          <circle cx="230" cy="187" r="4" fill="#0a1830"/>
-          <line x1="226" y1="187" x2="155" y2="162" stroke="#8899bb" stroke-width="1.5" stroke-dasharray="4 3"/>
-          <!-- 4 Handles → right bubble -->
-          <circle cx="368" cy="203" r="4" fill="#0a1830"/>
-          <line x1="372" y1="205" x2="436" y2="222" stroke="#8899bb" stroke-width="1.5" stroke-dasharray="4 3"/>
-          <!-- 5 Tips → bottom-left bubble -->
-          <circle cx="80"  cy="216" r="4" fill="#0a1830"/>
-          <line x1="76" y1="220" x2="50" y2="277" stroke="#8899bb" stroke-width="1.5" stroke-dasharray="4 3"/>
-          <!-- 6 TE → bottom bubble -->
-          <circle cx="350" cy="318" r="4" fill="#0a1830"/>
-          <line x1="350" y1="322" x2="350" y2="366" stroke="#8899bb" stroke-width="1.5" stroke-dasharray="4 3"/>
-
-          <!-- ═══════════════ NUMBER BUBBLES (clickable) ═══════════════ -->
-          <!-- 1 Borde de Ataque -->
-          <g class="wing-num" data-part="0">
-            <circle class="wing-num-bg" cx="350" cy="32" r="13"/>
-            <text x="350" y="37" text-anchor="middle" fill="#fff" font-size="12" font-weight="900" font-family="system-ui">1</text>
-          </g>
-          <text x="367" y="30" fill="#0a1830" font-size="11" font-weight="700" font-family="system-ui">Borde de Ataque</text>
-
-          <!-- 2 Quilla / Strut -->
-          <g class="wing-num" data-part="1">
-            <circle class="wing-num-bg" cx="436" cy="174" r="13"/>
-            <text x="436" y="179" text-anchor="middle" fill="#fff" font-size="12" font-weight="900" font-family="system-ui">2</text>
-          </g>
-          <text x="452" y="171" fill="#0a1830" font-size="11" font-weight="700" font-family="system-ui">Quilla / Strut</text>
-
-          <!-- 3 Vela (Canopy) -->
-          <g class="wing-num" data-part="2">
-            <circle class="wing-num-bg" cx="143" cy="159" r="13"/>
-            <text x="143" y="164" text-anchor="middle" fill="#fff" font-size="12" font-weight="900" font-family="system-ui">3</text>
-          </g>
-          <text x="127" y="156" text-anchor="end" fill="#0a1830" font-size="11" font-weight="700" font-family="system-ui">Vela (Canopy)</text>
-
-          <!-- 4 Manijas -->
-          <g class="wing-num" data-part="3">
-            <circle class="wing-num-bg" cx="449" cy="219" r="13"/>
-            <text x="449" y="224" text-anchor="middle" fill="#fff" font-size="12" font-weight="900" font-family="system-ui">4</text>
-          </g>
-          <text x="465" y="217" fill="#0a1830" font-size="11" font-weight="700" font-family="system-ui">Manijas</text>
-
-          <!-- 5 Tips / Puntas -->
-          <g class="wing-num" data-part="4">
-            <circle class="wing-num-bg" cx="47" cy="280" r="13"/>
-            <text x="47" y="285" text-anchor="middle" fill="#fff" font-size="12" font-weight="900" font-family="system-ui">5</text>
-          </g>
-          <text x="47" y="301" text-anchor="middle" fill="#0a1830" font-size="11" font-weight="700" font-family="system-ui">Tips</text>
-
-          <!-- 6 Borde de Salida -->
-          <g class="wing-num" data-part="5">
-            <circle class="wing-num-bg" cx="350" cy="369" r="13"/>
-            <text x="350" y="374" text-anchor="middle" fill="#fff" font-size="12" font-weight="900" font-family="system-ui">6</text>
-          </g>
-          <text x="350" y="393" text-anchor="middle" fill="#0a1830" font-size="11" font-weight="700" font-family="system-ui">Borde de Salida</text>
-        </svg>
-        <p style="text-align:center;margin:6px 0 0;font-size:11px;color:#8899bb;letter-spacing:.06em">Tocá cada número para ver los detalles</p>
+      <div class="anatomy__visual" style="padding:0;cursor:default;overflow:hidden">
+        <div style="position:relative;width:100%">
+          <img src="https://www.kiteworldshop.com/img/cms/blog/ala-wing-foil-duotone-unit-jpg.jpg"
+               alt="Anatomía del ala de wing foil — partes principales"
+               style="width:100%;display:block;border-radius:12px;object-fit:cover"
+               onerror="this.style.minHeight='320px';this.style.background='#0b1c30'"/>
+          <!-- Callout dots — positions tuned for this image (% of image box) -->
+          <!-- 1 Borde de Ataque — LE tube front center -->
+          <button class="foil-dot wing-img-dot active" data-wing-part="0" style="left:50%;top:14%;pointer-events:all" aria-label="Borde de Ataque"><span class="foil-dot__ring"></span><span class="foil-dot__core">1</span></button>
+          <!-- 2 Quilla / Strut — central boom -->
+          <button class="foil-dot wing-img-dot" data-wing-part="1" style="left:52%;top:50%;pointer-events:all" aria-label="Quilla / Strut"><span class="foil-dot__ring"></span><span class="foil-dot__core">2</span></button>
+          <!-- 3 Vela (Canopy) — left fabric area -->
+          <button class="foil-dot wing-img-dot" data-wing-part="2" style="left:28%;top:40%;pointer-events:all" aria-label="Vela / Canopy"><span class="foil-dot__ring"></span><span class="foil-dot__core">3</span></button>
+          <!-- 4 Manijas — handles on strut -->
+          <button class="foil-dot wing-img-dot" data-wing-part="3" style="left:54%;top:42%;pointer-events:all" aria-label="Manijas"><span class="foil-dot__ring"></span><span class="foil-dot__core">4</span></button>
+          <!-- 5 Tips — right wingtip -->
+          <button class="foil-dot wing-img-dot" data-wing-part="4" style="left:90%;top:32%;pointer-events:all" aria-label="Tips / Puntas"><span class="foil-dot__ring"></span><span class="foil-dot__core">5</span></button>
+          <!-- 6 Borde de Salida — trailing edge -->
+          <button class="foil-dot wing-img-dot" data-wing-part="5" style="left:50%;top:80%;pointer-events:all" aria-label="Borde de Salida"><span class="foil-dot__ring"></span><span class="foil-dot__core">6</span></button>
+        </div>
+        <p style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);margin:0;font-size:11px;color:rgba(255,255,255,.55);letter-spacing:.05em;white-space:nowrap;pointer-events:none;text-shadow:0 1px 4px rgba(0,0,0,.8)">Tocá los números para ver los detalles</p>
       </div>
       <div class="anatomy__parts" id="wingParts">
         <div class="foil-part active" data-wing-part="0"><div class="foil-part__header"><span class="foil-part__num">1</span><span class="foil-part__name">Borde de Ataque</span></div><p class="foil-part__desc">El tubo inflable principal que da forma y rigidez al ala. Cuanto más rígido, más eficiente la transferencia de potencia. Siempre chequeá la presión antes de salir al agua.</p></div>
@@ -3118,13 +2999,13 @@ foilDots.forEach(function(d,i){d.addEventListener('click',function(){activateFoi
 
 // ============ WING ANATOMY ============
 var wingParts=document.querySelectorAll('#anatomia-ala .foil-part');
-var wingNums=document.querySelectorAll('#wingDiagram .wing-num');
+var wingImgDots=document.querySelectorAll('.wing-img-dot');
 function activateWing(i){
   wingParts.forEach(function(p,j){p.classList.toggle('active',j===i)});
-  wingNums.forEach(function(g,j){g.classList.toggle('active',j===i)});
+  wingImgDots.forEach(function(d,j){d.classList.toggle('active',j===i)});
 }
 wingParts.forEach(function(p,i){p.addEventListener('click',function(){activateWing(i)})});
-wingNums.forEach(function(g,i){g.addEventListener('click',function(){activateWing(i)})})
+wingImgDots.forEach(function(d,i){d.addEventListener('click',function(){activateWing(i)})})
 
 // ============ SPOTS GRID ============
 var LV={b:'Principiante',i:'Intermedio',a:'Avanzado',c:'Cable Park'};
