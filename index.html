@@ -4695,7 +4695,8 @@ function shareArticle(platform, btn) {
   var dialog = btn.closest('dialog');
   var h2 = dialog && dialog.querySelector('h2');
   var title = (h2 ? h2.textContent.trim() : '') + ' — Escuela de Wingfoil';
-  var url = window.location.href;
+  var base = window.location.origin + window.location.pathname;
+  var url = dialog && dialog.id ? base + '#' + dialog.id : window.location.href;
   var enc = encodeURIComponent(url);
   var txtEnc = encodeURIComponent(title);
   if (platform === 'wa') {
@@ -4711,6 +4712,17 @@ function shareArticle(platform, btn) {
     });
   }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  var hash = window.location.hash.slice(1);
+  if (!hash) return;
+  var el = document.getElementById(hash);
+  if (el && el.tagName === 'DIALOG') {
+    var blogSection = document.getElementById('blog');
+    if (blogSection) blogSection.scrollIntoView({behavior: 'instant', block: 'start'});
+    el.showModal();
+  }
+});
 </script>
 
 </body>
