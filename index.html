@@ -620,13 +620,23 @@ textarea{resize:vertical;min-height:90px}
 .meta-table__badge--foil{background:rgba(232,90,90,.15);color:#e85a5a}
 .meta-table__badge--equipo{background:rgba(233,196,106,.15);color:#a07800}
 
-/* AMAZON CARDS */
-.amazon-cat-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;text-align:center;transition:all .2s;text-decoration:none}
-.amazon-cat-card:hover{border-color:#ff9900;box-shadow:0 4px 20px rgba(255,153,0,.15);transform:translateY(-2px)}
-.amazon-cat-card--all{border-style:dashed}
-.amazon-cat-card__icon{font-size:28px;line-height:1}
-.amazon-cat-card__name{font-size:14px;font-weight:700;color:var(--text);font-family:'Clash Display',sans-serif}
-.amazon-cat-card__cta{font-size:12px;color:#ff9900;font-weight:600}
+/* AMAZON EDITORIAL GRID */
+.amz-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin-top:20px}
+.amz-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:all .2s}
+.amz-card:hover{border-color:#ff9900;box-shadow:0 6px 24px rgba(255,153,0,.12);transform:translateY(-2px)}
+.amz-card__img{width:100%;height:160px;object-fit:cover;display:block}
+.amz-card__body{padding:16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.amz-card__badge{display:inline-flex;width:fit-content;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 10px;border-radius:99px}
+.amz-badge--wing{background:color-mix(in oklab,var(--primary),transparent 82%);color:var(--primary)}
+.amz-badge--tabla{background:color-mix(in oklab,#22c55e,transparent 82%);color:#16a34a}
+.amz-badge--foil{background:color-mix(in oklab,#8b5cf6,transparent 82%);color:#7c3aed}
+.amz-badge--prot{background:color-mix(in oklab,#ef4444,transparent 82%);color:#b91c1c}
+.amz-badge--acc{background:color-mix(in oklab,#f59e0b,transparent 82%);color:#b45309}
+.amz-card__title{font-size:14px;font-weight:800;color:var(--text);font-family:'Clash Display',sans-serif;line-height:1.3}
+.amz-card__why{font-size:13px;color:var(--text-muted);line-height:1.6;flex:1;margin:0}
+.amz-card__price{font-size:15px;font-weight:700;color:var(--text);font-family:'Clash Display',sans-serif}
+.amz-card__link{display:inline-flex;align-items:center;justify-content:center;margin-top:4px;padding:9px 14px;background:#ff9900;color:#000;font-size:13px;font-weight:700;border-radius:8px;text-decoration:none;transition:all .15s}
+.amz-card__link:hover{background:#e68a00;transform:translateY(-1px)}
 
 /* FAQ */
 .faq-wrap{margin-top:64px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:clamp(24px,4vw,48px)}
@@ -2041,49 +2051,157 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div><!-- /eqPanelML -->
 
     <div id="eqPanelAmazon" style="display:none">
-      <p class="equipos-disclaimer">📦 Los enlaces te llevan directamente a Amazon Argentina. La Escuela de Wingfoil no tiene relación comercial con Amazon ni recibe comisión por estas búsquedas. Los precios y disponibilidad dependen exclusivamente de Amazon.</p>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:8px">
-        <a href="https://www.amazon.com.ar/s?k=wingfoil+ala+wing" target="_blank" rel="noopener" class="amazon-cat-card">
-          <span class="amazon-cat-card__icon">🪂</span>
-          <span class="amazon-cat-card__name">Alas / Wings</span>
-          <span class="amazon-cat-card__cta">Buscar en Amazon →</span>
-        </a>
-        <a href="https://www.amazon.com.ar/s?k=wingfoil+tabla" target="_blank" rel="noopener" class="amazon-cat-card">
-          <span class="amazon-cat-card__icon">🏄</span>
-          <span class="amazon-cat-card__name">Tablas</span>
-          <span class="amazon-cat-card__cta">Buscar en Amazon →</span>
-        </a>
-        <a href="https://www.amazon.com.ar/s?k=hydrofoil+wingfoil" target="_blank" rel="noopener" class="amazon-cat-card">
-          <span class="amazon-cat-card__icon">🦈</span>
-          <span class="amazon-cat-card__name">Foils</span>
-          <span class="amazon-cat-card__cta">Buscar en Amazon →</span>
-        </a>
-        <a href="https://www.amazon.com.ar/s?k=neoprene+kitesurf+wingfoil" target="_blank" rel="noopener" class="amazon-cat-card">
-          <span class="amazon-cat-card__icon">🤿</span>
-          <span class="amazon-cat-card__name">Neoprene</span>
-          <span class="amazon-cat-card__cta">Buscar en Amazon →</span>
-        </a>
-        <a href="https://www.amazon.com.ar/s?k=casco+kitesurf+wingfoil" target="_blank" rel="noopener" class="amazon-cat-card">
-          <span class="amazon-cat-card__icon">⛑️</span>
-          <span class="amazon-cat-card__name">Cascos</span>
-          <span class="amazon-cat-card__cta">Buscar en Amazon →</span>
-        </a>
-        <a href="https://www.amazon.com.ar/s?k=chaleco+flotacion+kitesurf" target="_blank" rel="noopener" class="amazon-cat-card">
-          <span class="amazon-cat-card__icon">🦺</span>
-          <span class="amazon-cat-card__name">Chalecos</span>
-          <span class="amazon-cat-card__cta">Buscar en Amazon →</span>
-        </a>
-        <a href="https://www.amazon.com.ar/s?k=wingfoil+accesorios" target="_blank" rel="noopener" class="amazon-cat-card">
-          <span class="amazon-cat-card__icon">🔧</span>
-          <span class="amazon-cat-card__name">Accesorios</span>
-          <span class="amazon-cat-card__cta">Buscar en Amazon →</span>
-        </a>
-        <a href="https://www.amazon.com.ar/s?k=wingfoil" target="_blank" rel="noopener" class="amazon-cat-card amazon-cat-card--all">
-          <span class="amazon-cat-card__icon">📦</span>
-          <span class="amazon-cat-card__name">Ver todo wingfoil</span>
-          <span class="amazon-cat-card__cta">Buscar en Amazon →</span>
-        </a>
+      <p class="equipos-disclaimer">📦 Selección curada por la Escuela de Wingfoil. Los enlaces dirigen a Amazon Argentina. No recibimos comisión ni tenemos relación comercial con Amazon. Los precios son orientativos y pueden variar.</p>
+
+      <div class="eq-filters" id="amzFilters">
+        <button class="eq-filter active" data-amzcat="all">Todos</button>
+        <button class="eq-filter" data-amzcat="wing">🪂 Alas</button>
+        <button class="eq-filter" data-amzcat="tabla">🏄 Tablas</button>
+        <button class="eq-filter" data-amzcat="foil">🦈 Foil</button>
+        <button class="eq-filter" data-amzcat="proteccion">⛑️ Protección</button>
+        <button class="eq-filter" data-amzcat="accesorios">🔧 Accesorios</button>
       </div>
+
+      <div class="amz-grid" id="amzGrid">
+
+        <div class="amz-card" data-amzcat="wing">
+          <img class="amz-card__img" src="https://images.unsplash.com/photo-1666175497584-dab60dcf1419?w=400&auto=format&fit=crop&q=60" alt="Aztron Air Wing 5.0m" loading="lazy"/>
+          <div class="amz-card__body">
+            <span class="amz-card__badge amz-badge--wing">🪂 Ala</span>
+            <div class="amz-card__title">Aztron Air Wing 5.0m</div>
+            <p class="amz-card__why"><strong>Por qué lo recomendamos:</strong> Una de las alas más accesibles del mercado para aprender. El tamaño 5.0m es ideal para riders de 70–90 kg con viento de 15–20 kn. Buen manejo de depower y relanzado sencillo desde el agua.</p>
+            <div class="amz-card__price">~$1.600.000 ARS</div>
+            <a class="amz-card__link" href="https://www.amazon.com.ar/s?k=Aztron+Air+Wing+5m+wingfoil" target="_blank" rel="noopener">Ver en Amazon →</a>
+          </div>
+        </div>
+
+        <div class="amz-card" data-amzcat="wing">
+          <img class="amz-card__img" src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=400&auto=format&fit=crop&q=60" alt="Aztron Air Wing 4.0m" loading="lazy"/>
+          <div class="amz-card__body">
+            <span class="amz-card__badge amz-badge--wing">🪂 Ala</span>
+            <div class="amz-card__title">Aztron Air Wing 4.0m</div>
+            <p class="amz-card__why"><strong>Por qué lo recomendamos:</strong> Versión más pequeña para riders livianos (&lt;70 kg) o para días con más viento (20–25 kn). Liviana y rápida, con excelente respuesta de potencia. Buena opción de segunda ala.</p>
+            <div class="amz-card__price">~$1.300.000 ARS</div>
+            <a class="amz-card__link" href="https://www.amazon.com.ar/s?k=Aztron+Air+Wing+4m+wingfoil" target="_blank" rel="noopener">Ver en Amazon →</a>
+          </div>
+        </div>
+
+        <div class="amz-card" data-amzcat="tabla">
+          <img class="amz-card__img" src="https://images.unsplash.com/photo-1666175497562-ccb66e6c373b?w=400&auto=format&fit=crop&q=60" alt="Tabla inflable wingfoil 120L" loading="lazy"/>
+          <div class="amz-card__body">
+            <span class="amz-card__badge amz-badge--tabla">🏄 Tabla</span>
+            <div class="amz-card__title">Tabla Inflable Wingfoil 120 L — 5'3''</div>
+            <p class="amz-card__why"><strong>Por qué lo recomendamos:</strong> El mayor volumen facilita enormemente los primeros pasos: te quedás parado más fácil y el tiempo de aprendizaje se reduce. El formato inflable la hace transportable en cualquier auto. Ideal para principiantes.</p>
+            <div class="amz-card__price">~$900.000 ARS</div>
+            <a class="amz-card__link" href="https://www.amazon.com.ar/s?k=tabla+wingfoil+inflable+120l" target="_blank" rel="noopener">Ver en Amazon →</a>
+          </div>
+        </div>
+
+        <div class="amz-card" data-amzcat="tabla">
+          <img class="amz-card__img" src="https://images.unsplash.com/photo-1615840956750-3262c5fffb62?w=400&auto=format&fit=crop&q=60" alt="Tabla wingfoil rígida 75L carbono" loading="lazy"/>
+          <div class="amz-card__body">
+            <span class="amz-card__badge amz-badge--tabla">🏄 Tabla</span>
+            <div class="amz-card__title">Tabla Wingfoil Rígida 65–75 L Carbono</div>
+            <p class="amz-card__why"><strong>Por qué lo recomendamos:</strong> Para quienes ya foilean y quieren mejorar su nivel. El menor volumen obliga a trabajar el balance pero premia con más velocidad y maniobras más limpias. El carbono reduce el peso total del setup.</p>
+            <div class="amz-card__price">~$999.000 ARS</div>
+            <a class="amz-card__link" href="https://www.amazon.com.ar/s?k=tabla+wingfoil+carbono+75l" target="_blank" rel="noopener">Ver en Amazon →</a>
+          </div>
+        </div>
+
+        <div class="amz-card" data-amzcat="foil">
+          <img class="amz-card__img" src="https://images.unsplash.com/photo-1594814964600-5d8e56ec16c7?w=400&auto=format&fit=crop&q=60" alt="Hydrofoil aluminio completo" loading="lazy"/>
+          <div class="amz-card__body">
+            <span class="amz-card__badge amz-badge--foil">🦈 Foil</span>
+            <div class="amz-card__title">Hydrofoil Aluminio Completo — Mástil 85 cm</div>
+            <p class="amz-card__why"><strong>Por qué lo recomendamos:</strong> Aluminio antes que carbono para empezar: tolera mejor los golpes contra el fondo y sale mucho más económico. Mástil de 85 cm es el largo ideal para el Río de la Plata — suficiente profundidad sin perder control.</p>
+            <div class="amz-card__price">~$450.000 ARS</div>
+            <a class="amz-card__link" href="https://www.amazon.com.ar/s?k=hydrofoil+aluminio+wingfoil+mastil+85cm" target="_blank" rel="noopener">Ver en Amazon →</a>
+          </div>
+        </div>
+
+        <div class="amz-card" data-amzcat="foil">
+          <img class="amz-card__img" src="https://images.unsplash.com/photo-1666175496147-9faf7d295503?w=400&auto=format&fit=crop&q=60" alt="Kit tornillos foil" loading="lazy"/>
+          <div class="amz-card__body">
+            <span class="amz-card__badge amz-badge--foil">🦈 Foil</span>
+            <div class="amz-card__title">Kit Tornillos y Tuercas M6/M8 para Foil</div>
+            <p class="amz-card__why"><strong>Por qué lo recomendamos:</strong> Lo más reemplazado del equipo. El agua salada y la presión del foil desgastan los tornillos rápido. Tener un kit de repuesto evita cancelar sesiones por una pieza mínima. Llevalós siempre en la mochila.</p>
+            <div class="amz-card__price">~$42.000 ARS</div>
+            <a class="amz-card__link" href="https://www.amazon.com.ar/s?k=tornillos+tuercas+M6+M8+hydrofoil+wingfoil" target="_blank" rel="noopener">Ver en Amazon →</a>
+          </div>
+        </div>
+
+        <div class="amz-card" data-amzcat="proteccion">
+          <img class="amz-card__img" src="https://images.unsplash.com/photo-1530549387789-4c1017266635?w=400&auto=format&fit=crop&q=60" alt="Casco deportes acuáticos" loading="lazy"/>
+          <div class="amz-card__body">
+            <span class="amz-card__badge amz-badge--prot">⛑️ Protección</span>
+            <div class="amz-card__title">Casco para Deportes Náuticos — Kite / Wing / Wake</div>
+            <p class="amz-card__why"><strong>Por qué lo recomendamos:</strong> El foil es duro y cuando caés puede estar cerca. El casco no es opcional — es parte del equipo básico. Buscá uno específico para deportes acuáticos: cierre rápido, ventilación y cubierta de oído. No uses cascos de bici.</p>
+            <div class="amz-card__price">~$55.000 ARS</div>
+            <a class="amz-card__link" href="https://www.amazon.com.ar/s?k=casco+deportes+nauticos+kitesurf+wingfoil" target="_blank" rel="noopener">Ver en Amazon →</a>
+          </div>
+        </div>
+
+        <div class="amz-card" data-amzcat="proteccion">
+          <img class="amz-card__img" src="https://images.unsplash.com/photo-1643489680461-e5a19b9b54c5?w=400&auto=format&fit=crop&q=60" alt="Chaleco de flotación" loading="lazy"/>
+          <div class="amz-card__body">
+            <span class="amz-card__badge amz-badge--prot">⛑️ Protección</span>
+            <div class="amz-card__title">Chaleco de Flotación — Kitesurf / Wingfoil</div>
+            <p class="amz-card__why"><strong>Por qué lo recomendamos:</strong> Obligatorio para salir al agua. Los chalecos de impacto finos no restringen el movimiento y amortiguan golpes con el foil. Priorizá los que tienen certificación ISO 50N. Indispensable en días de viento fuerte.</p>
+            <div class="amz-card__price">~$150.000 ARS</div>
+            <a class="amz-card__link" href="https://www.amazon.com.ar/s?k=chaleco+flotacion+impacto+kitesurf+wingfoil" target="_blank" rel="noopener">Ver en Amazon →</a>
+          </div>
+        </div>
+
+        <div class="amz-card" data-amzcat="proteccion">
+          <img class="amz-card__img" src="https://images.unsplash.com/photo-1564415315949-7a0c4ad2d438?w=400&auto=format&fit=crop&q=60" alt="Neoprene 3/2mm" loading="lazy"/>
+          <div class="amz-card__body">
+            <span class="amz-card__badge amz-badge--prot">⛑️ Protección</span>
+            <div class="amz-card__title">Neoprene 3/2 mm — Traje de Agua Completo</div>
+            <p class="amz-card__why"><strong>Por qué lo recomendamos:</strong> En el Río de la Plata el agua ronda los 18–22°C en temporada. Un 3/2mm es el espesor más versátil: abriga en los meses de transición y no sobrecalienta en verano. Buscar costuras pegadas (glued &amp; blind stitched) para mejor sellado.</p>
+            <div class="amz-card__price">~$230.000 ARS</div>
+            <a class="amz-card__link" href="https://www.amazon.com.ar/s?k=traje+neoprene+3mm+kitesurf+wingfoil" target="_blank" rel="noopener">Ver en Amazon →</a>
+          </div>
+        </div>
+
+        <div class="amz-card" data-amzcat="accesorios">
+          <img class="amz-card__img" src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&auto=format&fit=crop&q=60" alt="Bomba eléctrica de alta presión" loading="lazy"/>
+          <div class="amz-card__body">
+            <span class="amz-card__badge amz-badge--acc">🔧 Accesorio</span>
+            <div class="amz-card__title">Bomba Eléctrica de Alta Presión — 20 PSI</div>
+            <p class="amz-card__why"><strong>Por qué lo recomendamos:</strong> Inflar el ala a mano cansa antes de entrar al agua. Una bomba eléctrica de 20 PSI llena el ala en menos de 2 minutos. Las que vienen con adaptador doble sirven también para las tablas inflables. Una compra que se amortiza rápido.</p>
+            <div class="amz-card__price">~$285.000 ARS</div>
+            <a class="amz-card__link" href="https://www.amazon.com.ar/s?k=bomba+electrica+alta+presion+20psi+kitesurf" target="_blank" rel="noopener">Ver en Amazon →</a>
+          </div>
+        </div>
+
+        <div class="amz-card" data-amzcat="accesorios">
+          <img class="amz-card__img" src="https://images.unsplash.com/photo-1625135779946-f9eeb1d70e25?w=400&auto=format&fit=crop&q=60" alt="Footstraps wingfoil" loading="lazy"/>
+          <div class="amz-card__body">
+            <span class="amz-card__badge amz-badge--acc">🔧 Accesorio</span>
+            <div class="amz-card__title">Footstraps Wingfoil — Set x 3 Regulables</div>
+            <p class="amz-card__why"><strong>Por qué lo recomendamos:</strong> Los footstraps te dan control sobre la tabla durante el foileo, especialmente en maniobras y rachas. Los regulables se adaptan a cualquier talle de pie y bota de neoprene. Básicos para pasar del nivel principiante al intermedio.</p>
+            <div class="amz-card__price">~$120.000 ARS</div>
+            <a class="amz-card__link" href="https://www.amazon.com.ar/s?k=footstraps+wingfoil+regulables+set" target="_blank" rel="noopener">Ver en Amazon →</a>
+          </div>
+        </div>
+
+        <div class="amz-card" data-amzcat="accesorios">
+          <img class="amz-card__img" src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=400&auto=format&fit=crop&q=60" alt="Kit reparación wing bladder" loading="lazy"/>
+          <div class="amz-card__body">
+            <span class="amz-card__badge amz-badge--acc">🔧 Accesorio</span>
+            <div class="amz-card__title">Kit de Reparación Bladder / Tubos Wing</div>
+            <p class="amz-card__why"><strong>Por qué lo recomendamos:</strong> Un pinchazo en el ala no debería terminar tu sesión. Este kit de látex y parches para tubos inflables permite reparaciones en el spot en minutos. Obligatorio tenerlo en la bolsa si salís a spots alejados.</p>
+            <div class="amz-card__price">~$23.000 ARS</div>
+            <a class="amz-card__link" href="https://www.amazon.com.ar/s?k=kit+reparacion+bladder+inflable+wingfoil" target="_blank" rel="noopener">Ver en Amazon →</a>
+          </div>
+        </div>
+
+      </div><!-- /amz-grid -->
+
+      <div style="text-align:center;margin-top:24px">
+        <a href="https://www.amazon.com.ar/s?k=wingfoil" target="_blank" rel="noopener" class="btn btn--primary">Ver todo wingfoil en Amazon →</a>
+      </div>
+
     </div><!-- /eqPanelAmazon -->
 
   </div>
@@ -4572,6 +4690,20 @@ if (eqTabs) {
     document.getElementById('eqPanelML').style.display = tab === 'ml' ? '' : 'none';
     document.getElementById('eqPanelMeta').style.display = tab === 'meta' ? '' : 'none';
     document.getElementById('eqPanelAmazon').style.display = tab === 'amazon' ? '' : 'none';
+  });
+}
+
+// ===== AMAZON filters =====
+var amzFilters = document.getElementById('amzFilters');
+if (amzFilters) {
+  amzFilters.addEventListener('click', function(e) {
+    var btn = e.target.closest('.eq-filter'); if (!btn) return;
+    amzFilters.querySelectorAll('.eq-filter').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var cat = btn.dataset.amzcat;
+    document.querySelectorAll('#amzGrid .amz-card').forEach(function(card) {
+      card.style.display = (cat === 'all' || card.dataset.amzcat === cat) ? '' : 'none';
+    });
   });
 }
 
