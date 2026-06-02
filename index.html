@@ -110,7 +110,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         "@type": "HowToStep",
         "name": "Elegí tu equipo",
         "text": "Para principiante: tabla 100-115L, ala 5-7m según tu peso, foil con ala delantera grande (1.800-2.500 cm²). Nuevo sale USD 2.500-3.000; usado en buen estado USD 1.000-1.500. Consultá el mercado de la plataforma.",
-        "url": "https://www.escueladewingfoil.com.ar/#equipos",
+        "url": "https://www.escueladewingfoil.com.ar/#venta-de-wingfoil",
         "image": "https://images.unsplash.com/photo-1666175497562-ccb66e6c373b?w=600&fit=crop&auto=format&q=80"
       }
     ]
@@ -797,6 +797,37 @@ textarea{resize:vertical;min-height:90px}
 .gloss-empty{text-align:center;padding:32px 20px;color:var(--text-muted);font-size:14px;background:var(--surface);border:1px dashed var(--border);border-radius:10px}
 
 
+/* FAQ */
+.faq-list{display:grid;gap:10px;max-width:800px;margin:28px auto 0}
+.faq-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.faq-item[open]{border-color:var(--primary);box-shadow:0 4px 20px rgba(0,180,216,.1)}
+.faq-item summary{list-style:none;cursor:pointer;padding:18px 52px 18px 20px;font-size:15px;font-weight:700;color:var(--text);font-family:'Clash Display',sans-serif;position:relative;line-height:1.4}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary::after{content:'+';position:absolute;right:16px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--primary-glow);color:var(--primary);font-size:17px;font-weight:700;transition:all .2s;line-height:1}
+.faq-item[open] summary::after{content:'–';background:var(--primary);color:#fff}
+.faq-answer{padding:0 20px 18px;font-size:14px;color:var(--text-muted);line-height:1.7;animation:glossOpen .2s ease}
+
+/* COMPARADOR */
+.comp-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:28px;border-radius:14px;border:1px solid var(--border)}
+.comp-table{width:100%;border-collapse:collapse;min-width:680px;font-size:13px}
+.comp-table th,.comp-table td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--border);vertical-align:middle}
+.comp-table thead th{background:var(--surface-2);font-family:'Clash Display',sans-serif;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);white-space:nowrap}
+.comp-table thead th:first-child{border-radius:14px 0 0 0}
+.comp-table thead th:last-child{border-radius:0 14px 0 0}
+.comp-table tbody tr{background:var(--surface);transition:background .15s}
+.comp-table tbody tr:hover{background:var(--surface-2)}
+.comp-table tbody tr:last-child td{border-bottom:none}
+.comp-brand-name{font-weight:800;font-family:'Clash Display',sans-serif;color:var(--text);font-size:14px}
+.comp-brand-country{font-size:11px;color:var(--text-muted);margin-top:2px}
+.comp-level{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px}
+.comp-level--beg{background:color-mix(in oklab,#22c55e,transparent 82%);color:#16a34a}
+.comp-level--int{background:color-mix(in oklab,#f59e0b,transparent 82%);color:#b45309}
+.comp-level--adv{background:color-mix(in oklab,#ef4444,transparent 82%);color:#b91c1c}
+.comp-level--all{background:var(--primary-glow);color:var(--primary)}
+.comp-arg{font-size:12px}
+.comp-arg--si{color:#22c55e;font-weight:700}
+.comp-arg--parcial{color:#f59e0b;font-weight:700}
+
 /* TESTIMONIOS */
 .testimonials{background:var(--surface);padding:48px 0}
 .testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:24px}
@@ -1231,8 +1262,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <a href="#anatomia">Anatomía</a>
       <a href="#instructores">Instructores</a>
       <a href="#spots">Mapa</a>
-      <a href="#equipos">Equipos</a>
+      <a href="#venta-de-wingfoil">Equipos</a>
       <a href="#riders">Riders</a>
+      <a href="#faq">FAQ</a>
+      <a href="#comparador">Comparador</a>
       <a href="#camaras"><span>📡 Cámaras en vivo</span><span class="arrow">›</span></a>
   <a href="#calculadora">Calculadora</a>
     </nav>
@@ -1268,10 +1301,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <a href="#spots"><span>📍 Spots Argentina</span><span class="arrow">›</span></a>
   <a href="#calculadora"><span>🧮 Calculadora Equipo</span><span class="arrow">›</span></a>
   <a href="#instructores"><span>👨‍🏫 Instructores</span><span class="arrow">›</span></a>
-  <a href="#equipos"><span>🛒 Equipos en venta</span><span class="arrow">›</span></a>
+  <a href="#venta-de-wingfoil"><span>🛒 Equipos en venta</span><span class="arrow">›</span></a>
   <a href="#riders"><span>🌟 Riders & Legends</span><span class="arrow">›</span></a>
   <a href="#glosario"><span>📖 Glosario</span><span class="arrow">›</span></a>
   <a href="#marcas"><span>🏷️ Marcas</span><span class="arrow">›</span></a>
+  <a href="#faq"><span>❓ Preguntas frecuentes</span><span class="arrow">›</span></a>
+  <a href="#comparador"><span>⚖️ Comparador de marcas</span><span class="arrow">›</span></a>
   <div class="nav-drawer__footer">
     <button class="nav-drawer__theme" id="drawerTheme">
       <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -1333,7 +1368,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <span class="qs-step__cta">Ver instructores</span>
       </a>
 
-      <a href="#equipos" class="qs-step">
+      <a href="#venta-de-wingfoil" class="qs-step">
         <div class="qs-step__num">02</div>
         <div class="qs-step__icon">🏄</div>
         <div class="qs-step__title">Conseguí tu equipo</div>
@@ -1801,7 +1836,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 
 <!-- ============================================================ EQUIPOS ============================================================ -->
-<section class="section" id="equipos">
+<section class="section" id="venta-de-wingfoil">
   <div class="container">
     <span class="eyebrow">Comunidad</span>
     <h2 class="section-title">Equipos en Venta</h2>
@@ -2565,7 +2600,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <tr><td style="padding:10px 12px;font-weight:700">Kit completo</td><td style="padding:10px 12px;color:var(--text-muted)">USD 2.500-3.000</td><td style="padding:10px 12px;color:var(--text-muted)">USD 1.000-1.500</td></tr>
             </tbody>
           </table></div>
-          <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">¿Encontraste algo pero no estás seguro? Consultá con los <a href="#instructores" onclick="document.getElementById('articleUsado').close()" style="color:var(--primary)">instructores</a> — muchos hacen revisión de equipos usados antes de comprar. También revisá el <a href="#equipos" onclick="document.getElementById('articleUsado').close()" style="color:var(--primary)">mercado de equipos</a> de la plataforma.</p>
+          <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">¿Encontraste algo pero no estás seguro? Consultá con los <a href="#instructores" onclick="document.getElementById('articleUsado').close()" style="color:var(--primary)">instructores</a> — muchos hacen revisión de equipos usados antes de comprar. También revisá el <a href="#venta-de-wingfoil" onclick="document.getElementById('articleUsado').close()" style="color:var(--primary)">mercado de equipos</a> de la plataforma.</p>
           <div class="article-share">
             <span class="article-share__label">Compartir</span>
             <button class="share-btn share-btn--wa" onclick="shareArticle('wa',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.867-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg><span>WhatsApp</span></button>
@@ -3072,6 +3107,143 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </div>
 
+<!-- ============================================================ FAQ ============================================================ -->
+<section class="section" id="faq">
+  <div class="container">
+    <span class="eyebrow">❓ Dudas frecuentes</span>
+    <h2 class="section-title">Preguntas frecuentes</h2>
+    <p class="section-sub">Todo lo que necesitás saber antes de arrancar con el wingfoil.</p>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>¿En qué momento del año conviene arrancar con el wingfoil?</summary>
+        <p class="faq-answer">La época ideal en el Río de la Plata arranca a fines de septiembre hasta marzo. Si arrancás en invierno los vientos son más de tierra; igualmente las clases vienen con un gomón de seguridad.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Qué necesito para arrancar?</summary>
+        <p class="faq-answer">Si tomás clases, la escuela te da todo: neoprene, tabla, vela, casco y salvavidas. Si tenés base en kitesurf, windsurf, surf o vela necesitás: tabla grande +100 L, ala 6–7 m para viento moderado, neoprene, botitas, casco, chaleco y un spot seguro.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Qué tabla de wingfoil necesito para empezar?</summary>
+        <p class="faq-answer">Principiante: 100–115 L. Intermedio (85 kg+): 85–90 L. Avanzado: 40–75 L. La regla es peso corporal + 30–40 L para empezar. Cuanta más flotación, más fácil aprender.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Conviene comprar equipo nuevo o usado?</summary>
+        <p class="faq-answer">Nuevo es mejor para reventa futura. Si comprás usado: revisá costuras del ala, que los tubos inflen bien y que el foil no tenga corrosión. Hablá siempre con tu instructor antes de comprar.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Cuánto tiempo me lleva foilear?</summary>
+        <p class="faq-answer">Depende del tiempo en el agua. Con clases regulares (2–3 veces por semana), la mayoría logra su primer foileo en 5–10 sesiones. Con experiencia previa en deportes de viento, mucho más rápido.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Cuánto cuesta el equipo en Argentina?</summary>
+        <p class="faq-answer">Los equipos están dolarizados. Nuevo: USD 2.500–3.000. Usado en buen estado: USD 1.000–1.500. Las clases varían por zona e instructor — consultá con los instructores listados en la plataforma.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Qué foil es mejor para principiante en el Río de la Plata?</summary>
+        <p class="faq-answer">Mástil 75–85 cm. Ala delantera grande (1.800–2.500 cm²) para arrancar con poco viento. Fuselaje largo para más estabilidad. Aluminio antes que carbono: más barato y tolerante a golpes.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Hay competencias de wingfoil en Argentina?</summary>
+        <p class="faq-answer">Sí, hay regatas y competencias todo el año organizadas por distintos clubes. Hablá con tu instructor para sumarte al circuito argentino.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿La Escuela de Wingfoil dicta clases directamente?</summary>
+        <p class="faq-answer">La plataforma en sí no dicta clases — sí los instructores certificados que se sumaron. Los perfiles los publican los propios instructores. Verificá credenciales antes de contratar.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ COMPARADOR DE MARCAS ============================================================ -->
+<section class="section" id="comparador">
+  <div class="container">
+    <span class="eyebrow">🏷️ Marcas</span>
+    <h2 class="section-title">Comparador de marcas</h2>
+    <p class="section-sub">Las principales marcas de wingfoil cara a cara: nivel ideal, fortaleza y disponibilidad en Argentina.</p>
+    <div class="comp-scroll">
+      <table class="comp-table" aria-label="Comparador de marcas de wingfoil">
+        <thead>
+          <tr>
+            <th>Marca</th>
+            <th>País</th>
+            <th>Nivel ideal</th>
+            <th>Precio referencia</th>
+            <th>Punto fuerte</th>
+            <th>En Argentina</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="comp-brand-name">F-One</div></td>
+            <td>🇫🇷 Francia</td>
+            <td><span class="comp-level comp-level--all">Todos los niveles</span></td>
+            <td>USD 2.800 – 4.200</td>
+            <td>Alas muy estables y fáciles de relanzar; diseño innovador y accesible</td>
+            <td><span class="comp-arg comp-arg--si">✔ Distribuidor oficial</span></td>
+          </tr>
+          <tr>
+            <td><div class="comp-brand-name">Duotone</div></td>
+            <td>🇩🇪 Alemania</td>
+            <td><span class="comp-level comp-level--all">Todos los niveles</span></td>
+            <td>USD 3.000 – 5.000</td>
+            <td>Construcción premium; línea completa para principiante y competición</td>
+            <td><span class="comp-arg comp-arg--si">✔ Distribuidor oficial</span></td>
+          </tr>
+          <tr>
+            <td><div class="comp-brand-name">Naish</div></td>
+            <td>🌺 Hawaii</td>
+            <td><span class="comp-level comp-level--int">Intermedio / Avanzado</span></td>
+            <td>USD 2.600 – 4.000</td>
+            <td>Foils de alta performance; fuerte en ondas y freeride</td>
+            <td><span class="comp-arg comp-arg--si">✔ Distribuidor oficial</span></td>
+          </tr>
+          <tr>
+            <td><div class="comp-brand-name">Cabrinha</div></td>
+            <td>🇺🇸 USA</td>
+            <td><span class="comp-level comp-level--all">Todos los niveles</span></td>
+            <td>USD 2.500 – 4.500</td>
+            <td>Versatilidad kite + wing; tablas duales muy populares en Argentina</td>
+            <td><span class="comp-arg comp-arg--si">✔ Distribuidor oficial</span></td>
+          </tr>
+          <tr>
+            <td><div class="comp-brand-name">Ozone</div></td>
+            <td>🇬🇧 Reino Unido</td>
+            <td><span class="comp-level comp-level--int">Intermedio / Avanzado</span></td>
+            <td>USD 2.800 – 4.000</td>
+            <td>Velas ligeras y eficientes; excelente rango de viento</td>
+            <td><span class="comp-arg comp-arg--parcial">〜 Importación particular</span></td>
+          </tr>
+          <tr>
+            <td><div class="comp-brand-name">North</div></td>
+            <td>🌐 Internacional</td>
+            <td><span class="comp-level comp-level--adv">Avanzado</span></td>
+            <td>USD 3.200 – 5.500</td>
+            <td>Materiales de competición; tecnología punta en foils de carbono</td>
+            <td><span class="comp-arg comp-arg--parcial">〜 Importación particular</span></td>
+          </tr>
+          <tr>
+            <td><div class="comp-brand-name">Armstrong</div></td>
+            <td>🇳🇿 Nueva Zelanda</td>
+            <td><span class="comp-level comp-level--adv">Avanzado</span></td>
+            <td>USD 2.000 – 3.800 (solo foil)</td>
+            <td>Foils de carbono de alto rendimiento; referencia en downwind y race</td>
+            <td><span class="comp-arg comp-arg--parcial">〜 Importación particular</span></td>
+          </tr>
+          <tr>
+            <td><div class="comp-brand-name">Starboard</div></td>
+            <td>🇹🇭 Tailandia</td>
+            <td><span class="comp-level comp-level--beg">Principiante</span></td>
+            <td>USD 2.400 – 4.000</td>
+            <td>Tablas de aprendizaje muy estables; amplia línea inflable para viajeros</td>
+            <td><span class="comp-arg comp-arg--si">✔ Distribuidor oficial</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12px;color:var(--text-muted);margin-top:14px;text-align:center">Precios orientativos en USD para kit completo (ala + foil + tabla) salvo indicación. Disponibilidad y precios pueden variar. Consultá con tu instructor antes de comprar.</p>
+  </div>
+</section>
+
 <!-- ============================================================ DISCLAIMER ============================================================ -->
 <section class="disclaimer-section">
   <div class="container">
@@ -3107,6 +3279,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <li><a href="#anatomia-ala">Anatomía del ala</a></li>
             <li><a href="#calculadora">Calculadora equipo</a></li>
             <li><a href="#glosario">Glosario</a></li>
+            <li><a href="#faq">Preguntas frecuentes</a></li>
+            <li><a href="#comparador">Comparador de marcas</a></li>
             <li><a href="#riders">Riders & Legends</a></li>
             <li><a href="#blog">Guías y artículos</a></li>
           </ul>
@@ -3116,7 +3290,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <ul role="list">
             <li><a href="#instructores">Instructores</a></li>
             <li><a href="#spots">Spots Argentina</a></li>
-            <li><a href="#equipos">Equipos en venta</a></li>
+            <li><a href="#venta-de-wingfoil">Equipos en venta</a></li>
             <li><a href="#testimonios">Testimonios</a></li>
             <li><a href="#marcas">Marcas</a></li>
           </ul>
@@ -3923,11 +4097,13 @@ if(mBread && mBreadCurrent && 'IntersectionObserver' in window){
     'spots':'🗺️ Aguas argentinas',
     'camaras':'📡 Cámaras en vivo',
     'calculadora':'🧮 Calculadora',
-    'equipos':'🛒 Equipos',
+    'venta-de-wingfoil':'🛒 Equipos en venta',
     'riders':'🌟 Riders',
     'glosario':'📖 Glosario',
     'blog':'📚 Recursos',
-    'marcas':'🏷️ Marcas'
+    'marcas':'🏷️ Marcas',
+    'faq':'❓ Preguntas frecuentes',
+    'comparador':'⚖️ Comparador de marcas'
   };
   var bcObs = new IntersectionObserver(function(entries){
     entries.forEach(function(en){
