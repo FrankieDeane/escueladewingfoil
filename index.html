@@ -620,6 +620,14 @@ textarea{resize:vertical;min-height:90px}
 .meta-table__badge--foil{background:rgba(232,90,90,.15);color:#e85a5a}
 .meta-table__badge--equipo{background:rgba(233,196,106,.15);color:#a07800}
 
+/* AMAZON CARDS */
+.amazon-cat-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;text-align:center;transition:all .2s;text-decoration:none}
+.amazon-cat-card:hover{border-color:#ff9900;box-shadow:0 4px 20px rgba(255,153,0,.15);transform:translateY(-2px)}
+.amazon-cat-card--all{border-style:dashed}
+.amazon-cat-card__icon{font-size:28px;line-height:1}
+.amazon-cat-card__name{font-size:14px;font-weight:700;color:var(--text);font-family:'Clash Display',sans-serif}
+.amazon-cat-card__cta{font-size:12px;color:#ff9900;font-weight:600}
+
 /* FAQ */
 .faq-wrap{margin-top:64px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:clamp(24px,4vw,48px)}
 .faq-list{display:grid;gap:12px;margin-top:32px}
@@ -1848,6 +1856,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <button class="eq-tab active" data-tab="comunidad">👥 Entre riders</button>
       <button class="eq-tab" data-tab="ml">🛒 Mercado Libre</button>
       <button class="eq-tab" data-tab="meta">🟦 Meta</button>
+      <button class="eq-tab" data-tab="amazon">📦 Amazon</button>
     </div>
 
     <!-- COMUNIDAD -->
@@ -2030,6 +2039,52 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </table>
       </div>
     </div><!-- /eqPanelML -->
+
+    <div id="eqPanelAmazon" style="display:none">
+      <p class="equipos-disclaimer">📦 Los enlaces te llevan directamente a Amazon Argentina. La Escuela de Wingfoil no tiene relación comercial con Amazon ni recibe comisión por estas búsquedas. Los precios y disponibilidad dependen exclusivamente de Amazon.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:8px">
+        <a href="https://www.amazon.com.ar/s?k=wingfoil+ala+wing" target="_blank" rel="noopener" class="amazon-cat-card">
+          <span class="amazon-cat-card__icon">🪂</span>
+          <span class="amazon-cat-card__name">Alas / Wings</span>
+          <span class="amazon-cat-card__cta">Buscar en Amazon →</span>
+        </a>
+        <a href="https://www.amazon.com.ar/s?k=wingfoil+tabla" target="_blank" rel="noopener" class="amazon-cat-card">
+          <span class="amazon-cat-card__icon">🏄</span>
+          <span class="amazon-cat-card__name">Tablas</span>
+          <span class="amazon-cat-card__cta">Buscar en Amazon →</span>
+        </a>
+        <a href="https://www.amazon.com.ar/s?k=hydrofoil+wingfoil" target="_blank" rel="noopener" class="amazon-cat-card">
+          <span class="amazon-cat-card__icon">🦈</span>
+          <span class="amazon-cat-card__name">Foils</span>
+          <span class="amazon-cat-card__cta">Buscar en Amazon →</span>
+        </a>
+        <a href="https://www.amazon.com.ar/s?k=neoprene+kitesurf+wingfoil" target="_blank" rel="noopener" class="amazon-cat-card">
+          <span class="amazon-cat-card__icon">🤿</span>
+          <span class="amazon-cat-card__name">Neoprene</span>
+          <span class="amazon-cat-card__cta">Buscar en Amazon →</span>
+        </a>
+        <a href="https://www.amazon.com.ar/s?k=casco+kitesurf+wingfoil" target="_blank" rel="noopener" class="amazon-cat-card">
+          <span class="amazon-cat-card__icon">⛑️</span>
+          <span class="amazon-cat-card__name">Cascos</span>
+          <span class="amazon-cat-card__cta">Buscar en Amazon →</span>
+        </a>
+        <a href="https://www.amazon.com.ar/s?k=chaleco+flotacion+kitesurf" target="_blank" rel="noopener" class="amazon-cat-card">
+          <span class="amazon-cat-card__icon">🦺</span>
+          <span class="amazon-cat-card__name">Chalecos</span>
+          <span class="amazon-cat-card__cta">Buscar en Amazon →</span>
+        </a>
+        <a href="https://www.amazon.com.ar/s?k=wingfoil+accesorios" target="_blank" rel="noopener" class="amazon-cat-card">
+          <span class="amazon-cat-card__icon">🔧</span>
+          <span class="amazon-cat-card__name">Accesorios</span>
+          <span class="amazon-cat-card__cta">Buscar en Amazon →</span>
+        </a>
+        <a href="https://www.amazon.com.ar/s?k=wingfoil" target="_blank" rel="noopener" class="amazon-cat-card amazon-cat-card--all">
+          <span class="amazon-cat-card__icon">📦</span>
+          <span class="amazon-cat-card__name">Ver todo wingfoil</span>
+          <span class="amazon-cat-card__cta">Buscar en Amazon →</span>
+        </a>
+      </div>
+    </div><!-- /eqPanelAmazon -->
 
   </div>
 </section>
@@ -3160,88 +3215,127 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <span class="eyebrow">🏷️ Marcas</span>
     <h2 class="section-title">Comparador de marcas</h2>
-    <p class="section-sub">Las principales marcas de wingfoil cara a cara: nivel ideal, fortaleza y disponibilidad en Argentina.</p>
-    <div class="comp-scroll">
-      <table class="comp-table" aria-label="Comparador de marcas de wingfoil">
-        <thead>
-          <tr>
-            <th>Marca</th>
-            <th>País</th>
-            <th>Nivel ideal</th>
-            <th>Precio referencia</th>
-            <th>Punto fuerte</th>
-            <th>En Argentina</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><div class="comp-brand-name">F-One</div></td>
-            <td>🇫🇷 Francia</td>
-            <td><span class="comp-level comp-level--all">Todos los niveles</span></td>
-            <td>USD 2.800 – 4.200</td>
-            <td>Alas muy estables y fáciles de relanzar; diseño innovador y accesible</td>
-            <td><span class="comp-arg comp-arg--si">✔ Distribuidor oficial</span></td>
-          </tr>
-          <tr>
-            <td><div class="comp-brand-name">Duotone</div></td>
-            <td>🇩🇪 Alemania</td>
-            <td><span class="comp-level comp-level--all">Todos los niveles</span></td>
-            <td>USD 3.000 – 5.000</td>
-            <td>Construcción premium; línea completa para principiante y competición</td>
-            <td><span class="comp-arg comp-arg--si">✔ Distribuidor oficial</span></td>
-          </tr>
-          <tr>
-            <td><div class="comp-brand-name">Naish</div></td>
-            <td>🌺 Hawaii</td>
-            <td><span class="comp-level comp-level--int">Intermedio / Avanzado</span></td>
-            <td>USD 2.600 – 4.000</td>
-            <td>Foils de alta performance; fuerte en ondas y freeride</td>
-            <td><span class="comp-arg comp-arg--si">✔ Distribuidor oficial</span></td>
-          </tr>
-          <tr>
-            <td><div class="comp-brand-name">Cabrinha</div></td>
-            <td>🇺🇸 USA</td>
-            <td><span class="comp-level comp-level--all">Todos los niveles</span></td>
-            <td>USD 2.500 – 4.500</td>
-            <td>Versatilidad kite + wing; tablas duales muy populares en Argentina</td>
-            <td><span class="comp-arg comp-arg--si">✔ Distribuidor oficial</span></td>
-          </tr>
-          <tr>
-            <td><div class="comp-brand-name">Ozone</div></td>
-            <td>🇬🇧 Reino Unido</td>
-            <td><span class="comp-level comp-level--int">Intermedio / Avanzado</span></td>
-            <td>USD 2.800 – 4.000</td>
-            <td>Velas ligeras y eficientes; excelente rango de viento</td>
-            <td><span class="comp-arg comp-arg--parcial">〜 Importación particular</span></td>
-          </tr>
-          <tr>
-            <td><div class="comp-brand-name">North</div></td>
-            <td>🌐 Internacional</td>
-            <td><span class="comp-level comp-level--adv">Avanzado</span></td>
-            <td>USD 3.200 – 5.500</td>
-            <td>Materiales de competición; tecnología punta en foils de carbono</td>
-            <td><span class="comp-arg comp-arg--parcial">〜 Importación particular</span></td>
-          </tr>
-          <tr>
-            <td><div class="comp-brand-name">Armstrong</div></td>
-            <td>🇳🇿 Nueva Zelanda</td>
-            <td><span class="comp-level comp-level--adv">Avanzado</span></td>
-            <td>USD 2.000 – 3.800 (solo foil)</td>
-            <td>Foils de carbono de alto rendimiento; referencia en downwind y race</td>
-            <td><span class="comp-arg comp-arg--parcial">〜 Importación particular</span></td>
-          </tr>
-          <tr>
-            <td><div class="comp-brand-name">Starboard</div></td>
-            <td>🇹🇭 Tailandia</td>
-            <td><span class="comp-level comp-level--beg">Principiante</span></td>
-            <td>USD 2.400 – 4.000</td>
-            <td>Tablas de aprendizaje muy estables; amplia línea inflable para viajeros</td>
-            <td><span class="comp-arg comp-arg--si">✔ Distribuidor oficial</span></td>
-          </tr>
-        </tbody>
-      </table>
+    <p class="section-sub">Las principales marcas de wingfoil cara a cara. Expandí cada una para ver nivel ideal, precio y disponibilidad en Argentina.</p>
+
+    <div class="faq-list" style="max-width:860px">
+
+      <details class="faq-item">
+        <summary>🇫🇷 F-One — <span class="comp-level comp-level--all" style="margin-left:6px">Todos los niveles</span></summary>
+        <div class="faq-answer">
+          <div style="display:grid;gap:6px">
+            <div><strong>País:</strong> Francia</div>
+            <div><strong>Nivel ideal:</strong> Todos los niveles — línea accesible para principiantes y gama race para avanzados</div>
+            <div><strong>Precio referencia:</strong> USD 2.800 – 4.200 (kit completo)</div>
+            <div><strong>Punto fuerte:</strong> Alas muy estables y fáciles de relanzar; diseño innovador con excelente relación precio/calidad</div>
+            <div><strong>En Argentina:</strong> <span class="comp-arg comp-arg--si">✔ Distribuidor oficial</span></div>
+            <div style="margin-top:8px;font-size:12px;color:var(--text-muted)">Fuente: <a href="https://www.f-one.world" target="_blank" rel="noopener" style="color:var(--primary)">f-one.world</a> · catálogo oficial 2024–2025</div>
+          </div>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>🇩🇪 Duotone — <span class="comp-level comp-level--all" style="margin-left:6px">Todos los niveles</span></summary>
+        <div class="faq-answer">
+          <div style="display:grid;gap:6px">
+            <div><strong>País:</strong> Alemania</div>
+            <div><strong>Nivel ideal:</strong> Todos los niveles — desde la línea Echo (principiantes) hasta la Slick SLS (competición)</div>
+            <div><strong>Precio referencia:</strong> USD 3.000 – 5.000 (kit completo)</div>
+            <div><strong>Punto fuerte:</strong> Construcción premium con materiales Aluula y SLS; sistema de conexión rápido y confiable</div>
+            <div><strong>En Argentina:</strong> <span class="comp-arg comp-arg--si">✔ Distribuidor oficial</span></div>
+            <div style="margin-top:8px;font-size:12px;color:var(--text-muted)">Fuente: <a href="https://www.duotonesports.com" target="_blank" rel="noopener" style="color:var(--primary)">duotonesports.com</a> · catálogo oficial 2024–2025</div>
+          </div>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>🌺 Naish — <span class="comp-level comp-level--int" style="margin-left:6px">Intermedio / Avanzado</span></summary>
+        <div class="faq-answer">
+          <div style="display:grid;gap:6px">
+            <div><strong>País:</strong> Hawaii, USA</div>
+            <div><strong>Nivel ideal:</strong> Intermedio a avanzado; foils especialmente apreciados para ondas y freeride</div>
+            <div><strong>Precio referencia:</strong> USD 2.600 – 4.000 (kit completo)</div>
+            <div><strong>Punto fuerte:</strong> Foils Jet y Thrust de alta performance; marca con décadas de historia en deportes de viento</div>
+            <div><strong>En Argentina:</strong> <span class="comp-arg comp-arg--si">✔ Distribuidor oficial</span></div>
+            <div style="margin-top:8px;font-size:12px;color:var(--text-muted)">Fuente: <a href="https://www.naishsports.com" target="_blank" rel="noopener" style="color:var(--primary)">naishsports.com</a> · catálogo oficial 2024–2025</div>
+          </div>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>🇺🇸 Cabrinha — <span class="comp-level comp-level--all" style="margin-left:6px">Todos los niveles</span></summary>
+        <div class="faq-answer">
+          <div style="display:grid;gap:6px">
+            <div><strong>País:</strong> USA</div>
+            <div><strong>Nivel ideal:</strong> Todos los niveles; especialmente popular entre kitesurfers que migran al wingfoil</div>
+            <div><strong>Precio referencia:</strong> USD 2.500 – 4.500 (kit completo)</div>
+            <div><strong>Punto fuerte:</strong> Versatilidad kite + wing; tablas como la Cutlass (dual kite/wing) muy populares en Argentina</div>
+            <div><strong>En Argentina:</strong> <span class="comp-arg comp-arg--si">✔ Distribuidor oficial</span></div>
+            <div style="margin-top:8px;font-size:12px;color:var(--text-muted)">Fuente: <a href="https://www.cabrinha.com" target="_blank" rel="noopener" style="color:var(--primary)">cabrinha.com</a> · catálogo oficial 2024–2025</div>
+          </div>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>🇬🇧 Ozone — <span class="comp-level comp-level--int" style="margin-left:6px">Intermedio / Avanzado</span></summary>
+        <div class="faq-answer">
+          <div style="display:grid;gap:6px">
+            <div><strong>País:</strong> Reino Unido</div>
+            <div><strong>Nivel ideal:</strong> Intermedio a avanzado; velas con gran eficiencia aerodinámica</div>
+            <div><strong>Precio referencia:</strong> USD 2.800 – 4.000 (kit completo)</div>
+            <div><strong>Punto fuerte:</strong> Velas ligeras con excelente rango de viento; construcción Aluula en gama alta</div>
+            <div><strong>En Argentina:</strong> <span class="comp-arg comp-arg--parcial">〜 Importación particular (sin distribuidor oficial)</span></div>
+            <div style="margin-top:8px;font-size:12px;color:var(--text-muted)">Fuente: <a href="https://www.ozonekites.com" target="_blank" rel="noopener" style="color:var(--primary)">ozonekites.com</a> · catálogo oficial 2024–2025</div>
+          </div>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>🌐 North — <span class="comp-level comp-level--adv" style="margin-left:6px">Avanzado</span></summary>
+        <div class="faq-answer">
+          <div style="display:grid;gap:6px">
+            <div><strong>País:</strong> Internacional (sede en Alemania)</div>
+            <div><strong>Nivel ideal:</strong> Avanzado; materiales y geometrías orientados a la competición</div>
+            <div><strong>Precio referencia:</strong> USD 3.200 – 5.500 (kit completo)</div>
+            <div><strong>Punto fuerte:</strong> Foils de carbono de última generación; tecnología punta en alas Seek y Sonar</div>
+            <div><strong>En Argentina:</strong> <span class="comp-arg comp-arg--parcial">〜 Importación particular (sin distribuidor oficial)</span></div>
+            <div style="margin-top:8px;font-size:12px;color:var(--text-muted)">Fuente: <a href="https://www.northkb.com" target="_blank" rel="noopener" style="color:var(--primary)">northkb.com</a> · catálogo oficial 2024–2025</div>
+          </div>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>🇳🇿 Armstrong — <span class="comp-level comp-level--adv" style="margin-left:6px">Avanzado</span></summary>
+        <div class="faq-answer">
+          <div style="display:grid;gap:6px">
+            <div><strong>País:</strong> Nueva Zelanda</div>
+            <div><strong>Nivel ideal:</strong> Avanzado; referencia mundial en downwind y race</div>
+            <div><strong>Precio referencia:</strong> USD 2.000 – 3.800 (solo foil; tablas aparte)</div>
+            <div><strong>Punto fuerte:</strong> Foils de carbono de altísimo rendimiento; sistemas HA (High Aspect) muy valorados para downwind largo</div>
+            <div><strong>En Argentina:</strong> <span class="comp-arg comp-arg--parcial">〜 Importación particular (sin distribuidor oficial)</span></div>
+            <div style="margin-top:8px;font-size:12px;color:var(--text-muted)">Fuente: <a href="https://www.armstrongfoils.com" target="_blank" rel="noopener" style="color:var(--primary)">armstrongfoils.com</a> · catálogo oficial 2024–2025</div>
+          </div>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>🇹🇭 Starboard — <span class="comp-level comp-level--beg" style="margin-left:6px">Principiante</span></summary>
+        <div class="faq-answer">
+          <div style="display:grid;gap:6px">
+            <div><strong>País:</strong> Tailandia</div>
+            <div><strong>Nivel ideal:</strong> Principiante; tablas de aprendizaje con mucha estabilidad</div>
+            <div><strong>Precio referencia:</strong> USD 2.400 – 4.000 (kit completo)</div>
+            <div><strong>Punto fuerte:</strong> Amplia línea inflable (Freewing Air) ideal para viajeros; tablas muy accesibles para quienes arrancan</div>
+            <div><strong>En Argentina:</strong> <span class="comp-arg comp-arg--si">✔ Distribuidor oficial</span></div>
+            <div style="margin-top:8px;font-size:12px;color:var(--text-muted)">Fuente: <a href="https://www.star-board.com" target="_blank" rel="noopener" style="color:var(--primary)">star-board.com</a> · catálogo oficial 2024–2025</div>
+          </div>
+        </div>
+      </details>
+
     </div>
-    <p style="font-size:12px;color:var(--text-muted);margin-top:14px;text-align:center">Precios orientativos en USD para kit completo (ala + foil + tabla) salvo indicación. Disponibilidad y precios pueden variar. Consultá con tu instructor antes de comprar.</p>
+
+    <p style="font-size:12px;color:var(--text-muted);margin-top:20px;text-align:center;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px">
+      ⚠️ <strong>Aviso:</strong> Los precios son orientativos en USD para kit completo (ala + foil + tabla) salvo indicación. Los valores pueden variar según el tipo de cambio, stock y punto de venta. Consultá siempre con un distribuidor o instructor antes de comprar. La Escuela de Wingfoil no tiene relación comercial con ninguna de estas marcas.
+    </p>
   </div>
 </section>
 
@@ -4477,6 +4571,7 @@ if (eqTabs) {
     document.getElementById('eqPanelComunidad').style.display = tab === 'comunidad' ? '' : 'none';
     document.getElementById('eqPanelML').style.display = tab === 'ml' ? '' : 'none';
     document.getElementById('eqPanelMeta').style.display = tab === 'meta' ? '' : 'none';
+    document.getElementById('eqPanelAmazon').style.display = tab === 'amazon' ? '' : 'none';
   });
 }
 
