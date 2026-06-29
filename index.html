@@ -3773,7 +3773,8 @@ if(instrForm){
     var msg=document.getElementById('instrFormMsg');
     if(!nombre||!apellido||!wa||!ub){msg.hidden=false;msg.className='form-msg form-msg--err';msg.textContent='Completá los campos obligatorios.';return}
     var deportes=[wf?'wingfoil':'',ks?'kitesurf':''].filter(Boolean).join(',');
-    var instrParams=new URLSearchParams({nombre:nombre,apellido:apellido,whatsapp:wa,ubicacion:ub,bio:bio,deportes:deportes});
+    var instrBot=(instrForm.querySelector('[name="bot-field"]')||{}).value||'';
+    var instrParams=new URLSearchParams({nombre:nombre,apellido:apellido,whatsapp:wa,ubicacion:ub,bio:bio,deportes:deportes,'bot-field':instrBot});
     fetch('/api/instructors',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:instrParams.toString()}).catch(function(){});
     fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(Object.fromEntries(instrParams)).toString()+'&form-name=instructor-form'}).catch(function(){});
     var avatar=instrFotoData?'<img class="instructor-card__photo" src="'+instrFotoData+'" alt="">':'<div class="instructor-card__photo">🏄</div>';
@@ -3831,7 +3832,8 @@ if(equipoForm){
     var wa=document.getElementById('eq-wa').value.trim();
     var msg=document.getElementById('equipoMsg');
     if(!tipo||!marca||!precio||!ub||!desc||!wa){msg.innerHTML='<div class="form-msg form-msg--err">Completá todos los campos.</div>';return}
-    var eqParams=new URLSearchParams({tipo:tipo,marca:marca,precio:precio,ubicacion:ub,descripcion:desc,whatsapp:wa});
+    var eqBot=(equipoForm.querySelector('[name="bot-field"]')||{}).value||'';
+    var eqParams=new URLSearchParams({tipo:tipo,marca:marca,precio:precio,ubicacion:ub,descripcion:desc,whatsapp:wa,'bot-field':eqBot});
     fetch('/api/equipos',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:eqParams.toString()}).catch(function(){});
     fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(Object.fromEntries(eqParams)).toString()+'&form-name=equipo-form'}).catch(function(){});
     var fotosHtml='';

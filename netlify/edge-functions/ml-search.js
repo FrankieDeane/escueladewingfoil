@@ -3,8 +3,11 @@
 
 export default async function handler(request) {
   const url = new URL(request.url);
-  const query = url.searchParams.get('q') || 'wing foil';
-  const limit = url.searchParams.get('limit') || '48';
+  // Cap query length to keep the upstream URL bounded.
+  const query = (url.searchParams.get('q') || 'wing foil').slice(0, 120);
+  // Clamp limit to a sane 1–50 range (ML caps at 50; reject junk/huge values).
+  const limitNum = parseInt(url.searchParams.get('limit'), 10);
+  const limit = String(Number.isFinite(limitNum) ? Math.min(Math.max(limitNum, 1), 50) : 48);
   const cond = url.searchParams.get('cond') || '';
 
   const condMap = { new: '2230284', used: '2230581' };
