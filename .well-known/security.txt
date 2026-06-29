@@ -1,0 +1,7 @@
+# Responsible disclosure — Escuela de Wingfoil Argentina
+# If you find a security issue, please report it via the channels below.
+Contact: https://www.instagram.com/clubkitewing/
+Contact: https://www.escueladewingfoil.com.ar/
+Expires: 2027-06-29T00:00:00.000Z
+Preferred-Languages: es, en
+Canonical: https://www.escueladewingfoil.com.ar/.well-known/security.txt

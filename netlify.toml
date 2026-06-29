@@ -8,3 +8,19 @@
 [[edge_functions]]
   path = "/api/ml-search"
   function = "ml-search"
+
+# ─── Security headers ───────────────────────────────────────────────────────
+# Applied to every response. The CSP allows the inline scripts/styles the page
+# relies on ('unsafe-inline') while still locking down where active content can
+# be loaded from and blocking clickjacking, base-tag hijacking and plugins.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; upgrade-insecure-requests; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://unpkg.com https://webcams.windy.com; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://unpkg.com; font-src 'self' data: https://api.fontshare.com https://cdn.fontshare.com; img-src 'self' data: https:; media-src 'self' https:; connect-src 'self' https:; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://www.googletagmanager.com https://windy.com https://www.windguru.cz https://www.openstreetmap.org https://webcams.windy.com; worker-src 'self' blob:; manifest-src 'self'"
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), payment=(), usb=(), geolocation=(), interest-cohort=()"
+    Cross-Origin-Opener-Policy = "same-origin"
+    X-Permitted-Cross-Domain-Policies = "none"
