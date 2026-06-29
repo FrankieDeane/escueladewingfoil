@@ -3,6 +3,8 @@ import { getStore } from '@netlify/blobs';
 const KEY = 'list';
 const MAX_BODY_BYTES = 8 * 1024;   // reject oversized request bodies
 const MAX_ENTRIES = 1000;          // cap stored list to bound storage growth
+const RL_WINDOW_MS = 60 * 60 * 1000; // rate-limit window: 1 hour
+const RL_MAX = 8;                    // max POSTs per IP per window
 
 // Strip angle brackets + control chars (defense-in-depth vs stored XSS), trim
 // and cap length. Newlines/tabs are preserved for free-text fields.
@@ -19,6 +21,32 @@ function cleanPhone(value) {
   const raw = String(value || '').replace(/[^0-9+]/g, '');
   const plus = raw.startsWith('+') ? '+' : '';
   return (plus + raw.replace(/[^0-9]/g, '')).slice(0, 20);
+}
+
+// Client IP from Netlify-provided headers.
+function clientIp(req) {
+  return req.headers.get('x-nf-client-connection-ip')
+    || (req.headers.get('x-forwarded-for') || '').split(',')[0].trim()
+    || '';
+}
+
+// Sliding-window per-IP rate limit backed by Netlify Blobs.
+// Returns true if the request is allowed, false if the limit is exceeded.
+async function allowRequest(ip) {
+  if (!ip) return true; // can't identify caller — don't block
+  try {
+    const rl = getStore({ name: 'equipos', consistency: 'strong' });
+    const rlKey = `rl:${ip}`;
+    const now = Date.now();
+    const hits = (await rl.get(rlKey, { type: 'json' }).catch(() => []) || [])
+      .filter((t) => now - t < RL_WINDOW_MS);
+    if (hits.length >= RL_MAX) return false;
+    hits.push(now);
+    await rl.setJSON(rlKey, hits);
+    return true;
+  } catch {
+    return true; // never let the limiter itself break submissions
+  }
 }
 
 export default async function(req) {
@@ -42,6 +70,11 @@ export default async function(req) {
     if (text.length > MAX_BODY_BYTES) {
       return new Response(JSON.stringify({ error: 'payload too large' }), { status: 413, headers: cors });
     }
+    // Per-IP rate limit (counts every attempt, including bots).
+    if (!(await allowRequest(clientIp(req)))) {
+      return new Response(JSON.stringify({ error: 'too many requests' }), { status: 429, headers: cors });
+    }
+
     const body = new URLSearchParams(text);
 
     // Honeypot: real users never fill this hidden field. Pretend success.
