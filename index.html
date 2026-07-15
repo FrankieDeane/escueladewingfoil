@@ -3363,7 +3363,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <li><a href="https://wa.me/?text=Hoy%20puede%20ser%20un%20gran%20d%C3%ADa%20para%20adentrarte%20en%20un%20gran%20deporte%20y%20en%20la%20naturaleza%20%F0%9F%8C%8A%20www.escueladewingfoil.com.ar" target="_blank" rel="noopener">💬 Compartir por WhatsApp</a></li>
             <li><a href="#empezar">🚀 Empezar ahora</a></li>
           </ul>
-          <a href="https://www.mercadopago.com.ar/payment-link/v1/redirect?preference-id=198206295-deaf014f-84e6-4da5-9c07-6aaa0d6bf549&source=link" target="_blank" rel="noopener" class="footer__coffee">☕ Invitamos un cafecito</a>
+          <a href="https://www.mercadopago.com.ar/payment-link/v1/redirect?preference-id=198206295-deaf014f-84e6-4da5-9c07-6aaa0d6bf549&source=link" target="_blank" rel="noopener" class="footer__coffee">☕ Invitame a un cafecito</a>
         </div>
       </div>
     </div>
@@ -3382,6 +3382,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </footer>
 
 <!-- NEWSLETTER POPUP -->
+
+<!-- CAFECITO POPUP -->
+<div class="modal" id="coffeeModal" hidden role="dialog" aria-modal="true" aria-labelledby="coffeeModalTitle">
+  <div class="modal__box">
+    <div class="modal__bg"></div>
+    <button class="modal__close" id="coffeeModalClose" aria-label="Cerrar">✕</button>
+    <div class="modal__emoji">☕</div>
+    <h3 class="modal__title" id="coffeeModalTitle">Invitame a un cafecito</h3>
+    <p class="modal__sub">Proyecto independiente que vive gracias a los curiosos del deporte</p>
+    <a href="https://www.mercadopago.com.ar/payment-link/v1/redirect?preference-id=198206295-deaf014f-84e6-4da5-9c07-6aaa0d6bf549&source=link" target="_blank" rel="noopener" class="btn btn--primary" style="width:100%;justify-content:center" id="coffeeModalCta">☕ Invitame a un cafecito</a>
+  </div>
+</div>
 
 <!-- COOKIE BANNER -->
 <div class="cookie-banner" id="cookieBanner" role="alert">
@@ -3743,6 +3755,36 @@ var cAccept=document.getElementById('cookieAccept');
 var cDecline=document.getElementById('cookieDecline');
 if(cAccept)cAccept.addEventListener('click',hideCookie);
 if(cDecline)cDecline.addEventListener('click',hideCookie);
+
+
+// ============ CAFECITO POPUP ============
+// Aparece siempre en la primera visita; después solo a veces (25% de las visitas)
+// y nunca más de una vez cada 5 días, para no hartar.
+var coffeeModal=document.getElementById('coffeeModal');
+if(coffeeModal){
+  var coffeeClose=document.getElementById('coffeeModalClose');
+  var coffeeCta=document.getElementById('coffeeModalCta');
+  function hideCoffee(){coffeeModal.hidden=true}
+  function markCoffeeShown(){try{localStorage.setItem('wf-cafecito','' + Date.now())}catch(e){}}
+  if(coffeeClose)coffeeClose.addEventListener('click',hideCoffee);
+  if(coffeeCta)coffeeCta.addEventListener('click',hideCoffee);
+  coffeeModal.addEventListener('click',function(e){if(e.target===coffeeModal)hideCoffee()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!coffeeModal.hidden)hideCoffee()});
+  var coffeeShouldShow=false;
+  try{
+    var lastCoffee=localStorage.getItem('wf-cafecito');
+    if(!lastCoffee){
+      coffeeShouldShow=true; // primera visita: se muestra siempre
+    }else{
+      var daysSince=(Date.now()-parseInt(lastCoffee,10))/(1000*60*60*24);
+      coffeeShouldShow=daysSince>=5&&Math.random()<.25;
+    }
+  }catch(e){}
+  if(coffeeShouldShow){
+    // Delay aleatorio de 8 a 20 segundos para que no interrumpa apenas entra
+    setTimeout(function(){coffeeModal.hidden=false;markCoffeeShown()},8000+Math.random()*12000);
+  }
+}
 
 
 // ============ FOTO UPLOAD INSTRUCTOR ============
