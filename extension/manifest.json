@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Comparador Wingfoil",
+  "short_name": "Comparador Wingfoil",
+  "version": "1.0.0",
+  "description": "Compará el precio de tablas, wings y foils de Mercado Libre contra Hardwind, GPX Store, Kitestore y Santa Tabla, en un clic.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": [
+    "https://www.mercadolibre.com.ar/*",
+    "https://www.escueladewingfoil.com.ar/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://www.mercadolibre.com.ar/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
