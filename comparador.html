@@ -232,7 +232,13 @@ searchForm.addEventListener('submit', async (e) => {
     const res = await fetch(`${ML_SEARCH_URL}?q=${encodeURIComponent(q)}&limit=6`);
     const data = await res.json();
     const results = data.results || [];
-    if (!results.length) { picker.innerHTML = '<p class="search-hint">No encontramos publicaciones para esa búsqueda.</p>'; return; }
+    if (!results.length) {
+      // Info de diagnóstico que manda el edge function (ver ml-search.js) —
+      // se muestra acá para poder copiarla sin abrir la consola del navegador.
+      const dbg = data._debug ? `<br><small style="opacity:.6">detalle técnico: ${JSON.stringify(data._debug)}</small>` : (data.error ? `<br><small style="opacity:.6">detalle técnico: ${data.error}</small>` : '');
+      picker.innerHTML = `<p class="search-hint">No encontramos publicaciones para esa búsqueda.${dbg}</p>`;
+      return;
+    }
     picker.innerHTML = '';
     results.forEach(r => {
       const btn = document.createElement('button');

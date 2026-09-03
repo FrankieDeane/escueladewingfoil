@@ -27,6 +27,12 @@ export default async function handler(request) {
     });
   }
 
+  // Diagnóstico: por qué "no encontramos publicaciones" puede significar cosas
+  // muy distintas (sin token, token rechazado, ML bloqueando el pedido, o de
+  // verdad 0 resultados). En vez de adivinar a ciegas de nuevo, esto queda
+  // en la respuesta para poder leerlo directo desde comparador.html.
+  const debug = { tokenAttempted: false, tokenOk: null, tokenStatus: null, tokenErrorBody: null, mlStatus: null };
+
   try {
     let accessToken = null;
 
@@ -35,14 +41,19 @@ export default async function handler(request) {
     const appSecret = Deno.env.get('ML_SECRET');
 
     if (appId && appSecret) {
+      debug.tokenAttempted = true;
       const tokenRes = await fetch('https://api.mercadolibre.com/oauth/token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
         body: `grant_type=client_credentials&client_id=${appId}&client_secret=${appSecret}`,
       });
+      debug.tokenStatus = tokenRes.status;
+      debug.tokenOk = tokenRes.ok;
       if (tokenRes.ok) {
         const tokenData = await tokenRes.json();
         accessToken = tokenData.access_token;
+      } else {
+        debug.tokenErrorBody = (await tokenRes.text()).slice(0, 300);
       }
     }
 
@@ -61,13 +72,15 @@ export default async function handler(request) {
     }
 
     const res = await fetch(mlSearchUrl, { headers: searchHeaders });
+    debug.mlStatus = res.status;
     if (!res.ok) throw new Error(`ML API ${res.status}`);
 
     const data = await res.json();
+    data._debug = debug;
     return new Response(JSON.stringify(data), { status: 200, headers: corsHeaders });
 
   } catch (e) {
-    return errorResponse(e.message);
+    return errorResponse(e.message + ' | debug=' + JSON.stringify(debug));
   }
 }
 
