@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es-AR" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacidad — Comparador Wingfoil | Escuela de Wingfoil Argentina</title>
+<meta name="description" content="Política de privacidad de la extensión Comparador Wingfoil.">
+<link rel="icon" href="/favicon.ico" sizes="32x32 16x16"/>
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+<script>(function(){try{var t=localStorage.getItem('wf-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root,[data-theme='light']{--bg:#f0f8ff;--surface:#ffffff;--border:#b8d8ed;--divider:#cce4f2;--text:#0a1f2e;--text-muted:#3d6a85;--primary:#0077a8;--accent:#00b4d8}
+[data-theme='dark']{--bg:#040e1a;--surface:#081525;--border:#1a3558;--divider:#142840;--text:#ddeef8;--text-muted:#6da4be;--primary:#00b4d8;--accent:#00cfed}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Satoshi',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+h1,h2{font-family:'Clash Display',sans-serif;letter-spacing:-.02em}
+.wrap{max-width:680px;margin:0 auto;padding:56px 24px 90px}
+.brand{display:flex;align-items:center;gap:9px;font-family:'Clash Display',sans-serif;font-weight:700;font-size:14px;color:var(--primary);text-decoration:none;margin-bottom:36px}
+h1{font-size:28px;margin-bottom:6px}
+.updated{font-size:12.5px;color:var(--text-muted);margin-bottom:32px}
+h2{font-size:16px;margin:32px 0 10px;color:var(--primary)}
+p,li{font-size:14.5px;color:var(--text-muted);max-width:66ch}
+ul{padding-left:20px;margin-top:6px}
+li{margin-bottom:6px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-top:28px}
+.card p{color:var(--text)}
+a{color:var(--primary)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="brand" href="/">🌊 Escuela de Wingfoil</a>
+  <h1>Privacidad — Comparador Wingfoil</h1>
+  <p class="updated">Última actualización: 3 de septiembre de 2026</p>
+
+  <div class="card">
+    <p><b>En una frase:</b> la extensión no recolecta, guarda ni envía a ningún servidor tus datos de navegación, compras o identidad. Todo el procesamiento pasa en tu propio navegador.</p>
+  </div>
+
+  <h2>Qué lee la extensión</h2>
+  <p>Cuando abrís el popup estando en una publicación de <strong>mercadolibre.com.ar</strong>, un content script lee el título, precio, imagen y URL de esa publicación directamente del HTML de la página. Esa lectura ocurre solo cuando vos hacés clic en el ícono de la extensión (permiso <code>activeTab</code>) — no corre en segundo plano ni en otras pestañas.</p>
+
+  <h2>Qué se envía a internet</h2>
+  <ul>
+    <li>El popup hace un pedido a <code>escueladewingfoil.com.ar/store-data.json</code> para traer los precios de referencia de las otras tiendas (Hardwind, GPX Store, Kitestore, Santa Tabla). Es un archivo público de solo lectura — no se manda ningún dato tuyo en ese pedido.</li>
+    <li>El producto de Mercado Libre que estabas mirando (título, precio y link) se pasa por la URL cuando tocás "Ver informe completo", para abrir esa comparación en <code>escueladewingfoil.com.ar/comparador.html</code>. Eso solo pasa si vos tocás ese botón.</li>
+  </ul>
+  <p>No hay analítica, no hay cookies de terceros, no hay tracking de qué publicaciones visitás.</p>
+
+  <h2>Qué NO hace</h2>
+  <ul>
+    <li>No accede a tu cuenta de Mercado Libre, contraseñas ni datos de pago.</li>
+    <li>No lee ni modifica ninguna otra pestaña ni sitio fuera de mercadolibre.com.ar y escueladewingfoil.com.ar.</li>
+    <li>No vende ni comparte información con terceros, porque no la recolecta.</li>
+  </ul>
+
+  <h2>Permisos que pide y por qué</h2>
+  <ul>
+    <li><code>activeTab</code> / <code>scripting</code> — leer el título y precio de la pestaña de Mercado Libre activa cuando abrís el popup.</li>
+    <li>Acceso a <code>mercadolibre.com.ar</code> — para leer la publicación que estás viendo.</li>
+    <li>Acceso a <code>escueladewingfoil.com.ar</code> — para traer los precios de las otras tiendas y abrir el informe completo.</li>
+  </ul>
+
+  <h2>Contacto</h2>
+  <p>Dudas sobre esta política: escribinos por WhatsApp o redes desde <a href="/">escueladewingfoil.com.ar</a>.</p>
+</div>
+</body>
+</html>

@@ -21,19 +21,39 @@ function detectMarca(titulo) {
   return '';
 }
 
+// Precio mínimo plausible para equipo de wingfoil (ARS). Cualquier cosa por
+// debajo es casi seguro un error de parseo, no un producto real — se descarta
+// en vez de publicarse (ver uso en main()).
+const MIN_PRICE = 1000;
+
 function cleanPrice(str) {
   if (!str) return 0;
-  // Handle formats: $1.200.000 / 1200000 / 1.200,50
-  const s = str.replace(/[^\d.,]/g, '');
-  // If has dots as thousands separator (e.g. 1.200.000 or 1.200,50)
+  // Algunos sitios meten el precio y la cuota ("3 cuotas sin interés de
+  // $305.465") en el mismo bloque de texto; si se toma todo el textContent
+  // junto, los dígitos de ambos números quedan pegados. Por eso primero se
+  // busca el PRIMER monto bien formado (con separador de miles) y se ignora
+  // cualquier dígito que venga después — así no se contamina el precio real
+  // con la cuota. Si no hay ningún monto así, se cae al string completo
+  // (formato viejo: $1.200.000 / 1200000 / 1.200,50).
+  const withThousands = str.match(/\d{1,3}(?:\.\d{3})+(?:,\d{1,2})?/);
+  const bareDigits = str.match(/\d{4,}(?:,\d{1,2})?/);
+  const s = (withThousands?.[0] || bareDigits?.[0] || str).replace(/[^\d.,]/g, '');
+  if (!s) return 0;
   const lastComma = s.lastIndexOf(',');
   const lastDot   = s.lastIndexOf('.');
   let normalized;
   if (lastComma > lastDot) {
     // comma is decimal separator: 1.200,50 → 1200.50
     normalized = s.replace(/\./g, '').replace(',', '.');
+  } else if (lastDot === -1) {
+    // sin separadores: 1200000
+    normalized = s;
+  } else if (/^\d{1,3}(?:\.\d{3})+$/.test(s)) {
+    // solo puntos, todos de a 3 dígitos exactos → son miles, no decimales
+    // (una moneda real nunca muestra 3 dígitos decimales): 916.395 → 916395
+    normalized = s.replace(/\./g, '');
   } else {
-    // dot is decimal separator or thousands: 1,200.50 or 1.200.000
+    // un solo punto decimal (1200.50) o miles con coma (1,200.50)
     normalized = s.replace(/,/g, '');
   }
   return parseFloat(normalized) || 0;
@@ -458,11 +478,15 @@ async function main() {
 
   const seenIds = new Set();
   const productos = [];
+  let descartadosPorPrecio = 0;
   for (const item of [...gpxItems, ...hwItems, ...ktsItems, ...stbItems, ...fbItems]) {
-    if (item.titulo && !seenIds.has(item.id)) {
-      seenIds.add(item.id);
-      productos.push(item);
-    }
+    if (!item.titulo || seenIds.has(item.id)) continue;
+    // Precio imposible (0, NaN, o por debajo del piso plausible) → casi
+    // seguro un error de parseo (ver cleanPrice). Mejor no publicarlo que
+    // mostrarle a alguien un "ahorro" inventado.
+    if (!item.precio || item.precio < MIN_PRICE) { descartadosPorPrecio++; continue; }
+    seenIds.add(item.id);
+    productos.push(item);
   }
 
   productos.sort((a, b) => (a.precio || 0) - (b.precio || 0));
@@ -471,6 +495,9 @@ async function main() {
   writeFileSync('store-data.json', JSON.stringify(output, null, 2), 'utf8');
   console.log(`\n💾 Guardados: ${productos.length} productos en store-data.json`);
   console.log(`   GPX: ${gpxItems.length} | Hardwind: ${hwItems.length} | Kitestore: ${ktsItems.length} | Santa Tabla: ${stbItems.length} | Facebook: ${fbItems.length}`);
+  if (descartadosPorPrecio > 0) {
+    console.warn(`⚠️  ${descartadosPorPrecio} producto(s) descartados por precio inválido (< $${MIN_PRICE} o no numérico)`);
+  }
   if (productos.length === 0) {
     console.warn('⚠️  0 productos — revisar selectores o estructura de las páginas');
     process.exit(1);
