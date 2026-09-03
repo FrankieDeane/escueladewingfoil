@@ -17,9 +17,13 @@ Kitestore, sin salir de la página.
 3. Activá **Modo de desarrollador** (arriba a la derecha de esa página).
 4. Van a aparecer 3 botones nuevos arriba a la izquierda — tocá
    **Cargar descomprimida** y elegí la carpeta nueva del paso 1 (la que
-   tiene `popup.html`, `manifest.json`, etc. adentro).
+   tiene `popup.html`, `manifest.json`, etc. adentro). Ahí debería aparecer
+   una tarjeta que dice **"Comparador Wingfoil"** — ese es el nombre de la
+   extensión, así la vas a ver en todos lados.
 5. Abrí cualquier publicación de wingfoil en `mercadolibre.com.ar` y hacé clic
-   en el ícono 🌊 (fijalo desde el ícono de piezas 🧩 si no lo ves).
+   en el ícono 🌊 (si no lo ves en la barra de arriba, clickeá el ícono de
+   piezas 🧩, buscá **"Comparador Wingfoil"** en la lista y tocá el alfiler
+   📌 al lado para fijarlo).
 
 ⚠️ **No hagas doble clic en `popup.html` ni en ningún otro archivo de esta
 carpeta para "abrirla".** Estos archivos solo funcionan dentro de Chrome
