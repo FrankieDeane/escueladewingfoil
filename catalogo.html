@@ -41,6 +41,8 @@ img{max-width:100%;display:block}
 .theme-btn:hover{color:var(--primary);border-color:var(--primary)}
 
 .wrap{max-width:1080px;margin:0 auto;padding:36px 24px 90px}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--text-muted);text-decoration:none;margin-bottom:18px}
+.back-link:hover{color:var(--primary)}
 .eyebrow{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--primary);display:inline-flex;align-items:center;gap:10px;margin-bottom:14px}
 .eyebrow::before{content:'';width:28px;height:1px;background:var(--primary)}
 .wrap>h1{font-size:clamp(24px,4vw,32px);margin-bottom:10px}
@@ -93,9 +95,10 @@ tbody tr:hover{background:var(--primary-glow)}
 </div>
 
 <div class="wrap">
+  <a class="back-link" href="/">← Volver al inicio</a>
   <div class="eyebrow">Catálogo completo</div>
   <h1>Todos los precios de wingfoil, en una tabla</h1>
-  <p class="lead">Cada wing, tabla, foil y kit que rastreamos en Hardwind y Kitestore — sin buscar nada, sin entrar a ninguna publicación. Se actualiza cada 6&nbsp;h.</p>
+  <p class="lead">Cada wing, tabla, foil y kit que rastreamos en Hardwind y Kitestore — sin buscar nada, sin entrar a ninguna publicación. Se actualiza una vez por mes.</p>
 
   <div class="controls">
     <input type="text" id="filterText" placeholder="Filtrar por marca o modelo (ej: duotone, cabrinha)…" autocomplete="off">
@@ -120,8 +123,8 @@ tbody tr:hover{background:var(--primary-glow)}
   <p class="foot-note" id="updatedAt"></p>
 
   <div class="ext-promo">
-    <p><b>¿Ya sabés qué producto querés?</b> Instalá la extensión: al entrar a esa publicación en Mercado Libre te muestra al instante si la conseguís más barata acá.</p>
-    <a class="btn" href="/#comparador-extension">Ver extensión →</a>
+    <p><b>¿Tenés equipo para vender?</b> Publicalo gratis en la sección de equipos entre riders — aparece al instante y te contactan por WhatsApp.</p>
+    <a class="btn btn--primary" href="/#equipoForm">Vender mi equipo →</a>
   </div>
 </div>
 

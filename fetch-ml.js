@@ -1,5 +1,5 @@
 // fetch-ml.js — scraper Playwright para Hardwind (WooCommerce) y Kitestore
-// Corre en GitHub Actions cada 2 horas, guarda store-data.json
+// Corre en GitHub Actions una vez por mes, guarda store-data.json
 
 import { chromium } from 'playwright';
 import { writeFileSync } from 'fs';
