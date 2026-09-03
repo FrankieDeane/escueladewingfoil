@@ -12,6 +12,11 @@ Kitestore, sin salir de la página.
 5. Abrí cualquier publicación de wingfoil en `mercadolibre.com.ar` y hacé clic
    en el ícono 🌊 de la barra de extensiones.
 
+⚠️ **No hagas doble clic en `popup.html` ni en ningún otro archivo de esta
+carpeta para "abrirla".** Estos archivos solo funcionan dentro de Chrome
+como extensión (paso 4) — abiertos sueltos no tienen forma de leer la
+publicación de Mercado Libre y se quedan colgados.
+
 ## Cómo funciona
 
 - `content.js` lee el título y precio de la publicación de Mercado Libre que
