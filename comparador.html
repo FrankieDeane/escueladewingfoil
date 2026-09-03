@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Comparador de Precios Wingfoil | Escuela de Wingfoil Argentina</title>
-<meta name="description" content="Comparativa de precios entre Mercado Libre, Hardwind, GPX Store, Kitestore y Santa Tabla para equipos de wingfoil en Argentina.">
+<meta name="description" content="Comparativa de precios entre Mercado Libre, Hardwind y Kitestore para equipos de wingfoil en Argentina.">
 <meta name="robots" content="noindex">
 <link rel="icon" href="/favicon.ico" sizes="32x32 16x16"/>
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
@@ -123,7 +123,7 @@ tbody tr:last-child td{border-bottom:none}
 <div class="wrap">
   <div class="eyebrow">Informe de precios</div>
   <h1>Comparador de precios Wingfoil</h1>
-  <p class="lead">Cruzamos el precio de Mercado Libre contra Hardwind, GPX Store, Kitestore y Santa Tabla. Llegaste desde la extensión con un producto cargado, o buscá uno acá abajo.</p>
+  <p class="lead">Cruzamos el precio de Mercado Libre contra Hardwind y Kitestore. Llegaste desde la extensión con un producto cargado, o buscá uno acá abajo.</p>
 
   <form class="search" id="searchForm">
     <input type="text" id="searchInput" placeholder="Ej: tabla wingfoil duotone sky air" autocomplete="off">
@@ -168,7 +168,8 @@ tbody tr:last-child td{border-bottom:none}
 // Mantener en sync con la lógica de matching de extension/popup.js
 const STORE_DATA_URL = '/store-data.json';
 const ML_SEARCH_URL = '/api/ml-search';
-const STORES_ORDER = ['Hardwind', 'GPX Store', 'Kitestore', 'Santa Tabla'];
+// GPX Store y Santa Tabla quedaron afuera por ahora (ver fetch-ml.js).
+const STORES_ORDER = ['Hardwind', 'Kitestore'];
 const MATCH_THRESHOLD = 0.32;
 const MARCAS = ['duotone','naish','f-one','north','core','armstrong','slingshot','cabrinha','flysurfer','ozone','starboard','fanatic','liquid force','manera','rrd','nobile'];
 const STOPWORDS = new Set(['de','la','el','los','las','para','con','sin','un','una','nuevo','nueva','y','en','del']);

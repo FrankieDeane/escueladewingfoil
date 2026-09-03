@@ -403,13 +403,16 @@ async function main() {
     args: ['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage','--disable-blink-features=AutomationControlled'],
   });
 
-  let gpxItems = [], hwItems = [], ktsItems = [], stbItems = [], fbItems = [];
+  // GPX Store y Santa Tabla desactivadas: son SPA que arman el catálogo con
+  // JS, y ni con networkidle ni con un patrón de precio ampliado se pudo
+  // detectar la grilla sin ver el HTML real (ver historial de PRs #73-#77).
+  // scrapeGPX/scrapeSantaTabla quedan definidas para retomarlas apenas
+  // consigamos el HTML de un precio real de cada sitio.
+  let hwItems = [], ktsItems = [], fbItems = [];
   try {
-    [gpxItems, hwItems, ktsItems, stbItems, fbItems] = await Promise.all([
-      scrapeGPX(browser),
+    [hwItems, ktsItems, fbItems] = await Promise.all([
       scrapeHardwind(browser),
       scrapeKitestore(browser),
-      scrapeSantaTabla(browser),
       scrapeFacebook(browser),
     ]);
   } finally {
@@ -419,7 +422,7 @@ async function main() {
   const seenIds = new Set();
   const productos = [];
   let descartadosPorPrecio = 0;
-  for (const item of [...gpxItems, ...hwItems, ...ktsItems, ...stbItems, ...fbItems]) {
+  for (const item of [...hwItems, ...ktsItems, ...fbItems]) {
     if (!item.titulo || seenIds.has(item.id)) continue;
     // Precio imposible (0, NaN, o por debajo del piso plausible) → casi
     // seguro un error de parseo (ver cleanPrice). Mejor no publicarlo que
@@ -434,7 +437,7 @@ async function main() {
   const output = { actualizado: new Date().toISOString(), total: productos.length, productos };
   writeFileSync('store-data.json', JSON.stringify(output, null, 2), 'utf8');
   console.log(`\n💾 Guardados: ${productos.length} productos en store-data.json`);
-  console.log(`   GPX: ${gpxItems.length} | Hardwind: ${hwItems.length} | Kitestore: ${ktsItems.length} | Santa Tabla: ${stbItems.length} | Facebook: ${fbItems.length}`);
+  console.log(`   Hardwind: ${hwItems.length} | Kitestore: ${ktsItems.length} | Facebook: ${fbItems.length} (GPX y Santa Tabla desactivadas — ver comentario arriba)`);
   if (descartadosPorPrecio > 0) {
     console.warn(`⚠️  ${descartadosPorPrecio} producto(s) descartados por precio inválido (< $${MIN_PRICE} o no numérico)`);
   }

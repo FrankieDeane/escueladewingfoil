@@ -18,7 +18,7 @@ Comparador Wingfoil
 
 **Resumen** (máx. 132 caracteres — aparece en los resultados de búsqueda)
 ```
-Comparás precios de wingfoil entre Mercado Libre, Hardwind, GPX Store, Kitestore y Santa Tabla, sin salir de la publicación.
+Comparás precios de wingfoil entre Mercado Libre, Hardwind y Kitestore, sin salir de la publicación.
 ```
 
 **Descripción detallada**
@@ -30,9 +30,8 @@ pagarlo en Mercado Libre.
 Cómo funciona:
 1. Abrís cualquier publicación de equipo de wingfoil en mercadolibre.com.ar
 2. Hacés clic en el ícono de la extensión
-3. Te muestra el precio de esa publicación al lado del de Hardwind, GPX
-   Store, Kitestore y Santa Tabla — con el ahorro en pesos si hay una
-   opción más barata
+3. Te muestra el precio de esa publicación al lado del de Hardwind y
+   Kitestore — con el ahorro en pesos si hay una opción más barata
 
 Los precios de las otras tiendas se actualizan cada 6 horas desde
 escueladewingfoil.com.ar. Con un clic accedés al informe completo, que
@@ -54,8 +53,8 @@ Argentina para la comunidad de wingfoil, kite y windsurf del país.
 **Single purpose** (propósito único, un párrafo)
 ```
 Comparar el precio de una publicación de Mercado Libre que el usuario está
-viendo contra el precio del mismo producto en otras cuatro tiendas de
-equipamiento de wingfoil (Hardwind, GPX Store, Kitestore, Santa Tabla).
+viendo contra el precio del mismo producto en otras tiendas de
+equipamiento de wingfoil (Hardwind, Kitestore).
 ```
 
 **Justificación de cada permiso** (los pega tal cual en cada campo del
@@ -66,7 +65,7 @@ formulario):
 | `activeTab` | Necesario para leer el título y precio de la publicación de Mercado Libre que el usuario está mirando, solo cuando hace clic en el ícono de la extensión. |
 | `scripting` | Necesario para inyectar el content script que lee el título y precio de la página cuando el usuario abre el popup, en caso de que la página ya estuviera cargada antes de instalar la extensión. |
 | Acceso a host `mercadolibre.com.ar` | La extensión solo funciona sobre publicaciones de Mercado Libre Argentina — necesita leer esa página para saber qué producto comparar. |
-| Acceso a host `escueladewingfoil.com.ar` | Para traer store-data.json (precios de las otras 4 tiendas, actualizados cada 6h) y para abrir el informe completo en comparador.html. |
+| Acceso a host `escueladewingfoil.com.ar` | Para traer store-data.json (precios de las otras tiendas, actualizados cada 6h) y para abrir el informe completo en comparador.html. |
 
 **¿Recolecta datos personales, financieros, de salud, ubicación, historial
 web, actividad del usuario, contenido de comunicaciones, etc.?**

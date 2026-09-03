@@ -5,7 +5,8 @@
 
 const SITE = 'https://www.escueladewingfoil.com.ar';
 const STORE_DATA_URL = `${SITE}/store-data.json`;
-const STORES_ORDER = ['Hardwind', 'GPX Store', 'Kitestore', 'Santa Tabla'];
+// GPX Store y Santa Tabla quedaron afuera por ahora (ver fetch-ml.js).
+const STORES_ORDER = ['Hardwind', 'Kitestore'];
 const MATCH_THRESHOLD = 0.32;
 
 // Mantener en sync con MARCAS/detectCategoria en fetch-ml.js y comparador.html

@@ -1,7 +1,8 @@
 # Comparador Wingfoil — extensión de Chrome
 
-Compara el precio de una publicación de Mercado Libre contra Hardwind, GPX
-Store, Kitestore y Santa Tabla, sin salir de la página.
+Compara el precio de una publicación de Mercado Libre contra Hardwind y
+Kitestore, sin salir de la página. (GPX Store y Santa Tabla quedaron afuera
+por ahora — ver `fetch-ml.js`.)
 
 ## Instalación (todavía no está en la Chrome Web Store)
 
@@ -18,8 +19,8 @@ Store, Kitestore y Santa Tabla, sin salir de la página.
   estás mirando (no envía nada a ningún servidor).
 - `popup.js` trae `store-data.json` desde escueladewingfoil.com.ar/store-data.json
   — un archivo que un GitHub Action (`fetch-ml.js`) actualiza cada 6 horas
-  rastreando Hardwind, GPX Store, Kitestore y Santa Tabla — y hace el
-  matcheo por marca + modelo contra el producto detectado.
+  rastreando Hardwind y Kitestore — y hace el matcheo por marca + modelo
+  contra el producto detectado.
 - No hace scraping en vivo desde tu navegador: siempre lee el último
   rastreo publicado en el sitio.
 - "Ver informe completo" abre `escueladewingfoil.com.ar/comparador.html`
