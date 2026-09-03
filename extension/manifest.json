@@ -3,7 +3,7 @@
   "name": "Comparador Wingfoil",
   "short_name": "Comparador Wingfoil",
   "version": "1.0.0",
-  "description": "Compará el precio de tablas, wings y foils de Mercado Libre contra Hardwind, GPX Store, Kitestore y Santa Tabla, en un clic.",
+  "description": "Compará el precio de tablas, wings y foils de Mercado Libre contra Hardwind y Kitestore, en un clic.",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
