@@ -165,17 +165,20 @@ async function scrapeStorefront(browser, { source, idPrefix, baseUrl, candidateU
   }
 }
 
-// ── GPX Store (Shopify) ─────────────────────────────────────────────────────
+// ── GPX Store (plataforma propia, no Shopify) ───────────────────────────────
+// El usuario confirmó dos URLs reales: /productos/<cat>/<subcat>/<slug>
+// (WING-Velas) y /categoria/<id> (tablas). No es Shopify como se asumía
+// originalmente — mismo caso que Santa Tabla.
 function scrapeGPX(browser) {
   return scrapeStorefront(browser, {
     source: 'GPX Store',
     idPrefix: 'gpx',
     baseUrl: 'https://gpxstore.com',
     candidateUrls: [
+      'https://gpxstore.com/productos/2/9/WING-Velas',
+      'https://gpxstore.com/categoria/2',
       'https://gpxstore.com/search?q=wing+foil&type=product',
       'https://gpxstore.com/collections/wingfoil',
-      'https://gpxstore.com/collections/wing-foil',
-      'https://gpxstore.com/collections/wing',
       'https://gpxstore.com/outlet',
     ],
   });
