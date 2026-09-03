@@ -5,12 +5,17 @@ Kitestore, sin salir de la página.
 
 ## Instalación (todavía no está en la Chrome Web Store)
 
-1. Descargá esta carpeta (o el .zip desde escueladewingfoil.com.ar).
-2. Abrí `chrome://extensions` en Chrome.
-3. Activá **Modo de desarrollador** (arriba a la derecha).
-4. Tocá **Cargar descomprimida** y elegí esta carpeta.
+1. Descargá esta carpeta (o el .zip desde escueladewingfoil.com.ar) y
+   descomprimila en una carpeta normal (no la abras desde adentro del
+   compresor/WinRAR).
+2. En Chrome, hacé clic en el ícono de piezas de rompecabezas 🧩 (junto a la
+   barra de direcciones) → **Gestionar extensiones**. (O escribí
+   `chrome://extensions` directamente en la barra de direcciones.)
+3. Activá **Modo de desarrollador** (arriba a la derecha de esa página).
+4. Van a aparecer 3 botones nuevos arriba a la izquierda — tocá
+   **Cargar descomprimida** y elegí la carpeta que descomprimiste.
 5. Abrí cualquier publicación de wingfoil en `mercadolibre.com.ar` y hacé clic
-   en el ícono 🌊 de la barra de extensiones.
+   en el ícono 🌊 (fijalo desde el ícono de piezas 🧩 si no lo ves).
 
 ⚠️ **No hagas doble clic en `popup.html` ni en ningún otro archivo de esta
 carpeta para "abrirla".** Estos archivos solo funcionan dentro de Chrome
