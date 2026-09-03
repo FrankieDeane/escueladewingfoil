@@ -50,23 +50,17 @@ img{max-width:100%;display:block}
 .wrap>h1{font-size:clamp(26px,4vw,34px);margin-bottom:10px;text-wrap:balance}
 .wrap>p.lead{color:var(--text-muted);max-width:60ch;font-size:14.5px;margin-bottom:28px}
 
-/* búsqueda */
-.search{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
-.search input{flex:1;min-width:220px;padding:13px 16px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface);color:var(--text);font:inherit;font-size:14px}
-.search input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-glow)}
 .btn{font-family:inherit;font-weight:700;font-size:13.5px;padding:12px 22px;border-radius:9px;border:1.5px solid transparent;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
 .btn--primary{background:var(--primary);color:var(--text-inverse)}
 .btn--primary:hover{background:var(--primary-h)}
 .btn--outline{border-color:var(--border);background:var(--surface);color:var(--text)}
 .btn--outline:hover{border-color:var(--primary);color:var(--primary)}
-.search-hint{font-size:11.5px;color:var(--text-faint);margin-bottom:30px}
 
-.picker{display:flex;flex-direction:column;gap:8px;margin:18px 0 30px}
-.pick-item{display:flex;gap:12px;align-items:center;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--surface);cursor:pointer;text-align:left;width:100%;font:inherit;color:var(--text)}
-.pick-item:hover{border-color:var(--primary);background:var(--primary-glow)}
-.pick-item img{width:44px;height:44px;border-radius:7px;object-fit:cover;background:var(--surface-2);flex-shrink:0}
-.pick-item b{font-size:13px;display:block}
-.pick-item span{font-size:12px;color:var(--text-muted)}
+/* estado sin producto cargado (sin extensión) */
+.empty-state{border:1px solid var(--border);border-radius:16px;background:var(--surface);padding:32px 30px;text-align:center}
+.empty-state .icon{font-size:32px;margin-bottom:12px}
+.empty-state h2{font-size:18px;margin-bottom:8px}
+.empty-state p{color:var(--text-muted);font-size:13.5px;max-width:48ch;margin:0 auto 22px}
 
 /* informe */
 #report{display:none;border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow-lg);overflow:hidden;background:var(--surface)}
@@ -107,7 +101,7 @@ tbody tr:last-child td{border-bottom:none}
   .bar-track{width:90px}
 }
 @media print{
-  .topbar,.search,.search-hint,.picker,.ext-promo,.report__export,.toast{display:none!important}
+  .topbar,.empty-state,.ext-promo,.report__export,.toast{display:none!important}
   body{background:#fff;color:#111}
   #report{box-shadow:none;border:none}
 }
@@ -123,15 +117,14 @@ tbody tr:last-child td{border-bottom:none}
 <div class="wrap">
   <div class="eyebrow">Informe de precios</div>
   <h1>Comparador de precios Wingfoil</h1>
-  <p class="lead">Cruzamos el precio de Mercado Libre contra Hardwind y Kitestore. Llegaste desde la extensión con un producto cargado, o buscá uno acá abajo.</p>
+  <p class="lead">Cruzamos el precio de Mercado Libre contra Hardwind y Kitestore. Este informe se arma solo cuando llegás acá desde la extensión, con un producto ya cargado.</p>
 
-  <form class="search" id="searchForm">
-    <input type="text" id="searchInput" placeholder="Ej: tabla wingfoil duotone sky air" autocomplete="off">
-    <button class="btn btn--primary" type="submit">Buscar en Mercado Libre</button>
-  </form>
-  <p class="search-hint">Trae resultados en vivo desde la API de Mercado Libre.</p>
-
-  <div class="picker" id="picker" hidden></div>
+  <div class="empty-state" id="emptyState">
+    <div class="icon">🌊</div>
+    <h2>Todavía no hay ningún producto cargado</h2>
+    <p>Instalá el Comparador Wingfoil: abrí cualquier publicación de wingfoil en Mercado Libre, hacé clic en el ícono de la extensión y tocá "Ver informe completo" — vas a llegar acá con la comparación ya armada.</p>
+    <a class="btn btn--primary" href="/#comparador-extension">Instalar la extensión →</a>
+  </div>
 
   <section id="report">
     <div class="report__head">
@@ -156,8 +149,8 @@ tbody tr:last-child td{border-bottom:none}
     </div>
   </section>
 
-  <div class="ext-promo">
-    <p><b>¿No tenés la extensión?</b> Instalala y este informe se arma solo cada vez que abrís una publicación en Mercado Libre.</p>
+  <div class="ext-promo" id="extPromo" hidden>
+    <p><b>¿Le pasás este link a alguien más?</b> Sin la extensión instalada, no va a poder generar su propio informe — solo ver este.</p>
     <a class="btn btn--outline" href="/#comparador-extension">Ver extensión →</a>
   </div>
 </div>
@@ -167,7 +160,6 @@ tbody tr:last-child td{border-bottom:none}
 <script>
 // Mantener en sync con la lógica de matching de extension/popup.js
 const STORE_DATA_URL = '/store-data.json';
-const ML_SEARCH_URL = '/api/ml-search';
 const STORES_ORDER = ['Hardwind', 'Kitestore'];
 const MATCH_THRESHOLD = 0.32;
 const MARCAS = ['duotone','naish','f-one','north','core','armstrong','slingshot','cabrinha','flysurfer','ozone','starboard','fanatic','liquid force','manera','rrd','nobile'];
@@ -218,49 +210,10 @@ themeBtn.addEventListener('click', () => {
   try { localStorage.setItem('wf-theme', next); } catch(e){}
 });
 
-// ── búsqueda ML en vivo ──
-const searchForm = document.getElementById('searchForm');
-const picker = document.getElementById('picker');
-searchForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const q = document.getElementById('searchInput').value.trim();
-  if (!q) return;
-  picker.innerHTML = '<p class="search-hint">Buscando…</p>';
-  picker.hidden = false;
-  document.getElementById('report').style.display = 'none';
-  try {
-    const res = await fetch(`${ML_SEARCH_URL}?q=${encodeURIComponent(q)}&limit=6`);
-    const data = await res.json();
-    const results = data.results || [];
-    if (!results.length) {
-      // Info de diagnóstico que manda el edge function (ver ml-search.js) —
-      // se muestra acá para poder copiarla sin abrir la consola del navegador.
-      const dbg = data._debug ? `<br><small style="opacity:.6">detalle técnico: ${JSON.stringify(data._debug)}</small>` : (data.error ? `<br><small style="opacity:.6">detalle técnico: ${data.error}</small>` : '');
-      picker.innerHTML = `<p class="search-hint">No encontramos publicaciones para esa búsqueda.${dbg}</p>`;
-      return;
-    }
-    picker.innerHTML = '';
-    results.forEach(r => {
-      const btn = document.createElement('button');
-      btn.className = 'pick-item';
-      btn.type = 'button';
-      btn.innerHTML = `<img src="${r.thumbnail || ''}" alt=""><div><b>${r.title}</b><span>${fmtPrice(r.price)}</span></div>`;
-      btn.addEventListener('click', () => {
-        picker.hidden = true;
-        runReport({ titulo: r.title, precio: r.price, url: r.permalink, imagen: r.thumbnail || '' });
-      });
-      picker.appendChild(btn);
-    });
-  } catch {
-    picker.innerHTML = '<p class="search-hint">No pudimos buscar en Mercado Libre ahora. Probá de nuevo.</p>';
-  }
-});
-
 // ── armado del informe ──
 async function runReport(product) {
-  const params = new URLSearchParams({ titulo: product.titulo, precio: product.precio, url: product.url });
-  if (product.imagen) params.set('img', product.imagen);
-  history.replaceState(null, '', '?' + params.toString());
+  document.getElementById('emptyState').hidden = true;
+  document.getElementById('extPromo').hidden = false;
 
   document.getElementById('reportProductName').textContent = product.titulo;
   const report = document.getElementById('report');
