@@ -2,11 +2,7 @@
   "name": "escueladewingfoil",
   "version": "1.0.0",
   "type": "module",
-  "scripts": {
-    "fetch": "node fetch-ml.js"
-  },
   "dependencies": {
-    "@netlify/blobs": "^8.1.0",
-    "playwright": "^1.44.0"
+    "@netlify/blobs": "^8.1.0"
   }
 }
