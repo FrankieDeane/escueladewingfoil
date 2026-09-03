@@ -5,10 +5,6 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
-[[edge_functions]]
-  path = "/api/ml-search"
-  function = "ml-search"
-
 # ─── Security headers ───────────────────────────────────────────────────────
 # Applied to every response. The CSP allows the inline scripts/styles the page
 # relies on ('unsafe-inline') while still locking down where active content can
