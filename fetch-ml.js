@@ -59,177 +59,6 @@ function cleanPrice(str) {
   return parseFloat(normalized) || 0;
 }
 
-// ── GPX Store (Shopify) ────────────────────────────────────────────────────
-async function scrapeGPX(browser) {
-  const context = await browser.newContext({
-    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-    locale: 'es-AR',
-  });
-  const page = await context.newPage();
-  try {
-    await page.setExtraHTTPHeaders({ 'Accept-Language': 'es-AR,es;q=0.9' });
-    await page.goto('https://gpxstore.com/outlet', { waitUntil: 'domcontentloaded', timeout: 50000 });
-    await page.waitForTimeout(4000);
-
-    const items = await page.evaluate(() => {
-      const results = [];
-      // Shopify Dawn/Debut theme card selectors
-      const CARD_SELS = [
-        'li.grid__item',
-        '.product-card',
-        '[data-product-card]',
-        '[class*="product-card"]',
-        '.grid-product',
-        '.collection-grid__item',
-      ];
-      let cards = [];
-      for (const s of CARD_SELS) {
-        const found = [...document.querySelectorAll(s)];
-        if (found.length >= 2) { cards = found; break; }
-      }
-
-      cards.forEach(card => {
-        // Title: Shopify Dawn uses .card__heading a or .card__heading h3
-        const titleEl = card.querySelector(
-          '.card__heading a, .card__heading h3, .card__heading, ' +
-          '[class*="card__title"], [class*="card-title"], ' +
-          '[class*="product-title"], [class*="product_title"], ' +
-          '[class*="title"] a, h2 a, h3 a, h2, h3'
-        );
-        if (!titleEl) return;
-        const titulo = titleEl.textContent.trim();
-        if (!titulo || titulo.length < 3) return;
-
-        // Price: Shopify uses .price__regular .price-item or span.money
-        const priceEl = card.querySelector(
-          '.price-item--sale, .price-item--regular, span.money, ' +
-          '.price__sale, .price__regular, [class*="price-item"], ' +
-          '[class*="price"]:not([class*="compare"]):not([class*="was"]):not(del)'
-        );
-
-        // Link
-        const linkEl = card.querySelector(
-          'a.full-unstyled-link, a[href*="/products/"], a.card__heading, a[href]'
-        );
-        const href = linkEl
-          ? (linkEl.href.startsWith('http') ? linkEl.href : 'https://gpxstore.com' + linkEl.getAttribute('href'))
-          : '';
-        if (!href) return;
-
-        // Image: lazy-loaded in Shopify
-        const imgEl = card.querySelector('img');
-        const img = imgEl?.src && !imgEl.src.includes('cdn.shopify.com/s/files/1/0') ? imgEl.src
-          : imgEl?.getAttribute('data-src') || imgEl?.getAttribute('data-lazy-src') || imgEl?.src || '';
-
-        results.push({ titulo, priceText: priceEl?.textContent?.trim() || '', href, img });
-      });
-      return results;
-    });
-
-    console.log(`  ✓ GPX Store: ${items.length} productos`);
-    return items.map(i => ({
-      id: 'gpx-' + i.href.split('/products/').pop().split('?')[0].replace(/\//g,''),
-      titulo: i.titulo,
-      precio: cleanPrice(i.priceText),
-      moneda: 'ARS',
-      condicion: 'nuevo',
-      categoria: detectCategoria(i.titulo),
-      marca: detectMarca(i.titulo),
-      imagen: i.img,
-      url: i.href,
-      fuente: 'GPX Store',
-      fecha: new Date().toISOString().split('T')[0],
-    }));
-  } catch(e) {
-    console.error(`  ✗ GPX Store: ${e.message}`);
-    return [];
-  } finally {
-    await context.close();
-  }
-}
-
-// ── Hardwind Argentina (WooCommerce) ──────────────────────────────────────
-async function scrapeHardwind(browser) {
-  const context = await browser.newContext({
-    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-    locale: 'es-AR',
-  });
-  const page = await context.newPage();
-  try {
-    await page.setExtraHTTPHeaders({ 'Accept-Language': 'es-AR,es;q=0.9' });
-    await page.goto('https://hardwind.com/wing/', { waitUntil: 'domcontentloaded', timeout: 50000 });
-    await page.waitForTimeout(4000);
-
-    const items = await page.evaluate(() => {
-      const results = [];
-      // WooCommerce standard selectors
-      const CARD_SELS = [
-        'li.product.type-product',
-        'li.product',
-        'ul.products li',
-        '.woocommerce-loop-product',
-        '[class*="product-item"]',
-        '.product-card',
-      ];
-      let cards = [];
-      for (const s of CARD_SELS) {
-        const found = [...document.querySelectorAll(s)];
-        if (found.length >= 2) { cards = found; break; }
-      }
-
-      cards.forEach(card => {
-        // WooCommerce title
-        const titleEl = card.querySelector(
-          'h2.woocommerce-loop-product__title, .woocommerce-loop-product__title, ' +
-          '[class*="product__title"], [class*="product-title"], h2, h3'
-        );
-        if (!titleEl) return;
-        const titulo = titleEl.textContent.trim();
-        if (!titulo || titulo.length < 3) return;
-
-        // WooCommerce price: prefer sale price (ins), fallback to regular
-        const salePriceEl   = card.querySelector('.price ins .woocommerce-Price-amount, .price ins .amount, .price ins bdi');
-        const regularPriceEl = card.querySelector('.price .woocommerce-Price-amount, .price .amount, .price bdi');
-        const priceEl = salePriceEl || regularPriceEl;
-
-        // Link
-        const linkEl = card.querySelector('a.woocommerce-LoopProduct-link, a[href]');
-        const href = linkEl
-          ? (linkEl.href.startsWith('http') ? linkEl.href : 'https://hardwind.com' + linkEl.getAttribute('href'))
-          : '';
-        if (!href) return;
-
-        // Image
-        const imgEl = card.querySelector('img.attachment-woocommerce_thumbnail, img[data-src], img');
-        const img = imgEl?.getAttribute('data-src') || imgEl?.getAttribute('data-lazy-src') || imgEl?.src || '';
-
-        results.push({ titulo, priceText: priceEl?.textContent?.trim() || '', href, img });
-      });
-      return results;
-    });
-
-    console.log(`  ✓ Hardwind: ${items.length} productos`);
-    return items.map(i => ({
-      id: 'hw-' + i.href.split('/').filter(Boolean).pop(),
-      titulo: i.titulo,
-      precio: cleanPrice(i.priceText),
-      moneda: 'ARS',
-      condicion: 'nuevo',
-      categoria: detectCategoria(i.titulo),
-      marca: detectMarca(i.titulo),
-      imagen: i.img,
-      url: i.href,
-      fuente: 'Hardwind',
-      fecha: new Date().toISOString().split('T')[0],
-    }));
-  } catch(e) {
-    console.error(`  ✗ Hardwind: ${e.message}`);
-    return [];
-  } finally {
-    await context.close();
-  }
-}
-
 // ── Genérico multi-plataforma (Tiendanube / Shopify / WooCommerce) ────────
 // Usado por tiendas cuya plataforma no está confirmada: prueba varias URLs
 // candidatas (categoría/búsqueda) y varios sets de selectores hasta encontrar
@@ -331,6 +160,41 @@ async function scrapeStorefront(browser, { source, idPrefix, baseUrl, candidateU
   } finally {
     await context.close();
   }
+}
+
+// ── GPX Store (Shopify) ─────────────────────────────────────────────────────
+function scrapeGPX(browser) {
+  return scrapeStorefront(browser, {
+    source: 'GPX Store',
+    idPrefix: 'gpx',
+    baseUrl: 'https://gpxstore.com',
+    candidateUrls: [
+      'https://gpxstore.com/search?q=wing+foil&type=product',
+      'https://gpxstore.com/collections/wingfoil',
+      'https://gpxstore.com/collections/wing-foil',
+      'https://gpxstore.com/collections/wing',
+      'https://gpxstore.com/outlet',
+    ],
+  });
+}
+
+// ── Hardwind Argentina (WooCommerce) ────────────────────────────────────────
+// /wing/ dejó de traer resultados — hardwind.com/kites/ confirmado con
+// productos reales (ver PR #71). Se prueban varias categorías porque el
+// wing a veces se cataloga junto con kite en estas tiendas.
+function scrapeHardwind(browser) {
+  return scrapeStorefront(browser, {
+    source: 'Hardwind',
+    idPrefix: 'hw',
+    baseUrl: 'https://hardwind.com',
+    candidateUrls: [
+      'https://hardwind.com/kites/',
+      'https://hardwind.com/wing/',
+      'https://hardwind.com/wing-foil/',
+      'https://hardwind.com/?s=wing&post_type=product',
+      'https://hardwind.com/?s=wingfoil&post_type=product',
+    ],
+  });
 }
 
 // ── Kitestore Argentina (plataforma no confirmada) ─────────────────────────
