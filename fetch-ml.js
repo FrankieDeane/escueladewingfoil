@@ -1,4 +1,4 @@
-// fetch-ml.js — scraper Playwright para GPX Store (Shopify) y Hardwind (WooCommerce)
+// fetch-ml.js — scraper Playwright para Hardwind (WooCommerce) y Kitestore
 // Corre en GitHub Actions cada 2 horas, guarda store-data.json
 
 import { chromium } from 'playwright';
@@ -71,8 +71,6 @@ const STOREFRONT_CARD_SELS = [
   'li.grid__item', '.product-card', '[data-product-card]', '.grid-product', '.collection-grid__item',
   // WooCommerce
   'li.product.type-product', 'li.product', 'ul.products li', '.woocommerce-loop-product',
-  // GPX Store / Santa Tabla: confirmado por el usuario un <a class="product__overlay">
-  // dentro de la tarjeta → sigue BEM, la tarjeta en sí debería ser .product
   '.product',
   // genérico / plataformas propias (ES)
   '[class*="product-item"]', '[class*="product-card"]', 'li[class*="product"]',
@@ -228,25 +226,6 @@ async function scrapeStorefront(browser, { source, idPrefix, baseUrl, candidateU
   }
 }
 
-// ── GPX Store (plataforma propia, no Shopify) ───────────────────────────────
-// El usuario confirmó dos URLs reales: /productos/<cat>/<subcat>/<slug>
-// (WING-Velas) y /categoria/<id> (tablas). No es Shopify como se asumía
-// originalmente — mismo caso que Santa Tabla.
-function scrapeGPX(browser) {
-  return scrapeStorefront(browser, {
-    source: 'GPX Store',
-    idPrefix: 'gpx',
-    baseUrl: 'https://gpxstore.com',
-    candidateUrls: [
-      'https://gpxstore.com/productos/2/9/WING-Velas',
-      'https://gpxstore.com/categoria/2',
-      'https://gpxstore.com/search?q=wing+foil&type=product',
-      'https://gpxstore.com/collections/wingfoil',
-      'https://gpxstore.com/outlet',
-    ],
-  });
-}
-
 // ── Hardwind Argentina (WooCommerce) ────────────────────────────────────────
 // /wing/ dejó de traer resultados — hardwind.com/kites/ confirmado con
 // productos reales (ver PR #71). Se prueban varias categorías porque el
@@ -278,29 +257,6 @@ function scrapeKitestore(browser) {
       'https://kitestore.com.ar/collections/wingfoil',
       'https://kitestore.com.ar/collections/wing-foil',
       'https://kitestore.com.ar/?s=wing+foil&post_type=product',
-    ],
-  });
-}
-
-// ── Santa Tabla (plataforma propia, no Tiendanube/Shopify/WooCommerce) ─────
-// El usuario confirmó la URL real de la categoría Foils: /shop/tienda-de-
-// <Categoría>-<id>. Se prueba primero esa (foils son equipo de wingfoil
-// válido) y variantes del mismo patrón para Wing, por si existe con el
-// mismo esquema de slugs.
-function scrapeSantaTabla(browser) {
-  return scrapeStorefront(browser, {
-    source: 'Santa Tabla',
-    idPrefix: 'stb',
-    baseUrl: 'https://santatabla.com',
-    candidateUrls: [
-      'https://santatabla.com/shop/tienda-de-Foils-56',
-      'https://santatabla.com/shop/tienda-de-Wing-Foil',
-      'https://santatabla.com/shop/tienda-de-Wings',
-      'https://santatabla.com/search?q=wing+foil&type=product',
-      'https://santatabla.com/catalogo?q=wing',
-      'https://santatabla.com/collections/wingfoil',
-      'https://santatabla.com/collections/wing-foil',
-      'https://santatabla.com/?s=wing+foil&post_type=product',
     ],
   });
 }
@@ -403,11 +359,6 @@ async function main() {
     args: ['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage','--disable-blink-features=AutomationControlled'],
   });
 
-  // GPX Store y Santa Tabla desactivadas: son SPA que arman el catálogo con
-  // JS, y ni con networkidle ni con un patrón de precio ampliado se pudo
-  // detectar la grilla sin ver el HTML real (ver historial de PRs #73-#77).
-  // scrapeGPX/scrapeSantaTabla quedan definidas para retomarlas apenas
-  // consigamos el HTML de un precio real de cada sitio.
   let hwItems = [], ktsItems = [], fbItems = [];
   try {
     [hwItems, ktsItems, fbItems] = await Promise.all([
@@ -437,7 +388,7 @@ async function main() {
   const output = { actualizado: new Date().toISOString(), total: productos.length, productos };
   writeFileSync('store-data.json', JSON.stringify(output, null, 2), 'utf8');
   console.log(`\n💾 Guardados: ${productos.length} productos en store-data.json`);
-  console.log(`   Hardwind: ${hwItems.length} | Kitestore: ${ktsItems.length} | Facebook: ${fbItems.length} (GPX y Santa Tabla desactivadas — ver comentario arriba)`);
+  console.log(`   Hardwind: ${hwItems.length} | Kitestore: ${ktsItems.length} | Facebook: ${fbItems.length}`);
   if (descartadosPorPrecio > 0) {
     console.warn(`⚠️  ${descartadosPorPrecio} producto(s) descartados por precio inválido (< $${MIN_PRICE} o no numérico)`);
   }

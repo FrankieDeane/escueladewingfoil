@@ -1,8 +1,7 @@
 # Comparador Wingfoil — extensión de Chrome
 
 Compara el precio de una publicación de Mercado Libre contra Hardwind y
-Kitestore, sin salir de la página. (GPX Store y Santa Tabla quedaron afuera
-por ahora — ver `fetch-ml.js`.)
+Kitestore, sin salir de la página.
 
 ## Instalación (todavía no está en la Chrome Web Store)
 

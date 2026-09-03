@@ -28,7 +28,7 @@ jobs:
       - name: Instalar Chromium
         run: npx playwright install chromium --with-deps
 
-      - name: Scrapear GPX Store y Hardwind
+      - name: Scrapear Hardwind y Kitestore
         run: node fetch-ml.js
 
       - name: Mostrar resultado
