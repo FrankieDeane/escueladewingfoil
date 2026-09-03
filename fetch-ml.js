@@ -8,7 +8,7 @@ const MARCAS = ['duotone','naish','f-one','north','core','armstrong','slingshot'
 
 function detectCategoria(titulo) {
   const t = titulo.toLowerCase();
-  if (/kit|combo|completo|set\b/.test(t)) return 'kit';
+  if (/\bkit\b|combo|completo|set\b/.test(t)) return 'kit';
   if (/\bwing\b|\bala\b/.test(t) && !/tabla|foil|mástil|mastil|fuselaje|plano|board/.test(t)) return 'wing';
   if (/tabla|board/.test(t) && !/foil/.test(t)) return 'tabla';
   if (/foil|mástil|mastil|fuselaje|plano|estabilizador|hydrofoil/.test(t)) return 'foil';
@@ -227,20 +227,26 @@ async function scrapeStorefront(browser, { source, idPrefix, baseUrl, candidateU
 }
 
 // ── Hardwind Argentina (WooCommerce) ────────────────────────────────────────
-// /wing/ dejó de traer resultados — hardwind.com/kites/ confirmado con
-// productos reales (ver PR #71). Se prueban varias categorías porque el
-// wing a veces se cataloga junto con kite en estas tiendas.
+// /kites/ (página 1, sin mpage) da resultados pero son accesorios de KITE
+// (leashes, barras, tablas de kite) — nada de wingfoil, confirmado mirando
+// store-data.json de un run real. El usuario había señalado hardwind.com/
+// kites/?mpage=4 con wing/foil reales, así que esa va primero, seguida de
+// las búsquedas por texto (más confiables que adivinar el n° de página).
+// /kites/ sin mpage queda de último recurso: mejor mostrar algo de Hardwind
+// que nada, aunque sea la categoría equivocada.
 function scrapeHardwind(browser) {
   return scrapeStorefront(browser, {
     source: 'Hardwind',
     idPrefix: 'hw',
     baseUrl: 'https://hardwind.com',
     candidateUrls: [
-      'https://hardwind.com/kites/',
+      'https://hardwind.com/kites/?mpage=4',
+      'https://hardwind.com/?s=wing+foil&post_type=product',
+      'https://hardwind.com/?s=wingfoil&post_type=product',
+      'https://hardwind.com/?s=wing&post_type=product',
       'https://hardwind.com/wing/',
       'https://hardwind.com/wing-foil/',
-      'https://hardwind.com/?s=wing&post_type=product',
-      'https://hardwind.com/?s=wingfoil&post_type=product',
+      'https://hardwind.com/kites/',
     ],
   });
 }

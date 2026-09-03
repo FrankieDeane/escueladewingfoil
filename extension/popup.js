@@ -25,7 +25,7 @@ function tokenize(str) {
 }
 function categoriaDe(titulo) {
   const t = normalize(titulo);
-  if (/kit|combo|completo|set\b/.test(t)) return 'kit';
+  if (/\bkit\b|combo|completo|set\b/.test(t)) return 'kit';
   if (/\bwing\b|\bala\b/.test(t) && !/tabla|foil|mastil|fuselaje|plano|board/.test(t)) return 'wing';
   if (/tabla|board/.test(t) && !/foil/.test(t)) return 'tabla';
   if (/foil|mastil|fuselaje|plano|estabilizador|hydrofoil/.test(t)) return 'foil';
