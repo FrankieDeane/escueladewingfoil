@@ -71,17 +71,22 @@ const STOREFRONT_CARD_SELS = [
   'li.grid__item', '.product-card', '[data-product-card]', '.grid-product', '.collection-grid__item',
   // WooCommerce
   'li.product.type-product', 'li.product', 'ul.products li', '.woocommerce-loop-product',
+  // GPX Store / Santa Tabla: confirmado por el usuario un <a class="product__overlay">
+  // dentro de la tarjeta → sigue BEM, la tarjeta en sí debería ser .product
+  '.product',
   // genérico / plataformas propias (ES)
   '[class*="product-item"]', '[class*="product-card"]', 'li[class*="product"]',
   'article[class*="product"]', '[class*="item-product"]',
 ];
 const STOREFRONT_TITLE_SELS =
+  '.product__title, .product__name, ' +
   '.js-item-name, .product-item__name, ' +
   '.card__heading a, .card__heading, [class*="card__title"], [class*="product-title"], [class*="product_title"], ' +
   'h2.woocommerce-loop-product__title, .woocommerce-loop-product__title, ' +
   '[class*="nombre"], [class*="name"] a, ' +
   '[class*="title"] a, h2 a, h3 a, h2, h3';
 const STOREFRONT_PRICE_SELS =
+  '.product__price, ' +
   '.js-item-price ins, .js-item-price, [class*="price"] ins, ' +
   '.price-item--sale, .price-item--regular, span.money, .price__sale, .price__regular, [class*="price-item"], ' +
   '.price ins .woocommerce-Price-amount, .price ins .amount, .price ins bdi, ' +
