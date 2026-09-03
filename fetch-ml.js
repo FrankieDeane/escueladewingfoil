@@ -41,10 +41,13 @@ function cleanPrice(str) {
 
 // ── GPX Store (Shopify) ────────────────────────────────────────────────────
 async function scrapeGPX(browser) {
-  const page = await browser.newPage();
+  const context = await browser.newContext({
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+    locale: 'es-AR',
+  });
+  const page = await context.newPage();
   try {
     await page.setExtraHTTPHeaders({ 'Accept-Language': 'es-AR,es;q=0.9' });
-    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
     await page.goto('https://gpxstore.com/outlet', { waitUntil: 'domcontentloaded', timeout: 50000 });
     await page.waitForTimeout(4000);
 
@@ -121,16 +124,19 @@ async function scrapeGPX(browser) {
     console.error(`  ✗ GPX Store: ${e.message}`);
     return [];
   } finally {
-    await page.close();
+    await context.close();
   }
 }
 
 // ── Hardwind Argentina (WooCommerce) ──────────────────────────────────────
 async function scrapeHardwind(browser) {
-  const page = await browser.newPage();
+  const context = await browser.newContext({
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+    locale: 'es-AR',
+  });
+  const page = await context.newPage();
   try {
     await page.setExtraHTTPHeaders({ 'Accept-Language': 'es-AR,es;q=0.9' });
-    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
     await page.goto('https://hardwind.com/wing/', { waitUntil: 'domcontentloaded', timeout: 50000 });
     await page.waitForTimeout(4000);
 
@@ -200,7 +206,7 @@ async function scrapeHardwind(browser) {
     console.error(`  ✗ Hardwind: ${e.message}`);
     return [];
   } finally {
-    await page.close();
+    await context.close();
   }
 }
 
@@ -233,10 +239,13 @@ const STOREFRONT_PRICE_SELS =
 const STOREFRONT_IMG_SELS = 'img[data-src], img[data-lazy-src], img[srcset], img';
 
 async function scrapeStorefront(browser, { source, idPrefix, baseUrl, candidateUrls }) {
-  const page = await browser.newPage();
+  const context = await browser.newContext({
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+    locale: 'es-AR',
+  });
+  const page = await context.newPage();
   try {
     await page.setExtraHTTPHeaders({ 'Accept-Language': 'es-AR,es;q=0.9' });
-    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
 
     let items = [];
     let usedUrl = '';
@@ -300,7 +309,7 @@ async function scrapeStorefront(browser, { source, idPrefix, baseUrl, candidateU
     console.error(`  ✗ ${source}: ${e.message}`);
     return [];
   } finally {
-    await page.close();
+    await context.close();
   }
 }
 
