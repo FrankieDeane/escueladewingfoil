@@ -31,7 +31,7 @@ export default async function handler(request) {
   // muy distintas (sin token, token rechazado, ML bloqueando el pedido, o de
   // verdad 0 resultados). En vez de adivinar a ciegas de nuevo, esto queda
   // en la respuesta para poder leerlo directo desde comparador.html.
-  const debug = { tokenAttempted: false, tokenOk: null, tokenStatus: null, tokenErrorBody: null, mlStatus: null };
+  const debug = { hasAppId: false, hasAppSecret: false, tokenAttempted: false, tokenOk: null, tokenStatus: null, tokenErrorBody: null, mlStatus: null };
 
   try {
     let accessToken = null;
@@ -39,6 +39,8 @@ export default async function handler(request) {
     // Si hay credenciales de app, obtener App Token via client_credentials
     const appId = Deno.env.get('ML_APP_ID');
     const appSecret = Deno.env.get('ML_SECRET');
+    debug.hasAppId = !!appId;
+    debug.hasAppSecret = !!appSecret;
 
     if (appId && appSecret) {
       debug.tokenAttempted = true;
