@@ -115,29 +115,65 @@ async function scrapeStorefront(browser, { source, idPrefix, baseUrl, candidateU
       }
 
       const found = await page.evaluate(({ CARD_SELS, TITLE_SELS, PRICE_SELS, IMG_SELS }) => {
+        const PRICE_RE = /\$\s?\d{1,3}(?:[.,]\d{3})+(?:[.,]\d{1,2})?/;
+
+        function extractFromCard(card) {
+          const titleEl = card.querySelector(TITLE_SELS);
+          const linkEl = card.querySelector('a[href]');
+          const href = linkEl ? linkEl.href : '';
+          if (!href) return null;
+          const priceEl = card.querySelector(PRICE_SELS);
+          let priceText = priceEl?.textContent?.trim() || '';
+          let titulo = titleEl?.textContent?.trim() || '';
+          // Sin selector de precio/título conocido: buscar el patrón $ a mano
+          // dentro de la tarjeta y usar el resto del texto como título.
+          if (!priceText || !PRICE_RE.test(priceText)) {
+            const m = card.textContent.match(PRICE_RE);
+            if (m) priceText = m[0];
+          }
+          if (!titulo) {
+            titulo = (linkEl.getAttribute('title') || linkEl.textContent || card.querySelector('img')?.alt || '').trim();
+          }
+          if (!titulo || titulo.length < 3) return null;
+          const imgEl = card.querySelector(IMG_SELS);
+          let img = imgEl?.getAttribute('data-src') || imgEl?.getAttribute('data-lazy-src') || imgEl?.src || '';
+          if (!img) {
+            // Imagen puesta como background-image inline en vez de <img>
+            const bgEl = [...card.querySelectorAll('[style*="background-image"]')][0];
+            const m = bgEl?.getAttribute('style')?.match(/url\((['"]?)(.*?)\1\)/);
+            if (m) img = m[2];
+          }
+          return { titulo, priceText, href, img };
+        }
+
+        // 1) Selectores conocidos (Tiendanube/Shopify/WooCommerce/BEM genérico).
         let cards = [];
         for (const s of CARD_SELS) {
           const found = [...document.querySelectorAll(s)];
           if (found.length >= 2) { cards = found; break; }
         }
-        const results = [];
-        cards.forEach(card => {
-          const titleEl = card.querySelector(TITLE_SELS);
-          if (!titleEl) return;
-          const titulo = titleEl.textContent.trim();
-          if (!titulo || titulo.length < 3) return;
 
-          const priceEl = card.querySelector(PRICE_SELS);
-          const linkEl = card.querySelector('a[href]');
-          const href = linkEl ? linkEl.href : '';
-          if (!href) return;
+        // 2) Sin match: detector automático. Busca textos con forma de precio
+        // ($1.234.567) y sube por los padres hasta encontrar un contenedor
+        // que se repite (una grilla de ≥4 hijos) — esa es la "tarjeta",
+        // sin necesidad de conocer los nombres de clase del sitio.
+        if (!cards.length) {
+          const priceNodes = [...document.querySelectorAll('body *')].filter(el =>
+            el.children.length <= 3 && el.textContent.trim().length <= 60 && PRICE_RE.test(el.textContent)
+          );
+          const detected = new Set();
+          for (const priceEl of priceNodes) {
+            let node = priceEl;
+            for (let i = 0; i < 6 && node.parentElement; i++) {
+              const parent = node.parentElement;
+              if (parent.children.length >= 4) { detected.add(node); break; }
+              node = parent;
+            }
+          }
+          cards = [...detected];
+        }
 
-          const imgEl = card.querySelector(IMG_SELS);
-          const img = imgEl?.getAttribute('data-src') || imgEl?.getAttribute('data-lazy-src') || imgEl?.src || '';
-
-          results.push({ titulo, priceText: priceEl?.textContent?.trim() || '', href, img });
-        });
-        return results;
+        return cards.map(extractFromCard).filter(Boolean);
       }, { CARD_SELS: STOREFRONT_CARD_SELS, TITLE_SELS: STOREFRONT_TITLE_SELS, PRICE_SELS: STOREFRONT_PRICE_SELS, IMG_SELS: STOREFRONT_IMG_SELS });
 
       if (found.length >= 2) { items = found; usedUrl = url; break; }
