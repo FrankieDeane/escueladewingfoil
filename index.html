@@ -602,7 +602,7 @@ textarea{resize:vertical;min-height:90px}
 
 .equipos-disclaimer{background:color-mix(in oklab,var(--accent-warm),transparent 88%);border:1px solid color-mix(in oklab,var(--accent-warm),transparent 60%);border-radius:10px;padding:16px 20px;font-size:13px;color:var(--text-muted);line-height:1.7;margin-bottom:36px;max-width:none}
 
-/* COMPARADOR DE PRECIOS (extensión) */
+/* CATÁLOGO DE PRECIOS */
 .cmp-promo{background:linear-gradient(160deg,var(--surface-2),var(--surface));border:1px solid var(--border);border-radius:16px;padding:32px;margin-bottom:48px;scroll-margin-top:90px}
 .cmp-promo__eyebrow{font-size:10.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--primary);margin-bottom:10px}
 .cmp-promo h3{font-family:'Clash Display',sans-serif;font-size:clamp(21px,3vw,27px);font-weight:700;margin-bottom:10px;max-width:26ch;letter-spacing:-.02em}
@@ -1872,28 +1872,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h2 class="section-title">Equipos en Venta</h2>
     <p class="section-sub">Comprá y vendé equipos entre riders o encontrá publicaciones en Mercado Libre.</p>
 
-    <!-- COMPARADOR DE PRECIOS -->
-    <div class="cmp-promo" id="comparador-extension">
-      <div class="cmp-promo__eyebrow">Precios actualizados cada 6 h</div>
+    <!-- CATÁLOGO DE PRECIOS -->
+    <div class="cmp-promo" id="catalogo-precios">
+      <div class="cmp-promo__eyebrow">Precios de referencia</div>
       <h3>Compará precios antes de comprar tu equipo</h3>
-      <p>Mirá el catálogo completo: todos los wings, tablas, foils y kits que rastreamos en Hardwind y Kitestore, con precios, en una sola tabla. Sin instalar nada, sin buscar nada.</p>
+      <p>Todos los wings, tablas, foils y kits que rastreamos en Hardwind y Kitestore, con sus precios, en una sola tabla. Sin instalar nada, sin buscar nada.</p>
       <div class="cmp-promo__row">
         <a class="btn btn--primary" href="/catalogo.html">📊 Ver catálogo de precios</a>
-        <a class="btn btn--outline" href="/descargas/comparador-wingfoil-extension.zip" download>⬇ Descargar extensión de Chrome</a>
       </div>
       <div class="cmp-trust">
         <span><b>Gratis</b> · sin registro</span>
         <span>Hardwind + Kitestore</span>
-        <span>La extensión suma la comparación con Mercado Libre</span>
-      </div>
-      <div class="faq-item" style="margin-top:20px;border:1px solid var(--border, #ccc);border-radius:10px;padding:14px 16px">
-        <p style="font-weight:700;margin-bottom:8px">Cómo instalarla (todavía no está en la Chrome Web Store)</p>
-        <p>1. Descargá el .zip de arriba. Andá a la carpeta donde se descargó (normalmente "Descargas"), hacé <b>clic derecho sobre el archivo .zip</b> → <b>"Extraer todo..."</b> (Windows) o hacé doble clic para descomprimirlo (Mac). Eso crea una <b>carpeta nueva</b> con todos los archivos adentro — acordate dónde quedó, la necesitás en el paso 4. No uses los archivos directamente desde adentro de WinRAR/7-Zip: tienen que quedar extraídos en esa carpeta nueva del disco.<br>
-        2. En Chrome, hacé clic en el ícono de piezas de rompecabezas 🧩 (arriba a la derecha, junto a la barra de direcciones) y después en "Gestionar extensiones". (O escribí <code>chrome://extensions</code> directamente en la barra de direcciones.)<br>
-        3. Activá "Modo de desarrollador" (arriba a la derecha de esa página).<br>
-        4. Van a aparecer 3 botones nuevos arriba a la izquierda — tocá "Cargar descomprimida" y elegí la carpeta nueva del paso 1 (la que tiene <code>popup.html</code>, <code>manifest.json</code>, etc. adentro). Ahí debería aparecer una tarjeta que dice <b>"Comparador Wingfoil"</b> — ese es el nombre de la extensión, así la vas a ver en todos lados.<br>
-        5. Listo — abrí cualquier publicación de wingfoil en Mercado Libre y hacé clic en el ícono 🌊 (si no lo ves en la barra de arriba, clickeá el ícono de piezas 🧩, buscá <b>"Comparador Wingfoil"</b> en la lista y tocá el alfiler 📌 al lado para fijarlo).</p>
-        <p style="margin-top:10px"><b>⚠️ No hagas doble clic en ningún archivo de la carpeta</b> (como <code>popup.html</code>) para "abrirla" — no va a funcionar así, se instala únicamente con el paso 4 de arriba.</p>
+        <span>Se actualiza una vez por mes</span>
       </div>
     </div>
 
@@ -3386,7 +3376,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <li><a href="#instructores">Instructores</a></li>
             <li><a href="#spots">Spots Argentina</a></li>
             <li><a href="#venta-de-wingfoil">Equipos en venta</a></li>
-            <li><a href="/extension-privacidad.html">Privacidad del comparador</a></li>
+            <li><a href="/catalogo.html">Catálogo de precios</a></li>
             <li><a href="#testimonios">Testimonios</a></li>
             <li><a href="#marcas">Marcas</a></li>
           </ul>

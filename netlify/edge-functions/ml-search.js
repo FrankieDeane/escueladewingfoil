@@ -30,7 +30,7 @@ export default async function handler(request) {
   // Diagnóstico: por qué "no encontramos publicaciones" puede significar cosas
   // muy distintas (sin token, token rechazado, ML bloqueando el pedido, o de
   // verdad 0 resultados). En vez de adivinar a ciegas de nuevo, esto queda
-  // en la respuesta para poder leerlo directo desde comparador.html.
+  // en la respuesta para poder leerlo sin abrir los logs de la función.
   const debug = { hasAppId: false, hasAppSecret: false, tokenAttempted: false, tokenOk: null, tokenStatus: null, tokenErrorBody: null, mlStatus: null, mlErrorBody: null };
 
   try {
