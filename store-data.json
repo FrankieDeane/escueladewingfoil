@@ -1,7 +1,85 @@
 {
-  "actualizado": "2026-09-03T12:47:28.671Z",
-  "total": 12,
+  "actualizado": "2026-09-03T14:01:17.767Z",
+  "total": 24,
   "productos": [
+    {
+      "id": "hw-kite-repuestos-duotone-short-safety-leash-umj4g",
+      "titulo": "Kite Repuestos Duotone Short Safety Leash",
+      "precio": 88195.55,
+      "moneda": "ARS",
+      "condicion": "nuevo",
+      "categoria": "kit",
+      "marca": "duotone",
+      "imagen": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+      "url": "https://hardwind.com/productos/kite-repuestos-duotone-short-safety-leash-umj4g/",
+      "fuente": "Hardwind",
+      "fecha": "2026-09-03"
+    },
+    {
+      "id": "hw-2026-kite-cabrinha-unify-leash-v1-short-1fgbb",
+      "titulo": "2026 Kite Cabrinha Unify Leash V1 Short",
+      "precio": 102918.07,
+      "moneda": "ARS",
+      "condicion": "nuevo",
+      "categoria": "kit",
+      "marca": "cabrinha",
+      "imagen": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+      "url": "https://hardwind.com/productos/2026-kite-cabrinha-unify-leash-v1-short-1fgbb/",
+      "fuente": "Hardwind",
+      "fecha": "2026-09-03"
+    },
+    {
+      "id": "hw-kite-accesorios-duotone-quick-release-combi-kit-o-s-44250-8152-c0j72",
+      "titulo": "Kite Accesorios Duotone Quick Release Combi Kit o/s (44250-8152)",
+      "precio": 195369.89,
+      "moneda": "ARS",
+      "condicion": "nuevo",
+      "categoria": "kit",
+      "marca": "duotone",
+      "imagen": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+      "url": "https://hardwind.com/productos/kite-accesorios-duotone-quick-release-combi-kit-o-s-44250-8152-c0j72/",
+      "fuente": "Hardwind",
+      "fecha": "2026-09-03"
+    },
+    {
+      "id": "hw-fijaciones-kite-cabrinha-h1-1mieh",
+      "titulo": "Fijaciones Kite Cabrinha H1",
+      "precio": 279099.84,
+      "moneda": "ARS",
+      "condicion": "nuevo",
+      "categoria": "kit",
+      "marca": "cabrinha",
+      "imagen": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+      "url": "https://hardwind.com/productos/fijaciones-kite-cabrinha-h1-1mieh/",
+      "fuente": "Hardwind",
+      "fecha": "2026-09-03"
+    },
+    {
+      "id": "hw-fijaciones-kite-duotone-vario-2026-1eugb",
+      "titulo": "Fijaciones Kite Duotone Vario 2026",
+      "precio": 331431.06,
+      "moneda": "ARS",
+      "condicion": "nuevo",
+      "categoria": "kit",
+      "marca": "duotone",
+      "imagen": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+      "url": "https://hardwind.com/productos/fijaciones-kite-duotone-vario-2026-1eugb/",
+      "fuente": "Hardwind",
+      "fecha": "2026-09-03"
+    },
+    {
+      "id": "hw-2025-kite-tabla-duotone-gonzales-2qznd",
+      "titulo": "2025 Kite Tabla Duotone Gonzales",
+      "precio": 732637.08,
+      "moneda": "ARS",
+      "condicion": "nuevo",
+      "categoria": "kit",
+      "marca": "duotone",
+      "imagen": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+      "url": "https://hardwind.com/productos/2025-kite-tabla-duotone-gonzales-2qznd/",
+      "fuente": "Hardwind",
+      "fecha": "2026-09-03"
+    },
     {
       "id": "kts-wing-cabrinha-aer-2025",
       "titulo": "Wing CABRINHA AER 2025",
@@ -13,6 +91,19 @@
       "imagen": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
       "url": "https://www.kitestore.com.ar/productos/wing-cabrinha-aer-2025/",
       "fuente": "Kitestore",
+      "fecha": "2026-09-03"
+    },
+    {
+      "id": "hw-kite-tabla-cabrinha-x-caliber-138-1x3hk",
+      "titulo": "Kite Tabla Cabrinha X Caliber 138",
+      "precio": 957661.33,
+      "moneda": "ARS",
+      "condicion": "nuevo",
+      "categoria": "kit",
+      "marca": "cabrinha",
+      "imagen": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+      "url": "https://hardwind.com/productos/kite-tabla-cabrinha-x-caliber-138-1x3hk/",
+      "fuente": "Hardwind",
       "fecha": "2026-09-03"
     },
     {
@@ -55,6 +146,19 @@
       "fecha": "2026-09-03"
     },
     {
+      "id": "hw-2026-kite-barra-cabrinha-unify-control-system-qn74c",
+      "titulo": "2026 Kite Barra Cabrinha Unify Control System",
+      "precio": 1435619.8,
+      "moneda": "ARS",
+      "condicion": "nuevo",
+      "categoria": "kit",
+      "marca": "cabrinha",
+      "imagen": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+      "url": "https://hardwind.com/productos/2026-kite-barra-cabrinha-unify-control-system-qn74c/",
+      "fuente": "Hardwind",
+      "fecha": "2026-09-03"
+    },
+    {
       "id": "kts-wing-cabrinha-mantis-v2-windows-wdw-2022",
       "titulo": "Wing CABRINHA Mantis V2 WDW",
       "precio": 1571840,
@@ -68,6 +172,19 @@
       "fecha": "2026-09-03"
     },
     {
+      "id": "hw-2026-kite-tabla-duotone-select-concept-blue-ons9j",
+      "titulo": "2026 Kite Tabla Duotone Select Concept Blue",
+      "precio": 1610057.2,
+      "moneda": "ARS",
+      "condicion": "nuevo",
+      "categoria": "kit",
+      "marca": "duotone",
+      "imagen": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+      "url": "https://hardwind.com/productos/2026-kite-tabla-duotone-select-concept-blue-ons9j/",
+      "fuente": "Hardwind",
+      "fecha": "2026-09-03"
+    },
+    {
       "id": "kts-wing-duotone-unit-2025",
       "titulo": "Wing DUOTONE Unit 2025",
       "precio": 1832790,
@@ -78,6 +195,19 @@
       "imagen": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
       "url": "https://www.kitestore.com.ar/productos/wing-duotone-unit-2025/",
       "fuente": "Kitestore",
+      "fecha": "2026-09-03"
+    },
+    {
+      "id": "hw-2025-kite-tabla-cabrinha-ace-apex-138-x-41-5-l8wmi",
+      "titulo": "2025 Kite Tabla Cabrinha Ace Apex 138 x 41.5",
+      "precio": 1836825.82,
+      "moneda": "ARS",
+      "condicion": "nuevo",
+      "categoria": "kit",
+      "marca": "cabrinha",
+      "imagen": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+      "url": "https://hardwind.com/productos/2025-kite-tabla-cabrinha-ace-apex-138-x-41-5-l8wmi/",
+      "fuente": "Hardwind",
       "fecha": "2026-09-03"
     },
     {
@@ -146,6 +276,19 @@
       "fecha": "2026-09-03"
     },
     {
+      "id": "hw-2025-kite-duotone-evo-185be",
+      "titulo": "2025 Kite Duotone Evo",
+      "precio": 3153828.19,
+      "moneda": "ARS",
+      "condicion": "nuevo",
+      "categoria": "kit",
+      "marca": "duotone",
+      "imagen": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+      "url": "https://hardwind.com/productos/2025-kite-duotone-evo-185be/",
+      "fuente": "Hardwind",
+      "fecha": "2026-09-03"
+    },
+    {
       "id": "kts-foil-reedin-flight-attendant-con-mastil-de-carbono-85cm",
       "titulo": "Foil REEDIN Flight Attendant con Mastil de Carbono 85cm",
       "precio": 3515150,
@@ -156,6 +299,19 @@
       "imagen": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
       "url": "https://www.kitestore.com.ar/productos/foil-reedin-flight-attendant-con-mastil-de-carbono-85cm/",
       "fuente": "Kitestore",
+      "fecha": "2026-09-03"
+    },
+    {
+      "id": "hw-2026-kite-kites-duotone-rebel-d-lab-1a3jv",
+      "titulo": "2026 Kite Kites Duotone Rebel D/LAB",
+      "precio": 6677463.67,
+      "moneda": "ARS",
+      "condicion": "nuevo",
+      "categoria": "kit",
+      "marca": "duotone",
+      "imagen": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+      "url": "https://hardwind.com/productos/2026-kite-kites-duotone-rebel-d-lab-1a3jv/",
+      "fuente": "Hardwind",
       "fecha": "2026-09-03"
     }
   ]
