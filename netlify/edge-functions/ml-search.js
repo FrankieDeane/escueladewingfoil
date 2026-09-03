@@ -31,7 +31,7 @@ export default async function handler(request) {
   // muy distintas (sin token, token rechazado, ML bloqueando el pedido, o de
   // verdad 0 resultados). En vez de adivinar a ciegas de nuevo, esto queda
   // en la respuesta para poder leerlo directo desde comparador.html.
-  const debug = { hasAppId: false, hasAppSecret: false, tokenAttempted: false, tokenOk: null, tokenStatus: null, tokenErrorBody: null, mlStatus: null };
+  const debug = { hasAppId: false, hasAppSecret: false, tokenAttempted: false, tokenOk: null, tokenStatus: null, tokenErrorBody: null, mlStatus: null, mlErrorBody: null };
 
   try {
     let accessToken = null;
@@ -75,7 +75,10 @@ export default async function handler(request) {
 
     const res = await fetch(mlSearchUrl, { headers: searchHeaders });
     debug.mlStatus = res.status;
-    if (!res.ok) throw new Error(`ML API ${res.status}`);
+    if (!res.ok) {
+      debug.mlErrorBody = (await res.text()).slice(0, 500);
+      throw new Error(`ML API ${res.status}`);
+    }
 
     const data = await res.json();
     data._debug = debug;
