@@ -227,20 +227,20 @@ async function scrapeStorefront(browser, { source, idPrefix, baseUrl, candidateU
 }
 
 // ── Hardwind Argentina (WooCommerce) ────────────────────────────────────────
-// /kites/ (página 1, sin mpage) da resultados pero son accesorios de KITE
-// (leashes, barras, tablas de kite) — nada de wingfoil, confirmado mirando
-// store-data.json de un run real. El usuario había señalado hardwind.com/
-// kites/?mpage=4 con wing/foil reales, así que esa va primero, seguida de
-// las búsquedas por texto (más confiables que adivinar el n° de página).
-// /kites/ sin mpage queda de último recurso: mejor mostrar algo de Hardwind
-// que nada, aunque sea la categoría equivocada.
+// Confirmado con dos runs reales: tanto /kites/ (página 1) como
+// /kites/?mpage=4 son accesorios de KITEsurf (leashes, barras, arneses,
+// tablas de kite) — nada de wingfoil. Se sacan de la prioridad y se prueba
+// primero la búsqueda de texto nativa del sitio (?s=wing...), que nunca se
+// había llegado a probar en vivo porque /kites/ siempre "ganaba" al tener
+// ≥2 resultados. Si las búsquedas tampoco traen nada, /kites/ queda de
+// último recurso — mejor mostrar algo de Hardwind que nada, aunque haya
+// que revisar a mano qué categoría real usa el sitio para wingfoil.
 function scrapeHardwind(browser) {
   return scrapeStorefront(browser, {
     source: 'Hardwind',
     idPrefix: 'hw',
     baseUrl: 'https://hardwind.com',
     candidateUrls: [
-      'https://hardwind.com/kites/?mpage=4',
       'https://hardwind.com/?s=wing+foil&post_type=product',
       'https://hardwind.com/?s=wingfoil&post_type=product',
       'https://hardwind.com/?s=wing&post_type=product',
