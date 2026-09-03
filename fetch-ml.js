@@ -71,19 +71,22 @@ const STOREFRONT_CARD_SELS = [
   'li.grid__item', '.product-card', '[data-product-card]', '.grid-product', '.collection-grid__item',
   // WooCommerce
   'li.product.type-product', 'li.product', 'ul.products li', '.woocommerce-loop-product',
-  // genérico
-  '[class*="product-item"]', '[class*="product-card"]',
+  // genérico / plataformas propias (ES)
+  '[class*="product-item"]', '[class*="product-card"]', 'li[class*="product"]',
+  'article[class*="product"]', '[class*="item-product"]',
 ];
 const STOREFRONT_TITLE_SELS =
   '.js-item-name, .product-item__name, ' +
   '.card__heading a, .card__heading, [class*="card__title"], [class*="product-title"], [class*="product_title"], ' +
   'h2.woocommerce-loop-product__title, .woocommerce-loop-product__title, ' +
+  '[class*="nombre"], [class*="name"] a, ' +
   '[class*="title"] a, h2 a, h3 a, h2, h3';
 const STOREFRONT_PRICE_SELS =
   '.js-item-price ins, .js-item-price, [class*="price"] ins, ' +
   '.price-item--sale, .price-item--regular, span.money, .price__sale, .price__regular, [class*="price-item"], ' +
   '.price ins .woocommerce-Price-amount, .price ins .amount, .price ins bdi, ' +
   '.price .woocommerce-Price-amount, .price .amount, .price bdi, ' +
+  '[class*="precio"], [class*="valor"], ' +
   '[class*="price"]:not([class*="compare"]):not([class*="was"]):not(del)';
 const STOREFRONT_IMG_SELS = 'img[data-src], img[data-lazy-src], img[srcset], img';
 
@@ -213,13 +216,20 @@ function scrapeKitestore(browser) {
   });
 }
 
-// ── Santa Tabla (plataforma no confirmada) ──────────────────────────────────
+// ── Santa Tabla (plataforma propia, no Tiendanube/Shopify/WooCommerce) ─────
+// El usuario confirmó la URL real de la categoría Foils: /shop/tienda-de-
+// <Categoría>-<id>. Se prueba primero esa (foils son equipo de wingfoil
+// válido) y variantes del mismo patrón para Wing, por si existe con el
+// mismo esquema de slugs.
 function scrapeSantaTabla(browser) {
   return scrapeStorefront(browser, {
     source: 'Santa Tabla',
     idPrefix: 'stb',
     baseUrl: 'https://santatabla.com',
     candidateUrls: [
+      'https://santatabla.com/shop/tienda-de-Foils-56',
+      'https://santatabla.com/shop/tienda-de-Wing-Foil',
+      'https://santatabla.com/shop/tienda-de-Wings',
       'https://santatabla.com/search?q=wing+foil&type=product',
       'https://santatabla.com/catalogo?q=wing',
       'https://santatabla.com/collections/wingfoil',
