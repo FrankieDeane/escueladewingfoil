@@ -204,6 +204,138 @@ async function scrapeHardwind(browser) {
   }
 }
 
+// ── Genérico multi-plataforma (Tiendanube / Shopify / WooCommerce) ────────
+// Usado por tiendas cuya plataforma no está confirmada: prueba varias URLs
+// candidatas (categoría/búsqueda) y varios sets de selectores hasta encontrar
+// al menos 2 productos. Pensado para validar y ajustar mirando los logs del
+// primer run real en GitHub Actions (acá no hay salida a internet para probar).
+const STOREFRONT_CARD_SELS = [
+  // Tiendanube
+  '.js-item-product', '.product-item', 'article.product-item',
+  // Shopify
+  'li.grid__item', '.product-card', '[data-product-card]', '.grid-product', '.collection-grid__item',
+  // WooCommerce
+  'li.product.type-product', 'li.product', 'ul.products li', '.woocommerce-loop-product',
+  // genérico
+  '[class*="product-item"]', '[class*="product-card"]',
+];
+const STOREFRONT_TITLE_SELS =
+  '.js-item-name, .product-item__name, ' +
+  '.card__heading a, .card__heading, [class*="card__title"], [class*="product-title"], [class*="product_title"], ' +
+  'h2.woocommerce-loop-product__title, .woocommerce-loop-product__title, ' +
+  '[class*="title"] a, h2 a, h3 a, h2, h3';
+const STOREFRONT_PRICE_SELS =
+  '.js-item-price ins, .js-item-price, [class*="price"] ins, ' +
+  '.price-item--sale, .price-item--regular, span.money, .price__sale, .price__regular, [class*="price-item"], ' +
+  '.price ins .woocommerce-Price-amount, .price ins .amount, .price ins bdi, ' +
+  '.price .woocommerce-Price-amount, .price .amount, .price bdi, ' +
+  '[class*="price"]:not([class*="compare"]):not([class*="was"]):not(del)';
+const STOREFRONT_IMG_SELS = 'img[data-src], img[data-lazy-src], img[srcset], img';
+
+async function scrapeStorefront(browser, { source, idPrefix, baseUrl, candidateUrls }) {
+  const page = await browser.newPage();
+  try {
+    await page.setExtraHTTPHeaders({ 'Accept-Language': 'es-AR,es;q=0.9' });
+    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
+
+    let items = [];
+    let usedUrl = '';
+    for (const url of candidateUrls) {
+      try {
+        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
+        await page.waitForTimeout(3500);
+      } catch {
+        continue; // URL candidata no existe/no responde — probar la siguiente
+      }
+
+      const found = await page.evaluate(({ CARD_SELS, TITLE_SELS, PRICE_SELS, IMG_SELS }) => {
+        let cards = [];
+        for (const s of CARD_SELS) {
+          const found = [...document.querySelectorAll(s)];
+          if (found.length >= 2) { cards = found; break; }
+        }
+        const results = [];
+        cards.forEach(card => {
+          const titleEl = card.querySelector(TITLE_SELS);
+          if (!titleEl) return;
+          const titulo = titleEl.textContent.trim();
+          if (!titulo || titulo.length < 3) return;
+
+          const priceEl = card.querySelector(PRICE_SELS);
+          const linkEl = card.querySelector('a[href]');
+          const href = linkEl ? linkEl.href : '';
+          if (!href) return;
+
+          const imgEl = card.querySelector(IMG_SELS);
+          const img = imgEl?.getAttribute('data-src') || imgEl?.getAttribute('data-lazy-src') || imgEl?.src || '';
+
+          results.push({ titulo, priceText: priceEl?.textContent?.trim() || '', href, img });
+        });
+        return results;
+      }, { CARD_SELS: STOREFRONT_CARD_SELS, TITLE_SELS: STOREFRONT_TITLE_SELS, PRICE_SELS: STOREFRONT_PRICE_SELS, IMG_SELS: STOREFRONT_IMG_SELS });
+
+      if (found.length >= 2) { items = found; usedUrl = url; break; }
+    }
+
+    if (!items.length) {
+      console.warn(`  ⚠ ${source}: ninguna URL candidata devolvió productos — revisar candidateUrls/selectores`);
+      return [];
+    }
+
+    console.log(`  ✓ ${source}: ${items.length} productos (via ${usedUrl})`);
+    return items.map(i => ({
+      id: idPrefix + '-' + (i.href.split('/').filter(Boolean).pop() || '').split('?')[0],
+      titulo: i.titulo,
+      precio: cleanPrice(i.priceText),
+      moneda: 'ARS',
+      condicion: 'nuevo',
+      categoria: detectCategoria(i.titulo),
+      marca: detectMarca(i.titulo),
+      imagen: i.img,
+      url: i.href,
+      fuente: source,
+      fecha: new Date().toISOString().split('T')[0],
+    }));
+  } catch (e) {
+    console.error(`  ✗ ${source}: ${e.message}`);
+    return [];
+  } finally {
+    await page.close();
+  }
+}
+
+// ── Kitestore Argentina (plataforma no confirmada) ─────────────────────────
+function scrapeKitestore(browser) {
+  return scrapeStorefront(browser, {
+    source: 'Kitestore',
+    idPrefix: 'kts',
+    baseUrl: 'https://kitestore.com.ar',
+    candidateUrls: [
+      'https://kitestore.com.ar/search?q=wing+foil&type=product',
+      'https://kitestore.com.ar/catalogo?q=wing',
+      'https://kitestore.com.ar/collections/wingfoil',
+      'https://kitestore.com.ar/collections/wing-foil',
+      'https://kitestore.com.ar/?s=wing+foil&post_type=product',
+    ],
+  });
+}
+
+// ── Santa Tabla (plataforma no confirmada) ──────────────────────────────────
+function scrapeSantaTabla(browser) {
+  return scrapeStorefront(browser, {
+    source: 'Santa Tabla',
+    idPrefix: 'stb',
+    baseUrl: 'https://santatabla.com',
+    candidateUrls: [
+      'https://santatabla.com/search?q=wing+foil&type=product',
+      'https://santatabla.com/catalogo?q=wing',
+      'https://santatabla.com/collections/wingfoil',
+      'https://santatabla.com/collections/wing-foil',
+      'https://santatabla.com/?s=wing+foil&post_type=product',
+    ],
+  });
+}
+
 // ── Facebook Marketplace (requiere cookies de sesión) ─────────────────────
 async function scrapeFacebook(browser) {
   const rawCookies = process.env.FB_COOKIES;
@@ -302,11 +434,13 @@ async function main() {
     args: ['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage','--disable-blink-features=AutomationControlled'],
   });
 
-  let gpxItems = [], hwItems = [], fbItems = [];
+  let gpxItems = [], hwItems = [], ktsItems = [], stbItems = [], fbItems = [];
   try {
-    [gpxItems, hwItems, fbItems] = await Promise.all([
+    [gpxItems, hwItems, ktsItems, stbItems, fbItems] = await Promise.all([
       scrapeGPX(browser),
       scrapeHardwind(browser),
+      scrapeKitestore(browser),
+      scrapeSantaTabla(browser),
       scrapeFacebook(browser),
     ]);
   } finally {
@@ -315,7 +449,7 @@ async function main() {
 
   const seenIds = new Set();
   const productos = [];
-  for (const item of [...gpxItems, ...hwItems, ...fbItems]) {
+  for (const item of [...gpxItems, ...hwItems, ...ktsItems, ...stbItems, ...fbItems]) {
     if (item.titulo && !seenIds.has(item.id)) {
       seenIds.add(item.id);
       productos.push(item);
@@ -327,7 +461,7 @@ async function main() {
   const output = { actualizado: new Date().toISOString(), total: productos.length, productos };
   writeFileSync('store-data.json', JSON.stringify(output, null, 2), 'utf8');
   console.log(`\n💾 Guardados: ${productos.length} productos en store-data.json`);
-  console.log(`   GPX: ${gpxItems.length} | Hardwind: ${hwItems.length} | Facebook: ${fbItems.length}`);
+  console.log(`   GPX: ${gpxItems.length} | Hardwind: ${hwItems.length} | Kitestore: ${ktsItems.length} | Santa Tabla: ${stbItems.length} | Facebook: ${fbItems.length}`);
   if (productos.length === 0) {
     console.warn('⚠️  0 productos — revisar selectores o estructura de las páginas');
     process.exit(1);
