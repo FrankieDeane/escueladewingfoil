@@ -177,6 +177,20 @@ async function scrapeStorefront(browser, { source, idPrefix, baseUrl, candidateU
       }, { CARD_SELS: STOREFRONT_CARD_SELS, TITLE_SELS: STOREFRONT_TITLE_SELS, PRICE_SELS: STOREFRONT_PRICE_SELS, IMG_SELS: STOREFRONT_IMG_SELS });
 
       if (found.length >= 2) { items = found; usedUrl = url; break; }
+
+      // Diagnóstico: si ni los selectores conocidos ni el detector automático
+      // encontraron nada, algo raro está pasando (bloqueo antibot, cartel de
+      // cookies tapando todo, redirect, contenido que carga después del
+      // wait). Loguear título + texto visible para saber qué está viendo
+      // realmente el scraper, en vez de seguir adivinando a ciegas.
+      try {
+        const diag = await page.evaluate(() => ({
+          title: document.title,
+          bodyLen: document.body?.innerText?.length || 0,
+          snippet: (document.body?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 200),
+        }));
+        console.log(`    · ${url} → 0 tarjetas | title="${diag.title}" bodyLen=${diag.bodyLen} texto="${diag.snippet}"`);
+      } catch { /* diagnóstico best-effort */ }
     }
 
     if (!items.length) {
