@@ -144,6 +144,28 @@ themeBtn.addEventListener('click', () => {
 function fmtPrice(n){ return '$' + Math.round(n).toLocaleString('es-AR'); }
 function normalize(str){ return (str||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''); }
 
+// ── UTMs de salida ────────────────────────────────────────────────────────
+// Cada link a una tienda sale etiquetado, así Hardwind/Kitestore ven en su
+// analytics que el tráfico vino de acá. Para cambiar los valores, tocar solo
+// este objeto. utm_medium=referral (y no algo custom) para que GA4 lo agrupe
+// en el canal Referral con su definición por defecto.
+const UTM = {
+  utm_source: 'escueladewingfoil',
+  utm_medium: 'referral',
+  utm_campaign: 'catalogo-precios',
+};
+function conUtm(p) {
+  try {
+    const u = new URL(p.url);
+    for (const [k, v] of Object.entries(UTM)) u.searchParams.set(k, v);
+    // Segmentación extra: qué categoría del catálogo generó el clic.
+    if (p.categoria) u.searchParams.set('utm_content', p.categoria);
+    return u.toString();
+  } catch {
+    return p.url; // URL rara o relativa: mejor el link sin UTM que un link roto
+  }
+}
+
 let productos = [];
 let activeCat = 'todos';
 let sortKey = 'precio';
@@ -182,7 +204,7 @@ function applyFiltersAndRender() {
         <td><span class="cat-badge">${CAT_LABELS[p.categoria] || p.categoria}</span></td>
         <td><span class="store-badge"><span class="store-dot" style="background:${color}"></span>${p.fuente}</span></td>
         <td class="mono price">${fmtPrice(p.precio)}</td>
-        <td><a class="gotolink" href="${p.url}" target="_blank" rel="noopener">Ver →</a></td>
+        <td><a class="gotolink" href="${conUtm(p)}" target="_blank" rel="noopener">Ver →</a></td>
       </tr>`;
   }).join('');
 }
