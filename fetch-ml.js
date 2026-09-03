@@ -109,13 +109,21 @@ async function scrapeStorefront(browser, { source, idPrefix, baseUrl, candidateU
     for (const url of candidateUrls) {
       try {
         await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
-        await page.waitForTimeout(3500);
+        // Varias de estas tiendas son SPA que traen el catálogo por API
+        // después de la carga inicial (confirmado: título correcto pero
+        // body casi vacío a los 3,5s). Esperar a que la red esté inactiva
+        // le da tiempo real a ese fetch; si nunca queda inactiva (polling,
+        // analytics), seguir igual después del timeout.
+        await page.waitForLoadState('networkidle', { timeout: 12000 }).catch(() => {});
+        await page.waitForTimeout(2500);
       } catch {
         continue; // URL candidata no existe/no responde — probar la siguiente
       }
 
       const found = await page.evaluate(({ CARD_SELS, TITLE_SELS, PRICE_SELS, IMG_SELS }) => {
-        const PRICE_RE = /\$\s?\d{1,3}(?:[.,]\d{3})+(?:[.,]\d{1,2})?/;
+        // Con separador de miles primero (más confiable); si no matchea,
+        // acepta un monto "pelado" de 3+ dígitos con $ (ej: sin separador).
+        const PRICE_RE = /\$\s?\d{1,3}(?:[.,]\d{3})+(?:[.,]\d{1,2})?|\$\s?\d{3,}/;
 
         function extractFromCard(card) {
           const titleEl = card.querySelector(TITLE_SELS);
@@ -187,7 +195,7 @@ async function scrapeStorefront(browser, { source, idPrefix, baseUrl, candidateU
         const diag = await page.evaluate(() => ({
           title: document.title,
           bodyLen: document.body?.innerText?.length || 0,
-          snippet: (document.body?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 200),
+          snippet: (document.body?.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 400),
         }));
         console.log(`    · ${url} → 0 tarjetas | title="${diag.title}" bodyLen=${diag.bodyLen} texto="${diag.snippet}"`);
       } catch { /* diagnóstico best-effort */ }
