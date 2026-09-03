@@ -144,6 +144,22 @@ function renderRows(mlProduct, productos) {
 }
 
 async function main() {
+  // Si este archivo se abrió suelto (doble clic desde el .zip descomprimido,
+  // o desde el visor de WinRAR/7-Zip) en vez de cargarlo como extensión en
+  // chrome://extensions, la API chrome.tabs no existe y se quedaría
+  // colgado para siempre en "Comparando precios…" sin explicación. Se
+  // detecta ese caso primero y se muestra qué hacer en vez de eso.
+  if (typeof chrome === 'undefined' || !chrome.tabs) {
+    document.getElementById('headSub').textContent = 'No se pudo cargar como extensión';
+    document.getElementById('errorMsg').innerHTML =
+      'Este archivo se abrió como una página suelta, no como extensión — ' +
+      'por eso no funciona. Instalala así: extraé el .zip a una carpeta, ' +
+      'andá a <b>chrome://extensions</b>, activá "Modo de desarrollador" y ' +
+      'tocá "Cargar descomprimida" eligiendo esa carpeta.';
+    showState('stateError');
+    return;
+  }
+
   showState('stateLoading');
   const { product, offSite } = await getActiveProduct();
 
