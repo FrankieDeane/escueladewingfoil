@@ -1,0 +1,19 @@
+# SONDA TEMPORAL — se elimina apenas tengamos el resultado.
+# Averigua si el viento de Pilote Norden se puede leer, y sobre todo si se
+# puede leer DESDE EL NAVEGADOR (o sea: si manda CORS).
+name: SONDA — Pilote Norden
+
+on: pull_request
+
+permissions:
+  contents: read
+
+jobs:
+  sonda:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node sonda-norden.mjs
