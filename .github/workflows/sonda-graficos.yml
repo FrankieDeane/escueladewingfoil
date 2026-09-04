@@ -1,0 +1,13 @@
+# SONDA TEMPORAL — se elimina apenas tengamos el resultado.
+name: SONDA — gráficos CARP y estación CNSI
+on: pull_request
+permissions:
+  contents: read
+jobs:
+  sonda:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: node sonda-graficos.mjs
