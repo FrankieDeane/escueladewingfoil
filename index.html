@@ -1212,7 +1212,9 @@ textarea{resize:vertical;min-height:90px}
   .hoy__flecha{margin-left:auto}
   .hoy__head{gap:10px;margin-bottom:18px}
   .hoy__estado{margin-left:0;text-align:left}
-  .hoy__graficos{padding:14px}
+  .hoy__est--3d{text-decoration:none;border-style:dashed}
+.hoy__est--3d .hoy__est-val{color:var(--accent)}
+.hoy__graficos{padding:14px}
   .hoy__grid{grid-template-columns:1fr}
   .hoy__medido{grid-template-columns:1fr}
 }
@@ -1505,6 +1507,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <span class="hoy__est-fuente">Estación meteorológica del <strong>Club Náutico San Isidro (CNSI)</strong> y mareógrafo de su oficina de yachting. Datos publicados por el CNSI; acá solo los mostramos y los citamos.</span>
         <span class="hoy__est-ver" data-en="See charts">Ver gráficos</span>
       </button>
+      <a class="hoy__est hoy__est--3d" data-hay="1" href="/costa-san-isidro">
+        <b data-en="🗺️ San Isidro coast in 3D">🗺️ La costa de San Isidro en 3D</b>
+        <span class="hoy__est-val" data-en="See how far the water gets">Mirá hasta dónde llega el agua</span>
+        <span class="hoy__est-det" data-en="Satellite image over real relief, with SHN tide on top">Imagen satelital sobre el relieve real, con la marea del SHN encima</span>
+        <span class="hoy__est-fuente">Incluye la sudestada del 19/12/2023. No es un mapa de inundación: la marea y el terreno están en datums distintos.</span>
+        <span class="hoy__est-ver" data-en="Open">Abrir</span>
+      </a>
     </div>
     <div class="hoy__graficos" id="hoyGraficos" role="region" aria-label="Gráficos de la estación"></div>
     <div class="hoy__grid" id="hoySi">
@@ -5382,6 +5391,14 @@ document.addEventListener('DOMContentLoaded', function() {
   function guardar(k, v){ try{ localStorage.setItem(k, v); }catch(e){} }
   function leer(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
 
+  // "Ocultarlo del todo" es un fastidio del momento, no una preferencia para
+  // siempre: el que lo saca hoy no quiere perderlo para siempre, y la única
+  // forma de recuperarlo es un botón al pie que hay que ir a buscar. Así que
+  // esto dura la visita y nada más. Esconderlo en la pestañita sí se recuerda:
+  // esa vuelve con un toque y queda a la vista.
+  function guardarVisita(k, v){ try{ sessionStorage.setItem(k, v); }catch(e){} }
+  function leerVisita(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } }
+
   // Lo deja siempre dentro de la pantalla, aunque la ventana cambie de tamaño.
   function ubicarFab(x, y){
     var m = 8, w = dock.offsetWidth || 60, h = dock.offsetHeight || 60;
@@ -5453,7 +5470,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var tab    = document.getElementById('bramTab');
 
   function aplicarVisibilidad(){
-    var oculto    = leer(LS_OFF) === '1';
+    var oculto    = leerVisita(LS_OFF) === '1';
     var escondido = leer(LS_MIN) === '1';
     dock.hidden = oculto || escondido;
     if(tab) tab.hidden = oculto || !escondido;
@@ -5472,15 +5489,19 @@ document.addEventListener('DOMContentLoaded', function() {
     fab.focus();
   });
   if(btnOcultar) btnOcultar.addEventListener('click', function(){
-    guardar(LS_OFF, '1');
+    guardarVisita(LS_OFF, '1');
     aplicarVisibilidad();
   });
   if(volver) volver.addEventListener('click', function(){
-    guardar(LS_OFF, '0');
+    guardarVisita(LS_OFF, '0');
     guardar(LS_MIN, '0');          // desde el pie vuelve entero, no a la pestaña
     aplicarVisibilidad();
     fab.focus();
   });
+
+  // Antes esto se guardaba en localStorage: el que lo ocultó una vez se quedó
+  // sin Bramador para siempre. Limpiamos esa marca vieja al entrar.
+  try{ localStorage.removeItem(LS_OFF); }catch(e){}
 
   // Estado guardado de la sesión anterior
   aplicarVisibilidad();
