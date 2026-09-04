@@ -1,0 +1,40 @@
+==================================================================
+1. BOYAS / BALIZAS / FAROS DEL SHN — probando ambos ordenes de eje
+==================================================================
+  SHN:BOYADO             -> 0 en el recorte (probé 6 combinaciones)
+  SHN:Vw_BALIZAS         -> 0 en el recorte (probé 6 combinaciones)
+  SHN:faros              -> 0 en el recorte (probé 6 combinaciones)
+  SHN:Calidad_Fondo      lon,lat v1.0.0 -> 5 features
+      props: {"lgrados": 34, "lmin": 26.4, "LATITUD": -34.44, "wgrados": 58, "wminutos": 27.3, "LONGITUD": -58.455, "CALIDAD": "L. Ac."}
+      geom : {"type": "Point", "coordinates": [-58.455, -34.44]}
+  IDERA:linea_de_costa   lon,lat v1.0.0 -> 5 features
+      props: {"sag": "Servicio de Hidrografía Naval"}
+      geom : {"type": "MultiLineString", "coordinates": [[[-58.4915522, -34.4685331], [-58.491525, -34.4685556], [-58.4914842, -34.4686457], [-58.4913754, -34.4687
+
+==================================================================
+2. SIN bbox: la capa tiene datos en algun lado?
+==================================================================
+  SHN:BOYADO             ERROR HTTP Error 400: Bad Request
+  SHN:Vw_BALIZAS         ERROR HTTP Error 400: Bad Request
+  SHN:faros              total=73  muestra=3
+      props: {"OBJNAM": "FARO PUNTA VOLUNTARIO", "DESCRIPCION": null, "DESCRIPTECNICA": null, "TOPONIMO": null, "HISTORIA": null, "TURISMO": null, "NROINTERNACIONAL": null, "CONGUARDIA": null, "HISTORICO": null, "NOCTURNA": null, "DIURNA": null, "OBJTIP": "FAROS", "OBJIMG"
+      geom : Point [-57.74034167, -51.51263888]
+  SHN:Calidad_Fondo      total=2980  muestra=3
+      props: {"lgrados": 38, "lmin": 54.7, "LATITUD": -38.911667, "wgrados": 62, "wminutos": 5.7, "LONGITUD": -62.095, "CALIDAD": "A. c L. Ac."}
+      geom : Point [-62.095, -38.911667]
+
+==================================================================
+3. OPENSEAMAP — boyas renderizadas sobre San Isidro
+==================================================================
+  z13  2764/4932 -> 1863 bytes CON MARCAS
+  z14  5529/9865 -> 334 bytes (vacio)
+  z15  11059/19730 -> 334 bytes (vacio)
+
+==================================================================
+4. SENTINEL-2 — cuantas imagenes hay de San Isidro (para batimetria propia)
+==================================================================
+  escenas con <20% de nube: 141279551
+  ejemplo: 2026-09-04T16:32:27.615873Z  nube=0%
+  resolucion bandas B02/B03/B04/B08: 10 m
+  acceso: ['safe-manifest', 'schema-product-vh', 'schema-product-vv', 'schema-calibration-vh', 'schema-calibration-vv', 'schema-noise-vh', 'schema-noise-vv', 'thumbnail', 'vh']
+FIN
