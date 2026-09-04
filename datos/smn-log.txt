@@ -1,0 +1,47 @@
+======================================================================
+CNSI — estacion meteorologica y mareografo
+======================================================================
+
+clima CNSI (canal 1506798)  http=200  CORS=*
+  nombre: 'Meteorología CNSI Yachting'
+  campos: {"field1": "Altura", "field2": "Racha  Viento", "field3": "AVG Viento", "field4": "Direccion Viento", "field5": "Temperatura", "field6": "Humedad", "field7": "Presion", "field8": "Precipitacion 24h"}
+  ultima entrada del canal: 2022-10-06T19:46:33Z
+  ultimo feed: {"created_at": "2026-09-04T18:13:01Z", "entry_id": 371093, "field1": "0", "field2": "10.71", "field3": "6.67", "field4": "232.0", "field5": "16.56", "field6": "33.97", "field7": "1015.8", "field8": "0.0"}
+  ANTIGUEDAD: 0.1 horas  -> VIVO
+  valores no nulos en el ultimo feed: ['0', '10.71', '6.67']
+
+mareografo CNSI (canal 2075368)  http=200  CORS=*
+  nombre: 'Mareógrafo Yachting Mediciones'
+  campos: {"field1": "Altura", "field2": "Prono_SHN"}
+  ultima entrada del canal: 2026-08-07T16:15:20Z
+  ultimo feed: {"created_at": "2026-09-03T12:57:56Z", "entry_id": 790978, "field1": "0", "field2": null}
+  ANTIGUEDAD: 29.3 horas  -> DESACTUALIZADO
+  valores no nulos en el ultimo feed: ['0']
+
+prono marea SHN (canal 3447831)  http=200  CORS=*
+  nombre: 'Datos Hidrografia'
+  campos: {"field1": "historial_prono_marea", "field2": "datetime", "field3": "is_altamar"}
+  ultima entrada del canal: 2026-08-15T22:46:31Z
+  ultimo feed: {"created_at": "2026-09-04T10:37:13Z", "entry_id": 120, "field1": "0.95", "field2": "1788564600", "field3": "0"}
+  ANTIGUEDAD: 7.7 horas  -> DESACTUALIZADO
+  valores no nulos en el ultimo feed: ['0.95', '1788564600', '0']
+
+======================================================================
+SMN — Servicio Meteorologico Nacional
+======================================================================
+
+portal           ERROR HTTP Error 403: Forbidden
+
+datos abiertos   ERROR HTTP Error 403: Forbidden
+
+API pronostico   ERROR HTTP Error 503: Service Unavailable
+
+API forecast     ERROR HTTP Error 503: Service Unavailable
+
+estaciones       ERROR HTTP Error 503: Service Unavailable
+
+ws alertas       ERROR HTTP Error 503: Service Unavailable
+
+dataset zip      ERROR HTTP Error 403: Forbidden
+
+FIN
