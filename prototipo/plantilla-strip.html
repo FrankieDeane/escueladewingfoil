@@ -1,0 +1,369 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Costa de San Isidro</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{--fondo:#0A1013;--panel:#121B1F;--panel2:#18242A;--borde:#22343B;
+ --sonda:#48B6CE;--limo:#B2814A;--aviso:#E0708F;--ok:#6FCF97;
+ --texto:#DDE7E9;--tenue:#7A9198;--apenas:#4E656C;
+ --display:'Archivo',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--texto);font-family:var(--display);font-size:15px;
+     line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;text-wrap:balance}
+.env{max-width:1140px;margin:0 auto;padding:0 18px}
+header{border-bottom:1px solid var(--borde);background:var(--panel);padding:16px 0 14px}
+.ey{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--apenas)}
+h1{font-size:clamp(20px,3.2vw,27px);font-weight:800;letter-spacing:-.02em;margin-top:4px}
+header p{margin:6px 0 0;color:var(--tenue);font-size:13.5px;max-width:64ch}
+
+.esc{position:relative;background:#000;border-bottom:1px solid var(--borde)}
+canvas{display:block;width:100%;height:clamp(360px,62vh,660px);touch-action:none;cursor:grab}
+canvas:active{cursor:grabbing}
+.hud{position:absolute;left:14px;top:14px;background:rgba(10,16,19,.82);border:1px solid var(--borde);
+     border-radius:3px;padding:11px 13px;backdrop-filter:blur(8px);min-width:180px}
+.hud .k{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+        color:var(--apenas);display:block;margin-bottom:2px}
+.hud .v{font-family:var(--mono);font-size:31px;font-weight:600;line-height:1;color:var(--sonda);
+        font-variant-numeric:tabular-nums}
+.hud .v small{font-size:13px;color:var(--tenue)}
+.hud .n{font-family:var(--mono);font-size:11px;color:var(--tenue);margin-top:6px}
+.hud .n b{color:var(--texto);font-weight:500}
+.hud hr{border:0;border-top:1px solid var(--borde);margin:8px 0}
+.aviso-flota{position:absolute;right:14px;top:14px;max-width:250px;background:rgba(178,58,97,.14);
+  border:1px solid rgba(224,112,143,.42);border-radius:3px;padding:9px 11px;backdrop-filter:blur(8px)}
+.aviso-flota>b{color:var(--aviso);font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;display:block;margin-bottom:3px}
+.aviso-flota p b{color:var(--aviso);font-weight:600}
+.aviso-flota p{margin:0;font-size:11.5px;color:var(--texto);line-height:1.45}
+.pista{position:absolute;left:14px;bottom:11px;font-family:var(--mono);font-size:10px;color:#6d8189}
+
+.ctrl{background:var(--panel);border-bottom:1px solid var(--borde);padding:13px 0}
+.presets{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:11px}
+.pb{background:var(--panel2);border:1px solid var(--borde);border-radius:3px;padding:8px 13px;
+    cursor:pointer;font-family:var(--display);color:var(--tenue);font-size:13px;text-align:left}
+.pb:hover{border-color:var(--sonda);color:var(--texto)}
+.pb[aria-pressed=true]{background:color-mix(in srgb,var(--sonda) 20%,transparent);
+  border-color:var(--sonda);color:var(--texto)}
+.pb b{display:block;font-family:var(--mono);font-size:14px;font-weight:600;color:var(--sonda);
+      font-variant-numeric:tabular-nums}
+.pb[aria-pressed=true] b{color:var(--texto)}
+.pb.peli b{color:var(--aviso)}
+.fila{display:flex;align-items:center;gap:13px;flex-wrap:wrap}
+button.play{background:var(--sonda);color:#08171b;border:0;border-radius:3px;font-family:var(--mono);
+  font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:9px 16px;cursor:pointer}
+input[type=range]{flex:1;min-width:170px;accent-color:var(--sonda)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--sonda);outline-offset:2px}
+.lab{font-family:var(--mono);font-size:11px;color:var(--tenue);display:flex;align-items:center;gap:6px}
+.lab input[type=range]{width:96px;flex:none;min-width:0}
+
+main{padding:26px 0 54px}
+section{margin-bottom:30px}
+section>h2{font-size:11px;font-family:var(--mono);letter-spacing:.15em;text-transform:uppercase;
+  color:var(--tenue);padding-bottom:7px;border-bottom:1px solid var(--borde);margin-bottom:14px}
+.gr{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.c{background:var(--panel);border:1px solid var(--borde);border-radius:3px;padding:14px 15px}
+.c h3{font-size:14.5px;font-weight:600;margin-bottom:5px}
+.c p{margin:0;font-size:13px;color:var(--tenue)}
+.c b{color:var(--texto)}
+ul.l{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+ul.l li{padding-left:18px;position:relative;font-size:13.5px;color:var(--tenue);max-width:72ch}
+ul.l li::before{content:"—";position:absolute;left:0;color:var(--aviso);font-family:var(--mono)}
+ul.l b{color:var(--texto)}
+footer{border-top:1px solid var(--borde);padding:20px 0 40px;font-size:12.5px;color:var(--tenue)}
+footer .au{color:var(--texto);font-weight:600}
+footer code{font-family:var(--mono);color:var(--sonda);font-size:11.5px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(max-width:600px){.hud .v{font-size:25px}.aviso-flota{position:static;margin:10px 14px 0;max-width:none}}
+</style>
+
+<header><div class="env">
+  <div class="ey">Costa de San Isidro · imagen satelital + terreno + marea real</div>
+  <h1>Mirá hasta dónde llega el agua</h1>
+  <p>La barranca y la costa real, con la marea del SHN encima. Movés el nivel y ves qué queda bajo el agua.</p>
+</div></header>
+
+<div class="esc">
+  <canvas id="c"></canvas>
+  <div class="hud">
+    <span class="k">Nivel del agua</span>
+    <div class="v"><span id="hN">—</span><small> m</small></div>
+    <div class="n" id="hEsc">—</div>
+    <hr>
+    <div class="n">Bajo agua <b id="hSum">—</b></div>
+    <div class="n">Viento <b id="hV">—</b></div>
+    <div class="n" id="hFecha">—</div>
+  </div>
+  <div class="aviso-flota">
+    <b>Esto no es un mapa de inundación</b>
+    <p>La marea y el terreno están en datums verticales distintos y el desfase no es público.
+       La mancha es <b>indicativa</b>. Para emergencias, el SHN.</p>
+  </div>
+  <div class="pista">arrastrá para girar · rueda para acercar</div>
+</div>
+
+<div class="ctrl"><div class="env">
+  <div class="presets" id="pres"></div>
+  <div class="fila">
+    <button class="play" id="play">▶ Correr la marea</button>
+    <input type="range" id="sh" min="-50" max="400" value="109" aria-label="Nivel del agua en centímetros">
+    <span class="lab">Exageración<input type="range" id="sx" min="2" max="25" value="7"><b id="vx" style="color:var(--texto)">7×</b></span>
+  </div>
+</div></div>
+
+<main class="env">
+  <section>
+    <h2>Qué estás viendo</h2>
+    <div class="gr">
+      <div class="c"><h3>La imagen</h3><p>Foto satelital real drapeada sobre el relieve. Se reconoce
+        el <b>Hipódromo</b>, la <b>marina del Club Náutico</b> y la barranca. <b id="qSat">—</b>.</p></div>
+      <div class="c"><h3>El relieve</h3><p>SRTM a 30 m. La barranca de San Isidro llega a
+        <b id="qMax">—</b> sobre el nivel del mar, y el <b id="qT">—</b> del recorte es tierra.</p></div>
+      <div class="c"><h3>El agua</h3><p>Los escenarios no son inventados: salen de la serie real del SHN
+        de estas 4 semanas, y la sudestada de lo que se midió el <b>19/12/2023</b>.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Por qué la sudestada importa acá</h2>
+    <p style="margin:0 0 12px;color:var(--tenue);max-width:72ch;font-size:14px">
+      El viento del sudeste empuja agua del océano hacia adentro del estuario y la apila contra esta costa.
+      Es el fenómeno que sube el río, y el que un wingfoiler de San Isidro siente antes que nadie.
+      La normal de la costa acá es <b id="pNor" style="color:var(--texto)">—</b>: el sudeste entra
+      de frente. El viento que en cambio <b>te saca</b> mar adentro es del
+      <b id="pOff" style="color:var(--texto)">—</b>.</p>
+    <div class="gr" id="cifras"></div>
+  </section>
+
+  <section>
+    <h2>Lo que no hace</h2>
+    <ul class="l">
+      <li><b>No es un mapa de inundación.</b> El desfase entre el datum de la marea (plano de reducción de
+        sondajes) y el del terreno (nivel medio del mar) no está publicado para San Isidro. La superficie
+        que se moja es <b>indicativa</b>, no la cota real de anegamiento. Para decisiones de emergencia,
+        el SHN y Defensa Civil.</li>
+      <li><b>El relieve está suavizado.</b> SRTM sobre ciudad densa mide techos, no suelo: es ruido de varios metros a escala de manzana. Le aplico mediana 5×5 y promedio 3×3 sobre las celdas de tierra. Es filtrado sobre valores reales, no invención, pero achata construcciones.</li>
+      <li><b>El relieve es de 30 m.</b> SRTM no ve un cordón de vereda ni un murallón. Una defensa costera
+        de dos metros de ancho es invisible para este dato, y sin embargo cambia todo.</li>
+      <li><b>La imagen es de una fecha, la marea de otra.</b> La foto satelital muestra el río en el nivel
+        que tenía cuando se tomó; la simulación la usa como textura fija.</li>
+      <li><b>El fondo del río sigue sin medirse.</b> Bajo el agua no hay batimetría fiable — sólo el 5,5 %
+        del área está realmente medido según GEBCO. Acá el río se dibuja plano a propósito.</li>
+    </ul>
+  </section>
+</main>
+
+<footer class="env">
+  <p class="au">Idea original: Francisco Deane + https://escueladewingfoil.com</p>
+  <p>Imagen satelital: <b id="fSat">—</b>. Relieve: <b id="fTer">—</b>.
+     Marea y línea de costa: <b>Servicio de Hidrografía Naval (SHN)</b>, hidro.gov.ar.
+     Viento: <b>Open-Meteo</b>. Alturas de sudestada de diciembre de 2023 medidas por el SHN,
+     tomadas de prensa. Accedido el <code id="fAcc">—</code>.
+     Los datos son de sus organismos: citalos a ellos, no a este prototipo.</p>
+</footer>
+
+<script id="d" type="application/json">__DATOS__</script>
+<script>
+"use strict";
+var D=JSON.parse(document.getElementById('d').textContent);
+var $=function(i){return document.getElementById(i)};
+var NX=D.nx,NY=D.ny,bb=D.bbox,ALT=Float32Array.from(D.alt);
+var latM=(bb[1]+bb[3])/2;
+var anchoM=(bb[2]-bb[0])*111320*Math.cos(latM*Math.PI/180), altoM=(bb[3]-bb[1])*110574;
+var ESC=1000, W=anchoM/ESC, H=altoM/ESC;
+
+/* ---------- WebGL ---------- */
+var cv=$('c'), gl=cv.getContext('webgl',{antialias:true,alpha:false});
+function sh(t,s){var x=gl.createShader(t);gl.shaderSource(x,s);gl.compileShader(x);
+ if(!gl.getShaderParameter(x,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(x));return x}
+function prog(v,f){var p=gl.createProgram();gl.attachShader(p,sh(gl.VERTEX_SHADER,v));
+ gl.attachShader(p,sh(gl.FRAGMENT_SHADER,f));gl.linkProgram(p);
+ if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(p));return p}
+
+var pT=prog(
+ 'attribute vec3 pos;attribute vec3 nor;attribute vec2 uv;attribute float cota;'+
+ 'uniform mat4 mvp;varying vec2 vUV;varying float vC;varying vec3 vN;'+
+ 'void main(){vUV=uv;vC=cota;vN=nor;gl_Position=mvp*vec4(pos,1.0);}',
+ 'precision mediump float;varying vec2 vUV;varying float vC;varying vec3 vN;'+
+ 'uniform sampler2D tex;uniform float nivel;uniform vec3 luz;'+
+ 'void main(){'+
+ ' vec3 c=texture2D(tex,vUV).rgb;'+
+ ' float lam=max(dot(normalize(vN),normalize(luz)),0.0);'+
+ ' c*=0.62+0.55*lam;'+                                  // relieve sombreado
+ ' float bajo=nivel-vC;'+                               // cuanto la tapa el agua
+ ' if(bajo>0.0){'+
+ '   float f=clamp(bajo/2.2,0.0,1.0);'+
+ '   vec3 turbio=vec3(0.34,0.24,0.17);'+                // el Rio de la Plata es marron
+ '   c=mix(c*0.82,turbio,0.30+0.55*f);'+
+ '   if(bajo<0.16) c=mix(c,vec3(0.62,0.80,0.85),0.5);'+ // orilla brillante
+ ' }'+
+ ' gl_FragColor=vec4(c,1.0);}');
+
+var pA=prog(
+ 'attribute vec2 xz;uniform mat4 mvp;uniform float niv;varying vec2 v;'+
+ 'void main(){v=xz;gl_Position=mvp*vec4(xz.x,niv,xz.y,1.0);}',
+ 'precision mediump float;varying vec2 v;uniform float t;'+
+ 'void main(){float o=sin(v.x*7.0+t*0.9)*0.5+sin(v.y*9.0-t*0.7)*0.5;'+
+ ' vec3 c=mix(vec3(0.30,0.21,0.15),vec3(0.40,0.30,0.22),o*0.5+0.5);'+
+ ' gl_FragColor=vec4(c,0.86);}');
+
+var idx=[];
+for(var j=0;j<NY-1;j++)for(var i=0;i<NX-1;i++){var a=j*NX+i;idx.push(a,a+NX,a+1,a+1,a+NX,a+NX+1)}
+gl.getExtension('OES_element_index_uint');
+var bI=gl.createBuffer();gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,bI);
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint32Array(idx),gl.STATIC_DRAW);
+
+var P=new Float32Array(NX*NY*3),N=new Float32Array(NX*NY*3),
+    U=new Float32Array(NX*NY*2),C=new Float32Array(NX*NY);
+var bP=gl.createBuffer(),bN=gl.createBuffer(),bU=gl.createBuffer(),bC=gl.createBuffer();
+for(var j2=0;j2<NY;j2++)for(var i2=0;i2<NX;i2++){var k=j2*NX+i2;
+  U[k*2]=i2/(NX-1);U[k*2+1]=j2/(NY-1);C[k]=ALT[k]}
+gl.bindBuffer(gl.ARRAY_BUFFER,bU);gl.bufferData(gl.ARRAY_BUFFER,U,gl.STATIC_DRAW);
+gl.bindBuffer(gl.ARRAY_BUFFER,bC);gl.bufferData(gl.ARRAY_BUFFER,C,gl.STATIC_DRAW);
+
+function rehacer(ex){
+  for(var j=0;j<NY;j++)for(var i=0;i<NX;i++){var k=j*NX+i;
+    P[k*3]=(i/(NX-1)-0.5)*W; P[k*3+1]=ALT[k]*ex/ESC; P[k*3+2]=(j/(NY-1)-0.5)*H}
+  var dx=W/(NX-1),dz=H/(NY-1);
+  for(var b=0;b<NY;b++)for(var a=0;a<NX;a++){var k2=b*NX+a;
+    var hl=P[(b*NX+Math.max(a-1,0))*3+1],hr=P[(b*NX+Math.min(a+1,NX-1))*3+1];
+    var hu=P[(Math.max(b-1,0)*NX+a)*3+1],hd=P[(Math.min(b+1,NY-1)*NX+a)*3+1];
+    var nx=hl-hr,ny=2*dx,nz=(hu-hd)*dx/dz,L=Math.hypot(nx,ny,nz)||1;
+    N[k2*3]=nx/L;N[k2*3+1]=ny/L;N[k2*3+2]=nz/L}
+  gl.bindBuffer(gl.ARRAY_BUFFER,bP);gl.bufferData(gl.ARRAY_BUFFER,P,gl.DYNAMIC_DRAW);
+  gl.bindBuffer(gl.ARRAY_BUFFER,bN);gl.bufferData(gl.ARRAY_BUFFER,N,gl.DYNAMIC_DRAW);
+}
+var bAg=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,bAg);
+gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-W/2,-H/2,W/2,-H/2,W/2,H/2,-W/2,-H/2,W/2,H/2,-W/2,H/2]),gl.STATIC_DRAW);
+
+var tex=gl.createTexture(); var listo=false;
+var img=new Image();
+img.onload=function(){
+  gl.bindTexture(gl.TEXTURE_2D,tex);
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);
+  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,img);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+  listo=true;
+};
+img.src=D.sat;
+
+var cam={az:-0.34,el:0.30,dist:W*0.80};
+function mvp(){
+  var an=cv.width/cv.height,f=1/Math.tan(0.46),zn=0.03,zf=300;
+  var Pm=[f/an,0,0,0,0,f,0,0,0,0,(zf+zn)/(zn-zf),-1,0,0,2*zf*zn/(zn-zf),0];
+  var ce=Math.cos(cam.el),se=Math.sin(cam.el),ca=Math.cos(cam.az),sa=Math.sin(cam.az);
+  var ex=cam.dist*ce*sa,ey=cam.dist*se,ez=cam.dist*ce*ca;
+  var zx=ex,zy=ey,zz=ez,zl=Math.hypot(zx,zy,zz);zx/=zl;zy/=zl;zz/=zl;
+  var xx=zz,xz=-zx,xl=Math.hypot(xx,0,xz)||1;xx/=xl;xz/=xl;
+  var yx=zy*xz,yy=zz*xx-zx*xz,yz=-zy*xx;
+  var V=[xx,yx,zx,0,0,yy,zy,0,xz,yz,zz,0,-(xx*ex+xz*ez),-(yx*ex+yy*ey+yz*ez),-(zx*ex+zy*ey+zz*ez),1];
+  var M=new Float32Array(16);
+  for(var r=0;r<4;r++)for(var c=0;c<4;c++){var s=0;for(var k=0;k<4;k++)s+=Pm[k*4+c]*V[r*4+k];M[r*4+c]=s}
+  return M;
+}
+var drag=null;
+cv.addEventListener('pointerdown',function(e){drag={x:e.clientX,y:e.clientY};cv.setPointerCapture(e.pointerId)});
+cv.addEventListener('pointermove',function(e){if(!drag)return;
+  cam.az-=(e.clientX-drag.x)*0.006;
+  cam.el=Math.max(0.10,Math.min(1.42,cam.el+(e.clientY-drag.y)*0.005));
+  drag={x:e.clientX,y:e.clientY}});
+addEventListener('pointerup',function(){drag=null});
+cv.addEventListener('wheel',function(e){e.preventDefault();
+  cam.dist=Math.max(W*0.26,Math.min(W*2.6,cam.dist*(1+Math.sign(e.deltaY)*0.11)))},{passive:false});
+
+/* ---------- estado ---------- */
+var nivel=D.marea_mediana, exag=7, corriendo=false, idxHora=0;
+var SER=D.serie;
+
+function sumergido(h){var n=0,t=0;
+  for(var i=0;i<ALT.length;i++){if(ALT[i]>0.3){t++;if(ALT[i]<=h)n++}}
+  return {n:n,t:t,pct:t?100*n/t:0}}
+var cacheS={};
+function pintar(){
+  $('hN').textContent=nivel.toFixed(2);
+  var key=nivel.toFixed(2); if(!cacheS[key])cacheS[key]=sumergido(nivel);
+  var s=cacheS[key];
+  $('hSum').textContent=s.pct.toFixed(1)+' % de la tierra';
+  var e=null;
+  D.escenarios.forEach(function(x){if(Math.abs(x.h-nivel)<0.02)e=x});
+  $('hEsc').textContent=e?e.n:'nivel manual';
+  document.querySelectorAll('.pb').forEach(function(b){
+    b.setAttribute('aria-pressed', String(Math.abs(+b.dataset.h-nivel)<0.02))});
+  if(corriendo&&SER[idxHora]){var p=SER[idxHora];
+    $('hV').textContent=p.kn.toFixed(0)+' kn del '+rosa(p.dir);
+    $('hFecha').textContent=new Date(p.t*1000).toLocaleString('es-AR',
+      {timeZone:'America/Argentina/Buenos_Aires',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false})+' ART';
+  } else if(!corriendo){ $('hV').textContent='—'; $('hFecha').textContent=e?e.f:'—'; }
+}
+var rum=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSO','SO','OSO','O','ONO','NO','NNO'];
+function rosa(d){return rum[Math.round((d%360)/22.5)%16]}
+
+function marco(ts){
+  var w=cv.clientWidth,h=cv.clientHeight,dpr=Math.min(devicePixelRatio||1,2);
+  if(cv.width!==Math.round(w*dpr)){cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr)}
+  gl.viewport(0,0,cv.width,cv.height);gl.clearColor(0.04,0.06,0.07,1);
+  gl.enable(gl.DEPTH_TEST);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+  if(!listo){requestAnimationFrame(marco);return}
+  var M=mvp(), niv=nivel*exag/ESC;
+  gl.useProgram(pT);
+  gl.uniformMatrix4fv(gl.getUniformLocation(pT,'mvp'),false,M);
+  gl.uniform1f(gl.getUniformLocation(pT,'nivel'),nivel);
+  gl.uniform3f(gl.getUniformLocation(pT,'luz'),-0.5,0.78,0.38);
+  gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,tex);
+  gl.uniform1i(gl.getUniformLocation(pT,'tex'),0);
+  [['pos',bP,3],['nor',bN,3],['uv',bU,2],['cota',bC,1]].forEach(function(a){
+    var l=gl.getAttribLocation(pT,a[0]);gl.bindBuffer(gl.ARRAY_BUFFER,a[1]);
+    gl.enableVertexAttribArray(l);gl.vertexAttribPointer(l,a[2],gl.FLOAT,false,0,0)});
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,bI);
+  gl.drawElements(gl.TRIANGLES,idx.length,gl.UNSIGNED_INT,0);
+  gl.useProgram(pA);gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+  gl.uniformMatrix4fv(gl.getUniformLocation(pA,'mvp'),false,M);
+  gl.uniform1f(gl.getUniformLocation(pA,'niv'),niv);
+  gl.uniform1f(gl.getUniformLocation(pA,'t'),ts/1000);
+  var la=gl.getAttribLocation(pA,'xz');gl.bindBuffer(gl.ARRAY_BUFFER,bAg);
+  gl.enableVertexAttribArray(la);gl.vertexAttribPointer(la,2,gl.FLOAT,false,0,0);
+  gl.drawArrays(gl.TRIANGLES,0,6);gl.disable(gl.BLEND);
+  requestAnimationFrame(marco);
+}
+
+/* ---------- controles ---------- */
+$('pres').innerHTML=D.escenarios.map(function(e){
+  return '<button class="pb'+(e.h>=3?' peli':'')+'" data-h="'+e.h+'" aria-pressed="false" title="'+e.d+'">'+
+    e.n+'<b>'+e.h.toFixed(2)+' m</b></button>'}).join('');
+document.querySelectorAll('.pb').forEach(function(b){b.onclick=function(){
+  corriendo=false;$('play').textContent='▶ Correr la marea';
+  nivel=+b.dataset.h;$('sh').value=String(Math.round(nivel*100));pintar()}});
+$('sh').oninput=function(){corriendo=false;$('play').textContent='▶ Correr la marea';
+  nivel=+this.value/100;pintar()};
+$('sx').oninput=function(){exag=+this.value;$('vx').textContent=exag+'×';rehacer(exag)};
+var ultimo=0,acum=0;
+$('play').onclick=function(){corriendo=!corriendo;
+  this.textContent=corriendo?'❚❚ Pausar':'▶ Correr la marea'};
+setInterval(function(){
+  if(!corriendo)return;
+  idxHora=(idxHora+1)%SER.length;
+  nivel=SER[idxHora].h;$('sh').value=String(Math.round(nivel*100));pintar();
+},220);
+
+/* ---------- textos ---------- */
+(function(){
+  var mx=0,ti=0;for(var i=0;i<ALT.length;i++){if(ALT[i]>mx)mx=ALT[i];if(ALT[i]>0.3)ti++}
+  $('qMax').textContent=mx.toFixed(1)+' m';
+  $('qT').textContent=(100*ti/ALT.length).toFixed(0)+' %';
+  $('qSat').textContent=D.sat_meta.atribucion+', z'+D.sat_meta.zoom;
+  $('fSat').textContent=D.sat_meta.fuente+' — '+D.sat_meta.atribucion;
+  $('fTer').textContent=D.terreno_meta.fuente+' ('+D.terreno_meta.organismo+'), '+D.terreno_meta.resolucion_m+' m';
+  $('fAcc').textContent=(D.sat_meta.fecha_acceso||'').slice(0,10);
+  $('pNor').textContent=D.normal.toFixed(1)+'° ('+rosa(D.normal)+')';
+  $('pOff').textContent=rosa((D.normal+180)%360)+' ('+((D.normal+180)%360).toFixed(0)+'°)';
+  var cif=D.escenarios.map(function(e){
+    var s=sumergido(e.h);
+    return '<div class="c"><h3>'+e.n+' · '+e.h.toFixed(2)+' m</h3><p>Deja bajo el agua el <b>'+
+      s.pct.toFixed(1)+' %</b> de la tierra del recorte. '+e.d+'.</p></div>'});
+  $('cifras').innerHTML=cif.join('');
+})();
+rehacer(exag);pintar();requestAnimationFrame(marco);
+</script>
