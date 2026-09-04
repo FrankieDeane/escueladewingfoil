@@ -1,0 +1,24 @@
+viento: 912 horas, 2026-08-04T00:00 -> 2026-09-10T23:00
+  intensidad 0.2 .. 19.2 kn, media 6.6
+marea: 120 extremos, 2026-08-07 18:00:00 -> 2026-09-04 23:30:00 UTC
+  alturas 0.10 .. 2.70 m
+costa SHN: 37 features, 37 tramos, 458282 vertices
+  normal saliente de la costa (hacia el rio): 101.4 deg
+calidad de fondo: 18 puntos
+   L. A.          5
+   L.viento: 912 horas, 2026-08-04T00:00 -> 2026-09-10T23:00
+  intensidad 0.2 .. 19.2 kn, media 6.6
+marea: 120 extremos, 2026-08-07 18:00:00 -> 2026-09-04 23:30:00 UTC
+  alturas 0.10 .. 2.70 m
+costa SHN: 37 features, 37 tramos, 458282 vertices
+  normal saliente de la costa (hacia el rio): 101.4 deg
+calidad de fondo: 18 puntos
+   L. A.          5
+   L.             4
+   L. Ac.         4
+   L. A. Ac.      2
+   A. L.          1
+   L. Ac. c A.    1
+   L. Ac. A.      1
+
+KB: 10031
