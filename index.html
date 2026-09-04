@@ -1208,6 +1208,12 @@ textarea{resize:vertical;min-height:90px}
 @keyframes hoyLluvia{from{transform:translate(0,0);opacity:.55}to{transform:translate(-9px,26px);opacity:0}}
 .hoy__gota{animation:hoyLluvia 1.5s linear infinite}
 @media(prefers-reduced-motion:reduce){.hoy__racha,.hoy__gota{animation:none}.hoy__gota{opacity:.45}}
+.hoy__norden{display:none;align-items:center;gap:14px 20px;flex-wrap:wrap;margin:0 0 20px;padding:14px 18px;border-radius:13px;background:rgba(233,196,106,.09);border:1px solid rgba(233,196,106,.3)}
+.hoy__norden[data-hay="1"]{display:flex}
+.hoy__norden b{color:#f2d999;font-size:12px;text-transform:uppercase;letter-spacing:.07em;display:block}
+.hoy__norden-val{font-size:19px;color:#fff;font-weight:700;font-family:'Clash Display',sans-serif}
+.hoy__norden-det{font-size:12.5px;color:#c9b48a}
+.hoy__norden-por{flex:1 1 260px;font-size:11.5px;color:#a8967a;line-height:1.55;min-width:200px}
 .hoy__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:13px}
 .hoy__card{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.14);border-left:3px solid #34d399;border-radius:13px;padding:15px 17px;backdrop-filter:blur(3px)}
 .hoy__card--no{border-left-color:rgba(255,255,255,.2);opacity:.72}
@@ -1417,6 +1423,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="hoy__estado" id="hoyEstado"></div>
     </div>
+    <div class="hoy__norden" id="hoyNorden">
+      <div>
+        <b>📍 Pilote Norden — medición real</b>
+        <span class="hoy__norden-val" id="nordenVal">—</span>
+        <span class="hoy__norden-det" id="nordenDet"></span>
+      </div>
+      <p class="hoy__norden-por">Mareógrafo de la <strong>CARP</strong> en el Río de la Plata (Canal Martín García). Todo lo de abajo es pronóstico — un modelo. Esto es un instrumento midiendo el viento que hay.</p>
+    </div>
     <div class="hoy__grid" id="hoySi">
       <div class="hoy__skel"></div><div class="hoy__skel"></div><div class="hoy__skel"></div>
     </div>
@@ -1424,7 +1438,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <summary id="hoyMasLabel">Ver el resto de los spots</summary>
       <div class="hoy__grid" id="hoyNo"></div>
     </details>
-    <p class="hoy__nota">No es un pronóstico más: cruzamos el viento de las próximas 12 h con la <strong>dirección y el rango que cada spot necesita</strong> — los mismos que figuran en <a href="#spots">Aguas argentinas</a>. Datos de <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a>. Es una orientación, no un parte meteorológico: mirá el agua antes de entrar.</p>
+    <p class="hoy__nota">No es un pronóstico más: cruzamos el viento de las próximas 12 h con la <strong>dirección y el rango que cada spot necesita</strong> — los mismos que figuran en <a href="#spots">Aguas argentinas</a>. Pronóstico de <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a>; la medición del Río de la Plata es del mareógrafo Pilote Norden de la <a href="https://www.comisionriodelaplata.org" target="_blank" rel="noopener">CARP</a>. Es una orientación, no un parte meteorológico: mirá el agua antes de entrar.</p>
   </div>
 </section>
 
@@ -5089,6 +5103,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- Viento / pronóstico ---
     if(tiene(q,['viento','pronostico','kn','nudos','rafaga','cuando navegar','salgo hoy','salgo','esta bueno hoy','condiciones','se puede navegar','hay ola'])){
       var hoy = (window.__EWF || {}).HOY;
+      var nrd = (window.__EWF || {}).NORDEN;
+      var medido = nrd && isFinite(nrd.kn)
+        ? '\n\nY en el Río de la Plata hay una <strong>medición real</strong>, no un pronóstico: Pilote Norden marca '+nrd.kn+' kn del '+esc(nrd.rumbo)+'.'
+        : '';
       if(hoy && hoy.si){
         if(hoy.si.length){
           // El viento que nombra tiene que ser el de la hora que sirve, igual
@@ -5100,10 +5118,10 @@ document.addEventListener('DOMContentLoaded', function() {
           });
           return {m:'epico', h:'¡Sí! 🤩 Ahora mismo hay ventana en <strong>'+hoy.si.length+'</strong> spot'+(hoy.si.length>1?'s':'')+':\n\n'+top.join('\n')+
                     (hoy.si.length > 4 ? '\n\ny '+(hoy.si.length-4)+' más.' : '')+
-                    '\n\nEl detalle completo, con los que no dan y por qué, está en '+ir('salgo-hoy','¿Salgo hoy?')+'.',
+                    '\n\nEl detalle completo, con los que no dan y por qué, está en '+ir('salgo-hoy','¿Salgo hoy?')+'.'+medido,
                   s:['¿Qué tabla me conviene?','¿Dónde navego?','Mostrame maniobras']};
         }
-        return {m:'llorando', h:'Hoy no. 😭 Miré los '+(hoy.si.length + hoy.no.length)+' spots y ninguno tiene ventana en las próximas 12 h.\n\nEl detalle de por qué no da cada uno está en '+ir('salgo-hoy','¿Salgo hoy?')+'. Plan B: '+ir('videos','videos')+' o '+ir('glosario','glosario')+'.',
+        return {m:'llorando', h:'Hoy no. 😭 Miré los '+(hoy.si.length + hoy.no.length)+' spots y ninguno tiene ventana en las próximas 12 h.\n\nEl detalle de por qué no da cada uno está en '+ir('salgo-hoy','¿Salgo hoy?')+'. Plan B: '+ir('videos','videos')+' o '+ir('glosario','glosario')+'.'+medido,
                 s:['¿Qué tabla me conviene?','Mostrame maniobras','Contame un chiste']};
       }
       // Todavía no llegó el pronóstico: al menos la regla de cada spot sí la sé.
@@ -5480,6 +5498,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     return h + '<p class="hoy__regla">Este spot pide ' + esc(r.spot.w) + '</p></div>';
   }
+
+  // Pilote Norden: medición real, aparte del pronóstico. Va por su cuenta —
+  // si falla, la franja no aparece y el resto de la sección sigue igual.
+  fetch('/api/norden').then(function(r){
+    return r.ok ? r.json() : null;
+  }).then(function(n){
+    if(!n || !isFinite(n.kn)) return;
+    var caja = document.getElementById('hoyNorden');
+    if(!caja) return;
+    document.getElementById('nordenVal').textContent = n.kn + ' kn del ' + n.rumbo;
+    var det = [n.grados + '°'];
+    if(isFinite(n.alturaCm)) det.push('marea ' + n.alturaCm + ' cm');
+    if(n.medidoEn) det.push((n.vencido ? 'último dato ' : '') + n.medidoEn.split(' ').pop());
+    document.getElementById('nordenDet').textContent = ' · ' + det.join(' · ');
+    caja.setAttribute('data-hay', '1');
+    window.__EWF = window.__EWF || {};
+    window.__EWF.NORDEN = n;
+  }).catch(function(){ /* sin medición: la franja no se muestra */ });
 
   // Open-Meteo acepta todas las coordenadas en un solo pedido.
   var url = 'https://api.open-meteo.com/v1/forecast'
