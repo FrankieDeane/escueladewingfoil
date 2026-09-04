@@ -1184,27 +1184,53 @@ textarea{resize:vertical;min-height:90px}
 .bram-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
 /* ============ ¿SALGO HOY? ============ */
-.hoy{padding:52px 0 44px;border-bottom:1px solid var(--divider)}
+/* Banda oscura, como el hero: es lo primero después de la portada y tiene que
+   cortar con el resto de la página. El fondo es un SVG propio — viento y
+   tormenta dibujados a mano — y no una foto, para que no dependa de que un
+   servidor ajeno siga sirviendo la imagen dentro de dos años. */
+.hoy{position:relative;padding:56px 0 48px;background:var(--hero-grad);overflow:hidden;isolation:isolate}
+.hoy__fondo{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.hoy__fondo svg{width:100%;height:100%;display:block}
+.hoy .container{position:relative;z-index:1}
 .hoy__head{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
-.hoy__head h2{font-family:'Clash Display',sans-serif;font-size:clamp(26px,3.4vw,40px);line-height:1.05;margin:0}
-.hoy__resumen{font-size:14px;color:var(--text-muted);margin:6px 0 0}
-.hoy__resumen b{color:var(--text)}
-.hoy__estado{margin-left:auto;font-size:12px;color:var(--text-muted);text-align:right;line-height:1.5}
+.hoy__head h2{font-family:'Clash Display',sans-serif;font-size:clamp(28px,3.6vw,44px);line-height:1.03;margin:0;color:#f0f8ff}
+.hoy .eyebrow{color:#7fd8ee}
+.hoy__resumen{font-size:14.5px;color:#a9cfe2;margin:8px 0 0;max-width:56ch}
+.hoy__resumen b{color:#fff}
+.hoy__resumen a{color:#7fd8ee;font-weight:700}
+.hoy__estado{margin-left:auto;font-size:12px;color:#7fa9c1;text-align:right;line-height:1.5}
+/* Rachas de viento cruzando la banda */
+@keyframes hoyRacha{from{transform:translateX(-14%)}to{transform:translateX(14%)}}
+.hoy__racha{animation:hoyRacha linear infinite alternate}
+.hoy__racha--1{animation-duration:7s}
+.hoy__racha--2{animation-duration:11s;animation-direction:alternate-reverse}
+.hoy__racha--3{animation-duration:9s}
+@keyframes hoyLluvia{from{transform:translate(0,0);opacity:.55}to{transform:translate(-9px,26px);opacity:0}}
+.hoy__gota{animation:hoyLluvia 1.5s linear infinite}
+@media(prefers-reduced-motion:reduce){.hoy__racha,.hoy__gota{animation:none}.hoy__gota{opacity:.45}}
+.hoy__norden{display:none;align-items:center;gap:14px 20px;flex-wrap:wrap;margin:0 0 20px;padding:14px 18px;border-radius:13px;background:rgba(233,196,106,.09);border:1px solid rgba(233,196,106,.3)}
+.hoy__norden[data-hay="1"]{display:flex}
+.hoy__norden b{color:#f2d999;font-size:12px;text-transform:uppercase;letter-spacing:.07em;display:block}
+.hoy__norden-val{font-size:19px;color:#fff;font-weight:700;font-family:'Clash Display',sans-serif}
+.hoy__norden-det{font-size:12.5px;color:#c9b48a}
+.hoy__norden-por{flex:1 1 260px;font-size:11.5px;color:#a8967a;line-height:1.55;min-width:200px}
 .hoy__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:13px}
-.hoy__card{background:var(--surface);border:1px solid var(--border);border-left:3px solid #34d399;border-radius:13px;padding:15px 17px}
-.hoy__card--no{border-left-color:var(--border);opacity:.62}
-.hoy__card h3{font-size:15px;margin:0 0 3px;font-weight:700}
-.hoy__prov{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em}
-.hoy__dato{font-size:13.5px;margin:9px 0 0;line-height:1.55}
-.hoy__horas{font-size:12.5px;color:#34d399;font-weight:700;margin:7px 0 0}
-.hoy__motivo{font-size:12.5px;color:var(--text-muted);margin:7px 0 0}
-.hoy__regla{font-size:11.5px;color:var(--text-muted);margin:6px 0 0}
+.hoy__card{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.14);border-left:3px solid #34d399;border-radius:13px;padding:15px 17px;backdrop-filter:blur(3px)}
+.hoy__card--no{border-left-color:rgba(255,255,255,.2);opacity:.72}
+.hoy__card h3{font-size:15px;margin:0 0 3px;font-weight:700;color:#f0f8ff}
+.hoy__prov{font-size:11px;color:#7fa9c1;text-transform:uppercase;letter-spacing:.06em}
+.hoy__dato{font-size:13.5px;margin:9px 0 0;line-height:1.55;color:#dceaf3}
+.hoy__horas{font-size:12.5px;color:#4ade80;font-weight:700;margin:7px 0 0}
+.hoy__motivo{font-size:12.5px;color:#93b6c9;margin:7px 0 0}
+.hoy__regla{font-size:11.5px;color:#6d94ab;margin:6px 0 0}
 .hoy__mas{margin-top:16px}
-.hoy__mas summary{cursor:pointer;font-size:13px;color:var(--text-muted);padding:9px 0}
-.hoy__mas summary:hover{color:var(--text)}
+.hoy__mas summary{cursor:pointer;font-size:13px;color:#93b6c9;padding:9px 0}
+.hoy__mas summary:hover{color:#fff}
 .hoy__mas .hoy__grid{margin-top:12px}
-.hoy__nota{font-size:11.5px;color:var(--text-muted);margin:18px 0 0;line-height:1.6}
-.hoy__skel{height:96px;border-radius:13px;background:var(--surface-2);border:1px solid var(--border);animation:hoyLatir 1.3s ease-in-out infinite}
+.hoy__nota{font-size:11.5px;color:#7fa9c1;margin:20px 0 0;line-height:1.6;max-width:74ch}
+.hoy__nota a{color:#9ed5e8}
+.hoy__nota strong{color:#c5dfec}
+.hoy__skel{height:96px;border-radius:13px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);animation:hoyLatir 1.3s ease-in-out infinite}
 @keyframes hoyLatir{0%,100%{opacity:.45}50%{opacity:.8}}
 @media(prefers-reduced-motion:reduce){.hoy__skel{animation:none}}
 
@@ -1341,6 +1367,53 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- ============================================================ ¿SALGO HOY? ============================================================ -->
 <section class="section hoy" id="salgo-hoy" hidden>
+    <div class="hoy__fondo" aria-hidden="true">
+      <svg viewBox="0 0 1200 340" preserveAspectRatio="xMidYMid slice" role="presentation" focusable="false">
+        <defs>
+          <linearGradient id="hoyRacha" x1="0" x2="1">
+            <stop offset="0" stop-color="#7fd8ee" stop-opacity="0"/>
+            <stop offset=".45" stop-color="#7fd8ee" stop-opacity=".5"/>
+            <stop offset="1" stop-color="#7fd8ee" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="hoyNube" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#9fc4d8" stop-opacity=".5"/>
+            <stop offset="1" stop-color="#4d7f99" stop-opacity=".22"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Rachas de viento cruzando la banda -->
+        <g fill="none" stroke="url(#hoyRacha)" stroke-linecap="round">
+          <g class="hoy__racha hoy__racha--1" stroke-width="2.4">
+            <path d="M-90 78 C 200 52, 430 104, 720 74 S 1160 44, 1310 66"/>
+            <path d="M-90 262 C 240 236, 470 288, 760 256 S 1170 228, 1310 248"/>
+          </g>
+          <g class="hoy__racha hoy__racha--2" stroke-width="1.5" opacity=".7">
+            <path d="M-90 128 C 260 100, 500 152, 800 120 S 1180 92, 1310 112"/>
+            <path d="M-90 196 C 210 172, 460 220, 740 190 S 1150 164, 1310 182"/>
+            <path d="M-90 312 C 280 292, 520 330, 820 302 S 1190 280, 1310 296"/>
+          </g>
+          <g class="hoy__racha hoy__racha--3" stroke-width="1" opacity=".45">
+            <path d="M-90 44 C 230 22, 480 66, 780 38 S 1170 14, 1310 32"/>
+            <path d="M-90 168 C 250 146, 500 190, 790 162 S 1180 138, 1310 154"/>
+          </g>
+        </g>
+
+        <!-- Nube de tormenta con lluvia -->
+        <g transform="translate(905 44)">
+          <path d="M40 92 A34 34 0 0 1 46 25 A46 46 0 0 1 134 30 A30 30 0 0 1 140 92 Z"
+                fill="url(#hoyNube)" stroke="#a8cddf" stroke-opacity=".3" stroke-width="1.5"/>
+          <g stroke="#7fd8ee" stroke-width="2.6" stroke-linecap="round" opacity=".55">
+            <line class="hoy__gota" x1="58"  y1="102" x2="52"  y2="118" style="animation-delay:0s"/>
+            <line class="hoy__gota" x1="84"  y1="102" x2="78"  y2="118" style="animation-delay:.42s"/>
+            <line class="hoy__gota" x1="110" y1="102" x2="104" y2="118" style="animation-delay:.18s"/>
+            <line class="hoy__gota" x1="136" y1="102" x2="130" y2="118" style="animation-delay:.62s"/>
+          </g>
+          <!-- Rayo -->
+          <path d="M97 100 L83 128 L95 128 L86 156 L112 120 L99 120 Z"
+                fill="#e9c46a" opacity=".8"/>
+        </g>
+      </svg>
+    </div>
   <div class="container">
     <div class="hoy__head">
       <div>
@@ -1350,6 +1423,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="hoy__estado" id="hoyEstado"></div>
     </div>
+    <div class="hoy__norden" id="hoyNorden">
+      <div>
+        <b>📍 Pilote Norden — medición real</b>
+        <span class="hoy__norden-val" id="nordenVal">—</span>
+        <span class="hoy__norden-det" id="nordenDet"></span>
+      </div>
+      <p class="hoy__norden-por">Mareógrafo de la <strong>CARP</strong> en el Río de la Plata (Canal Martín García). Todo lo de abajo es pronóstico — un modelo. Esto es un instrumento midiendo el viento que hay.</p>
+    </div>
     <div class="hoy__grid" id="hoySi">
       <div class="hoy__skel"></div><div class="hoy__skel"></div><div class="hoy__skel"></div>
     </div>
@@ -1357,7 +1438,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <summary id="hoyMasLabel">Ver el resto de los spots</summary>
       <div class="hoy__grid" id="hoyNo"></div>
     </details>
-    <p class="hoy__nota">No es un pronóstico más: cruzamos el viento de las próximas 12 h con la <strong>dirección y el rango que cada spot necesita</strong> — los mismos que figuran en <a href="#spots">Aguas argentinas</a>. Datos de <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a>. Es una orientación, no un parte meteorológico: mirá el agua antes de entrar.</p>
+    <p class="hoy__nota">No es un pronóstico más: cruzamos el viento de las próximas 12 h con la <strong>dirección y el rango que cada spot necesita</strong> — los mismos que figuran en <a href="#spots">Aguas argentinas</a>. Pronóstico de <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a>; la medición del Río de la Plata es del mareógrafo Pilote Norden de la <a href="https://www.comisionriodelaplata.org" target="_blank" rel="noopener">CARP</a>. Es una orientación, no un parte meteorológico: mirá el agua antes de entrar.</p>
   </div>
 </section>
 
@@ -5022,17 +5103,25 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- Viento / pronóstico ---
     if(tiene(q,['viento','pronostico','kn','nudos','rafaga','cuando navegar','salgo hoy','salgo','esta bueno hoy','condiciones','se puede navegar','hay ola'])){
       var hoy = (window.__EWF || {}).HOY;
+      var nrd = (window.__EWF || {}).NORDEN;
+      var medido = nrd && isFinite(nrd.kn)
+        ? '\n\nY en el Río de la Plata hay una <strong>medición real</strong>, no un pronóstico: Pilote Norden marca '+nrd.kn+' kn del '+esc(nrd.rumbo)+'.'
+        : '';
       if(hoy && hoy.si){
         if(hoy.si.length){
+          // El viento que nombra tiene que ser el de la hora que sirve, igual
+          // que en las tarjetas: si no, dice "13 kn" de un spot que pide 15+.
           var top = hoy.si.slice(0, 4).map(function(r){
-            return '• <strong>'+esc(r.spot.n)+'</strong> — '+r.ahora.kn+' kn, '+r.horas.length+'h ('+r.horas[0]+' en adelante)';
+            return '• <strong>'+esc(r.spot.n)+'</strong> — '+r.ventana.kn+' kn '+
+                   (r.ahoraEsBuena ? 'ahora' : 'a las '+r.horas[0])+
+                   ', '+r.horas.length+'h navegable'+(r.horas.length>1?'s':'');
           });
           return {m:'epico', h:'¡Sí! 🤩 Ahora mismo hay ventana en <strong>'+hoy.si.length+'</strong> spot'+(hoy.si.length>1?'s':'')+':\n\n'+top.join('\n')+
                     (hoy.si.length > 4 ? '\n\ny '+(hoy.si.length-4)+' más.' : '')+
-                    '\n\nEl detalle completo, con los que no dan y por qué, está en '+ir('salgo-hoy','¿Salgo hoy?')+'.',
+                    '\n\nEl detalle completo, con los que no dan y por qué, está en '+ir('salgo-hoy','¿Salgo hoy?')+'.'+medido,
                   s:['¿Qué tabla me conviene?','¿Dónde navego?','Mostrame maniobras']};
         }
-        return {m:'llorando', h:'Hoy no. 😭 Miré los '+(hoy.si.length + hoy.no.length)+' spots y ninguno tiene ventana en las próximas 12 h.\n\nEl detalle de por qué no da cada uno está en '+ir('salgo-hoy','¿Salgo hoy?')+'. Plan B: '+ir('videos','videos')+' o '+ir('glosario','glosario')+'.',
+        return {m:'llorando', h:'Hoy no. 😭 Miré los '+(hoy.si.length + hoy.no.length)+' spots y ninguno tiene ventana en las próximas 12 h.\n\nEl detalle de por qué no da cada uno está en '+ir('salgo-hoy','¿Salgo hoy?')+'. Plan B: '+ir('videos','videos')+' o '+ir('glosario','glosario')+'.'+medido,
                 s:['¿Qué tabla me conviene?','Mostrame maniobras','Contame un chiste']};
       }
       // Todavía no llegó el pronóstico: al menos la regla de cada spot sí la sé.
@@ -5341,8 +5430,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if(typeof fetch !== 'function') return;   // navegador viejo: la sección no aparece
 
+  // Solo spots de viento: los cable parks (w:'Cable') se navegan con cable,
+  // el pronóstico no les aplica. Sin este filtro aparecían como "sin regla".
   var SPOTS = ((window.__EWF || {}).SPOTS || []).filter(function(sp){
-    return sp && sp.w && isFinite(sp.lat) && isFinite(sp.lng);
+    return sp && sp.w && /\d+\s*-\s*\d+/.test(sp.w) && isFinite(sp.lat) && isFinite(sp.lng);
   });
   if(!SPOTS.length) return;
 
@@ -5357,6 +5448,23 @@ document.addEventListener('DOMContentLoaded', function() {
     return {dirs:dirs, min: rango ? +rango[1] : null, max: rango ? +rango[2] : null};
   }
   function difAngular(a, b){ var d = Math.abs(a - b) % 360; return d > 180 ? 360 - d : d; }
+
+  // A la API le pedimos las horas en huso argentino, así que la hora "de ahora"
+  // también tiene que ser la argentina. Comparar contra UTC corría la ventana
+  // 3 h hacia adelante: te mostraba el viento de más tarde como si fuera el actual.
+  function horaLocalArg(){
+    try{
+      var g = {};
+      new Intl.DateTimeFormat('en-CA', {
+        timeZone:'America/Argentina/Buenos_Aires',
+        year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit',
+        hour12:false, hourCycle:'h23'
+      }).formatToParts(new Date()).forEach(function(x){ g[x.type] = x.value; });
+      if(g.year && g.month && g.day && g.hour) return g.year+'-'+g.month+'-'+g.day+'T'+g.hour;
+    }catch(e){}
+    // Sin Intl: Argentina es UTC-3 todo el año, no tiene horario de verano.
+    return new Date(Date.now() - 3*3600e3).toISOString().slice(0, 13);
+  }
 
   // Tolerancia de ±45° sobre la dirección ideal: el viento nunca entra exacto.
   function evaluar(regla, kn, deg){
@@ -5375,16 +5483,39 @@ document.addEventListener('DOMContentLoaded', function() {
   function card(r){
     var h = '<div class="hoy__card' + (r.ok ? '' : ' hoy__card--no') + '">' +
             '<span class="hoy__prov">' + esc(r.spot.prov) + '</span>' +
-            '<h3>' + esc(r.spot.n) + '</h3>' +
-            '<p class="hoy__dato">' + r.ahora.kn + ' kn · ráfagas ' + r.ahora.raf + ' · ' + r.ahora.dir + '°</p>';
+            '<h3>' + esc(r.spot.n) + '</h3>';
     if(r.ok){
-      h += '<p class="hoy__horas">✓ ' + r.horas.length + (r.horas.length === 1 ? ' hora navegable' : ' horas navegables') +
+      // El dato tiene que ser el de la hora que sirve, no el de ahora: si la
+      // ventana arranca más tarde, mostrar "ahora" contradice el ✓ verde.
+      var v = r.ventana;
+      h += '<p class="hoy__dato">' + (v.hora === r.horas[0] && r.ahoraEsBuena ? 'Ahora' : 'A las ' + v.hora) +
+           ' · ' + v.kn + ' kn · ráfagas ' + v.raf + ' · ' + v.dir + '°</p>' +
+           '<p class="hoy__horas">✓ ' + r.horas.length + (r.horas.length === 1 ? ' hora navegable' : ' horas navegables') +
            ': ' + r.horas.join(', ') + '</p>';
     }else{
-      h += '<p class="hoy__motivo">' + esc(r.motivo) + '</p>';
+      h += '<p class="hoy__dato">Ahora · ' + r.ahora.kn + ' kn · ráfagas ' + r.ahora.raf + ' · ' + r.ahora.dir + '°</p>' +
+           '<p class="hoy__motivo">' + esc(r.motivo) + '</p>';
     }
     return h + '<p class="hoy__regla">Este spot pide ' + esc(r.spot.w) + '</p></div>';
   }
+
+  // Pilote Norden: medición real, aparte del pronóstico. Va por su cuenta —
+  // si falla, la franja no aparece y el resto de la sección sigue igual.
+  fetch('/api/norden').then(function(r){
+    return r.ok ? r.json() : null;
+  }).then(function(n){
+    if(!n || !isFinite(n.kn)) return;
+    var caja = document.getElementById('hoyNorden');
+    if(!caja) return;
+    document.getElementById('nordenVal').textContent = n.kn + ' kn del ' + n.rumbo;
+    var det = [n.grados + '°'];
+    if(isFinite(n.alturaCm)) det.push('marea ' + n.alturaCm + ' cm');
+    if(n.medidoEn) det.push((n.vencido ? 'último dato ' : '') + n.medidoEn.split(' ').pop());
+    document.getElementById('nordenDet').textContent = ' · ' + det.join(' · ');
+    caja.setAttribute('data-hay', '1');
+    window.__EWF = window.__EWF || {};
+    window.__EWF.NORDEN = n;
+  }).catch(function(){ /* sin medición: la franja no se muestra */ });
 
   // Open-Meteo acepta todas las coordenadas en un solo pedido.
   var url = 'https://api.open-meteo.com/v1/forecast'
@@ -5398,7 +5529,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return res.json();
   }).then(function(data){
     var arr = Array.isArray(data) ? data : [data];
-    var ahoraISO = new Date().toISOString().slice(0, 13);
+    var ahoraISO = horaLocalArg();
     var resultados = [];
 
     arr.forEach(function(d, i){
@@ -5408,10 +5539,19 @@ document.addEventListener('DOMContentLoaded', function() {
       var ini = H.time.findIndex(function(t){ return t.slice(0, 13) >= ahoraISO; });
       if(ini < 0) ini = 0;
 
-      var horas = [];
+      function lectura(h){
+        return {
+          hora: H.time[h].slice(11, 16),
+          kn:   Math.round(H.wind_speed_10m[h]),
+          raf:  Math.round(H.wind_gusts_10m[h]),
+          dir:  Math.round(H.wind_direction_10m[h])
+        };
+      }
+      var horas = [], primera = null;
       for(var h = ini; h < Math.min(ini + 12, H.time.length); h++){
         if(evaluar(regla, Math.round(H.wind_speed_10m[h]), H.wind_direction_10m[h]).ok){
           horas.push(H.time[h].slice(11, 16));
+          if(primera === null) primera = h;
         }
       }
       var ev = evaluar(regla, Math.round(H.wind_speed_10m[ini]), H.wind_direction_10m[ini]);
@@ -5420,11 +5560,9 @@ document.addEventListener('DOMContentLoaded', function() {
         ok: horas.length > 0,
         horas: horas,
         motivo: ev.motivo,
-        ahora: {
-          kn:  Math.round(H.wind_speed_10m[ini]),
-          raf: Math.round(H.wind_gusts_10m[ini]),
-          dir: Math.round(H.wind_direction_10m[ini])
-        }
+        ahora: lectura(ini),
+        ventana: primera === null ? lectura(ini) : lectura(primera),
+        ahoraEsBuena: ev.ok
       });
     });
 
@@ -5448,7 +5586,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     document.getElementById('hoyEstado').innerHTML =
-      'Próximas 12 h<br>Actualizado ' + new Date().toLocaleTimeString('es-AR', {hour:'2-digit', minute:'2-digit'});
+      'Próximas 12 h<br>Actualizado ' + new Date().toLocaleTimeString('es-AR', {hour:'2-digit', minute:'2-digit', hour12:false});
 
     document.getElementById('hoySi').innerHTML = si.length
       ? si.map(card).join('')
