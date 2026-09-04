@@ -122,6 +122,7 @@ footer .au{color:var(--text);font-weight:700}
   .env{padding:0 14px}
   .top{padding:11px 0}
   .top .env{gap:8px}
+
   .top .sub{margin-left:0;flex-basis:100%;font-size:12px}
   .hud{left:10px;top:10px;padding:8px 10px;min-width:0;border-radius:10px}
   .hud .k{font-size:9px}
@@ -136,9 +137,9 @@ footer .au{color:var(--text);font-weight:700}
   .marca{font-size:10px}
   .marca span{max-width:11ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
   /* el dedo necesita 44 px, no 36 */
-  .play{padding:13px 18px;font-size:14px;min-height:44px}
-  .pb{padding:11px 13px;min-height:44px}
-  input[type=range]{height:34px}
+  .play{padding:13px 18px;font-size:14px}
+  .pb{padding:11px 13px}
+
   .lab{width:100%;justify-content:space-between}
   .lab input[type=range]{flex:1;width:auto;min-width:0}
   section>h2{font-size:19px}
@@ -147,9 +148,17 @@ footer .au{color:var(--text);font-weight:700}
 /* --- Tablet --- */
 @media(min-width:641px) and (max-width:900px){
   .hud{padding:10px 12px}
+}
+/* --- Cualquier cosa que se toque con el dedo. El mínimo de 44 px lo pide el
+   dedo, no el ancho: una tablet de 768 lo necesita igual que un teléfono. --- */
+@media (pointer:coarse){
   .play{min-height:44px}
   .pb{min-height:44px}
+  select{min-height:44px}
+  input[type=range]{height:44px}
+  .volver{min-height:44px;display:inline-flex;align-items:center;margin:-11px 0}
 }
+
 /* --- Pantallas bajas y apaisadas: el mapa no puede comerse todo --- */
 @media(max-height:520px){
   canvas{height:74vh}
