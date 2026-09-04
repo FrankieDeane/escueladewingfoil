@@ -1,14 +1,28 @@
-======================================================================
-1. LUGARES CLAVE DE LA COSTA DE SAN ISIDRO
-======================================================================
-  ERROR HTTP Error 406: Not Acceptable
+========================================================================
+1. LUGARES DE LA COSTA (Nominatim / OpenStreetMap)
+========================================================================
+  Club Nautico San Isidro                -34.44125, -58.76544  | Club Nautico San Isidro, Manuel Alberti, Partido del Pilar
+  Club Nautico San Isidro                -34.43975, -58.52709  | Club Náutico San Isidro, Primera Sección, Partido de Tigre
+  Puerto de San Isidro                   -34.46123, -58.50720  | Puerto de San Isidro, Avenida Mitre, San Isidro, Partido d
+  Hipodromo de San Isidro                -34.48193, -58.51919  | Hipódromo de San Isidro, San Isidro, Partido de San Isidro
+  Hipodromo de San Isidro                -24.79027, -65.45864  | Hipódromo de San Isidro, B° Alto La Viña, Bº Los Pinos, Sa
+  Club Nautico Albatros San Isidro       -34.44776, -58.52131  | Club Náutico Álbatros, Punta Chica, Victoria, Partido de S
+  Estacion Fluvial San Isidro            (sin resultado)
+  Club de Regatas San Isidro             (sin resultado)
 
-======================================================================
+========================================================================
 2. LIMITE DEL PARTIDO DE SAN ISIDRO
-======================================================================
-  ERROR HTTP Error 406: Not Acceptable
+========================================================================
+  San Isidro, Partido de San Isidro, Buenos Aires, 1642, Argentina
+     tipo: boundary / administrative
+     lat -34.4990 .. -34.4487   lon -58.5644 .. -58.4958
+     5.6 km N-S  x  6.3 km E-O
+  San Isidro, San Nicolás de los Arroyos, Partido de San Nicolás, Buenos
+     tipo: boundary / administrative
+     lat -33.3498 .. -33.3435   lon -60.2060 .. -60.1985
+     0.7 km N-S  x  0.7 km E-O
 
-======================================================================
-3. EL RECORTE QUE USE, PARA COMPARAR
-======================================================================
-  lon -58.5200 .. -58.4700   lat -34.4900 .. -34.4550
+========================================================================
+3. COMPARACION CON MI RECORTE
+========================================================================
+  usado:   lon -58.5200 .. -58.4700   lat -34.4900 .. -34.4550
