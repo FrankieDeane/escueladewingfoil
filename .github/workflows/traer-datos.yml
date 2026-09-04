@@ -1,0 +1,23 @@
+name: sonda-detalle
+on: [push]
+permissions: {contents: write}
+jobs:
+  s:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: claude/rio-3d-san-isidro}
+      - run: npm i -D playwright@1.48.0 && npx playwright install --with-deps chromium
+      - run: |
+          echo 'aW1wb3J0IHsgY2hyb21pdW0gfSBmcm9tICdwbGF5d3JpZ2h0JzsKY29uc3QgVT0naHR0cHM6Ly9kZXBsb3ktcHJldmlldy0xMDYtLXVuaXZlcnNpZGFkLXdpbmdmb2lsLm5ldGxpZnkuYXBwL2Nvc3RhLXNhbi1pc2lkcm8nOwpjb25zdCBiPWF3YWl0IGNocm9taXVtLmxhdW5jaCh7YXJnczpbJy0tZW5hYmxlLXVuc2FmZS1zd2lmdHNoYWRlcicsJy0tdXNlLWdsPWFuZ2xlJywnLS11c2UtYW5nbGU9c3dpZnRzaGFkZXInXX0pOwpjb25zdCBlcnJzPVtdOwpmb3IoY29uc3QgW25vbSx3LGgsdF0gb2YgW1snaVBob25lIDE0JywzOTAsODQ0LHRydWVdLFsnaVBob25lIFNFJywzNzUsNjY3LHRydWVdLAogICAgICAgICAgICAgICAgICAgICAgICAgIFsnaVBhZCcsNzY4LDEwMjQsdHJ1ZV0sWydFc2NyaXRvcmlvJywxNDQwLDkwMCxmYWxzZV1dKXsKICBjb25zdCBwPWF3YWl0IChhd2FpdCBiLm5ld0NvbnRleHQoe3ZpZXdwb3J0Ont3aWR0aDp3LGhlaWdodDpofSxoYXNUb3VjaDp0LGlzTW9iaWxlOnR9KSkubmV3UGFnZSgpOwogIHAub24oJ3BhZ2VlcnJvcicsZT0+ZXJycy5wdXNoKG5vbSsnOiAnK2UubWVzc2FnZSkpOwogIGF3YWl0IHAuZ290byhVLHt3YWl0VW50aWw6J2RvbWNvbnRlbnRsb2FkZWQnLHRpbWVvdXQ6NjAwMDB9KTsKICBhd2FpdCBwLndhaXRGb3JUaW1lb3V0KDExMDAwKTsKICBjb25zdCByPWF3YWl0IHAuZXZhbHVhdGUoKCk9PnsKICAgIGNvbnN0IGFsdG89cz0+e2NvbnN0IGU9ZG9jdW1lbnQucXVlcnlTZWxlY3RvcihzKTtyZXR1cm4gZT9NYXRoLnJvdW5kKGUuZ2V0Qm91bmRpbmdDbGllbnRSZWN0KCkuaGVpZ2h0KTpudWxsfTsKICAgIGNvbnN0IGNoaWNvcz1bXTsKICAgIGlmKG1hdGNoTWVkaWEoJyhwb2ludGVyOmNvYXJzZSknKS5tYXRjaGVzKXsKICAgICAgZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbCgnYnV0dG9uLHNlbGVjdCxpbnB1dFt0eXBlPXJhbmdlXSxhLnZvbHZlcicpLmZvckVhY2goZT0+ewogICAgICAgIGNvbnN0IHE9ZS5nZXRCb3VuZGluZ0NsaWVudFJlY3QoKTsKICAgICAgICBpZihxLmhlaWdodD4wJiZxLmhlaWdodDw0NCkgY2hpY29zLnB1c2goTWF0aC5yb3VuZChxLmhlaWdodCkrJ3B4ICcrKGUudGV4dENvbnRlbnR8fGUuaWQpLnRyaW0oKS5zbGljZSgwLDE4KSk7fSk7CiAgICB9CiAgICByZXR1cm4ge2NvYXJzZTptYXRjaE1lZGlhKCcocG9pbnRlcjpjb2Fyc2UpJykubWF0Y2hlcywKICAgICAgdm9sdmVyOmFsdG8oJy52b2x2ZXInKSwgcGxheTphbHRvKCcjcGxheScpLCBzaDphbHRvKCcjc2gnKSwgc3g6YWx0bygnI3N4JyksCiAgICAgIGNoaWNvcywgbWFyY2FzOlsuLi5kb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCcubWFyY2EnKV0uZmlsdGVyKG09Pm0uc3R5bGUub3BhY2l0eSE9PScwJykubGVuZ3RofTsKICB9KTsKICBjb25zb2xlLmxvZyhub20ucGFkRW5kKDExKSsnIGNvYXJzZTonKyhyLmNvYXJzZT8nc8OtJzonbm8gJykrCiAgICAnIHwgdm9sdmVyOicrci52b2x2ZXIrJyBwbGF5Oicrci5wbGF5Kycgc2xpZGVyczonK3Iuc2grJy8nK3Iuc3grCiAgICAnIHwgbWFyY2Fkb3JlczonK3IubWFyY2FzKwogICAgJyB8IGJham8gNDQ6ICcrKHIuY2hpY29zLmxlbmd0aD9yLmNoaWNvcy5qb2luKCcsICcpOiduaW5ndW5vJykpOwogIGF3YWl0IHAuY29udGV4dCgpLmNsb3NlKCk7Cn0KYXdhaXQgYi5jbG9zZSgpOwpjb25zb2xlLmxvZyhlcnJzLmxlbmd0aD8nRVJST1JFUzpcbicrZXJycy5qb2luKCdcbicpOidzaW4gZXJyb3JlcyBKUycpOwo=' | base64 -d > v106.mjs
+          mkdir -p datos
+          node v106.mjs 2>&1 | tee datos/v106.txt
+      - if: always()
+        run: |
+          git config user.name Claude
+          git config user.email noreply@anthropic.com
+          rm -f v106.mjs package.json package-lock.json
+          git add -f datos/v106.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'Verificacion del preview 106'
+          git push origin HEAD:claude/rio-3d-san-isidro
