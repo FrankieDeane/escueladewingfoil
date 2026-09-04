@@ -1,0 +1,5 @@
+borde del link 3D: {"borderStyle":"dashed","textDecoration":"none"}
+CNSI: {"titulos":["De dónde sopló — últimas horas","Cuánto tiempo hubo viento usable","Mareas de hoy — pronóstico del SHN"],"rosas":2,"petalos":8,"lineas":0,"txt":"De 144 lecturas, la dirección más frecuente fue el O. Cada pétalo mide cuántas veces sopló de ahí; el color, con qué fuerza.","leyendas":8}
+Norden: {"titulos":["De dónde sopló — Pilote Norden","Cuánto tiempo hubo viento usable","Altura del río","Ahora"],"rosas":2,"petalos":5,"lineas":0,"txt":"De 9 lecturas, la dirección más frecuente fue el OSO. Cada pétalo mide cuántas veces sopló de ahí; el color, con qué fuerza.","leyendas":8}
+ERRORES:
+CONS: A bad HTTP response code (404) was received when fetching the script.
