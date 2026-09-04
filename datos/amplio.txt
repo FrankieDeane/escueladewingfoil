@@ -1,0 +1,11 @@
+recorte: 9.2 km E-O x 7.1 km N-S
+terreno z15: 80 tiles
+crudo: min=-505.4 max=50.9
+terreno 260x200  min=-4.8 max=45.7  tierra=53%
+perfil O->E: [14.4, 14.8, 19.0, 22.0, 28.9, 6.0, 0.0, 0.0, 0.0, 0.0]
+lugares dentro del recorte: 4 de 4
+   Club Náutico San Isidro        DENTRO
+   Club Náutico Albatros          DENTRO
+   Puerto de San Isidro           DENTRO
+   Hipódromo de San Isidro        DENTRO
+-> datos/terreno-amplio.json  226 KB
