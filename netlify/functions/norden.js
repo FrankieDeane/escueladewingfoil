@@ -45,7 +45,9 @@ function parsear(html) {
     kn: Math.round(kn * 10) / 10,
     grados: Math.round(grados),
     rumbo: rumbo(grados),
-    alturaCm: alt ? Number(alt[1]) : null,
+    // La fuente devuelve la marea con la basura de un float de 32 bits
+    // (124.899994). Un decimal es toda la precisión que tiene sentido mostrar.
+    alturaCm: alt ? Math.round(Number(alt[1]) * 10) / 10 : null,
     medidoEn: act ? act[1] : null,     // hora local del mareógrafo (UTC-3)
     estacion: 'Pilote Norden',
     fuente: 'Comisión Administradora del Río de la Plata (CARP)'
