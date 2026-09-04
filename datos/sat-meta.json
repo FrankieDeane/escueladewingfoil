@@ -1,0 +1,18 @@
+{
+ "fuente": "Esri World Imagery",
+ "atribucion": "Esri, Maxar, Earthstar Geographics",
+ "referencia": "https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9",
+ "plantilla": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+ "zoom": 16,
+ "bbox": [
+  -58.52,
+  -34.49,
+  -58.47,
+  -34.455
+ ],
+ "px": [
+  1600,
+  1358
+ ],
+ "fecha_acceso": "2026-09-04T18:06:56+00:00"
+}

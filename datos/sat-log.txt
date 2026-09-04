@@ -1,0 +1,25 @@
+====================================================================
+CORS de cada fuente (hace falta para textura WebGL en vivo)
+====================================================================
+tiles z16: x 22114..22123  y 39456..39464  = 90 tiles
+  Esri World Imagery               http=200    CORS=*
+  IGN ArgenMap satelital           http=ERR HTTP Error 404: Not Found CORS=-
+  IGN ArgenMap base                http=200    CORS=*
+  Esri World Imagery (basemaps)    http=ERR HTTP Error 400: Bad Request CORS=-
+
+====================================================================
+COSER LA TEXTURA
+====================================================================
+  probando Esri World Imagery -> (256, 256) RGB
+  tiles: 90 ok, 0 fallados, mosaico (2560, 2304)
+  recorte al bbox: (2330, 1978)
+  -> datos/sat-san-isidro.jpg  647 KB  (1600, 1358)
+  atribucion: Esri, Maxar, Earthstar Geographics
+
+====================================================================
+TERRENO DEL MISMO STRIP (SRTM via terrarium z15)
+====================================================================
+  tiles x 11057..11061 y 19728..19732
+  grilla 200x160, 437 cotas distintas, min=-522.4 max=52.0
+  perfil O->E fila media: [23.4, 20.4, 34.8, 28.3, 29.3, 10.6, 6.0, 0.1, 0.0, 0.0]
+  -> datos/terreno-strip.json  173 KB
