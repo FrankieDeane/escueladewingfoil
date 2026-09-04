@@ -1,0 +1,671 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sonda San Isidro</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --fondo:#0A1013; --panel:#121B1F; --panel2:#18242A; --borde:#22343B;
+  --sonda:#48B6CE; --limo:#B2814A; --aviso:#E0708F; --ok:#6FCF97;
+  --texto:#DDE7E9; --tenue:#7A9198; --apenas:#4E656C;
+  --display:'Archivo',system-ui,sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+:root:not([data-theme="dark"]){
+  --fondo:#EDF1F2; --panel:#FFFFFF; --panel2:#F3F7F8; --borde:#CFDBDE;
+  --sonda:#136A80; --limo:#8A5E27; --aviso:#B23A61; --ok:#2C7A4B;
+  --texto:#0E1A1E; --tenue:#4A6068; --apenas:#7E949A;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --fondo:#0A1013; --panel:#121B1F; --panel2:#18242A; --borde:#22343B;
+    --sonda:#48B6CE; --limo:#B2814A; --aviso:#E0708F; --ok:#6FCF97;
+    --texto:#DDE7E9; --tenue:#7A9198; --apenas:#4E656C;
+  }
+}
+:root[data-theme="dark"]{
+  --fondo:#0A1013; --panel:#121B1F; --panel2:#18242A; --borde:#22343B;
+  --sonda:#48B6CE; --limo:#B2814A; --aviso:#E0708F; --ok:#6FCF97;
+  --texto:#DDE7E9; --tenue:#7A9198; --apenas:#4E656C;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--texto);font-family:var(--display);
+     font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{text-wrap:balance;margin:0}
+.env{max-width:1180px;margin:0 auto;padding:0 20px}
+
+/* ---------- encabezado ---------- */
+header{border-bottom:1px solid var(--borde);background:var(--panel);padding:18px 0 16px}
+.tit{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px}
+.tit h1{font-size:clamp(21px,3vw,29px);font-weight:800;letter-spacing:-.02em}
+.tit .sub{font-family:var(--mono);font-size:12px;color:var(--tenue)}
+.coord{font-family:var(--mono);font-size:11.5px;color:var(--apenas);margin-top:5px;
+       display:flex;flex-wrap:wrap;gap:4px 16px}
+
+/* ---------- escenario ---------- */
+.escena{position:relative;background:var(--panel2);border-bottom:1px solid var(--borde)}
+canvas{display:block;width:100%;height:clamp(340px,58vh,600px);touch-action:none;cursor:grab}
+canvas:active{cursor:grabbing}
+.hud{position:absolute;top:14px;left:14px;background:color-mix(in srgb,var(--panel) 88%,transparent);
+     border:1px solid var(--borde);border-radius:3px;padding:12px 14px;min-width:196px;
+     backdrop-filter:blur(7px)}
+.hud .et{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+         color:var(--apenas);display:block;margin-bottom:2px}
+.hud .grande{font-family:var(--mono);font-size:33px;font-weight:600;line-height:1;
+             color:var(--sonda);font-variant-numeric:tabular-nums}
+.hud .grande small{font-size:14px;color:var(--tenue);font-weight:400}
+.hud .cuando{font-family:var(--mono);font-size:12px;color:var(--texto);margin-top:7px;
+             font-variant-numeric:tabular-nums}
+.hud .estado{margin-top:9px;padding-top:9px;border-top:1px solid var(--borde);
+             font-family:var(--mono);font-size:11.5px;color:var(--tenue);
+             display:flex;flex-direction:column;gap:3px}
+.hud .estado b{color:var(--texto);font-weight:500}
+.marca{display:inline-block;padding:1px 6px;border-radius:2px;font-size:10px;
+       font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.marca.alta{background:color-mix(in srgb,var(--sonda) 22%,transparent);color:var(--sonda)}
+.marca.baja{background:color-mix(in srgb,var(--limo) 25%,transparent);color:var(--limo)}
+.marca.nodato{background:color-mix(in srgb,var(--aviso) 22%,transparent);color:var(--aviso)}
+
+/* escala de sondaje */
+.escala{position:absolute;right:14px;top:14px;background:color-mix(in srgb,var(--panel) 88%,transparent);
+        border:1px solid var(--borde);border-radius:3px;padding:10px 12px;backdrop-filter:blur(7px)}
+.escala .et{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+            color:var(--apenas);display:block;margin-bottom:7px}
+.banda{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;
+       color:var(--tenue);font-variant-numeric:tabular-nums;line-height:1.9}
+.swatch{width:15px;height:10px;border-radius:1px;flex:none}
+.pista{position:absolute;left:14px;bottom:12px;font-family:var(--mono);font-size:10.5px;
+       color:var(--apenas)}
+
+/* ---------- transporte ---------- */
+.transporte{background:var(--panel);border-bottom:1px solid var(--borde);padding:13px 0}
+.fila{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+button.play{background:var(--sonda);color:var(--fondo);border:0;border-radius:3px;
+  font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+  padding:9px 17px;cursor:pointer;flex:none}
+button.play:hover{filter:brightness(1.12)}
+button.play:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--sonda);outline-offset:2px}
+input[type=range]{flex:1;min-width:190px;accent-color:var(--sonda);height:22px}
+.ctrl{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;color:var(--tenue)}
+.ctrl select{background:var(--panel2);color:var(--texto);border:1px solid var(--borde);
+  border-radius:3px;font-family:var(--mono);font-size:11px;padding:5px 7px}
+.ctrl input[type=range]{min-width:104px;flex:none;width:104px}
+.reloj{font-family:var(--mono);font-size:12.5px;font-variant-numeric:tabular-nums;
+       color:var(--texto);flex:none;min-width:142px}
+
+/* ---------- aviso de datum ---------- */
+.datum{background:color-mix(in srgb,var(--aviso) 13%,var(--fondo));
+       border-bottom:1px solid color-mix(in srgb,var(--aviso) 34%,transparent);padding:13px 0}
+.datum .env{display:flex;gap:12px;align-items:flex-start}
+.datum .ico{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--aviso);
+            border:1px solid var(--aviso);border-radius:2px;padding:2px 6px;flex:none;margin-top:2px}
+.datum p{margin:0;font-size:13.5px;color:var(--texto);max-width:68ch}
+.datum b{color:var(--aviso);font-weight:600}
+
+/* ---------- documento ---------- */
+main{padding:34px 0 60px}
+section{margin-bottom:38px}
+section > h2{font-size:12px;font-family:var(--mono);letter-spacing:.15em;text-transform:uppercase;
+  color:var(--tenue);padding-bottom:8px;border-bottom:1px solid var(--borde);margin-bottom:16px}
+.rejilla{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(255px,1fr))}
+.ficha{background:var(--panel);border:1px solid var(--borde);border-radius:3px;padding:15px 16px}
+.ficha h3{font-size:14.5px;font-weight:600;margin-bottom:3px}
+.ficha .org{font-family:var(--mono);font-size:11px;color:var(--sonda);margin-bottom:9px}
+.ficha dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 11px;
+          font-family:var(--mono);font-size:11px}
+.ficha dt{color:var(--apenas)} .ficha dd{margin:0;color:var(--tenue);word-break:break-word}
+.ficha a{color:var(--sonda)}
+ul.lim{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px}
+ul.lim li{padding-left:19px;position:relative;font-size:14px;color:var(--tenue);max-width:74ch}
+ul.lim li::before{content:"—";position:absolute;left:0;color:var(--aviso);font-family:var(--mono)}
+ul.lim b{color:var(--texto);font-weight:600}
+table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px}
+.tabla-env{overflow-x:auto}
+th,td{text-align:left;padding:7px 11px;border-bottom:1px solid var(--borde);white-space:nowrap}
+th{color:var(--apenas);font-weight:500;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+td{color:var(--tenue);font-variant-numeric:tabular-nums} td:first-child{color:var(--texto)}
+.barra{display:inline-block;height:7px;border-radius:1px;background:var(--sonda);vertical-align:middle}
+footer{border-top:1px solid var(--borde);padding:22px 0 40px;font-size:13px;color:var(--tenue)}
+footer .autoria{color:var(--texto);font-weight:600}
+footer code{font-family:var(--mono);font-size:12px;color:var(--sonda)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:640px){
+  .hud{min-width:0;padding:9px 11px} .hud .grande{font-size:26px}
+  .escala{padding:7px 9px} .escala .banda{font-size:10px}
+  .reloj{min-width:0}
+}
+</style>
+
+<header>
+  <div class="env">
+    <div class="tit">
+      <h1>Sonda San Isidro</h1>
+      <span class="sub">lecho + marea real · Río de la Plata</span>
+    </div>
+    <div class="coord">
+      <span id="cBbox"></span><span id="cTam"></span><span id="cCeldas"></span><span id="cGen"></span>
+    </div>
+  </div>
+</header>
+
+<div class="escena">
+  <canvas id="lienzo"></canvas>
+  <div class="hud">
+    <span class="et">Altura de marea</span>
+    <div class="grande"><span id="hAltura">—</span><small> m</small></div>
+    <div class="cuando" id="hCuando">—</div>
+    <div class="estado">
+      <span>Estado <b id="hEstado">—</b></span>
+      <span>Próximo <b id="hProx">—</b></span>
+      <span>Fondo <b id="hFondo">—</b></span>
+    </div>
+  </div>
+  <div class="escala">
+    <span class="et">Cota (m)</span>
+    <div id="leyenda"></div>
+  </div>
+  <div class="pista">arrastrá para girar · rueda para acercar</div>
+</div>
+
+<div class="transporte">
+  <div class="env">
+    <div class="fila">
+      <button class="play" id="bPlay" aria-label="Reproducir o pausar la animación de marea">▶ Reproducir</button>
+      <span class="reloj" id="reloj">—</span>
+      <input type="range" id="sTiempo" min="0" max="1000" value="0" aria-label="Momento en el tiempo">
+    </div>
+    <div class="fila" style="margin-top:11px">
+      <label class="ctrl">Fondo
+        <select id="selFondo">
+          <option value="noaa">NOAA · 1,3 km</option>
+          <option value="gebco">GEBCO 2026 · 382 m</option>
+        </select>
+      </label>
+      <label class="ctrl">Exageración vertical
+        <input type="range" id="sExag" min="5" max="80" value="30">
+        <b id="vExag" style="color:var(--texto);min-width:30px">30×</b>
+      </label>
+      <label class="ctrl">Velocidad
+        <select id="selVel">
+          <option value="900">15 min/s</option>
+          <option value="3600" selected>1 h/s</option>
+          <option value="10800">3 h/s</option>
+        </select>
+      </label>
+    </div>
+  </div>
+</div>
+
+<div class="datum">
+  <div class="env">
+    <span class="ico">Datum</span>
+    <p>Las alturas de marea del SHN se refieren al <b>plano de reducción de sondajes</b>; las cotas del
+    terreno y del lecho, al <b>nivel medio del mar</b>. El desplazamiento entre ambos para San Isidro
+    <b>no está publicado</b>, así que no lo apliqué: el plano de agua se dibuja sobre el cero del terreno.
+    Sirve para leer el <b>rango</b> de la marea, no la profundidad absoluta bajo la quilla.</p>
+  </div>
+</div>
+
+<main class="env">
+  <section>
+    <h2>Fuentes</h2>
+    <div class="rejilla" id="fuentes"></div>
+  </section>
+
+  <section>
+    <h2>Cuánto de esto está realmente medido</h2>
+    <p style="margin:0 0 14px;font-size:14px;color:var(--tenue);max-width:74ch">
+      GEBCO publica junto a la grilla una capa <b style="color:var(--texto)">TID</b> que marca, celda por
+      celda, de dónde salió el número. No es mi opinión: es la procedencia que declara la propia fuente.</p>
+    <div class="tabla-env"><table id="tProc">
+      <thead><tr><th>Procedencia</th><th>Píxeles</th><th>Porción del recorte</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <p style="margin:14px 0 0;font-size:14px;color:var(--tenue);max-width:74ch" id="pMedido"></p>
+  </section>
+
+  <section>
+    <h2>Limitaciones</h2>
+    <ul class="lim">
+      <li><b>El lecho no está medido.</b> En el recorte de San Isidro, sólo el <b id="lPct">—</b> de las
+        celdas de GEBCO 2026 viene de una medición real; el resto es grilla pre-generada. NOAA es todavía
+        más grueso (~1,3 km por celda). Ninguna de las dos resuelve un cauce de pocos metros.</li>
+      <li><b>Interpolación.</b> El lecho se remuestrea por interpolación bilineal desde grillas de 40×36
+        (NOAA) o 26×19 (GEBCO) a la malla de render de 160×144. Los relieves suaves que ves entre celdas
+        son interpolación, no relevamiento.</li>
+      <li><b>Suavizado del terreno.</b> A las celdas de tierra les aplico una mediana 3×3 para sacar píxeles sueltos con error de SRTM, que a 30× de exageración aparecen como agujas. Es filtrado, no invención: ningún valor nuevo entra, sale la mediana de vecinos reales.</li>
+      <li><b>Datum sin resolver.</b> Marea y batimetría están en datums verticales distintos y el offset
+        no es público. No lo inventé.</li>
+      <li><b>La tierra sí es fiel.</b> La barranca viene de SRTM a ~30 m: ahí las cotas son confiables
+        (máxima medida en el recorte: <b id="lMax">—</b>).</li>
+      <li><b>Curva de marea reconstruida.</b> El SHN publica los <b>extremos</b> (pleamar y bajamar). Entre
+        dos extremos consecutivos interpolo con una cosenoidal, que es la forma estándar de la onda de
+        marea. Los extremos son dato oficial; los puntos intermedios son reconstrucción.</li>
+      <li><b>Huecos declarados.</b> La serie tiene <b id="lHuecos">—</b> tramo(s) de más de 14 h sin
+        extremos publicados. Ahí el prototipo muestra <span class="marca nodato">sin dato</span> en lugar
+        de inventar una curva.</li>
+      <li><b>Línea de costa.</b> No pude traer la de OpenStreetMap (Overpass devolvió 406). La costa que
+        ves es la que surge del propio SRTM donde la cota cae a cero, no una línea cartográfica.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Si sale bien</h2>
+    <div class="rejilla">
+      <div class="ficha"><h3>Profundidad coherente</h3><div class="org">verificable</div>
+        <p style="margin:0;font-size:13.5px;color:var(--tenue)">NOAA y GEBCO, que son independientes,
+        coinciden en una profundidad mediana de ~1–2 m frente a San Isidro. Coherente con que sea zona
+        de vadeo. <b style="color:var(--texto)">Se cumple.</b></p></div>
+      <div class="ficha"><h3>Marea sincronizada</h3><div class="org">verificable</div>
+        <p style="margin:0;font-size:13.5px;color:var(--tenue)">120 extremos del SHN, mediana de
+        <b style="color:var(--texto)">6,0 h</b> entre pleamar y bajamar: el semidiurno del Río de la
+        Plata. Rango medido 0,10–2,70 m. <b style="color:var(--texto)">Se cumple.</b></p></div>
+      <div class="ficha"><h3>Performance</h3><div class="org">verificable</div>
+        <p style="margin:0;font-size:13.5px;color:var(--tenue)">WebGL sin librerías externas.
+        <b style="color:var(--texto)" id="pTris">—</b> triángulos, un solo archivo, sin pedidos de red
+        en tiempo de ejecución.</p></div>
+    </div>
+  </section>
+</main>
+
+<footer class="env">
+  <p class="autoria">Idea original: Francisco Deane + https://escueladewingfoil.com</p>
+  <p>Prototipo Fase 1 — recorte de San Isidro. Los datos se trajeron una vez y quedaron embebidos;
+     cada fuente está citada arriba con organismo, URL y fecha de acceso. Grilla del lecho remuestreada;
+     alturas de marea sin corrección de datum. Reutilizá citando la fuente original, no este prototipo.</p>
+  <p style="margin-top:8px">Datos embebidos: <code id="fGen">—</code></p>
+</footer>
+
+<script id="datos" type="application/json">__DATOS__</script>
+<script>
+"use strict";
+var D = JSON.parse(document.getElementById('datos').textContent);
+
+/* ============================ geografía ============================ */
+var bb = D.bbox, NX = D.nx, NY = D.ny;
+var latMed = (bb[1] + bb[3]) / 2;
+var anchoM = (bb[2] - bb[0]) * 111320 * Math.cos(latMed * Math.PI / 180);
+var altoM  = (bb[3] - bb[1]) * 110574;
+var ESC = 1000;                       // 1 unidad de mundo = 1 km
+var W = anchoM / ESC, H = altoM / ESC;
+
+/* ====================== el lecho, según la fuente ====================== */
+function remuestrear(g, gw, gh) {     // bilineal a la malla de render
+  var out = new Float32Array(NX * NY);
+  for (var j = 0; j < NY; j++) for (var i = 0; i < NX; i++) {
+    var x = i / (NX - 1) * (gw - 1), y = j / (NY - 1) * (gh - 1);
+    var x0 = Math.floor(x), y0 = Math.floor(y);
+    var x1 = Math.min(x0 + 1, gw - 1), y1 = Math.min(y0 + 1, gh - 1);
+    var tx = x - x0, ty = y - y0;
+    var a = g[y0 * gw + x0], b = g[y0 * gw + x1], c = g[y1 * gw + x0], d = g[y1 * gw + x1];
+    out[j * NX + i] = a * (1 - tx) * (1 - ty) + b * tx * (1 - ty) + c * (1 - tx) * ty + d * tx * ty;
+  }
+  return out;
+}
+var lechoGebco = null;
+if (D.gebco) {
+  var pl = [];
+  for (var r = 0; r < D.gebco.ny; r++) for (var q = 0; q < D.gebco.nx; q++) pl.push(D.gebco.grilla_m[r][q]);
+  lechoGebco = remuestrear(pl, D.gebco.nx, D.gebco.ny);
+}
+var altNoaa = Float32Array.from(D.alt), clase = Uint8Array.from(D.clase);
+// SRTM trae pixeles sueltos con error de varios metros; a 30x de exageracion se ven
+// como agujas. Mediana 3x3 sobre las celdas de tierra: saca el pico, deja la barranca.
+(function suavizarTierra(){
+  var cp = Float32Array.from(altNoaa), v = [];
+  for (var j = 1; j < NY - 1; j++) for (var i = 1; i < NX - 1; i++) {
+    var k = j * NX + i;
+    if (clase[k] !== 0) continue;
+    v.length = 0;
+    for (var dj = -1; dj <= 1; dj++) for (var di = -1; di <= 1; di++) v.push(cp[(j+dj)*NX + i+di]);
+    v.sort(function(a,b){ return a - b; });
+    altNoaa[k] = v[4];
+  }
+})();
+function alturas(cual) {
+  if (cual === 'gebco' && lechoGebco) {
+    var o = new Float32Array(NX * NY);
+    for (var k = 0; k < o.length; k++) o[k] = clase[k] === 0 ? altNoaa[k] : Math.min(lechoGebco[k], 0);
+    return o;                          // la tierra siempre es SRTM; sólo cambia el lecho
+  }
+  return altNoaa;
+}
+
+/* ============================ marea ============================ */
+var EXT = D.marea.map(function (m) { return { t: m[0], h: m[1], alta: m[2] === 1 }; })
+                 .sort(function (a, b) { return a.t - b.t; });
+var HUECO = 14 * 3600;
+function mareaEn(t) {
+  if (t <= EXT[0].t) return { h: EXT[0].h, sube: null, sin: false, prox: EXT[0] };
+  for (var i = 0; i < EXT.length - 1; i++) {
+    var a = EXT[i], b = EXT[i + 1];
+    if (t >= a.t && t <= b.t) {
+      if (b.t - a.t > HUECO) return { h: null, sube: null, sin: true, prox: b };
+      var u = (t - a.t) / (b.t - a.t);
+      // onda de marea: cosenoidal entre extremos oficiales
+      var h = a.h + (b.h - a.h) * (1 - Math.cos(Math.PI * u)) / 2;
+      return { h: h, sube: b.h > a.h, sin: false, prox: b };
+    }
+  }
+  var z = EXT[EXT.length - 1];
+  return { h: z.h, sube: null, sin: false, prox: null };
+}
+var T0 = EXT[0].t, T1 = EXT[EXT.length - 1].t;
+
+/* ============================ WebGL ============================ */
+var cv = document.getElementById('lienzo');
+var gl = cv.getContext('webgl', { antialias: true, alpha: false })
+      || cv.getContext('experimental-webgl');
+
+var VS_T = [
+'attribute vec3 pos; attribute vec3 nor; attribute float cota;',
+'uniform mat4 mvp; varying float vCota; varying vec3 vNor;',
+'void main(){ vCota=cota; vNor=nor; gl_Position=mvp*vec4(pos,1.0); }'].join('\n');
+
+var FS_T = [
+'precision mediump float; varying float vCota; varying vec3 vNor;',
+'uniform vec3 luz;',
+'vec3 banda(float d){',                       // d = profundidad positiva, en metros
+'  if(d<1.0)  return vec3(0.62,0.83,0.87);',
+'  if(d<2.0)  return vec3(0.42,0.70,0.79);',
+'  if(d<3.0)  return vec3(0.27,0.56,0.70);',
+'  if(d<5.0)  return vec3(0.17,0.42,0.58);',
+'  if(d<10.0) return vec3(0.10,0.29,0.45);',
+'  return vec3(0.06,0.19,0.33);}',
+'void main(){',
+'  vec3 c;',
+'  if(vCota>0.0){',
+'    float u=clamp(vCota/48.0,0.0,1.0);',
+'    c=mix(vec3(0.45,0.44,0.30),vec3(0.78,0.62,0.36),u);',
+'    c=mix(c,vec3(0.88,0.80,0.62),smoothstep(0.72,1.0,u));',
+'  } else { c=banda(-vCota); }',
+'  float lam=max(dot(normalize(vNor),normalize(luz)),0.0);',
+'  gl_FragColor=vec4(c*(0.42+0.72*lam),1.0);',
+'}'].join('\n');
+
+var VS_A = ['attribute vec2 xz; uniform mat4 mvp; uniform float nivel;',
+'varying vec2 vXZ;',
+'void main(){ vXZ=xz; gl_Position=mvp*vec4(xz.x,nivel,xz.y,1.0); }'].join('\n');
+var FS_A = ['precision mediump float; varying vec2 vXZ; uniform float t;',
+'void main(){',
+'  float on=sin(vXZ.x*2.6+t*0.7)*0.5+sin(vXZ.y*3.4-t*0.5)*0.5;',
+'  vec3 c=mix(vec3(0.13,0.36,0.44),vec3(0.22,0.52,0.60),on*0.5+0.5);',
+'  gl_FragColor=vec4(c,0.80);',
+'}'].join('\n');
+
+function compilar(tipo, src) {
+  var s = gl.createShader(tipo); gl.shaderSource(s, src); gl.compileShader(s);
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+  return s;
+}
+function programa(vs, fs) {
+  var p = gl.createProgram();
+  gl.attachShader(p, compilar(gl.VERTEX_SHADER, vs));
+  gl.attachShader(p, compilar(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(p);
+  if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
+  return p;
+}
+var pT = programa(VS_T, FS_T), pA = programa(VS_A, FS_A);
+
+/* --- malla del terreno --- */
+var indices = [];
+for (var j = 0; j < NY - 1; j++) for (var i = 0; i < NX - 1; i++) {
+  var a = j * NX + i, b = a + 1, c = a + NX, d = c + 1;
+  indices.push(a, c, b, b, c, d);
+}
+var TRIS = indices.length / 3;
+var bufIdx = gl.createBuffer();
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, bufIdx);
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,
+  (NX * NY > 65535) ? new Uint32Array(indices) : new Uint16Array(indices), gl.STATIC_DRAW);
+var idxTipo = (NX * NY > 65535) ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT;
+if (idxTipo === gl.UNSIGNED_INT) gl.getExtension('OES_element_index_uint');
+
+var posA = new Float32Array(NX * NY * 3), norA = new Float32Array(NX * NY * 3),
+    cotA = new Float32Array(NX * NY);
+var bufPos = gl.createBuffer(), bufNor = gl.createBuffer(), bufCot = gl.createBuffer();
+
+function reconstruir(alt, exag) {
+  for (var j = 0; j < NY; j++) for (var i = 0; i < NX; i++) {
+    var k = j * NX + i, e = alt[k];
+    posA[k*3]   = (i / (NX - 1) - 0.5) * W;
+    posA[k*3+1] = e * exag / ESC;
+    posA[k*3+2] = (j / (NY - 1) - 0.5) * H;
+    cotA[k] = e;
+  }
+  var dx = W / (NX - 1), dz = H / (NY - 1);
+  for (var j2 = 0; j2 < NY; j2++) for (var i2 = 0; i2 < NX; i2++) {
+    var k2 = j2 * NX + i2;
+    var hl = posA[(j2*NX + Math.max(i2-1,0))*3+1], hr = posA[(j2*NX + Math.min(i2+1,NX-1))*3+1];
+    var hu = posA[(Math.max(j2-1,0)*NX + i2)*3+1], hd = posA[(Math.min(j2+1,NY-1)*NX + i2)*3+1];
+    var nx = (hl - hr), ny = 2 * dx, nz = (hu - hd) * dx / dz;
+    var L = Math.hypot(nx, ny, nz) || 1;
+    norA[k2*3] = nx/L; norA[k2*3+1] = ny/L; norA[k2*3+2] = nz/L;
+  }
+  gl.bindBuffer(gl.ARRAY_BUFFER, bufPos); gl.bufferData(gl.ARRAY_BUFFER, posA, gl.DYNAMIC_DRAW);
+  gl.bindBuffer(gl.ARRAY_BUFFER, bufNor); gl.bufferData(gl.ARRAY_BUFFER, norA, gl.DYNAMIC_DRAW);
+  gl.bindBuffer(gl.ARRAY_BUFFER, bufCot); gl.bufferData(gl.ARRAY_BUFFER, cotA, gl.STATIC_DRAW);
+}
+
+/* --- plano de agua --- */
+var bufAgua = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, bufAgua);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+  -W/2,-H/2,  W/2,-H/2,  W/2,H/2,  -W/2,-H/2,  W/2,H/2,  -W/2,H/2]), gl.STATIC_DRAW);
+
+/* --- cámara --- */
+var cam = { az: -0.62, el: 0.40, dist: W * 1.02 };
+function mat(){
+  var an = cv.width / cv.height, f = 1 / Math.tan(0.5 * 0.92), zn = 0.05, zf = 400;
+  var P = [f/an,0,0,0, 0,f,0,0, 0,0,(zf+zn)/(zn-zf),-1, 0,0,2*zf*zn/(zn-zf),0];
+  var ce = Math.cos(cam.el), se = Math.sin(cam.el), ca = Math.cos(cam.az), sa = Math.sin(cam.az);
+  var ex = cam.dist*ce*sa, ey = cam.dist*se, ez = cam.dist*ce*ca;
+  var zx=ex, zy=ey, zz=ez, zl=Math.hypot(zx,zy,zz); zx/=zl; zy/=zl; zz/=zl;
+  var xx=zz, xy=0, xz=-zx, xl=Math.hypot(xx,xy,xz)||1; xx/=xl; xz/=xl;
+  var yx=zy*xz-zz*xy, yy=zz*xx-zx*xz, yz=zx*xy-zy*xx;
+  var V=[xx,yx,zx,0, xy,yy,zy,0, xz,yz,zz,0, -(xx*ex+xy*ey+xz*ez), -(yx*ex+yy*ey+yz*ez), -(zx*ex+zy*ey+zz*ez), 1];
+  var M=new Float32Array(16);
+  for(var r=0;r<4;r++)for(var c=0;c<4;c++){var s=0;for(var k=0;k<4;k++)s+=P[k*4+c]*V[r*4+k];M[r*4+c]=s;}
+  return M;
+}
+
+/* --- interacción --- */
+var arr = null;
+cv.addEventListener('pointerdown', function(e){ arr = {x:e.clientX, y:e.clientY}; cv.setPointerCapture(e.pointerId); });
+cv.addEventListener('pointermove', function(e){
+  if (!arr) return;
+  cam.az -= (e.clientX - arr.x) * 0.006;
+  cam.el = Math.max(0.06, Math.min(1.45, cam.el + (e.clientY - arr.y) * 0.005));
+  arr = {x:e.clientX, y:e.clientY};
+});
+addEventListener('pointerup', function(){ arr = null; });
+cv.addEventListener('wheel', function(e){
+  e.preventDefault();
+  cam.dist = Math.max(W*0.32, Math.min(W*3.2, cam.dist * (1 + Math.sign(e.deltaY)*0.11)));
+}, {passive:false});
+
+/* ============================ estado y UI ============================ */
+var exag = 30, fuenteFondo = 'noaa', corriendo = false, vel = 3600;
+// arranca a mitad de una creciente real, para que se abra mostrando algo vivo
+var reloj = (function(){
+  for (var i = 0; i < EXT.length - 1; i++) {
+    var a = EXT[i], b = EXT[i+1];
+    if (b.h > a.h + 0.4 && b.t - a.t < HUECO) return a.t + (b.t - a.t) * 0.5;
+  }
+  return T0;
+})();
+var $ = function(id){ return document.getElementById(id); };
+
+function fmt(ts){
+  var d = new Date(ts * 1000);
+  return d.toLocaleString('es-AR', { timeZone:'America/Argentina/Buenos_Aires',
+    day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit', hour12:false });
+}
+function pintarHUD(){
+  var m = mareaEn(reloj);
+  $('reloj').textContent = fmt(reloj) + ' ART';
+  if (m.sin) {
+    $('hAltura').textContent = '—';
+    $('hEstado').innerHTML = '<span class="marca nodato">sin dato</span>';
+    $('hCuando').textContent = 'el SHN no publicó extremos en este tramo';
+    $('hProx').textContent = m.prox ? fmt(m.prox.t) : '—';
+    $('hFondo').textContent = '—';
+    return;
+  }
+  $('hAltura').textContent = m.h.toFixed(2);
+  $('hCuando').textContent = fmt(reloj) + ' ART';
+  $('hEstado').innerHTML = m.sube === null ? '—'
+    : (m.sube ? '<span class="marca alta">subiendo</span>' : '<span class="marca baja">bajando</span>');
+  if (m.prox) {
+    var faltan = (m.prox.t - reloj) / 3600;
+    $('hProx').textContent = (m.prox.alta ? 'pleamar' : 'bajamar') + ' ' + m.prox.h.toFixed(2)
+      + ' m · ' + (faltan < 1 ? Math.round(faltan*60) + ' min' : faltan.toFixed(1) + ' h');
+  } else $('hProx').textContent = '—';
+  $('hFondo').textContent = fuenteFondo === 'gebco' ? 'GEBCO 2026 · 382 m' : 'NOAA · 1,3 km';
+}
+
+function marco(ahora){
+  var m = mareaEn(reloj), nivel = (m.sin ? 0 : m.h) * exag / ESC;
+  var an = cv.clientWidth, al = cv.clientHeight, dpr = Math.min(devicePixelRatio || 1, 2);
+  if (cv.width !== Math.round(an*dpr) || cv.height !== Math.round(al*dpr)) {
+    cv.width = Math.round(an*dpr); cv.height = Math.round(al*dpr);
+  }
+  gl.viewport(0, 0, cv.width, cv.height);
+  var cf = getComputedStyle(document.body).backgroundColor.match(/\d+/g) || [10,16,19];
+  gl.clearColor(cf[0]/255, cf[1]/255, cf[2]/255, 1);
+  gl.enable(gl.DEPTH_TEST); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  var M = mat();
+
+  gl.useProgram(pT);
+  gl.uniformMatrix4fv(gl.getUniformLocation(pT,'mvp'), false, M);
+  gl.uniform3f(gl.getUniformLocation(pT,'luz'), -0.55, 0.72, 0.42);
+  var aP=gl.getAttribLocation(pT,'pos'), aN=gl.getAttribLocation(pT,'nor'), aC=gl.getAttribLocation(pT,'cota');
+  gl.bindBuffer(gl.ARRAY_BUFFER,bufPos); gl.enableVertexAttribArray(aP); gl.vertexAttribPointer(aP,3,gl.FLOAT,false,0,0);
+  gl.bindBuffer(gl.ARRAY_BUFFER,bufNor); gl.enableVertexAttribArray(aN); gl.vertexAttribPointer(aN,3,gl.FLOAT,false,0,0);
+  gl.bindBuffer(gl.ARRAY_BUFFER,bufCot); gl.enableVertexAttribArray(aC); gl.vertexAttribPointer(aC,1,gl.FLOAT,false,0,0);
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,bufIdx);
+  gl.drawElements(gl.TRIANGLES, indices.length, idxTipo, 0);
+
+  if (!m.sin) {
+    gl.useProgram(pA);
+    gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    gl.uniformMatrix4fv(gl.getUniformLocation(pA,'mvp'), false, M);
+    gl.uniform1f(gl.getUniformLocation(pA,'nivel'), nivel);
+    gl.uniform1f(gl.getUniformLocation(pA,'t'), ahora/1000);
+    var aX = gl.getAttribLocation(pA,'xz');
+    gl.bindBuffer(gl.ARRAY_BUFFER,bufAgua); gl.enableVertexAttribArray(aX);
+    gl.vertexAttribPointer(aX,2,gl.FLOAT,false,0,0);
+    gl.drawArrays(gl.TRIANGLES,0,6);
+    gl.disable(gl.BLEND);
+  }
+}
+
+var ultimo = 0;
+function bucle(ts){
+  if (corriendo && ultimo) {
+    reloj += (ts - ultimo)/1000 * vel;
+    if (reloj > T1) reloj = T0;
+    $('sTiempo').value = String(Math.round((reloj - T0)/(T1 - T0)*1000));
+    pintarHUD();
+  }
+  ultimo = ts;
+  marco(ts);
+  requestAnimationFrame(bucle);
+}
+
+/* --- controles --- */
+$('bPlay').onclick = function(){
+  corriendo = !corriendo;
+  this.textContent = corriendo ? '❚❚ Pausar' : '▶ Reproducir';
+};
+$('sTiempo').oninput = function(){
+  corriendo = false; $('bPlay').textContent = '▶ Reproducir';
+  reloj = T0 + (T1 - T0) * (+this.value / 1000);
+  pintarHUD();
+};
+$('sExag').oninput = function(){
+  exag = +this.value; $('vExag').textContent = exag + '×';
+  reconstruir(alturas(fuenteFondo), exag);
+};
+$('selFondo').onchange = function(){
+  fuenteFondo = this.value;
+  reconstruir(alturas(fuenteFondo), exag); pintarHUD();
+};
+$('selVel').onchange = function(){ vel = +this.value; };
+
+/* --- textos que salen del dato, no escritos a mano --- */
+(function(){
+  $('cBbox').textContent = bb[0].toFixed(2)+', '+bb[1].toFixed(2)+' → '+bb[2].toFixed(2)+', '+bb[3].toFixed(2);
+  $('cTam').textContent = (anchoM/1000).toFixed(1)+' × '+(altoM/1000).toFixed(1)+' km';
+  $('cCeldas').textContent = NX+'×'+NY+' celdas · '+Math.round(anchoM/(NX-1))+' m/celda';
+  $('cGen').textContent = 'datos del '+ (D.generado||'').slice(0,10);
+  $('fGen').textContent = D.generado || '—';
+  $('pTris').textContent = TRIS.toLocaleString('es-AR');
+
+  var cotas = Array.from(altNoaa);
+  $('lMax').textContent = Math.max.apply(null, cotas).toFixed(1) + ' m';
+  var hue = 0; for (var i=0;i<EXT.length-1;i++) if (EXT[i+1].t - EXT[i].t > HUECO) hue++;
+  $('lHuecos').textContent = hue;
+  if (D.gebco && D.gebco.pct_medido != null) $('lPct').textContent = D.gebco.pct_medido + ' %';
+
+  var bandas = [['> 20 m','#c8d4a0','#706f4d'],['0 – 20 m','#c8a35c','#c8a35c'],
+    ['0 – 1 m','#9ed4de'],['1 – 2 m','#6bb3ca'],['2 – 3 m','#458fb3'],
+    ['3 – 5 m','#2c6b94'],['5 – 10 m','#1a4a73'],['> 10 m','#103054']];
+  $('leyenda').innerHTML = bandas.map(function(b, i){
+    return '<div class="banda"><span class="swatch" style="background:'+b[1]+'"></span>'+
+      (i<2?'tierra ':'sonda ')+b[0]+'</div>'; }).join('');
+
+  var cont = $('fuentes');
+  (D.fuentes||[]).forEach(function(f){
+    var d = document.createElement('div'); d.className = 'ficha';
+    d.innerHTML = '<h3>'+f.capa+'</h3><div class="org">'+f.organismo+'</div><dl>'+
+      '<dt>dataset</dt><dd>'+f.nombre+'</dd>'+
+      '<dt>url</dt><dd><a href="'+f.url+'" target="_blank" rel="noopener">'+f.url+'</a></dd>'+
+      (f.resolucion_m?'<dt>resolución</dt><dd>'+(f.resolucion_m>=1000?(f.resolucion_m/1000)+' km':f.resolucion_m+' m')+'</dd>':'')+
+      (f.datum_vertical?'<dt>datum</dt><dd>'+f.datum_vertical+'</dd>':'')+
+      (f.licencia?'<dt>licencia</dt><dd>'+f.licencia+'</dd>':'')+
+      '<dt>acceso</dt><dd>'+(f.fecha_acceso||'').slice(0,10)+'</dd></dl>';
+    cont.appendChild(d);
+  });
+  if (D.gebco_meta) {
+    var g = document.createElement('div'); g.className = 'ficha';
+    g.innerHTML = '<h3>Batimetría de contraste</h3><div class="org">GEBCO / Source Cooperative (giswqs)</div><dl>'+
+      '<dt>dataset</dt><dd>GEBCO 2026 Grid (COG)</dd>'+
+      '<dt>url</dt><dd><a href="https://source.coop/giswqs/gebco-bathymetry" target="_blank" rel="noopener">source.coop/giswqs/gebco-bathymetry</a></dd>'+
+      '<dt>resolución</dt><dd>382 m E–O a esta latitud</dd>'+
+      '<dt>datum</dt><dd>nivel medio del mar</dd>'+
+      '<dt>acceso</dt><dd>'+(D.gebco_meta.fecha_acceso||'').slice(0,10)+'</dd></dl>';
+    cont.appendChild(g);
+  }
+  var mar = document.createElement('div'); mar.className='ficha';
+  mar.innerHTML = '<h3>Marea</h3><div class="org">Servicio de Hidrografía Naval (SHN)</div><dl>'+
+    '<dt>dataset</dt><dd>Pronóstico de marea del Río de la Plata ('+EXT.length+' extremos)</dd>'+
+    '<dt>url</dt><dd><a href="https://www.hidro.gov.ar/DA/DatosAbiertos.asp" target="_blank" rel="noopener">hidro.gov.ar/DA/DatosAbiertos.asp</a></dd>'+
+    '<dt>rango</dt><dd>'+fmt(T0)+' → '+fmt(T1)+' ART</dd>'+
+    '<dt>alturas</dt><dd>'+Math.min.apply(null,EXT.map(function(e){return e.h;})).toFixed(2)+' – '+
+      Math.max.apply(null,EXT.map(function(e){return e.h;})).toFixed(2)+' m</dd>'+
+    '<dt>datum</dt><dd>plano de reducción de sondajes</dd></dl>';
+  cont.appendChild(mar);
+
+  if (D.gebco && D.gebco.procedencia) {
+    var tb = document.querySelector('#tProc tbody'), tot = 0;
+    Object.keys(D.gebco.procedencia).forEach(function(k){ tot += D.gebco.procedencia[k].px; });
+    Object.keys(D.gebco.procedencia)
+      .sort(function(a,b){ return D.gebco.procedencia[b].px - D.gebco.procedencia[a].px; })
+      .forEach(function(k){
+        var p = D.gebco.procedencia[k], tr = document.createElement('tr');
+        tr.innerHTML = '<td>'+p.etiqueta+'</td><td>'+p.px+'</td>'+
+          '<td><span class="barra" style="width:'+Math.max(2,p.pct*1.5)+'px"></span> '+p.pct+' %</td>';
+        tb.appendChild(tr);
+      });
+    $('pMedido').innerHTML = 'En el recorte de San Isidro, sólo el <b style="color:var(--aviso)">'+
+      D.gebco.pct_medido+' %</b> de las celdas viene de una medición real. En el Río de la Plata completo '+
+      'la proporción sube al <b style="color:var(--texto)">'+(D.gebco_rio? D.gebco_rio.pct_medido:'—')+
+      ' %</b>, porque entran los sondajes de los canales de navegación.';
+  }
+})();
+
+reconstruir(alturas(fuenteFondo), exag);
+$('sTiempo').value = String(Math.round((reloj-T0)/(T1-T0)*1000));
+pintarHUD();
+requestAnimationFrame(bucle);
+</script>
