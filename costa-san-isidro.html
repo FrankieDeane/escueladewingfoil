@@ -32,8 +32,9 @@ a{color:var(--accent)}
 .top h1{font-size:clamp(19px,2.6vw,25px);font-weight:700;letter-spacing:-.01em}
 .top .sub{font-size:13px;color:var(--text-muted);margin-left:auto}
 
-.escena{position:relative;background:#02080f;border-bottom:1px solid var(--divider)}
-canvas{display:block;width:100%;height:clamp(340px,60vh,620px);touch-action:none;cursor:grab}
+.escena{background:#02080f;border-bottom:1px solid var(--divider)}
+.mapa{position:relative}
+canvas{display:block;width:100%;height:clamp(320px,58vh,620px);touch-action:pan-y;cursor:grab}
 canvas:active{cursor:grabbing}
 .cargando{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
  flex-direction:column;gap:10px;color:var(--text-muted);font-size:14px;background:#02080f}
@@ -71,6 +72,9 @@ canvas:active{cursor:grabbing}
 
 .mandos{background:var(--surface);border-bottom:1px solid var(--divider);padding:14px 0}
 .presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.resumen-tel{display:none;margin:0 0 11px;font-size:13.5px;color:var(--text-muted)}
+.resumen-tel b{color:var(--text)}
+@media(max-width:640px){.resumen-tel{display:block}}
 .pb{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:9px 14px;
  cursor:pointer;color:var(--text-muted);font-family:'Satoshi',sans-serif;font-size:13.5px;text-align:left;
  transition:border-color .16s,color .16s}
@@ -111,7 +115,46 @@ ul.lim b{color:var(--text)}
 footer{border-top:1px solid var(--divider);padding:24px 0 46px;color:var(--text-muted);font-size:14px}
 footer .au{color:var(--text);font-weight:700}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-@media(max-width:640px){.hud .v{font-size:26px}.nomapa{position:static;margin:12px 15px 0;max-width:none}}
+
+/* --- Teléfono. Medido en 375, 390 y 360: el mapa es lo que importa, los
+   carteles tienen que ocupar lo mínimo y no taparlo. --- */
+@media(max-width:640px){
+  .env{padding:0 14px}
+  .top{padding:11px 0}
+  .top .env{gap:8px}
+  .top .sub{margin-left:0;flex-basis:100%;font-size:12px}
+  .hud{left:10px;top:10px;padding:8px 10px;min-width:0;border-radius:10px}
+  .hud .k{font-size:9px}
+  .hud .v{font-size:23px}
+  .hud .v small{font-size:11px}
+  .hud .n{font-size:11px;margin-top:3px}
+  .hud hr{margin:6px 0}
+  .hud .oculto-tel{display:none}          /* el detalle vive abajo, no encima del mapa */
+  .nomapa{position:static;margin:10px 14px 0;max-width:none;backdrop-filter:none}
+  .viento-rosa{width:60px;height:60px;right:10px;bottom:10px}
+  .pista{font-size:10px;bottom:8px;left:10px;right:74px}
+  .marca{font-size:10px}
+  .marca span{max-width:11ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+  /* el dedo necesita 44 px, no 36 */
+  .play{padding:13px 18px;font-size:14px}
+  .pb{padding:11px 13px;min-height:44px}
+  input[type=range]{height:34px}
+  .lab{width:100%;justify-content:space-between}
+  .lab input[type=range]{flex:1;width:auto;min-width:0}
+  section>h2{font-size:19px}
+  .rej,.fuentes{grid-template-columns:1fr}
+}
+/* --- Tablet --- */
+@media(min-width:641px) and (max-width:900px){
+  .hud{padding:10px 12px}
+  .play{min-height:44px}
+  .pb{min-height:44px}
+}
+/* --- Pantallas bajas y apaisadas: el mapa no puede comerse todo --- */
+@media(max-height:520px){
+  canvas{height:74vh}
+  .hud .v{font-size:20px}
+}
 </style>
 </head>
 <body>
@@ -123,6 +166,7 @@ footer .au{color:var(--text);font-weight:700}
 </div></div>
 
 <div class="escena">
+  <div class="mapa">
   <canvas id="c"></canvas>
   <div class="cargando" id="cargando">
     <span id="cargaTxt">Trayendo la imagen satelital…</span>
@@ -132,15 +176,10 @@ footer .au{color:var(--text);font-weight:700}
     <span class="k">Nivel del agua</span>
     <div class="v"><span id="hN">—</span><small> m</small></div>
     <div class="n" id="hEsc">—</div>
-    <hr>
-    <div class="n">Bajo agua <b id="hSum">—</b></div>
-    <div class="n">Viento ahora <b id="hV">—</b></div>
-    <div class="n" id="hFuente">—</div>
-  </div>
-  <div class="nomapa">
-    <b>Esto no es un mapa de inundación</b>
-    <p>La marea y el terreno están en datums verticales distintos y el desfase no es público.
-      La mancha es <b>indicativa</b>. Para emergencias, el SHN y Defensa Civil.</p>
+    <hr class="oculto-tel">
+    <div class="n oculto-tel">Bajo agua <b id="hSum">—</b></div>
+    <div class="n">Viento <b id="hV">—</b></div>
+    <div class="n oculto-tel" id="hFuente">—</div>
   </div>
   <div class="marcas" id="marcas" aria-hidden="true"></div>
   <div class="viento-rosa sin" id="rosa" title="Viento medido por el CNSI">
@@ -155,11 +194,18 @@ footer .au{color:var(--text);font-weight:700}
       <text x="50" y="88" text-anchor="middle" font-size="8" fill="currentColor" opacity=".6">kn</text>
     </svg>
   </div>
-  <div class="pista">arrastrá para girar · rueda para acercar</div>
+  <div class="pista" id="pista">arrastrá para girar · rueda para acercar</div>
+  </div>
+  <div class="nomapa">
+    <b>Esto no es un mapa de inundación</b>
+    <p>La marea y el terreno están en datums verticales distintos y el desfase no es público.
+      La mancha es <b>indicativa</b>. Para emergencias, el SHN y Defensa Civil.</p>
+  </div>
 </div>
 
 <div class="mandos"><div class="env">
   <div class="presets" id="pres"></div>
+  <p class="resumen-tel" id="resumenTel" hidden></p>
   <div class="fila">
     <button class="play" id="play">▶ Correr la marea</button>
     <input type="range" id="sh" min="-50" max="400" value="109" aria-label="Nivel del agua en centímetros">
@@ -393,13 +439,60 @@ function mvp(){
   for(var r=0;r<4;r++)for(var c=0;c<4;c++){var s=0;for(var k=0;k<4;k++)s+=Pm[k*4+c]*V[r*4+k];M[r*4+c]=s}
   return M;
 }
-var drag=null;
-cv.addEventListener('pointerdown',function(e){drag={x:e.clientX,y:e.clientY};cv.setPointerCapture(e.pointerId)});
-cv.addEventListener('pointermove',function(e){if(!drag)return;
- cam.az-=(e.clientX-drag.x)*0.006;
- cam.el=Math.max(0.10,Math.min(1.42,cam.el+(e.clientY-drag.y)*0.005));
- drag={x:e.clientX,y:e.clientY}});
-addEventListener('pointerup',function(){drag=null});
+// Interacción. En teléfono el lienzo ocupa más de la mitad de la pantalla, así
+// que NO puede comerse el scroll: touch-action:pan-y le deja el deslizado
+// vertical al navegador y nos deja a nosotros el horizontal.
+//   un dedo  -> gira en horizontal (y el vertical scrollea la página)
+//   dos dedos-> gira en los dos ejes y hace zoom con pinza
+//   mouse    -> como siempre, arrastre libre y rueda
+var punteros = new Map(), pinza0 = 0, dist0 = 0;
+function centro(){
+  var xs=0, ys=0, n=0;
+  punteros.forEach(function(p){ xs+=p.x; ys+=p.y; n++; });
+  return {x:xs/n, y:ys/n, n:n};
+}
+function separacion(){
+  var a=[]; punteros.forEach(function(p){ a.push(p); });
+  return a.length<2 ? 0 : Math.hypot(a[0].x-a[1].x, a[0].y-a[1].y);
+}
+cv.addEventListener('pointerdown', function(e){
+  punteros.set(e.pointerId, {x:e.clientX, y:e.clientY, tipo:e.pointerType});
+  if(punteros.size === 2){ pinza0 = separacion(); dist0 = cam.dist; }
+  try{ cv.setPointerCapture(e.pointerId); }catch(err){}
+});
+cv.addEventListener('pointermove', function(e){
+  var p = punteros.get(e.pointerId);
+  if(!p) return;
+  var dx = e.clientX - p.x, dy = e.clientY - p.y;
+  p.x = e.clientX; p.y = e.clientY;
+
+  if(punteros.size >= 2){
+    // dos dedos: gira en ambos ejes y hace zoom con la pinza
+    cam.az -= dx * 0.004;
+    cam.el  = Math.max(0.10, Math.min(1.42, cam.el + dy * 0.003));
+    var sep = separacion();
+    if(pinza0 > 10 && sep > 10){
+      cam.dist = Math.max(W*0.26, Math.min(W*2.6, dist0 * (pinza0 / sep)));
+    }
+    e.preventDefault();
+    return;
+  }
+  if(e.pointerType === 'touch'){
+    // un dedo: solo horizontal. El vertical se lo queda el navegador para
+    // scrollear, que es lo que la gente espera al deslizar hacia arriba.
+    cam.az -= dx * 0.006;
+  } else {
+    cam.az -= dx * 0.006;
+    cam.el  = Math.max(0.10, Math.min(1.42, cam.el + dy * 0.005));
+  }
+});
+function soltarPuntero(e){
+  punteros.delete(e.pointerId);
+  if(punteros.size < 2){ pinza0 = 0; }
+}
+cv.addEventListener('pointerup', soltarPuntero);
+cv.addEventListener('pointercancel', soltarPuntero);
+cv.addEventListener('pointerleave', soltarPuntero);
 cv.addEventListener('wheel',function(e){e.preventDefault();
  cam.dist=Math.max(W*0.26,Math.min(W*2.6,cam.dist*(1+Math.sign(e.deltaY)*0.11)))},{passive:false});
 
@@ -417,6 +510,12 @@ function pintarHUD(){
   document.querySelectorAll('.pb').forEach(function(b){
     b.setAttribute('aria-pressed',String(Math.abs(+b.dataset.h-nivel)<0.02))});
   $('hFuente').textContent=corriendo?'serie real del SHN':(e?e.f:'—');
+  var rt=$('resumenTel');
+  if(rt){
+    rt.hidden=false;
+    rt.innerHTML='Deja bajo el agua el <b>'+cacheS[k].toFixed(1)+' %</b> de la tierra del recorte. '+
+                 (e? e.d+'.' : 'Nivel elegido a mano.');
+  }
 }
 function marco(ts){
   var w=cv.clientWidth,h=cv.clientHeight,dpr=Math.min(devicePixelRatio||1,2);
@@ -483,13 +582,15 @@ function armarMarcas(){
   MARCAS=D.lugares.map(function(l){
     var el=document.createElement('div');
     el.className='marca'+(l.tipo==='ref'?' ref':'');
-    el.innerHTML='<span>'+l.n+'</span><i></i>';
+    // en pantalla angosta el nombre completo empuja el marcador fuera del lienzo
+    el.innerHTML='<span>'+(l.corto||l.n)+'</span><i></i>';
+    el.title=l.n;
     cont.appendChild(el);
     // posicion en el mundo, con la cota del terreno debajo
     var u=(l.lon-BBOX[0])/(BBOX[2]-BBOX[0]), v=(BBOX[3]-l.lat)/(BBOX[3]-BBOX[1]);
     var i=Math.round(u*(NX-1)), j=Math.round(v*(NY-1));
     var cota=(i>=0&&i<NX&&j>=0&&j<NY)?ALT[j*NX+i]:0;
-    return {el:el,u:u,v:v,cota:cota};
+    return {el:el,u:u,v:v,cota:cota,visible:false,px:0,py:0,ancho:0,alto:0};
   });
 }
 function ubicarMarcas(M){
@@ -501,12 +602,45 @@ function ubicarMarcas(M){
     var cx=M[0]*x+M[4]*y+M[8]*z+M[12];
     var cy=M[1]*x+M[5]*y+M[9]*z+M[13];
     var cw=M[3]*x+M[7]*y+M[11]*z+M[15];
-    if(cw<=0){m.el.style.opacity='0';continue}
+    if(cw<=0){m.el.style.opacity='0';m.visible=false;continue}
     var sx=(cx/cw*0.5+0.5)*w, sy=(1-(cy/cw*0.5+0.5))*h;
-    var fuera=sx<-40||sx>w+40||sy<-20||sy>h+20;
-    m.el.style.opacity=fuera?'0':'1';
-    m.el.style.left=sx.toFixed(1)+'px';
-    m.el.style.top=sy.toFixed(1)+'px';
+    // Si está detrás de la cámara o muy lejos, se apaga. Si solo se pasa un
+    // poco del borde, se lo trae adentro: mejor la etiqueta pegada al costado
+    // que un lugar que desaparece.
+    if(sx<-90||sx>w+90||sy<-60||sy>h+60){ m.el.style.opacity='0'; m.visible=false; continue; }
+    var ancho=m.el.offsetWidth||70, alto=m.el.offsetHeight||20;
+    var px=Math.max(ancho/2+4, Math.min(w-ancho/2-4, sx));
+    var py=Math.max(alto+2,    Math.min(h-6,          sy));
+    // Dos etiquetas encimadas no se leen ninguna de las dos. Si chocan, gana la
+    // primera de la lista y la otra se apaga hasta que el usuario gire el mapa.
+    // La etiqueta se dibuja con translate(-50%,-100%): el punto de anclaje es
+    // el pie del centro, así que la caja va de px±ancho/2 y de py-alto a py.
+    // Comparar los anclajes no alcanzaba y en pantallas anchas se encimaban.
+    // Esconder la etiqueta que choca hacía que el Albatros, que está a menos
+    // de un kilómetro del CNSI, no se viera nunca. Mejor correrla para arriba:
+    // se prueban unos escalones y solo si ninguno entra se la apaga.
+    function libre(cx2, cy2){
+      var l1=cx2-ancho/2, r1=cx2+ancho/2, t1=cy2-alto, b1=cy2;
+      for(var q=0;q<k;q++){
+        var o=MARCAS[q];
+        if(!o.visible) continue;
+        var l2=o.px-o.ancho/2, r2=o.px+o.ancho/2, t2=o.py-o.alto, b2=o.py;
+        if(l1 < r2+3 && r1 > l2-3 && t1 < b2+3 && b1 > t2-3) return false;
+      }
+      return true;
+    }
+    var salto=alto+5, py2=py, entro=false;
+    for(var intento=0; intento<4; intento++){
+      var cand = py - intento*salto;
+      if(cand - alto < 2) break;                 // no se sale por arriba
+      if(libre(px, cand)){ py2=cand; entro=true; break; }
+    }
+    if(!entro){ m.el.style.opacity='0'; m.visible=false; continue; }
+    py = py2;
+    m.visible=true; m.px=px; m.py=py; m.ancho=ancho; m.alto=alto;
+    m.el.style.opacity='1';
+    m.el.style.left=px.toFixed(1)+'px';
+    m.el.style.top =py.toFixed(1)+'px';
   }
 }
 
@@ -551,10 +685,21 @@ fetch('/assets/terreno-san-isidro.json').then(function(r){
 }).then(function(d){
   D=d; BBOX=d.bbox; NX=d.nx; NY=d.ny; ALT=Float32Array.from(d.alt);
   nivel=d.marea_mediana;
+  (d.lugares||[]).forEach(function(l){
+    l.corto = l.n.replace('Club Náutico San Isidro','CNSI')
+               .replace('Club Náutico Albatros','Albatros')
+               .replace('Puerto de San Isidro','Puerto')
+               .replace('Hipódromo de San Isidro','Hipódromo');
+  });
   $('cargaTxt').textContent='Trayendo la imagen satelital de Esri…';
   return traerImagen(BBOX);
 }).then(function(lienzo){
-  iniciarGL(); armarMalla(); cam.dist=W*0.80; rehacer(exag);
+  iniciarGL(); armarMalla();
+  // en pantalla angosta el recorte entra apretado: se arranca un poco más lejos
+  var angosto = innerWidth < 700;
+  cam.dist = W * (angosto ? 1.15 : 0.80);
+  if(angosto) cam.el = 0.42;
+  rehacer(exag);
   tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);
   gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,lienzo);
@@ -563,6 +708,10 @@ fetch('/assets/terreno-san-isidro.json').then(function(r){
   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
   listo=true; $('cargando').style.display='none';
+  var pista=$('pista');
+  if(pista && matchMedia('(pointer:coarse)').matches){
+    pista.textContent='deslizá de costado para girar · dos dedos para inclinar y hacer zoom';
+  }
   armarMarcas(); montarUI(); vivo(); requestAnimationFrame(marco);
 }).catch(function(e){
   $('cargando').innerHTML='<span>No se pudo cargar el 3D: '+
