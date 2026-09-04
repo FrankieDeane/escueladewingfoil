@@ -1,0 +1,77 @@
+name: sonda-batimetria
+on: [push]
+jobs:
+  sonda:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Que hay de batimetria del Rio de la Plata
+        run: |
+          set +e
+          probe () {
+            echo "===================================================="
+            echo "URL: $1"
+            curl -sSL --max-time 45 -o /tmp/o.bin -D /tmp/h.txt -w "http=%{http_code} bytes=%{size_download} type=%{content_type} final=%{url_effective}\n" "$1"
+            echo "--- cors/headers ---"
+            grep -iE 'access-control|content-type|content-disposition|content-length' /tmp/h.txt | head -8
+            echo "--- primeros bytes ---"
+            head -c 1200 /tmp/o.bin | tr -d '\000' | sed 's/[[:cntrl:]]/ /g' | cut -c1-1200
+            echo ""
+          }
+
+          echo "############ 1. CARP - seccion batimetrias ############"
+          probe "https://www.comisionriodelaplata.org/servicios_main.php?sid=BT"
+          echo "--- links y archivos que menciona esa pagina ---"
+          grep -oiE 'href="[^"]+"' /tmp/o.bin 2>/dev/null | sort -u | head -60
+          grep -oiE '[A-Za-z0-9_./-]+\.(zip|pdf|xyz|dwg|dxf|csv|txt|shp|kmz|kml|tif)' /tmp/o.bin 2>/dev/null | sort -u | head -40
+
+          echo "############ 2. SHN Argentina ############"
+          probe "https://www.hidro.gov.ar/"
+          probe "https://geoportal.hidro.gov.ar/"
+          probe "https://www.hidro.gob.ar/"
+
+          echo "############ 3. GEBCO web services ############"
+          probe "https://www.gebco.net/data-products/gebco-web-services"
+          probe "https://wms.gebco.net/mapserv?request=getcapabilities&service=wms&version=1.3.0"
+          echo "--- GEBCO WCS: pido SOLO el Rio de la Plata (bbox -59,-36.6 a -55,-34) ---"
+          curl -sSL --max-time 90 -o /tmp/rdp.tif -w "http=%{http_code} bytes=%{size_download} type=%{content_type}\n" \
+            "https://wcs.gebco.net/2020/wcs?request=GetCoverage&service=WCS&version=1.0.0&coverage=gebco_2020&format=GeoTIFF&bbox=-59,-36.6,-55,-34&crs=EPSG:4326&width=800&height=520"
+          file /tmp/rdp.tif; head -c 300 /tmp/rdp.tif | sed 's/[[:cntrl:]]/ /g'
+          echo ""
+
+          echo "############ 4. Terreno 3D listo para usar (terrain-RGB / Terrarium) ############"
+          echo "--- AWS Terrain Tiles (open data, sin key). z10 sobre San Isidro ---"
+          curl -sSL --max-time 45 -o /tmp/t.png -D /tmp/th.txt -w "http=%{http_code} bytes=%{size_download} type=%{content_type}\n" \
+            "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/10/362/613.png"
+          grep -iE 'access-control|content-type' /tmp/th.txt | head -4
+          file /tmp/t.png
+          echo "--- lo mismo por el mirror de Mapzen/nextzen ---"
+          curl -sSL --max-time 45 -o /tmp/t2.png -w "http=%{http_code} bytes=%{size_download} type=%{content_type}\n" \
+            "https://elevation-tiles-prod.s3.amazonaws.com/terrarium/10/362/613.png"
+          file /tmp/t2.png
+
+          echo "############ 5. OpenTopography / SRTM ############"
+          probe "https://portal.opentopography.org/apidocs/"
+          curl -sSL --max-time 60 -o /tmp/ot.tif -w "http=%{http_code} bytes=%{size_download} type=%{content_type}\n" \
+            "https://portal.opentopography.org/API/globaldem?demtype=SRTMGL3&south=-35.2&north=-34.2&west=-58.8&east=-57.8&outputFormat=GTiff"
+          head -c 400 /tmp/ot.tif | sed 's/[[:cntrl:]]/ /g'
+          echo ""
+
+          echo "############ 6. EMODnet / NOAA / otros globales ############"
+          probe "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/DEM_global_mosaic/ImageServer?f=json"
+          echo "--- NOAA: pido la profundidad en un punto del Rio de la Plata ---"
+          curl -sSL --max-time 45 -w "\nhttp=%{http_code}\n" \
+            "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/DEM_global_mosaic/ImageServer/identify?geometry=%7B%22x%22%3A-58.3%2C%22y%22%3A-34.5%2C%22spatialReference%22%3A%7B%22wkid%22%3A4326%7D%7D&geometryType=esriGeometryPoint&returnGeometry=false&f=json" | head -c 800
+          echo ""
+
+          echo "############ 7. Uruguay / FREPLATA ############"
+          probe "https://www.ambiente.gub.uy/metadatos/index.php/metadata/md_iframe/20"
+          probe "https://www.gub.uy/ministerio-ambiente/"
+
+          echo "############ 8. IDE Argentina ############"
+          probe "https://www.ide.gob.ar/"
+          probe "https://catalogo.ide.gob.ar/geonetwork/srv/spa/catalog.search#/search?any=batimetria"
+          echo "--- IDERA / catalogo: busco 'batimetria' por API ---"
+          curl -sSL --max-time 45 -w "\nhttp=%{http_code}\n" \
+            "https://catalogo.ide.gob.ar/geonetwork/srv/api/search/records/_search?q=batimetria" | head -c 600
+          echo ""
+          echo "FIN DE LA SONDA"
