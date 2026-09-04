@@ -17,6 +17,11 @@ import { getStore } from '@netlify/blobs';
 // por visita.
 const FUENTE = 'https://www.molol.com/rio/viento-norden.html';
 const CACHE_MS = 10 * 60 * 1000;   // el mareógrafo reporta cada ~10 min
+// La CARP no publica la serie histórica en ningún formato alcanzable: solo
+// ZIPs por año y un gráfico que arma Highcharts en el navegador. Así que el
+// historial lo construimos nosotros, guardando cada lectura nueva. Arranca
+// vacío y se llena solo; 200 entradas a 10 min son unas 33 horas.
+const MAX_HISTORIAL = 200;
 const TIMEOUT_MS = 6000;
 
 const RUMBOS = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSO','SO','OSO','O','ONO','NO','NNO'];
@@ -45,7 +50,9 @@ function parsear(html) {
     kn: Math.round(kn * 10) / 10,
     grados: Math.round(grados),
     rumbo: rumbo(grados),
-    alturaCm: alt ? Number(alt[1]) : null,
+    // La fuente devuelve la marea con la basura de un float de 32 bits
+    // (124.899994). Un decimal es toda la precisión que tiene sentido mostrar.
+    alturaCm: alt ? Math.round(Number(alt[1]) * 10) / 10 : null,
     medidoEn: act ? act[1] : null,     // hora local del mareógrafo (UTC-3)
     estacion: 'Pilote Norden',
     fuente: 'Comisión Administradora del Río de la Plata (CARP)'
@@ -67,7 +74,10 @@ export default async () => {
     try {
       const guardado = await store.get('actual', { type: 'json' });
       if (guardado && Date.now() - guardado.leidoEn < CACHE_MS) {
-        return new Response(JSON.stringify({ ...guardado.dato, cache: true }), { headers: cabeceras });
+        return new Response(
+          JSON.stringify({ ...guardado.dato, cache: true, historial: guardado.historial || [] }),
+          { headers: cabeceras }
+        );
       }
     } catch { /* cache ilegible: se relee */ }
   }
@@ -82,10 +92,28 @@ export default async () => {
   } catch { /* la fuente no respondió */ }
 
   if (dato) {
+    let historial = [];
     if (store) {
-      try { await store.setJSON('actual', { dato, leidoEn: Date.now() }); } catch { /* no crítico */ }
+      try {
+        const previo = await store.get('actual', { type: 'json' });
+        historial = Array.isArray(previo?.historial) ? previo.historial : [];
+      } catch { /* sin historial previo */ }
+
+      // Una entrada por medición, no por request: si el mareógrafo no reportó
+      // todavía, no tiene sentido duplicar el mismo punto en el gráfico.
+      const ultimo = historial[historial.length - 1];
+      if (!ultimo || ultimo.medidoEn !== dato.medidoEn) {
+        historial.push({
+          medidoEn: dato.medidoEn,
+          kn: dato.kn,
+          grados: dato.grados,
+          alturaCm: dato.alturaCm
+        });
+        if (historial.length > MAX_HISTORIAL) historial = historial.slice(-MAX_HISTORIAL);
+      }
+      try { await store.setJSON('actual', { dato, leidoEn: Date.now(), historial }); } catch { /* no crítico */ }
     }
-    return new Response(JSON.stringify({ ...dato, cache: false }), { headers: cabeceras });
+    return new Response(JSON.stringify({ ...dato, cache: false, historial }), { headers: cabeceras });
   }
 
   // Falló la lectura: si hay algo viejo en cache, sirve eso antes que nada.
@@ -95,7 +123,8 @@ export default async () => {
       const guardado = await store.get('actual', { type: 'json' });
       if (guardado) {
         return new Response(
-          JSON.stringify({ ...guardado.dato, cache: true, vencido: true, leidoEn: guardado.leidoEn }),
+          JSON.stringify({ ...guardado.dato, cache: true, vencido: true, leidoEn: guardado.leidoEn,
+                           historial: guardado.historial || [] }),
           { headers: cabeceras }
         );
       }
