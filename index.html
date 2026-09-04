@@ -5341,8 +5341,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if(typeof fetch !== 'function') return;   // navegador viejo: la sección no aparece
 
+  // Solo spots de viento: los cable parks (w:'Cable') se navegan con cable,
+  // el pronóstico no les aplica. Sin este filtro aparecían como "sin regla".
   var SPOTS = ((window.__EWF || {}).SPOTS || []).filter(function(sp){
-    return sp && sp.w && isFinite(sp.lat) && isFinite(sp.lng);
+    return sp && sp.w && /\d+\s*-\s*\d+/.test(sp.w) && isFinite(sp.lat) && isFinite(sp.lng);
   });
   if(!SPOTS.length) return;
 
@@ -5357,6 +5359,23 @@ document.addEventListener('DOMContentLoaded', function() {
     return {dirs:dirs, min: rango ? +rango[1] : null, max: rango ? +rango[2] : null};
   }
   function difAngular(a, b){ var d = Math.abs(a - b) % 360; return d > 180 ? 360 - d : d; }
+
+  // A la API le pedimos las horas en huso argentino, así que la hora "de ahora"
+  // también tiene que ser la argentina. Comparar contra UTC corría la ventana
+  // 3 h hacia adelante: te mostraba el viento de más tarde como si fuera el actual.
+  function horaLocalArg(){
+    try{
+      var g = {};
+      new Intl.DateTimeFormat('en-CA', {
+        timeZone:'America/Argentina/Buenos_Aires',
+        year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit',
+        hour12:false, hourCycle:'h23'
+      }).formatToParts(new Date()).forEach(function(x){ g[x.type] = x.value; });
+      if(g.year && g.month && g.day && g.hour) return g.year+'-'+g.month+'-'+g.day+'T'+g.hour;
+    }catch(e){}
+    // Sin Intl: Argentina es UTC-3 todo el año, no tiene horario de verano.
+    return new Date(Date.now() - 3*3600e3).toISOString().slice(0, 13);
+  }
 
   // Tolerancia de ±45° sobre la dirección ideal: el viento nunca entra exacto.
   function evaluar(regla, kn, deg){
@@ -5375,13 +5394,18 @@ document.addEventListener('DOMContentLoaded', function() {
   function card(r){
     var h = '<div class="hoy__card' + (r.ok ? '' : ' hoy__card--no') + '">' +
             '<span class="hoy__prov">' + esc(r.spot.prov) + '</span>' +
-            '<h3>' + esc(r.spot.n) + '</h3>' +
-            '<p class="hoy__dato">' + r.ahora.kn + ' kn · ráfagas ' + r.ahora.raf + ' · ' + r.ahora.dir + '°</p>';
+            '<h3>' + esc(r.spot.n) + '</h3>';
     if(r.ok){
-      h += '<p class="hoy__horas">✓ ' + r.horas.length + (r.horas.length === 1 ? ' hora navegable' : ' horas navegables') +
+      // El dato tiene que ser el de la hora que sirve, no el de ahora: si la
+      // ventana arranca más tarde, mostrar "ahora" contradice el ✓ verde.
+      var v = r.ventana;
+      h += '<p class="hoy__dato">' + (v.hora === r.horas[0] && r.ahoraEsBuena ? 'Ahora' : 'A las ' + v.hora) +
+           ' · ' + v.kn + ' kn · ráfagas ' + v.raf + ' · ' + v.dir + '°</p>' +
+           '<p class="hoy__horas">✓ ' + r.horas.length + (r.horas.length === 1 ? ' hora navegable' : ' horas navegables') +
            ': ' + r.horas.join(', ') + '</p>';
     }else{
-      h += '<p class="hoy__motivo">' + esc(r.motivo) + '</p>';
+      h += '<p class="hoy__dato">Ahora · ' + r.ahora.kn + ' kn · ráfagas ' + r.ahora.raf + ' · ' + r.ahora.dir + '°</p>' +
+           '<p class="hoy__motivo">' + esc(r.motivo) + '</p>';
     }
     return h + '<p class="hoy__regla">Este spot pide ' + esc(r.spot.w) + '</p></div>';
   }
@@ -5398,7 +5422,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return res.json();
   }).then(function(data){
     var arr = Array.isArray(data) ? data : [data];
-    var ahoraISO = new Date().toISOString().slice(0, 13);
+    var ahoraISO = horaLocalArg();
     var resultados = [];
 
     arr.forEach(function(d, i){
@@ -5408,10 +5432,19 @@ document.addEventListener('DOMContentLoaded', function() {
       var ini = H.time.findIndex(function(t){ return t.slice(0, 13) >= ahoraISO; });
       if(ini < 0) ini = 0;
 
-      var horas = [];
+      function lectura(h){
+        return {
+          hora: H.time[h].slice(11, 16),
+          kn:   Math.round(H.wind_speed_10m[h]),
+          raf:  Math.round(H.wind_gusts_10m[h]),
+          dir:  Math.round(H.wind_direction_10m[h])
+        };
+      }
+      var horas = [], primera = null;
       for(var h = ini; h < Math.min(ini + 12, H.time.length); h++){
         if(evaluar(regla, Math.round(H.wind_speed_10m[h]), H.wind_direction_10m[h]).ok){
           horas.push(H.time[h].slice(11, 16));
+          if(primera === null) primera = h;
         }
       }
       var ev = evaluar(regla, Math.round(H.wind_speed_10m[ini]), H.wind_direction_10m[ini]);
@@ -5420,11 +5453,9 @@ document.addEventListener('DOMContentLoaded', function() {
         ok: horas.length > 0,
         horas: horas,
         motivo: ev.motivo,
-        ahora: {
-          kn:  Math.round(H.wind_speed_10m[ini]),
-          raf: Math.round(H.wind_gusts_10m[ini]),
-          dir: Math.round(H.wind_direction_10m[ini])
-        }
+        ahora: lectura(ini),
+        ventana: primera === null ? lectura(ini) : lectura(primera),
+        ahoraEsBuena: ev.ok
       });
     });
 
@@ -5448,7 +5479,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     document.getElementById('hoyEstado').innerHTML =
-      'Próximas 12 h<br>Actualizado ' + new Date().toLocaleTimeString('es-AR', {hour:'2-digit', minute:'2-digit'});
+      'Próximas 12 h<br>Actualizado ' + new Date().toLocaleTimeString('es-AR', {hour:'2-digit', minute:'2-digit', hour12:false});
 
     document.getElementById('hoySi').innerHTML = si.length
       ? si.map(card).join('')

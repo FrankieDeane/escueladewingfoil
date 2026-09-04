@@ -34,8 +34,10 @@ const linea = '='.repeat(78);
 console.log(linea);
 console.log('PRUEBA REAL DEL "¿SALGO HOY?" — ' + new Date().toLocaleString('es-AR', { timeZone:'America/Argentina/Buenos_Aires' }));
 console.log(linea);
-console.log('Spots pedidos      :', ((w.__EWF||{}).SPOTS||[]).filter(s=>s.w&&isFinite(s.lat)).length);
-console.log('Requests hechos    :', pedidos.length, pedidos.length === 1 ? '(uno solo, como se diseñó)' : '(!)');
+console.log('Spots de viento    :', ((w.__EWF||{}).SPOTS||[]).filter(s=>s.w&&/\\d+\\s*-\\s*\\d+/.test(s.w)&&isFinite(s.lat)).length, 'de', ((w.__EWF||{}).SPOTS||[]).length, 'totales');
+var aMeteo = pedidos.filter(u => u.includes('open-meteo'));
+console.log('Requests a la API  :', aMeteo.length, aMeteo.length === 1 ? '(uno solo para todos los spots, como se diseñó)' : '(!)');
+console.log('Otros fetch (sitio):', pedidos.length - aMeteo.length, '(instructores, equipos)');
 console.log('Tardó              :', ms, 'ms');
 console.log('Sección visible    :', sec.hidden ? 'NO — algo falló' : 'sí');
 
@@ -86,8 +88,10 @@ const dirs = todas.map(c => +c.dato.match(/(\d+)°/)[1]);
 const chk = (ok, txt) => console.log((ok ? '  ✓ ' : '  ✗ ') + txt);
 let malas = 0; const must = (ok, txt) => { if (!ok) malas++; chk(ok, txt); };
 
-must(todas.length === ((w.__EWF||{}).SPOTS||[]).filter(s=>s.w&&isFinite(s.lat)).length,
-     'todos los spots aparecen: ' + todas.length);
+const deViento = ((w.__EWF||{}).SPOTS||[]).filter(s=>s.w&&/\d+\s*-\s*\d+/.test(s.w)&&isFinite(s.lat));
+must(todas.length === deViento.length, 'aparecen los ' + deViento.length + ' spots de viento (los cable parks quedan afuera): ' + todas.length);
+must(!todas.some(c=>/Cable Park|Wake Park/.test(c.spot)), 'ningún cable park en la lista');
+must(!todas.some(c=>/sin regla/.test(c.extra)), 'ninguno queda sin motivo real');
 must(nums.every(n => n >= 0 && n < 90), 'velocidades plausibles: ' + Math.min(...nums) + '–' + Math.max(...nums) + ' kn');
 must(dirs.every(dg => dg >= 0 && dg <= 360), 'direcciones válidas: ' + Math.min(...dirs) + '°–' + Math.max(...dirs) + '°');
 must(si.every(c => /hora(s)? navegable/.test(c.extra)), 'los "sí" muestran las horas concretas');
