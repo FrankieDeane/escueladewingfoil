@@ -932,7 +932,7 @@ textarea{resize:vertical;min-height:90px}
 
 /* PRINT */
 @media print{
-  .header,.nav-drawer,.nav-drawer__backdrop,.burger,.btn-icon,.cookie-banner,.modal,#nlPopup,.mbreadcrumb,.hero__bg-video,.hero__bg::before,.hero__bg::after,.scroll-indicator,.spots-cta,.mapmodal,.game-cta-section,.game-modal,.gloss-item summary::after,video,iframe{display:none !important}
+  .header,.nav-drawer,.nav-drawer__backdrop,.burger,.btn-icon,.cookie-banner,.modal,#nlPopup,.mbreadcrumb,.bram-fab,.bram-panel,.hero__bg-video,.hero__bg::before,.hero__bg::after,.scroll-indicator,.spots-cta,.mapmodal,.game-cta-section,.game-modal,.gloss-item summary::after,video,iframe{display:none !important}
   .hero{min-height:auto;padding:40px 20px;background:#fff;color:#000}
   .hero__title,.section-title{color:#000 !important;font-size:24px !important}
   body{background:#fff !important;color:#000 !important}
@@ -1132,6 +1132,42 @@ textarea{resize:vertical;min-height:90px}
 .share-btn--fb{border-color:#1877f2;color:#1877f2}.share-btn--fb:hover{background:#1877f2;color:#fff}
 .share-btn--copy{border-color:var(--primary);color:var(--primary)}.share-btn--copy:hover{background:var(--primary);color:#fff}
 @media(max-width:520px){.share-btn span{display:none}.share-btn{padding:9px 12px;gap:0}}
+
+/* ============ BRAMADOR (asistente) ============ */
+.bram-fab{position:fixed;bottom:calc(22px + var(--bram-lift,0px));right:22px;z-index:120;width:60px;height:60px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(145deg,var(--primary),var(--accent));color:#fff;font-size:29px;line-height:1;box-shadow:0 6px 24px rgba(0,0,0,.32);display:flex;align-items:center;justify-content:center;transition:transform .2s,box-shadow .2s}
+.bram-fab:hover{transform:scale(1.08)}
+.bram-fab__dot{position:absolute;top:2px;right:2px;width:13px;height:13px;border-radius:50%;background:#34d399;border:2px solid var(--bg)}
+.bram-panel{position:fixed;bottom:calc(94px + var(--bram-lift,0px));right:22px;z-index:120;width:min(92vw,382px);max-height:min(74vh,600px);background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:0 18px 54px rgba(0,0,0,.42);display:none;flex-direction:column;overflow:hidden}
+.bram-panel[data-open="1"]{display:flex}
+.bram-head{display:flex;align-items:center;gap:11px;padding:14px 16px;border-bottom:1px solid var(--divider);background:linear-gradient(145deg,color-mix(in oklab,var(--primary),transparent 88%),transparent)}
+.bram-cara{font-size:30px;line-height:1;transition:transform .25s}
+.bram-head b{font-family:'Clash Display',sans-serif;font-size:15px;display:block}
+.bram-head small{font-size:11.5px;color:var(--text-muted)}
+.bram-x{margin-left:auto;background:none;border:none;color:var(--text-muted);font-size:21px;cursor:pointer;line-height:1;padding:2px 6px}
+.bram-x:hover{color:var(--text)}
+.bram-msgs{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:11px}
+.bram-msg{max-width:88%;padding:10px 13px;border-radius:13px;font-size:13.5px;line-height:1.55;white-space:pre-wrap;word-break:break-word}
+.bram-msg--bot{background:var(--surface-2);border:1px solid var(--border);border-bottom-left-radius:4px;align-self:flex-start}
+.bram-msg--yo{background:var(--primary);color:var(--text-inverse);border-bottom-right-radius:4px;align-self:flex-end}
+.bram-msg a{color:var(--primary);font-weight:700}
+.bram-msg--yo a{color:var(--text-inverse)}
+.bram-chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 15px 11px}
+.bram-chip{background:var(--surface-2);border:1px solid var(--border);color:var(--text-muted);border-radius:99px;padding:6px 11px;font-size:11.5px;cursor:pointer;font-family:inherit}
+.bram-chip:hover{border-color:var(--primary);color:var(--primary)}
+.bram-form{display:flex;gap:8px;padding:11px 13px;border-top:1px solid var(--divider)}
+.bram-form input{flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;color:var(--text);font:inherit;font-size:13.5px}
+.bram-form input:focus{outline:none;border-color:var(--primary)}
+.bram-form button{background:var(--primary);color:var(--text-inverse);border:none;border-radius:10px;padding:0 15px;cursor:pointer;font-size:16px}
+@keyframes bramTiembla{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(-3px) rotate(-7deg)}75%{transform:translateX(3px) rotate(7deg)}}
+@keyframes bramSalta{0%,100%{transform:translateY(0)}40%{transform:translateY(-9px)}}
+@keyframes bramCae{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(4px) rotate(-9deg)}}
+.bram--enojado{animation:bramTiembla .32s ease-in-out 3}
+.bram--feliz,.bram--epico,.bram--riendo{animation:bramSalta .45s ease-in-out 2}
+.bram--llorando{animation:bramCae 1.1s ease-in-out 2}
+@media(prefers-reduced-motion:reduce){.bram--enojado,.bram--feliz,.bram--epico,.bram--riendo,.bram--llorando{animation:none}}
+@media(max-width:480px){.bram-panel{right:10px;left:10px;width:auto;bottom:calc(88px + var(--bram-lift,0px))}.bram-fab{bottom:calc(16px + var(--bram-lift,0px));right:16px}}
+.bram-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
   </style>
 
   <!-- Leaflet -->
@@ -3191,6 +3227,7 @@ var SPOTS=[
   {p:'cable',prov:'BS AS',n:'HJ San Pedro Wake Park',d:'Cable lineal 200x40m. Wakeboard, kneeboard, wakeskate.',w:'Cable',lv:'c',tags:['Cable Park','San Pedro'],x:198,y:218,lat:-33.6786,lng:-59.6711,img:'https://images.unsplash.com/photo-1548263594-a71ea65a8598?w=600&q=75&fit=crop',cable:true},
   {p:'cable',prov:'CTES',n:'Ipora Wake Park — Corrientes',d:'Sede del Circuito Argentino FADEW.',w:'Cable',lv:'c',tags:['Cable Park','Corrientes'],x:213,y:160,lat:-27.4691,lng:-58.8306,img:'https://images.unsplash.com/photo-1559827291-72ee739d0d9a?w=600&q=75&fit=crop&crop=entropy',cable:true},
 ];
+window.__EWF = window.__EWF || {}; window.__EWF.SPOTS = SPOTS;
 
 // ============ THEME ============
 function setTheme(t){document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('wf-theme',t)}catch(e){}}
@@ -3725,6 +3762,7 @@ var GLOSSARY = [
   {n:'Cross-shore',tag:'Condición',d:'Viento paralelo a la costa. Condición ideal para wingfoil intermedio/avanzado.'},
   {n:'Knots (kn)',tag:'Unidad',d:'Nudos. Unidad de velocidad del viento. 1 nudo ≈ 1.85 km/h. Wingfoil arranca a partir de 12-15 kn.'}
 ];
+window.__EWF = window.__EWF || {}; window.__EWF.GLOSSARY = GLOSSARY;
 
 function renderGlossary(filter){
   var grid = document.getElementById('glosarioGrid');
@@ -4007,6 +4045,7 @@ var MANIOBRAS = [
   {n:'Twisted jump',sub:'Salto torcido',cat:'pro',catLabel:'Pro',diff:5,img:'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=600&auto=format&fit=crop&q=60',vid:'tQM0D9FFnrE',d:'Salto con rotación lateral del cuerpo. Combinación de fuerza, técnica y timing perfectos.'},
   {n:'Double backflip',sub:'Doble mortal',cat:'pro',catLabel:'Pro',diff:5,img:'https://images.unsplash.com/photo-1530541930197-ff16ac917b0e?w=600&auto=format&fit=crop&q=60',vid:'mfmLiKBv5Cc',d:'Dos vueltas completas en el aire. Solo los top riders del mundo lo logran de manera consistente.'}
 ];
+window.__EWF = window.__EWF || {}; window.__EWF.MANIOBRAS = MANIOBRAS;
 
 var manCurrentFilter = 'all';
 
@@ -4588,5 +4627,494 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+
+<!-- ============================================================ BRAMADOR — asistente ============================================================ -->
+<button class="bram-fab" id="bramFab" type="button" aria-label="Abrir a Bramador, el asistente del sitio" aria-expanded="false" aria-controls="bramPanel">
+  🤙<span class="bram-fab__dot" aria-hidden="true"></span>
+</button>
+<div class="bram-panel" id="bramPanel" role="dialog" aria-modal="false" aria-label="Bramador, asistente de la Escuela de Wingfoil">
+  <div class="bram-head">
+    <span class="bram-cara" id="bramCara" aria-hidden="true">🤙</span>
+    <span>
+      <b>Bramador</b>
+      <small id="bramEstado">Esperando que entre el S/SO</small>
+    </span>
+    <button class="bram-x" id="bramX" type="button" aria-label="Cerrar a Bramador">×</button>
+  </div>
+  <div class="bram-msgs" id="bramMsgs" role="log" aria-live="polite"></div>
+  <div class="bram-chips" id="bramChips"></div>
+  <form class="bram-form" id="bramForm" autocomplete="off">
+    <label for="bramInput" class="bram-sr">Escribile a Bramador</label>
+    <input type="text" id="bramInput" placeholder="Preguntale algo a Bramador…" maxlength="200">
+    <button type="submit" aria-label="Enviar">➤</button>
+  </form>
+</div>
+
+<script>
+// ============ BRAMADOR — asistente del sitio ============
+// Vive dentro de este mismo IIFE para poder leer SPOTS, GLOSSARY y MANIOBRAS
+// sin duplicar datos: todo lo que Bramador contesta sale del propio sitio.
+(function(){
+  var D = window.__EWF || {};
+  var SPOTS = D.SPOTS || [], GLOSSARY = D.GLOSSARY || [], MANIOBRAS = D.MANIOBRAS || [];
+
+  var fab   = document.getElementById('bramFab');
+  var panel = document.getElementById('bramPanel');
+  if(!fab || !panel) return;
+
+  var msgs   = document.getElementById('bramMsgs');
+  var cara   = document.getElementById('bramCara');
+  var estado = document.getElementById('bramEstado');
+  var form   = document.getElementById('bramForm');
+  var input  = document.getElementById('bramInput');
+  var chips  = document.getElementById('bramChips');
+  var btnX   = document.getElementById('bramX');
+
+  var CARAS = {neutral:'🤙',feliz:'😄',riendo:'🤣',enojado:'😡',llorando:'😭',epico:'🤩',pensando:'🤔',sorpresa:'😮'};
+  var ESTADOS = {
+    neutral:'Esperando que entre el S/SO', feliz:'De buen humor', riendo:'No puede parar',
+    enojado:'Enojadísimo', llorando:'Llorando otra vez', epico:'Modo épico',
+    pensando:'Pensando…', sorpresa:'No lo puede creer'
+  };
+  var MOODCLS = ['bram--enojado','bram--feliz','bram--epico','bram--riendo','bram--llorando'];
+
+  function esc(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+                    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+  function norm(s){
+    return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+                        .replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+  }
+  function tiene(q, lista){
+    for(var i=0;i<lista.length;i++){ if(q.indexOf(lista[i])>=0) return true; }
+    return false;
+  }
+  function ir(id, texto){
+    return '<a href="#'+id+'" data-bram-ir="'+id+'">'+esc(texto)+'</a>';
+  }
+
+  // ---- Mapa de secciones reales del sitio ----
+  var SECCIONES = [
+    {id:'empezar',          t:'¿Querés arrancar? 3 pasos'},
+    {id:'que-es',           t:'¿Qué es el WingFoil?'},
+    {id:'videos',           t:'Videos por nivel'},
+    {id:'anatomia',         t:'Anatomía del Foil'},
+    {id:'anatomia-ala',     t:'Anatomía del Ala'},
+    {id:'spots',            t:'Aguas argentinas'},
+    {id:'camaras',          t:'Cámaras de San Isidro'},
+    {id:'calculadora',      t:'Calculadora de equipo'},
+    {id:'instructores',     t:'Instructores'},
+    {id:'venta-de-wingfoil',t:'Equipos en venta'},
+    {id:'maniobras',        t:'Maniobras del WingFoil'},
+    {id:'riders',           t:'Riders & Legends'},
+    {id:'glosario',         t:'Glosario del WingFoil'},
+    {id:'blog',             t:'Guías y artículos'},
+    {id:'marcas',           t:'Marcas que confiamos'},
+    {id:'comparador',       t:'Comparador de marcas'},
+    {id:'faq',              t:'Preguntas frecuentes'},
+    {id:'testimonios',      t:'La gente que ya está volando'}
+  ];
+
+  // ---- FAQ del sitio, leída del DOM (una sola fuente de verdad) ----
+  var FAQ = [];
+  (function(){
+    var items = document.querySelectorAll('#faq .faq-item');
+    for(var i=0;i<items.length;i++){
+      var q = items[i].querySelector('summary');
+      var a = items[i].querySelector('.faq-answer');
+      if(q && a) FAQ.push({q:q.textContent.trim(), a:a.textContent.trim(), qn:norm(q.textContent), an:norm(a.textContent)});
+    }
+  })();
+
+  var STOP = ['lago','laguna','playa','rio','embalse','costanera','punta','puerto','bahia','club',
+              'para','como','donde','cuando','tengo','quiero','sobre','mejor','este','esta','wing',
+              'wingfoil','foil','viento','agua'];
+
+  // Palabras que aparecen en nombres de spots pero también en el habla común.
+  // Sin esto, "un equipo nuevo" caía en "Puerto Madryn — Golfo Nuevo" y
+  // "el Río de la Plata" caía en "Mar del Plata — Waikiki".
+  var GENERICO = ['nuevo','nueva','plata','tercero','union','norte','este','oeste','paso','patria',
+                  'bonita','frontera','grande','chica','media','primera','segunda','mayor','menor'];
+
+  function distintivos(txt){
+    var out = [], toks = norm(txt).split(' ');
+    for(var i=0;i<toks.length;i++){
+      var t = toks[i];
+      if(t.length >= 4 && STOP.indexOf(t) < 0 && GENERICO.indexOf(t) < 0) out.push(t);
+    }
+    return out;
+  }
+
+  // estricto: para nombres de lugares, un solo token corto no alcanza — o pega
+  // más de uno, o el token es largo. En glosario y maniobras no aplica, porque
+  // hay términos legítimos de una sola palabra corta ("Knots", "Gybe").
+  function mejorMatch(lista, campo, q, estricto){
+    var best = null, bestScore = 0;
+    for(var i=0;i<lista.length;i++){
+      var toks = distintivos(lista[i][campo]), hits = 0, sc = 0;
+      for(var j=0;j<toks.length;j++){
+        if(q.indexOf(toks[j]) >= 0){ hits++; sc += toks[j].length; }
+      }
+      if(estricto && hits === 1 && sc < 6) continue;
+      if(hits > 0 && sc > bestScore){ bestScore = sc; best = lista[i]; }
+    }
+    return best;
+  }
+
+  // Los spots suman una regla propia: el nombre base ("Mar del Plata",
+  // "San Isidro") tal cual dentro de la pregunta es match seguro.
+  function buscarSpot(q){
+    for(var i=0;i<SPOTS.length;i++){
+      var base = norm(SPOTS[i].n.split('—')[0]);
+      if(base.length >= 5 && q.indexOf(base) >= 0) return SPOTS[i];
+    }
+    return mejorMatch(SPOTS, 'n', q, true);
+  }
+
+  // Provincias y zonas por las que la gente pregunta, mapeadas a los códigos
+  // de provincia que ya usan los spots.
+  var ZONAS = [
+    {k:['bariloche','nahuel huapi','rio negro','patagonia norte'], p:['RÍO NEGRO']},
+    {k:['neuquen','san martin de los andes','junin de los andes'], p:['NEUQUÉN']},
+    {k:['chubut','madryn','rawson','trelew'],                      p:['CHUBUT']},
+    {k:['cordoba','carlos paz','calamuchita'],                     p:['CBA']},
+    {k:['corrientes','litoral'],                                   p:['CTES']},
+    {k:['entre rios','parana','gualeguaychu'],                     p:['E.RÍOS']},
+    {k:['buenos aires','bs as','gba','capital','conurbano'],        p:['BS AS']},
+    {k:['patagonia','sur del pais'],                               p:['NEUQUÉN','RÍO NEGRO','CHUBUT']}
+  ];
+  function buscarZona(q){
+    for(var i=0;i<ZONAS.length;i++){
+      for(var j=0;j<ZONAS[i].k.length;j++){
+        if(q.indexOf(ZONAS[i].k[j]) >= 0){
+          var lista = SPOTS.filter(function(sp){ return ZONAS[i].p.indexOf(sp.prov) >= 0; });
+          if(lista.length) return {nombre:ZONAS[i].k[j], spots:lista};
+        }
+      }
+    }
+    return null;
+  }
+
+  // conRespuesta = también puntúa contra el texto de la respuesta. Se usa solo
+  // en la última pasada: "¿qué época del año conviene?" no comparte palabras
+  // con el título de la FAQ, pero sí con su respuesta.
+  var STOP_FAQ = ['para','como','donde','cuando','tengo','quiero','sobre','este','esta','esto',
+                  'mucho','tanto','desde','hasta','pero','porque','entonces','algun','alguna'];
+  function matchFaq(q, conRespuesta){
+    var best = null, score = 0;
+    var palabras = q.split(' ').filter(function(w){ return w.length > 3 && STOP_FAQ.indexOf(w) < 0; });
+    for(var f=0; f<FAQ.length; f++){
+      var sc = 0;
+      for(var w=0; w<palabras.length; w++){
+        if(FAQ[f].qn.indexOf(palabras[w]) >= 0) sc++;
+        else if(conRespuesta && FAQ[f].an.indexOf(palabras[w]) >= 0) sc++;
+      }
+      if(sc > score){ score = sc; best = FAQ[f]; }
+    }
+    return {faq:best, score:score};
+  }
+  function respFaq(f){
+    return {m:'feliz', h:'<strong>'+esc(f.q)+'</strong> 😄\n\n'+esc(f.a)+'\n\nHay '+FAQ.length+' preguntas más en '+ir('faq','Preguntas frecuentes')+'.', s:SUGE_BASE};
+  }
+  function respGlos(g){
+    return {m:'feliz', h:'<strong>'+esc(g.n)+'</strong> — '+esc(g.tag)+' 😄\n\n'+esc(g.d)+'\n\nHay '+GLOSSARY.length+' términos más en '+ir('glosario','el glosario')+'.',
+            s:['¿Qué es pumpear?','Mostrame maniobras','¿Dónde navego?']};
+  }
+
+  // ---- Calculadora: misma fórmula que la sección #calculadora ----
+  function calcular(peso, nivel, cond){
+    var tabla = nivel==='b' ? peso+40 : nivel==='i' ? peso+15 : Math.max(peso-10,40);
+    var ala   = cond==='light' ? (peso<70?6.5:peso<85?7:7.5)
+              : cond==='medium'? (peso<70?5:peso<85?5.5:6)
+              :                  (peso<70?3.5:peso<85?4:4.5);
+    var mastil= nivel==='b' ? 70 : nivel==='i' ? 80 : 90;
+    return {tabla:tabla, ala:ala, mastil:mastil};
+  }
+
+  // ---- Estado emocional ----
+  function humor(m){
+    cara.textContent = CARAS[m] || CARAS.neutral;
+    estado.textContent = ESTADOS[m] || ESTADOS.neutral;
+    for(var i=0;i<MOODCLS.length;i++) cara.classList.remove(MOODCLS[i]);
+    var cls = {enojado:'bram--enojado',feliz:'bram--feliz',epico:'bram--epico',
+               riendo:'bram--riendo',llorando:'bram--llorando'}[m];
+    if(cls){ void cara.offsetWidth; cara.classList.add(cls); }
+  }
+
+  function decir(html, quien){
+    var d = document.createElement('div');
+    d.className = 'bram-msg bram-msg--' + (quien === 'yo' ? 'yo' : 'bot');
+    d.innerHTML = html;
+    msgs.appendChild(d);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function sugerir(lista){
+    chips.innerHTML = '';
+    for(var i=0;i<lista.length;i++){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'bram-chip';
+      b.textContent = lista[i];
+      chips.appendChild(b);
+    }
+  }
+
+  var SUGE_BASE = ['¿Qué tabla me conviene?','¿Dónde navego?','¿Qué es pumpear?','¿Cuánto sale un equipo?','Contame un chiste'];
+
+  // ============ El cerebro ============
+  function responder(txt){
+    var q = norm(txt);
+    // El glosario está en inglés técnico; la gente pregunta en castellano.
+    q = q.replace(/\bnudos?\b/g, 'nudos knots').replace(/\bbombear\b/g, 'bombear pumpear');
+    if(!q) return {m:'pensando', h:'Escribiste nada. Nada. Y yo acá, esperándote. 🤔', s:SUGE_BASE};
+
+    // --- Puteadas / bardo ---
+    if(tiene(q,['boludo','pelotudo','forro','la concha','conchuda','mierda','sos un','careta','inutil','no servis','no funciona nada'])){
+      return {m:'enojado', h:'¡PARÁ! 😤 Yo soy un robot con dignidad, no un poste de la Costanera.\n\nRespirá, contame bien qué necesitás y te lo resuelvo. Si querés algo concreto: '+ir('calculadora','calculadora de equipo')+', '+ir('spots','spots')+' o '+ir('instructores','instructores')+'.', s:SUGE_BASE};
+    }
+
+    // --- Chistes / humor ---
+    if(tiene(q,['chiste','joke','contame algo','hace reir','algo gracioso','divertime'])){
+      var CH = [
+        'El wingfoil es el único deporte donde pagás miles de dólares para caerte al agua con estilo. 🤣',
+        '—¿Cuántos nudos hay? —Ocho. —Uh, poquito. —Ocho spots, no ocho nudos. Viento cero. 🤣',
+        'Mi terapeuta me dijo que suelte lo que no puedo controlar. Solté el ala. Ahora está en Uruguay. 🤣',
+        'El pronóstico decía 20 kn. Llegué y había 4. El pronóstico también es un chamuyo argentino. 🤣'
+      ];
+      return {m:'riendo', h:CH[Math.floor(Math.random()*CH.length)]+'\n\nSi ya te reíste, mirá '+ir('maniobras','las maniobras')+' que ahí sí me pongo serio.', s:SUGE_BASE};
+    }
+
+    // --- Tristeza / no hay viento ---
+    if(tiene(q,['no hay viento','sin viento','viento cero','esta planchado','planchado','me aburro','triste','bajon'])){
+      return {m:'llorando', h:'No me hablés de días planchados que me pongo mal. 😭\n\nPlan B para día sin viento: '+ir('videos','videos por nivel')+', '+ir('glosario','el glosario')+' (30 términos) o '+ir('riders','Riders & Legends')+'. Y si querés espiar el agua en vivo: '+ir('camaras','cámaras de San Isidro')+'.', s:['¿Dónde navego?','¿Qué es pumpear?','Mostrame maniobras']};
+    }
+
+    // --- Saludos ---
+    if(/^(hola|buenas|buen dia|buenas tardes|buenas noches|hey|holis|que tal|como andas|como estas|todo bien)\b/.test(q)){
+      return {m:'feliz', h:'¡Hola! 😄 Soy Bramador, el robot de la Escuela de Wingfoil. Me sé todo lo que hay en este sitio: spots, maniobras, glosario, equipo, precios e instructores.\n\nPreguntame cualquier cosa.', s:SUGE_BASE};
+    }
+
+    // --- Quién sos ---
+    if(tiene(q,['quien sos','quien eres','que sos','como te llamas','tu nombre','bramador'])){
+      return {m:'epico', h:'Soy <strong>Bramador</strong>. 🤩 Me llamo así porque cuando entra el viento fuerte, brama.\n\nNo soy instructor ni pronóstico: soy el que te encuentra rápido lo que ya está en este sitio. Sé de '+ir('spots','21 spots')+', '+ir('maniobras','maniobras')+', '+ir('glosario','30 términos del glosario')+', '+ir('calculadora','medidas de equipo')+' y '+ir('faq','las dudas frecuentes')+'.', s:SUGE_BASE};
+    }
+
+    // --- Gracias / despedida ---
+    if(tiene(q,['gracias','grasias','sos un genio','buenisimo','excelente','crack','capo'])){
+      return {m:'feliz', h:'¡De nada! 😄 Para eso estoy.\n\nSi te sirvió, pasale el sitio a alguien que esté arrancando. Y si sos instructor, sumate acá: '+ir('instructores','¿Sos instructor?')+'.', s:SUGE_BASE};
+    }
+    if(tiene(q,['chau','adios','nos vemos','hasta luego','me voy'])){
+      return {m:'llorando', h:'¿Ya te vas? 😭 Bueno. Andá a navegar, que es mejor que hablar conmigo.\n\nDejo el botón acá abajo por si volvés.', s:SUGE_BASE};
+    }
+
+    // --- Calculadora de equipo ---
+    var pesoM = q.match(/(\d{2,3})\s*(kg|kilo|kilos|k)?\b/);
+    var pideMedida = tiene(q,['que tabla','cuantos litros','litros','que ala','que medida','tamano de tabla','tamano de ala','mastil','calculadora','que equipo me','que equipo necesito','me conviene','medida de'])
+                  || (!!pesoM && tiene(q,['peso','peso ','kg','kilos','principiante','intermedio','avanzado']));
+    if(pideMedida && pesoM && +pesoM[1] >= 35 && +pesoM[1] <= 160){
+      var peso = +pesoM[1];
+      var nivel = tiene(q,['avanzado','experto','pro']) ? 'a'
+                : tiene(q,['intermedio','medio']) ? 'i' : 'b';
+      var cond  = tiene(q,['poco viento','viento flojo','flojo','liviano','light','10 kn','12 kn']) ? 'light'
+                : tiene(q,['mucho viento','viento fuerte','fuerte','25 kn','30 kn']) ? 'strong' : 'medium';
+      var r = calcular(peso, nivel, cond);
+      var nivLbl = {b:'principiante',i:'intermedio',a:'avanzado'}[nivel];
+      var conLbl = {light:'viento flojo (10-15 kn)',medium:'viento medio (15-22 kn)',strong:'viento fuerte (22-30 kn)'}[cond];
+      return {m:'epico', h:'Listo, '+peso+' kg, nivel '+nivLbl+', '+conLbl+': 🤩\n\n<strong>Tabla:</strong> ~'+r.tabla+' L\n<strong>Ala:</strong> ~'+r.ala+' m²\n<strong>Mástil:</strong> ~'+r.mastil+' cm\n\nEs la misma cuenta que hace '+ir('calculadora','la calculadora del sitio')+' — entrá ahí si querés cambiar nivel o condición. Y antes de comprar, charlalo con un '+ir('instructores','instructor')+'.',
+              s:['¿Cuánto sale un equipo?','¿Nuevo o usado?','¿Dónde navego?']};
+    }
+    if(pideMedida){
+      return {m:'pensando', h:'Te la calculo acá mismo. 🤔 Decime tu peso y tu nivel, por ejemplo: <em>"peso 80 kg soy principiante"</em>.\n\nO usá directo '+ir('calculadora','la calculadora de equipo')+', que además te deja elegir la condición de viento.', s:['Peso 80 kg soy principiante','Peso 95 kg intermedio','¿Nuevo o usado?']};
+    }
+
+    // --- Definiciones: "¿qué es X?" va derecho al glosario, antes que
+    //     cualquier otra intención ("¿qué son los nudos?" es una definición,
+    //     no una consulta de viento) ---
+    if(/^que\s*(es|son|significa|quiere decir)\b/.test(q) || tiene(q,['significa','definicion','quiere decir'])){
+      var gDef = mejorMatch(GLOSSARY, 'n', q);
+      if(gDef) return respGlos(gDef);
+    }
+
+    // --- FAQ del sitio: si la pregunta entera calza con una, gana antes que un
+    //     match suelto de término ("¿cuánto tiempo me lleva foilear?" es una
+    //     pregunta de la FAQ, no la definición de "foilear") ---
+    var faq1 = matchFaq(q);
+    if(faq1.score >= 3) return respFaq(faq1.faq);
+
+    // --- Spot puntual ---
+    var spot = buscarSpot(q);
+    if(spot){
+      var extra = spot.tags && spot.tags.length ? '\n<strong>Tags:</strong> '+esc(spot.tags.join(' · ')) : '';
+      return {m:'epico', h:'<strong>'+esc(spot.n)+'</strong> ('+esc(spot.prov)+') 🤩\n\n'+esc(spot.d)+'\n\n<strong>Viento ideal:</strong> '+esc(spot.w||'sin dato')+extra+'\n\nEstá fichado en '+ir('spots','Aguas argentinas')+' con mapa y detalle.',
+              s:['¿Dónde navego?','¿Qué tabla me conviene?','Mostrame maniobras']};
+    }
+
+    // --- Viento / pronóstico ---
+    if(tiene(q,['viento','pronostico','kn','nudos','rafaga','cuando navegar','salgo hoy','esta bueno hoy','condiciones'])){
+      var ej = [];
+      for(var i=0;i<SPOTS.length && ej.length<4;i++){ if(SPOTS[i].w) ej.push('• <strong>'+esc(SPOTS[i].n)+'</strong>: '+esc(SPOTS[i].w)); }
+      return {m:'pensando', h:'No tengo pronóstico en vivo (todavía), pero sí sé la <strong>regla de viento de cada spot</strong>: 🤔\n\n'+ej.join('\n')+'\n\nLos 21 están en '+ir('spots','Aguas argentinas')+' con su dirección y rango. Para ver el agua ahora mismo: '+ir('camaras','cámaras de San Isidro')+'.',
+              s:['San Isidro','Mar del Plata','¿Qué tabla me conviene?']};
+    }
+
+    var man = mejorMatch(MANIOBRAS, 'n', q);
+    if(man){
+      return {m:'epico', h:'<strong>'+esc(man.n)+'</strong>'+(man.sub?' <em>('+esc(man.sub)+')</em>':'')+' — '+esc(man.catLabel||'')+' 🤩\n\n'+esc(man.d)+'\n\nEstá con video en '+ir('maniobras','Maniobras del WingFoil')+'.',
+              s:['Mostrame maniobras','¿Qué es pumpear?','¿Dónde navego?']};
+    }
+
+    var g = mejorMatch(GLOSSARY, 'n', q);
+    if(g) return respGlos(g);
+
+    // --- Listados por intención ---
+    // --- Spots de una zona / provincia ---
+    var zona = buscarZona(q);
+    if(zona && tiene(q,['spot','spots','navegar','navego','donde','lugares','hay algo','se puede','practicar'])){
+      var lz = zona.spots.map(function(sp){ return '• <strong>'+esc(sp.n)+'</strong> — '+esc(sp.w||'sin dato de viento'); });
+      return {m:'epico', h:'En esa zona tengo <strong>'+zona.spots.length+'</strong> spot'+(zona.spots.length>1?'s':'')+': 🤩\n\n'+lz.join('\n')+'\n\nCada uno con mapa y detalle en '+ir('spots','Aguas argentinas')+'. Nombrame uno y te lo cuento.',
+              s:['¿Qué tabla me conviene?','Mostrame maniobras','¿Dónde navego?']};
+    }
+
+    if(tiene(q,['donde navego','donde puedo navegar','spots','spot','lugares','donde se navega','playas','donde practicar'])){
+      var prov = {};
+      for(var k=0;k<SPOTS.length;k++){ prov[SPOTS[k].prov] = (prov[SPOTS[k].prov]||0)+1; }
+      var ln = [];
+      for(var p in prov){ if(Object.prototype.hasOwnProperty.call(prov,p)) ln.push('• '+esc(p)+': '+prov[p]); }
+      return {m:'epico', h:'Tengo <strong>'+SPOTS.length+' spots</strong> fichados en el país: 🤩\n\n'+ln.join('\n')+'\n\nMapa y detalle de cada uno en '+ir('spots','Aguas argentinas')+'. Nombrame uno y te cuento el viento que necesita.',
+              s:['San Isidro','Mar del Plata','Bariloche']};
+    }
+    if(tiene(q,['maniobra','maniobras','trucos','que puedo aprender','progresion'])){
+      return {m:'epico', h:'Hay <strong>'+MANIOBRAS.length+' maniobras</strong> cargadas, de básicas a avanzadas, cada una con video. 🤩\n\nArrancás por foileo → pumpear → upwind, y después viene la trabuchada, que es la que separa aguas.\n\nTodas en '+ir('maniobras','Maniobras del WingFoil')+'.',
+              s:['¿Qué es pumpear?','¿Qué es una trabuchada?','Videos por nivel']};
+    }
+    if(tiene(q,['glosario','que significa','que quiere decir','terminos','vocabulario','jerga'])){
+      return {m:'feliz', h:'Tengo <strong>'+GLOSSARY.length+' términos</strong> en '+ir('glosario','el glosario')+' 😄 — técnica, maniobras, equipo y unidades.\n\nDecime cuál no entendés y te lo explico acá mismo.',
+              s:['¿Qué es pumpear?','¿Qué es un touch down?','¿Qué son los nudos?']};
+    }
+    if(tiene(q,['clase','clases','instructor','instructores','profesor','aprender con alguien','escuela','curso'])){
+      return {m:'feliz', h:'La plataforma no dicta clases: los que dictan son los <strong>instructores certificados</strong> que se sumaron. 😄\n\nLos ves en '+ir('instructores','la sección de instructores')+' — y si sos instructor, ahí mismo cargás tu perfil gratis.\n\nOjo: los perfiles los publican ellos, verificá credenciales antes de contratar.',
+              s:['¿Cuánto tardo en foilear?','¿Dónde navego?','¿Qué tabla me conviene?']};
+    }
+    if(tiene(q,['comprar','precio','precios','cuanto sale','cuanto cuesta','vender','venta','usado','segunda mano','equipos en venta','marketplace'])){
+      return {m:'pensando', h:'Precios de referencia en Argentina (equipo dolarizado): 🤔\n\n<strong>Nuevo:</strong> USD 2.500–3.000\n<strong>Usado en buen estado:</strong> USD 1.000–1.500\n\nEn '+ir('venta-de-wingfoil','Equipos en venta')+' está el listado entre riders. Si comprás usado: revisá costuras del ala, que los tubos inflen bien y que el foil no tenga corrosión.',
+              s:['¿Qué tabla me conviene?','¿Nuevo o usado?','Ver marcas']};
+    }
+    if(tiene(q,['marca','marcas','duotone','naish','fone','armstrong','cual marca','comparador'])){
+      return {m:'feliz', h:'Las marcas que seguimos están en '+ir('marcas','Marcas que confiamos')+' 😄, y si querés verlas enfrentadas, está el '+ir('comparador','comparador de marcas')+'.', s:['¿Cuánto sale un equipo?','¿Qué tabla me conviene?']};
+    }
+    if(tiene(q,['video','videos','tutorial','ver como se hace'])){
+      return {m:'feliz', h:'Hay '+ir('videos','videos organizados por nivel')+' 😄 — principiante, intermedio y avanzado. Y cada maniobra de '+ir('maniobras','esta sección')+' viene con su propio video.', s:['Mostrame maniobras','¿Qué es pumpear?']};
+    }
+    if(tiene(q,['anatomia','partes','fuselaje','stabilizer','ala delantera','como es un foil','partes del ala','leading edge','bladder'])){
+      return {m:'epico', h:'Tengo las dos anatomías desarmadas pieza por pieza: 🤩\n\n• '+ir('anatomia','Anatomía del Foil')+' — mástil, fuselaje, ala delantera y stabilizer.\n• '+ir('anatomia-ala','Anatomía del Ala')+' — leading edge, strut, handles y ventana.', s:['¿Qué es pumpear?','¿Qué tabla me conviene?']};
+    }
+    if(tiene(q,['rider','riders','legends','quien es el mejor','profesionales','competencia','regata'])){
+      return {m:'epico', h:'Los referentes del deporte están en '+ir('riders','Riders & Legends')+' 🤩.\n\nY sí, en Argentina hay regatas y competencias todo el año organizadas por distintos clubes — hablalo con tu '+ir('instructores','instructor')+' para sumarte al circuito.', s:['Mostrame maniobras','¿Dónde navego?']};
+    }
+    if(tiene(q,['blog','articulo','articulos','guia','guias','leer','nota'])){
+      return {m:'feliz', h:'Las notas largas están en '+ir('blog','Guías y artículos')+' 😄.', s:SUGE_BASE};
+    }
+    if(tiene(q,['camara','camaras','en vivo','ver el agua','webcam'])){
+      return {m:'sorpresa', h:'Sí, hay '+ir('camaras','cámaras en vivo de San Isidro')+' 😮 — mirás el agua antes de cargar el auto.', s:['¿Dónde navego?','San Isidro']};
+    }
+    if(tiene(q,['empezar','arrancar','soy nuevo','principiante','nunca hice','como empiezo','primera vez','desde cero'])){
+      return {m:'feliz', h:'Arrancás así 😄:\n\n1. Leé '+ir('que-es','qué es el wingfoil')+' para entender el deporte.\n2. Mirá '+ir('empezar','los 3 pasos para arrancar')+'.\n3. Buscá un '+ir('instructores','instructor')+' cerca tuyo.\n\nNo compres equipo antes de la primera clase. En serio.',
+              s:['¿Qué tabla me conviene?','¿Cuánto tardo en foilear?','¿Dónde navego?']};
+    }
+    if(tiene(q,['que es el wingfoil','que es wingfoil','de que se trata','explicame el deporte'])){
+      return {m:'epico', h:'Wingfoil = tabla con hydrofoil + un ala inflable que sostenés con las manos. 🤩\n\nCuando agarrás velocidad el foil levanta la tabla y volás sobre el agua, en silencio. Sin líneas, sin barra, sin arnés obligatorio.\n\nTodo explicado en '+ir('que-es','¿Qué es el WingFoil?')+'.', s:['¿Cómo empiezo?','¿Qué tabla me conviene?','Mostrame videos']};
+    }
+    if(tiene(q,['seccion','secciones','que hay en el sitio','que tiene la pagina','menu','indice','que puedo ver'])){
+      var ls = [];
+      for(var z=0; z<SECCIONES.length; z++) ls.push('• '+ir(SECCIONES[z].id, SECCIONES[z].t));
+      return {m:'epico', h:'Esto es todo lo que hay acá adentro 🤩:\n\n'+ls.join('\n'), s:SUGE_BASE};
+    }
+
+    // --- FAQ del sitio (segunda pasada, umbral bajo) ---
+    var faq2 = matchFaq(q, true);
+    if(faq2.score >= 2) return respFaq(faq2.faq);
+
+    // --- No entendí ---
+    return {m:'llorando', h:'Uf, esa no me la sé. 😭 Soy un robot de wingfoil, no de la vida.\n\nProbá con algo de acá: spots, maniobras, glosario, equipo, precios, instructores o clases. También podés pedirme <em>"qué hay en el sitio"</em> y te tiro el índice completo.',
+            s:['¿Qué hay en el sitio?','¿Dónde navego?','¿Qué tabla me conviene?']};
+  }
+
+  // ============ Interacción ============
+  function preguntar(txt){
+    decir(esc(txt), 'yo');
+    humor('pensando');
+    setTimeout(function(){
+      var r = responder(txt);
+      humor(r.m);
+      decir(r.h, 'bot');
+      sugerir(r.s || SUGE_BASE);
+    }, 380);
+  }
+
+  var abierto = false, saludado = false;
+  function abrir(){
+    abierto = true;
+    panel.setAttribute('data-open','1');
+    fab.setAttribute('aria-expanded','true');
+    if(!saludado){
+      saludado = true;
+      humor('feliz');
+      decir('¡Buenas! Soy <strong>Bramador</strong> 😄, el robot de la Escuela de Wingfoil.\n\nMe sé de memoria todo lo que hay en este sitio: '+SPOTS.length+' spots, '+MANIOBRAS.length+' maniobras, '+GLOSSARY.length+' términos del glosario, la calculadora de equipo y las dudas frecuentes.\n\nPreguntame lo que quieras. Puedo enojarme, reírme o llorar, pero siempre te contesto.', 'bot');
+      sugerir(SUGE_BASE);
+    }
+    setTimeout(function(){ input.focus(); }, 60);
+  }
+  function cerrar(){
+    abierto = false;
+    panel.removeAttribute('data-open');
+    fab.setAttribute('aria-expanded','false');
+  }
+
+  // El banner de cookies ocupa el pie y en pantallas medianas o mobile se
+  // superpone con el botón. Lo medimos y levantamos a Bramador lo justo.
+  (function(){
+    var banner = document.getElementById('cookieBanner');
+    if(!banner) return;
+    function ajustar(){
+      var visible = !banner.hidden && banner.offsetParent !== null;
+      var alto = visible ? banner.offsetHeight + 14 : 0;
+      document.documentElement.style.setProperty('--bram-lift', alto + 'px');
+    }
+    ajustar();
+    if(window.MutationObserver){
+      new MutationObserver(ajustar).observe(banner, {attributes:true, attributeFilter:['hidden','style','class']});
+    }
+    window.addEventListener('resize', ajustar);
+  })();
+
+  fab.addEventListener('click', function(){ abierto ? cerrar() : abrir(); });
+  btnX.addEventListener('click', cerrar);
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && abierto) cerrar(); });
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var v = input.value.trim();
+    if(!v) return;
+    input.value = '';
+    preguntar(v);
+  });
+
+  chips.addEventListener('click', function(e){
+    var b = e.target.closest('.bram-chip');
+    if(b) preguntar(b.textContent);
+  });
+
+  // Los links que arma Bramador navegan a la sección y cierran el panel
+  msgs.addEventListener('click', function(e){
+    var a = e.target.closest('a[data-bram-ir]');
+    if(!a) return;
+    e.preventDefault();
+    var el = document.getElementById(a.getAttribute('data-bram-ir'));
+    if(el){ cerrar(); el.scrollIntoView({behavior:'smooth', block:'start'}); }
+  });
+})();
+</script>
 </body>
 </html>
