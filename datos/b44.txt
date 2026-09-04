@@ -1,0 +1,3 @@
+iPhone 14 -> play: 44px | controles bajo 44: 22px ← Volver al sitio / 34px sh / 34px sx
+Android chico -> play: 44px | controles bajo 44: 22px ← Volver al sitio / 34px sh / 34px sx
+iPhone SE -> play: 44px | controles bajo 44: 22px ← Volver al sitio / 34px sh / 34px sx
