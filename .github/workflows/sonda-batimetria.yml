@@ -4,74 +4,101 @@ jobs:
   sonda:
     runs-on: ubuntu-latest
     steps:
-      - name: Que hay de batimetria del Rio de la Plata
+      - name: Cuanta resolucion hay realmente
         run: |
           set +e
-          probe () {
-            echo "===================================================="
-            echo "URL: $1"
-            curl -sSL --max-time 45 -o /tmp/o.bin -D /tmp/h.txt -w "http=%{http_code} bytes=%{size_download} type=%{content_type} final=%{url_effective}\n" "$1"
-            echo "--- cors/headers ---"
-            grep -iE 'access-control|content-type|content-disposition|content-length' /tmp/h.txt | head -8
-            echo "--- primeros bytes ---"
-            head -c 1200 /tmp/o.bin | tr -d '\000' | sed 's/[[:cntrl:]]/ /g' | cut -c1-1200
-            echo ""
-          }
+          pip install pillow -q 2>/dev/null
 
-          echo "############ 1. CARP - seccion batimetrias ############"
-          probe "https://www.comisionriodelaplata.org/servicios_main.php?sid=BT"
-          echo "--- links y archivos que menciona esa pagina ---"
-          grep -oiE 'href="[^"]+"' /tmp/o.bin 2>/dev/null | sort -u | head -60
-          grep -oiE '[A-Za-z0-9_./-]+\.(zip|pdf|xyz|dwg|dxf|csv|txt|shp|kmz|kml|tif)' /tmp/o.bin 2>/dev/null | sort -u | head -40
+          echo "############ A. Los terrain tiles, tienen fondo de rio o agua plana? ############"
+          # Terrarium: altura = (R*256 + G + B/256) - 32768
+          for z in 8 10 12; do
+            python3 - "$z" <<'PYEOF'
+import sys, math, urllib.request
+from PIL import Image
+import io
+z = int(sys.argv[1])
+def tile(lat, lon, z):
+    n = 2**z
+    x = int((lon+180)/360*n)
+    y = int((1 - math.log(math.tan(math.radians(lat)) + 1/math.cos(math.radians(lat)))/math.pi)/2*n)
+    return x, y
+def px(lat, lon, z):
+    n = 2**z
+    fx = (lon+180)/360*n
+    fy = (1 - math.log(math.tan(math.radians(lat)) + 1/math.cos(math.radians(lat)))/math.pi)/2*n
+    return int((fx % 1)*256), int((fy % 1)*256)
+# transecta: de la costa de San Isidro hacia el medio del rio
+puntos = [
+    ("San Isidro costa", -34.470, -58.500),
+    ("1 km afuera",      -34.462, -58.486),
+    ("5 km afuera",      -34.436, -58.443),
+    ("15 km afuera",     -34.370, -58.330),
+    ("medio del rio",    -34.700, -57.700),
+    ("Canal Mitre",      -34.520, -58.200),
+    ("boca del rio",     -35.500, -56.500),
+]
+print(f"--- zoom {z} ---")
+cache = {}
+for nom, lat, lon in puntos:
+    x, y = tile(lat, lon, z)
+    key = (z, x, y)
+    if key not in cache:
+        try:
+            u = f"https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"
+            cache[key] = Image.open(io.BytesIO(urllib.request.urlopen(u, timeout=40).read())).convert("RGB")
+        except Exception as e:
+            print(f"  {nom}: ERROR {e}"); continue
+    im = cache[key]
+    a, b = px(lat, lon, z)
+    r, g, bl = im.getpixel((a, b))
+    h = (r*256 + g + bl/256) - 32768
+    print(f"  {nom:18s} lat={lat} lon={lon} -> {h:8.1f} m")
+# cuanta variedad hay adentro de un tile de agua? si es todo igual, es agua plana
+x, y = tile(-34.70, -57.70, z)
+try:
+    u = f"https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"
+    im = Image.open(io.BytesIO(urllib.request.urlopen(u, timeout=40).read())).convert("RGB")
+    vals = set()
+    for i in range(0, 256, 8):
+        for j in range(0, 256, 8):
+            r, g, bl = im.getpixel((i, j))
+            vals.add(round((r*256+g+bl/256)-32768, 1))
+    print(f"  tile del medio del rio: {len(vals)} valores distintos, min={min(vals)} max={max(vals)}")
+except Exception as e:
+    print("  tile medio:", e)
+PYEOF
+          done
 
-          echo "############ 2. SHN Argentina ############"
-          probe "https://www.hidro.gov.ar/"
-          probe "https://geoportal.hidro.gov.ar/"
-          probe "https://www.hidro.gob.ar/"
+          echo "############ B. NOAA: transecta de profundidad con CORS ############"
+          for p in "-58.500,-34.470" "-58.486,-34.462" "-58.443,-34.436" "-58.330,-34.370" "-58.200,-34.520" "-57.700,-34.700" "-56.500,-35.500"; do
+            lon=${p%,*}; lat=${p#*,}
+            v=$(curl -sS --max-time 30 "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/DEM_global_mosaic/ImageServer/identify?geometry=%7B%22x%22%3A${lon}%2C%22y%22%3A${lat}%2C%22spatialReference%22%3A%7B%22wkid%22%3A4326%7D%7D&geometryType=esriGeometryPoint&returnGeometry=false&returnCatalogItems=false&f=json")
+            echo "  lon=$lon lat=$lat -> $(echo "$v" | head -c 200)"
+          done
 
-          echo "############ 3. GEBCO web services ############"
-          probe "https://www.gebco.net/data-products/gebco-web-services"
-          probe "https://wms.gebco.net/mapserv?request=getcapabilities&service=wms&version=1.3.0"
-          echo "--- GEBCO WCS: pido SOLO el Rio de la Plata (bbox -59,-36.6 a -55,-34) ---"
-          curl -sSL --max-time 90 -o /tmp/rdp.tif -w "http=%{http_code} bytes=%{size_download} type=%{content_type}\n" \
-            "https://wcs.gebco.net/2020/wcs?request=GetCoverage&service=WCS&version=1.0.0&coverage=gebco_2020&format=GeoTIFF&bbox=-59,-36.6,-55,-34&crs=EPSG:4326&width=800&height=520"
-          file /tmp/rdp.tif; head -c 300 /tmp/rdp.tif | sed 's/[[:cntrl:]]/ /g'
-          echo ""
+          echo "############ C. GEBCO WMS: que capas ofrece y sirve numeros? ############"
+          curl -sS --max-time 40 "https://wms.gebco.net/mapserv?request=getcapabilities&service=wms&version=1.3.0" -o /tmp/cap.xml
+          echo "--- capas ---"
+          grep -oE '<Name>[^<]+</Name>' /tmp/cap.xml | sort -u | head -20
+          echo "--- formatos de GetFeatureInfo ---"
+          grep -A6 'GetFeatureInfo' /tmp/cap.xml | grep -oE '<Format>[^<]+</Format>' | sort -u | head -10
+          echo "--- pido una imagen del Rio de la Plata ---"
+          curl -sS --max-time 60 -o /tmp/g.png -w "http=%{http_code} bytes=%{size_download} type=%{content_type}\n" \
+            "https://wms.gebco.net/mapserv?request=GetMap&service=WMS&version=1.3.0&layers=GEBCO_LATEST&format=image/png&crs=EPSG:4326&bbox=-36.6,-59,-34,-55&width=800&height=520"
+          file /tmp/g.png
 
-          echo "############ 4. Terreno 3D listo para usar (terrain-RGB / Terrarium) ############"
-          echo "--- AWS Terrain Tiles (open data, sin key). z10 sobre San Isidro ---"
-          curl -sSL --max-time 45 -o /tmp/t.png -D /tmp/th.txt -w "http=%{http_code} bytes=%{size_download} type=%{content_type}\n" \
-            "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/10/362/613.png"
-          grep -iE 'access-control|content-type' /tmp/th.txt | head -4
-          file /tmp/t.png
-          echo "--- lo mismo por el mirror de Mapzen/nextzen ---"
-          curl -sSL --max-time 45 -o /tmp/t2.png -w "http=%{http_code} bytes=%{size_download} type=%{content_type}\n" \
-            "https://elevation-tiles-prod.s3.amazonaws.com/terrarium/10/362/613.png"
-          file /tmp/t2.png
+          echo "############ D. SHN: donde estan las cartas y si hay datos ############"
+          curl -sSL --max-time 40 "https://www.hidro.gov.ar/" -o /tmp/shn.html
+          echo "--- links del SHN ---"
+          grep -oiE 'href="[^"]{3,90}"' /tmp/shn.html | sort -u | head -50
+          for sub in "cartas/cartasnauticas.asp" "oceanografia/mareas/form2.asp" "Nautica/Cartas.asp" "productos.asp"; do
+            echo "  -> $sub : $(curl -sS -o /dev/null -w '%{http_code} %{size_download}' --max-time 25 "https://www.hidro.gov.ar/$sub")"
+          done
 
-          echo "############ 5. OpenTopography / SRTM ############"
-          probe "https://portal.opentopography.org/apidocs/"
-          curl -sSL --max-time 60 -o /tmp/ot.tif -w "http=%{http_code} bytes=%{size_download} type=%{content_type}\n" \
-            "https://portal.opentopography.org/API/globaldem?demtype=SRTMGL3&south=-35.2&north=-34.2&west=-58.8&east=-57.8&outputFormat=GTiff"
-          head -c 400 /tmp/ot.tif | sed 's/[[:cntrl:]]/ /g'
-          echo ""
+          echo "############ E. Cartas nauticas raster libres (NOAA/OpenSeaMap) ############"
+          curl -sS -o /tmp/osm.png -D /tmp/osmh.txt -w "OpenSeaMap seamark z12 http=%{http_code} bytes=%{size_download} type=%{content_type}\n" --max-time 40 \
+            "https://tiles.openseamap.org/seamark/12/1450/2455.png"
+          grep -i 'access-control' /tmp/osmh.txt | head -3
+          file /tmp/osm.png
 
-          echo "############ 6. EMODnet / NOAA / otros globales ############"
-          probe "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/DEM_global_mosaic/ImageServer?f=json"
-          echo "--- NOAA: pido la profundidad en un punto del Rio de la Plata ---"
-          curl -sSL --max-time 45 -w "\nhttp=%{http_code}\n" \
-            "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/DEM_global_mosaic/ImageServer/identify?geometry=%7B%22x%22%3A-58.3%2C%22y%22%3A-34.5%2C%22spatialReference%22%3A%7B%22wkid%22%3A4326%7D%7D&geometryType=esriGeometryPoint&returnGeometry=false&f=json" | head -c 800
-          echo ""
-
-          echo "############ 7. Uruguay / FREPLATA ############"
-          probe "https://www.ambiente.gub.uy/metadatos/index.php/metadata/md_iframe/20"
-          probe "https://www.gub.uy/ministerio-ambiente/"
-
-          echo "############ 8. IDE Argentina ############"
-          probe "https://www.ide.gob.ar/"
-          probe "https://catalogo.ide.gob.ar/geonetwork/srv/spa/catalog.search#/search?any=batimetria"
-          echo "--- IDERA / catalogo: busco 'batimetria' por API ---"
-          curl -sSL --max-time 45 -w "\nhttp=%{http_code}\n" \
-            "https://catalogo.ide.gob.ar/geonetwork/srv/api/search/records/_search?q=batimetria" | head -c 600
-          echo ""
-          echo "FIN DE LA SONDA"
+          echo "FIN DE LA SONDA 2"
