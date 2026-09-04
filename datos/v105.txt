@@ -1,0 +1,10 @@
+A) click de mouse quieto      -> 1
+B) segundo click cierra       -> null
+C) click con jitter de 2px    -> 1
+D) arrastre                   -> movio 300px, abrio por error: null
+✓ que es el foil           -> El foil es el ala sumergida que te levanta del agua. 🤩  Va 
+✓ donde aprendo wingfoil   -> Arrancás así 😄:  1. Leé qué es el wingfoil para entender el
+✓ como empiezo de cero     -> Arrancás así 😄:  1. Leé qué es el wingfoil para entender el
+✓ que es el wingfoil       -> Wingfoil = tabla con hydrofoil + un ala inflable que sostené
+E) telefono, tap              -> 1
+sin errores JS
