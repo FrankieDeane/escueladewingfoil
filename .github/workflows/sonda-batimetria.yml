@@ -4,29 +4,58 @@ jobs:
   sonda:
     runs-on: ubuntu-latest
     steps:
-      - name: Cuanta resolucion hay realmente
+      - name: SHN datos abiertos y geoportal
         run: |
           set +e
-          pip install pillow -q
-          echo 'aW1wb3J0IG1hdGgsIHVybGxpYi5yZXF1ZXN0LCBpbywganNvbgpmcm9tIFBJTCBpbXBvcnQgSW1hZ2UKCmRlZiB0aWxlKGxhdCwgbG9uLCB6KToKICAgIG4gPSAyKip6CiAgICB4ID0gaW50KChsb24rMTgwKS8zNjAqbikKICAgIHkgPSBpbnQoKDEgLSBtYXRoLmxvZyhtYXRoLnRhbihtYXRoLnJhZGlhbnMobGF0KSkgKyAxL21hdGguY29zKG1hdGgucmFkaWFucyhsYXQpKSkvbWF0aC5waSkvMipuKQogICAgcmV0dXJuIHgsIHkKCmRlZiBweChsYXQsIGxvbiwgeik6CiAgICBuID0gMioqegogICAgZnggPSAobG9uKzE4MCkvMzYwKm4KICAgIGZ5ID0gKDEgLSBtYXRoLmxvZyhtYXRoLnRhbihtYXRoLnJhZGlhbnMobGF0KSkgKyAxL21hdGguY29zKG1hdGgucmFkaWFucyhsYXQpKSkvbWF0aC5waSkvMipuCiAgICByZXR1cm4gaW50KChmeCAlIDEpKjI1NiksIGludCgoZnkgJSAxKSoyNTYpCgpwdW50b3MgPSBbCiAgICAoIlNhbiBJc2lkcm8gY29zdGEiLCAtMzQuNDcwLCAtNTguNTAwKSwKICAgICgiMSBrbSBhZnVlcmEiLCAgICAgIC0zNC40NjIsIC01OC40ODYpLAogICAgKCI1IGttIGFmdWVyYSIsICAgICAgLTM0LjQzNiwgLTU4LjQ0MyksCiAgICAoIjE1IGttIGFmdWVyYSIsICAgICAtMzQuMzcwLCAtNTguMzMwKSwKICAgICgiQ2FuYWwgTWl0cmUiLCAgICAgIC0zNC41MjAsIC01OC4yMDApLAogICAgKCJtZWRpbyBkZWwgcmlvIiwgICAgLTM0LjcwMCwgLTU3LjcwMCksCiAgICAoImJvY2EgZGVsIHJpbyIsICAgICAtMzUuNTAwLCAtNTYuNTAwKSwKXQoKcHJpbnQoIiMjIyMjIyMjIyMjIyBBLiBMb3MgdGVycmFpbiB0aWxlcyAoQVdTIHRlcnJhcml1bSk6IGhheSBmb25kbyBkZSByaW8gbyBhZ3VhIHBsYW5hPyAjIyMjIyMjIyMjIyMiKQpjYWNoZSA9IHt9CmRlZiBpbWcoeiwgeCwgeSk6CiAgICBrID0gKHosIHgsIHkpCiAgICBpZiBrIG5vdCBpbiBjYWNoZToKICAgICAgICB1ID0gImh0dHBzOi8vczMuYW1hem9uYXdzLmNvbS9lbGV2YXRpb24tdGlsZXMtcHJvZC90ZXJyYXJpdW0vJWQvJWQvJWQucG5nIiAlICh6LCB4LCB5KQogICAgICAgIGNhY2hlW2tdID0gSW1hZ2Uub3Blbihpby5CeXRlc0lPKHVybGxpYi5yZXF1ZXN0LnVybG9wZW4odSwgdGltZW91dD00NSkucmVhZCgpKSkuY29udmVydCgiUkdCIikKICAgIHJldHVybiBjYWNoZVtrXQoKZm9yIHogaW4gKDgsIDEwLCAxMik6CiAgICBwcmludCgiLS0tIHpvb20gJWQgLS0tIiAlIHopCiAgICBmb3Igbm9tLCBsYXQsIGxvbiBpbiBwdW50b3M6CiAgICAgICAgdHJ5OgogICAgICAgICAgICB4LCB5ID0gdGlsZShsYXQsIGxvbiwgeikKICAgICAgICAgICAgaW0gPSBpbWcoeiwgeCwgeSkKICAgICAgICAgICAgYSwgYiA9IHB4KGxhdCwgbG9uLCB6KQogICAgICAgICAgICByLCBnLCBibCA9IGltLmdldHBpeGVsKChhLCBiKSkKICAgICAgICAgICAgaCA9IChyKjI1NiArIGcgKyBibC8yNTYpIC0gMzI3NjgKICAgICAgICAgICAgcHJpbnQoIiAgJS0xOHMgLT4gJTguMWYgbSIgJSAobm9tLCBoKSkKICAgICAgICBleGNlcHQgRXhjZXB0aW9uIGFzIGU6CiAgICAgICAgICAgIHByaW50KCIgICUtMThzIC0+IEVSUk9SICVzIiAlIChub20sIGUpKQogICAgdHJ5OgogICAgICAgIHgsIHkgPSB0aWxlKC0zNC43MCwgLTU3LjcwLCB6KQogICAgICAgIGltID0gaW1nKHosIHgsIHkpCiAgICAgICAgdmFscyA9IFtdCiAgICAgICAgZm9yIGkgaW4gcmFuZ2UoMCwgMjU2LCA0KToKICAgICAgICAgICAgZm9yIGogaW4gcmFuZ2UoMCwgMjU2LCA0KToKICAgICAgICAgICAgICAgIHIsIGcsIGJsID0gaW0uZ2V0cGl4ZWwoKGksIGopKQogICAgICAgICAgICAgICAgdmFscy5hcHBlbmQocm91bmQoKHIqMjU2K2crYmwvMjU2KSAtIDMyNzY4LCAyKSkKICAgICAgICBwcmludCgiICB0aWxlIGRlbCBtZWRpbyBkZWwgcmlvOiAlZCB2YWxvcmVzIGRpc3RpbnRvcyBkZSAlZCBtdWVzdHJhcywgbWluPSVzIG1heD0lcyIKICAgICAgICAgICAgICAlIChsZW4oc2V0KHZhbHMpKSwgbGVuKHZhbHMpLCBtaW4odmFscyksIG1heCh2YWxzKSkpCiAgICBleGNlcHQgRXhjZXB0aW9uIGFzIGU6CiAgICAgICAgcHJpbnQoIiAgdGlsZSBtZWRpbzoiLCBlKQoKcHJpbnQoIiMjIyMjIyMjIyMjIyBCLiBOT0FBIERFTSBnbG9iYWwgbW9zYWljICh0aWVuZSBDT1JTKTogdHJhbnNlY3RhICMjIyMjIyMjIyMjIyIpCmZvciBub20sIGxhdCwgbG9uIGluIHB1bnRvczoKICAgIHRyeToKICAgICAgICB1ID0gKCJodHRwczovL2dpcy5uZ2RjLm5vYWEuZ292L2FyY2dpcy9yZXN0L3NlcnZpY2VzL0RFTV9tb3NhaWNzL0RFTV9nbG9iYWxfbW9zYWljL0ltYWdlU2VydmVyL2lkZW50aWZ5IgogICAgICAgICAgICAgIj9nZW9tZXRyeT0lJTdCJSUyMnglJTIyJSUzQSVzJSUyQyUlMjJ5JSUyMiUlM0ElcyUlMkMlJTIyc3BhdGlhbFJlZmVyZW5jZSUlMjIlJTNBJSU3QiUlMjJ3a2lkJSUyMiUlM0E0MzI2JSU3RCUlN0QiCiAgICAgICAgICAgICAiJmdlb21ldHJ5VHlwZT1lc3JpR2VvbWV0cnlQb2ludCZyZXR1cm5HZW9tZXRyeT1mYWxzZSZyZXR1cm5DYXRhbG9nSXRlbXM9ZmFsc2UmZj1qc29uIiAlIChsb24sIGxhdCkpCiAgICAgICAgZCA9IGpzb24ubG9hZHModXJsbGliLnJlcXVlc3QudXJsb3Blbih1LCB0aW1lb3V0PTM1KS5yZWFkKCkuZGVjb2RlKCkpCiAgICAgICAgcHJpbnQoIiAgJS0xOHMgLT4gdmFsdWU9JXMgICh0b2RvczogJXMpIiAlIChub20sIGQuZ2V0KCJ2YWx1ZSIpLCBkLmdldCgicHJvcGVydGllcyIsIHt9KS5nZXQoIlZhbHVlcyIpKSkKICAgIGV4Y2VwdCBFeGNlcHRpb24gYXMgZToKICAgICAgICBwcmludCgiICAlLTE4cyAtPiBFUlJPUiAlcyIgJSAobm9tLCBlKSkKCnByaW50KCIjIyMjIyMjIyMjIyMgQjIuIE5PQUE6IHF1ZSB0YW4gZmlubz8gcGlkbyBwaXhlbGVzIGNhZGEgfjIwMCBtIGZyZW50ZSBhIFNhbiBJc2lkcm8gIyMjIyMjIyMjIyMjIikKdHJ5OgogICAgdSA9ICgiaHR0cHM6Ly9naXMubmdkYy5ub2FhLmdvdi9hcmNnaXMvcmVzdC9zZXJ2aWNlcy9ERU1fbW9zYWljcy9ERU1fZ2xvYmFsX21vc2FpYy9JbWFnZVNlcnZlci9leHBvcnRJbWFnZSIKICAgICAgICAgIj9iYm94PS01OC42MCwtMzQuNTUsLTU4LjI1LC0zNC4zNSZiYm94U1I9NDMyNiZzaXplPTIwMCwxMjAmaW1hZ2VTUj00MzI2JmZvcm1hdD10aWZmJnBpeGVsVHlwZT1GMzImZj1qc29uIikKICAgIGQgPSBqc29uLmxvYWRzKHVybGxpYi5yZXF1ZXN0LnVybG9wZW4odSwgdGltZW91dD00NSkucmVhZCgpLmRlY29kZSgpKQogICAgcHJpbnQoIiAgZXhwb3J0SW1hZ2U6IiwganNvbi5kdW1wcyhkKVs6NDAwXSkKZXhjZXB0IEV4Y2VwdGlvbiBhcyBlOgogICAgcHJpbnQoIiAgZXhwb3J0SW1hZ2UgRVJST1IiLCBlKQo=' | base64 -d > /tmp/sonda.py
-          python3 /tmp/sonda.py
+          probe () {
+            echo "=========================================="
+            echo "URL: $1"
+            curl -sSL --max-time 40 -o /tmp/o.bin -D /tmp/h.txt -w "http=%{http_code} bytes=%{size_download} type=%{content_type} final=%{url_effective}\n" "$1"
+            grep -iE 'access-control-allow-origin|content-type' /tmp/h.txt | head -3
+            head -c 900 /tmp/o.bin | tr -d '\000' | sed 's/[[:cntrl:]]/ /g'
+            echo ""
+          }
 
-          echo "############ C. GEBCO WMS: capas y si sirve numeros ############"
-          curl -sS --max-time 40 "https://wms.gebco.net/mapserv?request=getcapabilities&service=wms&version=1.3.0" -o /tmp/cap.xml
-          echo "--- capas ---"
-          grep -oE '<Name>[^<]+</Name>' /tmp/cap.xml | sort -u | head -20
-          echo "--- formatos de GetFeatureInfo ---"
-          grep -oE '<Format>[^<]+</Format>' /tmp/cap.xml | sort -u | head -12
-          echo "--- imagen del Rio de la Plata ---"
-          curl -sS --max-time 60 -o /tmp/g.png -w "http=%{http_code} bytes=%{size_download} type=%{content_type}\n" "https://wms.gebco.net/mapserv?request=GetMap&service=WMS&version=1.3.0&layers=GEBCO_LATEST&format=image/png&crs=EPSG:4326&bbox=-36.6,-59,-34,-55&width=800&height=520"
-          file /tmp/g.png
+          echo "############ 1. SHN Datos Abiertos ############"
+          probe "https://www.hidro.gov.ar/DA/DatosAbiertos.asp"
+          echo "--- que ofrece para descargar ---"
+          grep -oiE 'href="[^"]{3,120}"' /tmp/o.bin | sort -u | head -40
+          grep -oiE '[A-Za-z0-9_./%-]+\.(zip|csv|txt|xyz|json|geojson|shp|kmz|kml|tif|xlsx?)' /tmp/o.bin | sort -u | head -30
 
-          echo "############ D. SHN: links y secciones ############"
-          curl -sSL --max-time 40 "https://www.hidro.gov.ar/" -o /tmp/shn.html
-          grep -oiE 'href="[^"]{3,90}"' /tmp/shn.html | sort -u | head -60
+          echo "############ 2. SHN download ############"
+          probe "https://www.hidro.gov.ar/download/download.asp"
+          grep -oiE 'href="[^"]{3,120}"' /tmp/o.bin | sort -u | head -40
 
-          echo "############ E. OpenSeaMap (cartas nauticas libres) ############"
-          curl -sS -o /tmp/osm.png -D /tmp/osmh.txt -w "seamark z12 http=%{http_code} bytes=%{size_download} type=%{content_type}\n" --max-time 40 "https://tiles.openseamap.org/seamark/12/1450/2455.png"
-          grep -i 'access-control' /tmp/osmh.txt | head -3
-          file /tmp/osm.png
-          echo "FIN DE LA SONDA 2"
+          echo "############ 3. Geoportal SHN ############"
+          probe "https://geoportal.shn.gob.ar/"
+          probe "https://geoportal.shn.gob.ar/#/geoportal"
+          echo "--- scripts que carga (ahi suele estar la URL del servicio de mapas) ---"
+          grep -oiE '(src|href)="[^"]{3,120}"' /tmp/o.bin | sort -u | head -40
+
+          echo "############ 4. Servicios de mapas tipicos detras de un geoportal ############"
+          for u in \
+            "https://geoportal.shn.gob.ar/geoserver/web/" \
+            "https://geoportal.shn.gob.ar/geoserver/ows?service=WMS&version=1.3.0&request=GetCapabilities" \
+            "https://geoportal.shn.gob.ar/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities" \
+            "https://geoportal.shn.gob.ar/arcgis/rest/services?f=json" \
+            "https://geoportal.shn.gob.ar/api/" \
+            "https://servicios.shn.gob.ar/" \
+            ; do
+            echo "  $(curl -sS -o /tmp/q.bin -w '%{http_code} %{size_download} %{content_type}' --max-time 25 "$u")  <- $u"
+            head -c 200 /tmp/q.bin | tr -d '\000' | sed 's/[[:cntrl:]]/ /g'; echo ""
+          done
+
+          echo "############ 5. GEBCO GetFeatureInfo: sirve numeros por punto? ############"
+          for p in "-58.500 -34.470" "-58.330 -34.370" "-57.700 -34.700" "-56.500 -35.500"; do
+            set -- $p
+            curl -sS --max-time 30 "https://wms.gebco.net/mapserv?request=GetFeatureInfo&service=WMS&version=1.3.0&layers=GEBCO_LATEST&query_layers=GEBCO_LATEST&info_format=application/json&crs=EPSG:4326&bbox=$(python3 -c "print(f'{$2-0.05},{$1-0.05},{$2+0.05},{$1+0.05}')")&width=101&height=101&i=50&j=50" | head -c 350
+            echo "   <- lon=$1 lat=$2"
+          done
+          echo "--- capa TID (dice si el dato es medido o estimado) ---"
+          curl -sS --max-time 30 "https://wms.gebco.net/mapserv?request=GetFeatureInfo&service=WMS&version=1.3.0&layers=GEBCO_LATEST_TID&query_layers=GEBCO_LATEST_TID&info_format=application/json&crs=EPSG:4326&bbox=-34.42,-58.38,-34.32,-58.28&width=101&height=101&i=50&j=50" | head -c 350
+          echo ""
+
+          echo "############ 6. Cartas nauticas del SHN: hay alguna del Rio de la Plata online? ############"
+          probe "https://www.hidro.gov.ar/ventas/ventas.asp"
+          probe "https://www.hidro.gov.ar/ServiciosNauticos.asp"
+          echo "FIN SONDA 3"
