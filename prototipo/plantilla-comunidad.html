@@ -1,0 +1,310 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ventana Real San Isidro</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --fondo:#EDF1F2;--panel:#FFF;--panel2:#F3F7F8;--borde:#CFDBDE;
+  --sonda:#136A80;--limo:#8A5E27;--aviso:#B23A61;--ok:#2C7A4B;
+  --texto:#0E1A1E;--tenue:#4A6068;--apenas:#7E949A;
+  --display:'Archivo',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --fondo:#0A1013;--panel:#121B1F;--panel2:#18242A;--borde:#22343B;
+  --sonda:#48B6CE;--limo:#B2814A;--aviso:#E0708F;--ok:#6FCF97;
+  --texto:#DDE7E9;--tenue:#7A9198;--apenas:#4E656C;}}
+:root[data-theme="dark"]{
+  --fondo:#0A1013;--panel:#121B1F;--panel2:#18242A;--borde:#22343B;
+  --sonda:#48B6CE;--limo:#B2814A;--aviso:#E0708F;--ok:#6FCF97;
+  --texto:#DDE7E9;--tenue:#7A9198;--apenas:#4E656C;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--texto);font-family:var(--display);
+     font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{text-wrap:balance;margin:0}
+.env{max-width:1080px;margin:0 auto;padding:0 20px}
+header{border-bottom:1px solid var(--borde);background:var(--panel);padding:26px 0 22px}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+         color:var(--apenas);margin-bottom:7px}
+h1{font-size:clamp(24px,4vw,38px);font-weight:800;letter-spacing:-.025em;max-width:19ch}
+header p{margin:11px 0 0;color:var(--tenue);max-width:66ch;font-size:15px}
+
+/* el numero que cambia la conversacion */
+.titular{background:var(--panel2);border-bottom:1px solid var(--borde);padding:30px 0}
+.tgrid{display:grid;gap:26px;grid-template-columns:auto 1fr;align-items:center}
+.cifra{font-family:var(--mono);font-weight:600;line-height:.9;color:var(--sonda);
+       font-size:clamp(52px,10vw,86px);font-variant-numeric:tabular-nums}
+.cifra small{display:block;font-size:12px;letter-spacing:.13em;text-transform:uppercase;
+             color:var(--apenas);margin-top:9px;font-weight:500}
+.titular p{margin:0;font-size:16px;color:var(--texto);max-width:52ch}
+.titular b{color:var(--aviso)}
+@media(max-width:620px){.tgrid{grid-template-columns:1fr;gap:14px}}
+
+main{padding:36px 0 60px}
+section{margin-bottom:44px}
+section>h2{font-size:11px;font-family:var(--mono);letter-spacing:.15em;text-transform:uppercase;
+  color:var(--tenue);padding-bottom:8px;border-bottom:1px solid var(--borde);margin-bottom:16px}
+.intro{margin:0 0 18px;color:var(--tenue);max-width:70ch;font-size:14.5px}
+
+/* grafico */
+.gr{background:var(--panel);border:1px solid var(--borde);border-radius:3px;padding:16px 16px 10px}
+canvas{display:block;width:100%;height:230px}
+.claves{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:11px;padding-top:11px;
+        border-top:1px solid var(--borde);font-family:var(--mono);font-size:10.5px;color:var(--tenue)}
+.cl{display:flex;align-items:center;gap:6px}
+.cw{width:14px;height:9px;border-radius:1px;flex:none}
+
+/* metricas */
+.mgrid{display:grid;gap:1px;background:var(--borde);border:1px solid var(--borde);
+       border-radius:3px;overflow:hidden;grid-template-columns:repeat(auto-fit,minmax(148px,1fr))}
+.met{background:var(--panel);padding:14px 15px}
+.met .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+        color:var(--apenas);display:block;margin-bottom:5px}
+.met .v{font-family:var(--mono);font-size:25px;font-weight:600;color:var(--texto);
+        font-variant-numeric:tabular-nums;line-height:1}
+.met .v.ac{color:var(--sonda)} .met .v.al{color:var(--aviso)}
+.met .n{font-size:11.5px;color:var(--tenue);margin-top:5px;font-family:var(--mono)}
+
+/* ideas */
+.ideas{display:flex;flex-direction:column;gap:11px}
+.idea{background:var(--panel);border:1px solid var(--borde);border-radius:3px;
+      padding:15px 17px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:start}
+.idea .n{font-family:var(--mono);font-size:11px;color:var(--apenas);padding-top:3px;
+         font-variant-numeric:tabular-nums}
+.idea h3{font-size:15.5px;font-weight:600;margin-bottom:4px}
+.idea p{margin:0;font-size:13.5px;color:var(--tenue);max-width:62ch}
+.idea .dep{margin-top:7px;font-family:var(--mono);font-size:11px;color:var(--apenas)}
+.est{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+     padding:3px 8px;border-radius:2px;white-space:nowrap;flex:none}
+.est.ya{background:color-mix(in srgb,var(--ok) 20%,transparent);color:var(--ok)}
+.est.medio{background:color-mix(in srgb,var(--sonda) 20%,transparent);color:var(--sonda)}
+.est.falta{background:color-mix(in srgb,var(--aviso) 18%,transparent);color:var(--aviso)}
+@media(max-width:620px){.idea{grid-template-columns:auto 1fr}.idea .est{grid-column:2}}
+
+/* hallazgos */
+.hall{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(232px,1fr))}
+.h{background:var(--panel);border:1px solid var(--borde);border-left:2px solid var(--limo);
+   border-radius:3px;padding:14px 15px}
+.h.c{border-left-color:var(--sonda)} .h.a{border-left-color:var(--aviso)}
+.h .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+      color:var(--apenas);display:block;margin-bottom:6px}
+.h p{margin:0;font-size:13.5px;color:var(--tenue)}
+.h b{color:var(--texto)}
+
+ul.lim{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px}
+ul.lim li{padding-left:19px;position:relative;font-size:14px;color:var(--tenue);max-width:72ch}
+ul.lim li::before{content:"—";position:absolute;left:0;color:var(--aviso);font-family:var(--mono)}
+ul.lim b{color:var(--texto)}
+footer{border-top:1px solid var(--borde);padding:22px 0 44px;font-size:13px;color:var(--tenue)}
+footer .au{color:var(--texto);font-weight:600}
+footer code{font-family:var(--mono);font-size:12px;color:var(--sonda)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<header><div class="env">
+  <div class="eyebrow">Fase 2 · qué más puede hacer esto</div>
+  <h1>La ventana real no es la que mira el viento</h1>
+  <p>Cuatro semanas de viento y marea reales sobre San Isidro, cruzados hora por hora.
+     El resultado corrige la intuición con la que todos salimos a navegar.</p>
+</div></header>
+
+<div class="titular"><div class="env"><div class="tgrid">
+  <div class="cifra"><span id="cAmbas">—</span><small>horas de <span id="cTot">—</span></small></div>
+  <p>Hubo viento navegable <b id="cV">—</b> horas. Pero con <b>agua suficiente al mismo tiempo</b>,
+     sólo <b id="cA">—</b>. Mirar sólo el pronóstico de viento
+     <b>sobreestima la ventana un <span id="cSobre">—</span></b>.</p>
+</div></div></div>
+
+<main class="env">
+
+  <section>
+    <h2>Las cuatro semanas, hora por hora</h2>
+    <p class="intro">Marea del SHN en área, viento de Open-Meteo en línea. Las bandas verticales marcan
+       las horas en que <b>coincidieron</b> viento navegable y agua sobre la mediana del período.</p>
+    <div class="gr">
+      <canvas id="g"></canvas>
+      <div class="claves">
+        <span class="cl"><span class="cw" style="background:color-mix(in srgb,var(--sonda) 30%,transparent)"></span>marea (m)</span>
+        <span class="cl"><span class="cw" style="background:var(--limo)"></span>viento (kn)</span>
+        <span class="cl"><span class="cw" style="background:color-mix(in srgb,var(--ok) 55%,transparent)"></span>ventana real</span>
+        <span class="cl"><span class="cw" style="background:var(--aviso)"></span>viento que te saca</span>
+        <span class="cl" id="clRango"></span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Lo que dicen los números</h2>
+    <div class="mgrid" id="mets"></div>
+  </section>
+
+  <section>
+    <h2>Lo que el dato ya reveló</h2>
+    <div class="hall">
+      <div class="h"><span class="k">Fondo</span>
+        <p>Los <b id="hN">—</b> puntos de sondaje del SHN en el recorte son
+        <b>todos limo</b> — barro. Ninguno es arena limpia. Tocar el fondo acá no te rompe el foil,
+        pero explica la turbidez: no ves nada bajo el agua.</p></div>
+      <div class="h c"><span class="k">Orientación de la costa</span>
+        <p>Normal saliente <b id="hNor">—</b>, calculada de los vértices reales de la línea de costa
+        del SHN. De ahí sale qué viento te empuja al río: el que viene del
+        <b id="hOff">—</b>.</p></div>
+      <div class="h a"><span class="k">Riesgo offshore</span>
+        <p>En 4 semanas hubo <b id="hOjo">—</b> horas con viento que te saca y marea bajando, y
+        <b id="hPel">—</b> de riesgo alto. <b>Es raro</b> — pero ninguna cayó en horario navegable,
+        así que el riesgo real es aún menor de lo que temía.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Qué se podría construir, en orden de valor</h2>
+    <p class="intro">El estado dice si el dato ya está verificado, si falta parte, o si hay que salir
+       a generarlo. No hay nada acá que dependa de datos que no probé.</p>
+    <div class="ideas" id="ideas"></div>
+  </section>
+
+  <section>
+    <h2>Lo que no hace</h2>
+    <ul class="lim">
+      <li><b>«Agua suficiente» es relativo, no absoluto.</b> Uso la mediana del período
+        (<span id="lMed">—</span>) como umbral porque el offset entre el datum de la marea y el del
+        fondo no está publicado. Sirve para comparar horas entre sí, no para decirte cuántos
+        centímetros tenés bajo el foil.</li>
+      <li><b>Los umbrales son míos, no oficiales.</b> Viento navegable 12–25 kn; riesgo si la
+        componente que te saca supera 8 kn con marea bajando. Son criterios discutibles y hay que
+        calibrarlos con gente que navegue el spot.</li>
+      <li><b>Una estación, un punto.</b> El viento es de un modelo global interpolado al CNSI, no de
+        un anemómetro en el agua. En un río con brisa térmica eso puede errar bastante.</li>
+      <li><b>Cuatro semanas no son una temporada.</b> Agosto–septiembre da media de 6,6 kn. Con un año
+        de datos los porcentajes van a cambiar, casi seguro para mejor.</li>
+    </ul>
+  </section>
+</main>
+
+<footer class="env">
+  <p class="au">Idea original: Francisco Deane + https://escueladewingfoil.com</p>
+  <p>Fuentes: marea y línea de costa y calidad de fondo — <b>Servicio de Hidrografía Naval (SHN)</b>,
+     hidro.gov.ar y geoportal.shn.gob.ar. Viento — <b>Open-Meteo</b>, open-meteo.com (modelo ICON/GFS).
+     Batimetría de contraste — <b>GEBCO 2026</b> vía Source Cooperative, y <b>NOAA NCEI</b>.
+     Relieve — <b>SRTM</b> vía AWS Open Data. Todo accedido el <code id="fAcc">—</code>.
+     Los datos son de sus organismos: citalos a ellos, no a este prototipo.</p>
+</footer>
+
+<script id="d" type="application/json">__DATOS__</script>
+<script>
+"use strict";
+var D=JSON.parse(document.getElementById('d').textContent), R=D.resumen, S=D.serie;
+var $=function(i){return document.getElementById(i)};
+var css=function(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()};
+
+/* --------- titular --------- */
+var sobre = R.viento_ok ? Math.round(100*(R.viento_ok-R.ambas)/R.viento_ok) : 0;
+$('cAmbas').textContent=R.ambas; $('cTot').textContent=R.horas;
+$('cV').textContent=R.viento_ok; $('cA').textContent=R.ambas; $('cSobre').textContent=sobre+' %';
+
+/* --------- metricas --------- */
+var rumbos=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSO','SO','OSO','O','ONO','NO','NNO'];
+function rosa(d){return rumbos[Math.round(((d%360)/22.5))%16]}
+var offDesde=(D.normal+180)%360;
+var kn=S.filter(function(p){return p.kn!=null}).map(function(p){return p.kn});
+var media=kn.reduce(function(a,b){return a+b},0)/kn.length;
+var mets=[
+ ['Ventana real',R.ambas+' h','ac','de '+R.horas+' h con los dos datos'],
+ ['Sólo viento',R.viento_ok+' h','','12–25 kn, sin mirar el agua'],
+ ['Sobreestimación',sobre+' %','al','lo que te sobra si mirás sólo viento'],
+ ['Sesión más larga',(R.rachas[0]||0)+' h','ac','horas navegables seguidas'],
+ ['Días aprovechables',R.rachas.length,'','bloques separados en 4 semanas'],
+ ['Viento medio',media.toFixed(1)+' kn','','agosto–septiembre'],
+];
+$('mets').innerHTML=mets.map(function(m){
+  return '<div class="met"><span class="k">'+m[0]+'</span><div class="v '+m[2]+'">'+m[1]+
+         '</div><div class="n">'+m[3]+'</div></div>'}).join('');
+
+/* --------- hallazgos --------- */
+$('hN').textContent=D.fondo.length;
+$('hNor').textContent=D.normal.toFixed(1)+'° ('+rosa(D.normal)+')';
+$('hOff').textContent=rosa(offDesde)+' ('+offDesde.toFixed(0)+'°)';
+$('hOjo').textContent=R.ojo; $('hPel').textContent=R.peligro;
+$('lMed').textContent=D.marea_mediana.toFixed(2)+' m';
+$('fAcc').textContent=(D.generado||'').slice(0,10);
+
+/* --------- ideas --------- */
+var ideas=[
+ ['Aviso de ventana real','Te avisa cuando coinciden viento y agua, no sólo viento. Es la diferencia entre '+R.viento_ok+' y '+R.ambas+' horas: le ahorrás a la gente el viaje al río para encontrarse sin agua.','marea SHN + viento Open-Meteo','ya','Se puede hacer hoy'],
+ ['Calendario de la temporada','Con un año de datos: en qué meses y a qué hora del día se abre la ventana. Nadie publica esto para el Río de la Plata.','lo mismo, con histórico','ya','Se puede hacer hoy'],
+ ['¿Hasta dónde camino?','En una costa así de plana, la orilla se mueve decenas de metros entre pleamar y bajamar. Saber cuánto caminás con tabla y ala es la pregunta práctica número uno.','falta la pendiente de la orilla','medio','Falta el método de línea de agua'],
+ ['Mapa de fondo','Dónde es barro y dónde arena, del sondaje del SHN. Importa para dónde te caés, dónde clavás y qué visibilidad hay.','SHN Calidad_Fondo','medio','Sólo '+D.fondo.length+' puntos'],
+ ['Alerta de viento que te saca','Cuando la componente hacia el río es fuerte y la marea baja, no salís solo. La costa da la orientación exacta; sólo hay que calibrar los umbrales con la comunidad.','viento + marea + normal de costa','ya','Se puede hacer hoy'],
+ ['Sonda colaborativa','Cada uno con una ecosonda casteable en el SUP suma sondajes reales. Es la única forma de arreglar el agujero de batimetría: hoy sólo el 5,5 % del recorte está medido.','hay que salir a generarlo','falta','Trabajo de campo'],
+];
+$('ideas').innerHTML=ideas.map(function(x,i){
+  return '<div class="idea"><div class="n">'+String(i+1).padStart(2,'0')+'</div><div><h3>'+x[0]+
+   '</h3><p>'+x[2]+'</p><div class="dep">necesita: '+x[3]+'</div></div>'+
+   '<span class="est '+x[4]+'">'+x[5]+'</span></div>'}).join('');
+
+/* --------- grafico --------- */
+var cv=$('g'),cx=cv.getContext('2d');
+function dibujar(){
+  var dpr=Math.min(devicePixelRatio||1,2),W=cv.clientWidth,H=cv.clientHeight;
+  cv.width=W*dpr; cv.height=H*dpr; cx.setTransform(dpr,0,0,dpr,0,0); cx.clearRect(0,0,W,H);
+  var L=38,Rr=34,T=12,B=22, w=W-L-Rr, h=H-T-B;
+  var con=S.filter(function(p){return p.h!=null});
+  if(!con.length) return;
+  var t0=S[0].t,t1=S[S.length-1].t;
+  var hMax=2.8, kMax=Math.max(26,Math.ceil(Math.max.apply(null,kn)/5)*5);
+  var X=function(t){return L+(t-t0)/(t1-t0)*w};
+  var Yh=function(v){return T+h-(v/hMax)*h};
+  var Yk=function(v){return T+h-(v/kMax)*h};
+
+  // tramos sin marea publicada: el area se corta ahi, y hay que decirlo
+  cx.fillStyle='color-mix(in srgb,'+css('--apenas')+' 14%, transparent)';
+  var j2=0; while(j2<S.length){
+    if(S[j2].h==null){var a2=j2; while(j2<S.length&&S[j2].h==null)j2++;
+      cx.fillRect(X(S[a2].t),T,Math.max(1,X(S[j2-1].t)-X(S[a2].t)),h);} else j2++;
+  }
+  // bandas de ventana real
+  cx.fillStyle='color-mix(in srgb,'+css('--ok')+' 40%, transparent)';
+  var i=0; while(i<S.length){
+    if(S[i].ok){var a=i; while(i<S.length&&S[i].ok)i++;
+      cx.fillRect(X(S[a].t),T,Math.max(1.5,X(S[i-1].t)-X(S[a].t)),h);} else i++;
+  }
+  // rejilla y ejes
+  cx.strokeStyle=css('--borde'); cx.lineWidth=1; cx.font='9px "IBM Plex Mono",monospace';
+  cx.fillStyle=css('--apenas'); cx.textAlign='right'; cx.textBaseline='middle';
+  [0,1,2].forEach(function(v){var y=Yh(v);cx.beginPath();cx.moveTo(L,y);cx.lineTo(L+w,y);cx.stroke();
+    cx.fillText(v.toFixed(0)+' m',L-6,y);});
+  cx.textAlign='left';
+  [0,10,20].forEach(function(v){cx.fillText(v+' kn',L+w+6,Yk(v));});
+
+  // marea: area
+  cx.beginPath(); cx.moveTo(X(con[0].t),Yh(0));
+  con.forEach(function(p){cx.lineTo(X(p.t),Yh(p.h))});
+  cx.lineTo(X(con[con.length-1].t),Yh(0)); cx.closePath();
+  cx.fillStyle='color-mix(in srgb,'+css('--sonda')+' 26%, transparent)'; cx.fill();
+  cx.beginPath(); con.forEach(function(p,j){j?cx.lineTo(X(p.t),Yh(p.h)):cx.moveTo(X(p.t),Yh(p.h))});
+  cx.strokeStyle=css('--sonda'); cx.lineWidth=1.1; cx.stroke();
+
+  // viento: linea
+  cx.beginPath();
+  S.forEach(function(p,j){ if(p.kn==null)return; var x=X(p.t),y=Yk(p.kn); j?cx.lineTo(x,y):cx.moveTo(x,y)});
+  cx.strokeStyle=css('--limo'); cx.lineWidth=1.3; cx.stroke();
+
+  // horas de viento que te saca
+  cx.fillStyle=css('--aviso');
+  S.forEach(function(p){ if(p.r===1||p.r===2) cx.fillRect(X(p.t)-1,T+2,2.4,7); });
+
+  // fechas
+  cx.fillStyle=css('--apenas'); cx.textAlign='center'; cx.textBaseline='top';
+  for(var k=0;k<=4;k++){ var t=t0+(t1-t0)*k/4, dd=new Date(t*1000);
+    cx.fillText(dd.getUTCDate()+'/'+(dd.getUTCMonth()+1),X(t),T+h+5); }
+  cx.strokeStyle=css('--borde'); cx.beginPath(); cx.moveTo(L,T+h); cx.lineTo(L+w,T+h); cx.stroke();
+}
+var conM=S.filter(function(p){return p.h!=null});
+var f0=new Date(conM[0].t*1000), f1=new Date(conM[conM.length-1].t*1000);
+$('clRango').innerHTML='<span class="cw" style="background:color-mix(in srgb,'+
+  'var(--apenas) 30%,transparent)"></span>sin marea publicada &nbsp;·&nbsp; '+
+  'superposición '+f0.getUTCDate()+'/'+(f0.getUTCMonth()+1)+' → '+
+  f1.getUTCDate()+'/'+(f1.getUTCMonth()+1)+', '+R.horas+' h';
+$('clRango').className='cl';
+dibujar(); addEventListener('resize',dibujar);
+matchMedia('(prefers-color-scheme:dark)').addEventListener('change',dibujar);
+</script>
