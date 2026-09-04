@@ -1,13 +1,8 @@
 terrarium z14: tiles x 5528..5533  y 9862..9866  (30 tiles)
   tiles traidos: 30, fallos: 0
   grilla tierra 160x144, 372 valores distintos, min=-2.7 max=47.4
-  NOAA lote 0 fallo: HTTP Error 414: Request-URI Too Long
-  NOAA lote 250 fallo: HTTP Error 414: Request-URI Too Long
-  NOAA lote 500 fallo: HTTP Error 414: Request-URI Too Long
-  NOAA lote 750 fallo: HTTP Error 414: Request-URI Too Long
-  NOAA lote 1000 fallo: HTTP Error 414: Request-URI Too Long
-NOAA getSamples: 190/1440 puntos con valor
-  min=-3.0 max=25.7  distintos=37
+NOAA getSamples: 1440/1440 puntos con valor
+  min=-5.0 max=26.4  distintos=182
 COSTA FALLO: <HTTPError 406: 'Not Acceptable'>
 ThingSpeak 3447831: canal='Datos Hidrografia'
   campos: {"field1": "historial_prono_marea", "field2": "datetime", "field3": "is_altamar"}

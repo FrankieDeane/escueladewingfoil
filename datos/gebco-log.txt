@@ -1,0 +1,62 @@
+======================================================================
+1. QUE HAY EN EL REPOSITORIO
+======================================================================
+
+--- https://source.coop/api/v1/repositories/giswqs/gebco-bathymetry
+    http OK, 130114 bytes
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/1e5913857760d7aa.css?dpl=dpl_AELrKQVvtRAS44CxJDBVwvrSqdQb" data-precedence="next"/><link rel="stylesheet" href="/_next/static/css/fdbd78beb3744130.css?dpl=dpl_AELrKQVvtRAS44CxJDBVwvrSqdQb" data-precedence="next"/><link rel="stylesheet" href="/_next/static/css/86c5350da92e20fe.css?dpl=dpl_AELrKQVvtRAS44CxJDBVwvrSqdQb" data-precedence="next"/><link rel="stylesheet" href="/_next/static/css/24552c94689b0df6.css?dpl=dpl_AELrKQVvtRAS44CxJDBVwvrSqdQb" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-58ecdcf9f4287859.js?dpl=dpl_AELrKQVvtRAS44CxJDBVwvrSqdQb"/><script src="/_next/static/chunks/4bd1b696-100b9d70ed4e49c1.js?dpl=dpl_AELrKQVvtRAS44CxJDBVwvrSqdQb" async=""></script><script src="/_next/static/chunks/1255-cd3d565f9f07b162.js?dpl=dpl_AELrKQVvtRAS44CxJDBVwvrSqdQb" async=""></script><script src="/_next/static/chunks/main-app-b7ac91ae224968d9.js?dpl=dpl_AELrKQVvtRAS44CxJDBVwvrSqdQb" async=""></script><script src="/_next/static/chunks/0e5ce63c-c5cd7cd7eb8d1d36.js?dpl=dpl_AELrKQVvtRAS44CxJDBVwvrSqdQb" async=""></script><script src="/_next/static/chunks/8318a8be-4f69c3a304d6a6d5.js?dpl=dpl_AELrKQVvtRAS44CxJDBVwvrSqdQb" async=""></script><script src="/_next/static/chunks/6546cef8-58fc7794c3f4d8a4.js?dpl=dpl_AELrKQVvtRAS44CxJDBVwvrSqdQb" async=""></script><script src="/_next/static/chunks/6701-26f36ac946252044.js?dpl=dpl_AELrKQVvtRAS44CxJDBVwvrSqdQb" async=""></script><script src="/_next/static/chunks/8049-a9ba35afb8beaa9a.js?dpl=dpl_AELrKQVvtRAS44CxJDBVwvrSqdQb" async=""></script><script src="/_next/static/chunks/2223-920df7718733efec.js?dpl=dp
+
+--- https://data.source.coop/giswqs/gebco-bathymetry/
+    http OK, 9680 bytes
+<?xml version="1.0" encoding="UTF-8"?>
+<ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Name>giswqs</Name><Prefix>gebco-bathymetry/</Prefix><MaxKeys>1000</MaxKeys><IsTruncated>false</IsTruncated><Marker/><Contents><Key>gebco-bathymetry/README.md</Key><LastModified>2026-07-12T14:09:14.000Z</LastModified><ETag>"e147dc0856ba8f8b45ef089deffe5343"</ETag><Size>7150</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>gebco-bathymetry/gebco_2026/GEBCO_Grid_documentation.pdf</Key><LastModified>2026-07-12T14:10:20.000Z</LastModified><ETag>"05791ec9af9f670727087c0c94d98053"</ETag><Size>266395</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>gebco-bathymetry/gebco_2026/GEBCO_Grid_terms_of_use.pdf</Key><LastModified>2026-07-12T14:13:22.000Z</LastModified><ETag>"8b75b5f2865f16f4e50533f34a4d7a9b"</ETag><Size>145503</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>gebco-bathymetry/gebco_2026/gebco_2026.tif</Key><LastModified>2026-07-12T14:13:07.000Z</LastModified><ETag>"9b96f5d55a5387faa90a436b4150b4ba-886"</ETag><Size>4641674238</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>gebco-bathymetry/gebco_2026/gebco_2026_n0.0_s-90.0_w-180.0_e-90.0.tif</Key><LastModified>2026-07-12T14:15:48.000Z</LastModified><ETag>"5ce1003ec5df986a172eb202498a1d58-115"</ETag><Size>601504952</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>gebco-bathymetry/gebco_2026/gebco_2026_n0.0_s-90.0_w-90.0_e0.0.tif</Key><LastModified>2026-07-12T14:10:19.000Z</LastModified><ETag>"a8f9b65030afe4b301c9b30f1b3c9a19-109"</ETag><Size>570710506</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>gebco-bathymetry/gebco_2026/gebco_2026_n0.0_s-90.0_w0.0_e90.0.tif</Key><LastModified>2026-07-12T14:12
+
+--- https://data.source.coop/giswqs/gebco-bathymetry/?list-type=2
+    http OK, 9694 bytes
+<?xml version="1.0" encoding="UTF-8"?>
+<ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Name>giswqs</Name><Prefix>gebco-bathymetry/</Prefix><MaxKeys>1000</MaxKeys><IsTruncated>false</IsTruncated><KeyCount>36</KeyCount><Contents><Key>gebco-bathymetry/README.md</Key><LastModified>2026-07-12T14:09:14.000Z</LastModified><ETag>"e147dc0856ba8f8b45ef089deffe5343"</ETag><Size>7150</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>gebco-bathymetry/gebco_2026/GEBCO_Grid_documentation.pdf</Key><LastModified>2026-07-12T14:10:20.000Z</LastModified><ETag>"05791ec9af9f670727087c0c94d98053"</ETag><Size>266395</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>gebco-bathymetry/gebco_2026/GEBCO_Grid_terms_of_use.pdf</Key><LastModified>2026-07-12T14:13:22.000Z</LastModified><ETag>"8b75b5f2865f16f4e50533f34a4d7a9b"</ETag><Size>145503</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>gebco-bathymetry/gebco_2026/gebco_2026.tif</Key><LastModified>2026-07-12T14:13:07.000Z</LastModified><ETag>"9b96f5d55a5387faa90a436b4150b4ba-886"</ETag><Size>4641674238</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>gebco-bathymetry/gebco_2026/gebco_2026_n0.0_s-90.0_w-180.0_e-90.0.tif</Key><LastModified>2026-07-12T14:15:48.000Z</LastModified><ETag>"5ce1003ec5df986a172eb202498a1d58-115"</ETag><Size>601504952</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>gebco-bathymetry/gebco_2026/gebco_2026_n0.0_s-90.0_w-90.0_e0.0.tif</Key><LastModified>2026-07-12T14:10:19.000Z</LastModified><ETag>"a8f9b65030afe4b301c9b30f1b3c9a19-109"</ETag><Size>570710506</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>gebco-bathymetry/gebco_2026/gebco_2026_n0.0_s-90.0_w0.0_e90.0.tif</Key><LastModified>20
+
+--- https://data.source.coop/giswqs/gebco-bathymetry?list-type=2&max-keys=60
+    http OK, 9692 bytes
+<?xml version="1.0" encoding="UTF-8"?>
+<ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Name>giswqs</Name><Prefix>gebco-bathymetry/</Prefix><MaxKeys>60</MaxKeys><IsTruncated>false</IsTruncated><KeyCount>36</KeyCount><Contents><Key>gebco-bathymetry/README.md</Key><LastModified>2026-07-12T14:09:14.000Z</LastModified><ETag>"e147dc0856ba8f8b45ef089deffe5343"</ETag><Size>7150</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>gebco-bathymetry/gebco_2026/GEBCO_Grid_documentation.pdf</Key><LastModified>2026-07-12T14:10:20.000Z</LastModified><ETag>"05791ec9af9f670727087c0c94d98053"</ETag><Size>266395</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>gebco-bathymetry/gebco_2026/GEBCO_Grid_terms_of_use.pdf</Key><LastModified>2026-07-12T14:13:22.000Z</LastModified><ETag>"8b75b5f2865f16f4e50533f34a4d7a9b"</ETag><Size>145503</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>gebco-bathymetry/gebco_2026/gebco_2026.tif</Key><LastModified>2026-07-12T14:13:07.000Z</LastModified><ETag>"9b96f5d55a5387faa90a436b4150b4ba-886"</ETag><Size>4641674238</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>gebco-bathymetry/gebco_2026/gebco_2026_n0.0_s-90.0_w-180.0_e-90.0.tif</Key><LastModified>2026-07-12T14:15:48.000Z</LastModified><ETag>"5ce1003ec5df986a172eb202498a1d58-115"</ETag><Size>601504952</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>gebco-bathymetry/gebco_2026/gebco_2026_n0.0_s-90.0_w-90.0_e0.0.tif</Key><LastModified>2026-07-12T14:10:19.000Z</LastModified><ETag>"a8f9b65030afe4b301c9b30f1b3c9a19-109"</ETag><Size>570710506</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>gebco-bathymetry/gebco_2026/gebco_2026_n0.0_s-90.0_w0.0_e90.0.tif</Key><LastModified>2026
+
+======================================================================
+2. LEER SOLO LA VENTANA DE SAN ISIDRO (range requests, sin bajar el grid)
+======================================================================
+  no abre gebco_2026_tid_n90.0_s0.0_w90.0_e180.0.tif -> HTTP response code: 404
+  no abre gebco_2026_tid_n90.0_s0.0_w0.0_e90.0.tif -> HTTP response code: 404
+  no abre gebco_2026_tid_n90.0_s0.0_w-90.0_e0.0.tif -> HTTP response code: 404
+  no abre gebco_2026_tid_n90.0_s0.0_w-180.0_e-90.0.tif -> HTTP response code: 404
+  no abre gebco_2026_tid_n0.0_s-90.0_w90.0_e180.0.tif -> HTTP response code: 404
+  no abre gebco_2026_tid_n0.0_s-90.0_w0.0_e90.0.tif -> HTTP response code: 404
+  no abre gebco_2026_tid_n0.0_s-90.0_w-90.0_e0.0.tif -> HTTP response code: 404
+  no abre gebco_2026_tid_n0.0_s-90.0_w-180.0_e-90.0.tif -> HTTP response code: 404
+  no abre gebco_2026_tid.tif -> HTTP response code: 404
+  no abre gebco_2026_sub_ice_webmerc.tif -> HTTP response code: 404
+  no abre gebco_2026_sub_ice_n90.0_s0.0_w90.0_e180.0.tif -> HTTP response code: 404
+  no abre gebco_2026_sub_ice_n90.0_s0.0_w0.0_e90.0.tif -> HTTP response code: 404
+  no abre gebco_2026_sub_ice_n90.0_s0.0_w-90.0_e0.0.tif -> HTTP response code: 404
+  no abre gebco_2026_sub_ice_n90.0_s0.0_w-180.0_e-90.0.tif -> HTTP response code: 404
+  no abre gebco_2026_sub_ice_n0.0_s-90.0_w90.0_e180.0.tif -> HTTP response code: 404
+  no abre gebco_2026_sub_ice_n0.0_s-90.0_w0.0_e90.0.tif -> HTTP response code: 404
+  no abre gebco_2026_sub_ice_n0.0_s-90.0_w-90.0_e0.0.tif -> HTTP response code: 404
+  no abre gebco_2026_sub_ice_n0.0_s-90.0_w-180.0_e-90.0.tif -> HTTP response code: 404
+  no abre gebco_2026_sub_ice.tif -> HTTP response code: 404
+  no abre gebco_2026_webmerc.tif -> HTTP response code: 404
+  no abre gebco_2026_n90.0_s0.0_w90.0_e180.0.tif -> HTTP response code: 404
+  no abre gebco_2026_n90.0_s0.0_w0.0_e90.0.tif -> HTTP response code: 404
+  no abre gebco_2026_n90.0_s0.0_w-90.0_e0.0.tif -> HTTP response code: 404
+  no abre gebco_2026_n90.0_s0.0_w-180.0_e-90.0.tif -> HTTP response code: 404
+  no abre gebco_2026_n0.0_s-90.0_w90.0_e180.0.tif -> HTTP response code: 404
+  no abre gebco_2026_n0.0_s-90.0_w0.0_e90.0.tif -> HTTP response code: 404
+  no abre gebco_2026_n0.0_s-90.0_w-90.0_e0.0.tif -> HTTP response code: 404
+  no abre gebco_2026_n0.0_s-90.0_w-180.0_e-90.0.tif -> HTTP response code: 404
+  no abre gebco_2026.tif -> HTTP response code: 404
+  no abre gebco_2024.tif -> HTTP response code: 404
+  no abre gebco_2023.tif -> HTTP response code: 404
+  no abre gebco.tif -> HTTP response code: 404
+  no abre gebco_2024.tif -> HTTP response code: 404
+  no abre gebco_2024_cog.tif -> HTTP response code: 404
+
+No se pudo abrir ningun COG. Hace falta el listado real de archivos.
