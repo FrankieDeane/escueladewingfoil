@@ -1193,6 +1193,15 @@ textarea{resize:vertical;min-height:90px}
 .hoy__fondo{position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.5}
 .hoy__fondo svg{width:100%;height:100%;display:block}
 .hoy .container{position:relative;z-index:1}
+.hoy__est--3d{text-decoration:none;border-style:dashed}
+.hoy__est--3d .hoy__est-val{color:var(--accent)}
+.hoy__g--rosa{text-align:center}
+.hoy__g--rosa svg{max-width:100%;height:auto;display:block;margin:2px auto 6px}
+.hoy__rosa-txt{font-size:12.5px;color:var(--text-muted);margin:6px auto 0;max-width:46ch;line-height:1.5}
+.hoy__rosa-txt b{color:var(--text)}
+.hoy__rosa-ley{display:flex;flex-wrap:wrap;gap:7px 15px;justify-content:center;margin:10px auto 0;max-width:44ch}
+.hoy__rosa-b{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-muted);white-space:nowrap}
+.hoy__rosa-b i{width:11px;height:11px;border-radius:3px;flex:none}
 .hoy__head{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px;cursor:pointer;list-style:none;padding:4px 0;transition:opacity .18s}
 .hoy__head::-webkit-details-marker{display:none}
 .hoy__head:hover{opacity:.88}
@@ -1212,9 +1221,7 @@ textarea{resize:vertical;min-height:90px}
   .hoy__flecha{margin-left:auto}
   .hoy__head{gap:10px;margin-bottom:18px}
   .hoy__estado{margin-left:0;text-align:left}
-  .hoy__est--3d{text-decoration:none;border-style:dashed}
-.hoy__est--3d .hoy__est-val{color:var(--accent)}
-.hoy__graficos{padding:14px}
+  .hoy__graficos{padding:14px}
   .hoy__grid{grid-template-columns:1fr}
   .hoy__medido{grid-template-columns:1fr}
 }
@@ -5681,6 +5688,127 @@ document.addEventListener('DOMContentLoaded', function() {
     return Math.max(260, Math.min(c || 640, 900));
   }
 
+
+  // ── Rosa de los vientos y dona de reparto ──────────────────────────────
+  // Una línea en grados está mal para la dirección: el viento que oscila entre
+  // 350 y 10 grados dibuja un salto vertical de punta a punta del gráfico,
+  // cuando en realidad casi no se movió. Circular no es una decisión estética:
+  // es la única forma de que 359 y 1 queden pegados, como están en la realidad.
+  var BANDAS = [
+    { hasta: 8,        nombre: 'menos de 8 kn',  color: '#3d6a85', que: 'poco' },
+    { hasta: 12,       nombre: '8 a 12 kn',      color: '#7fd8ee', que: 'justo' },
+    { hasta: 25,       nombre: '12 a 25 kn',     color: '#2fbf71', que: 'navegable' },
+    { hasta: Infinity, nombre: 'más de 25 kn',   color: '#e9c46a', que: 'mucho' }
+  ];
+  function bandaDe(kn){
+    for (var i = 0; i < BANDAS.length; i++) if (kn < BANDAS[i].hasta) return i;
+    return BANDAS.length - 1;
+  }
+  var RUMBOS16 = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSO','SO','OSO','O','ONO','NO','NNO'];
+
+  // lecturas: [{kn, dir}] — dir en grados, de dónde viene
+  function rosaViento(titulo, lecturas, nota){
+    var utiles = lecturas.filter(function(l){ return isFinite(l.kn) && isFinite(l.dir); });
+    if (utiles.length < 3) return '';
+    var W = Math.round(anchoUtil());
+    var lado = Math.max(210, Math.min(W, 330));
+    var cx = lado / 2, cy = lado / 2, R = lado / 2 - 26;
+
+    var celdas = [];                       // 16 sectores x 4 bandas
+    for (var s = 0; s < 16; s++) celdas.push([0,0,0,0]);
+    utiles.forEach(function(l){
+      var sec = Math.round(((l.dir % 360) + 360) % 360 / 22.5) % 16;
+      celdas[sec][bandaDe(l.kn)]++;
+    });
+    var maxSec = 0;
+    celdas.forEach(function(c){ var t = c[0]+c[1]+c[2]+c[3]; if (t > maxSec) maxSec = t; });
+    if (!maxSec) return '';
+
+    function arco(r0, r1, a0, a1){
+      var p = function(r, a){ var t = (a - 90) * Math.PI / 180;
+        return [(cx + r * Math.cos(t)).toFixed(2), (cy + r * Math.sin(t)).toFixed(2)]; };
+      var A = p(r1, a0), B = p(r1, a1), C = p(r0, a1), Dd = p(r0, a0);
+      return 'M' + A + 'A' + r1 + ' ' + r1 + ' 0 0 1 ' + B +
+             'L' + C + 'A' + r0 + ' ' + r0 + ' 0 0 0 ' + Dd + 'Z';
+    }
+    var svg = '';
+    // anillos de referencia
+    [0.5, 1].forEach(function(f){
+      svg += '<circle cx="' + cx + '" cy="' + cy + '" r="' + (R*f).toFixed(1) +
+             '" fill="none" stroke="rgba(127,216,238,.16)"/>';
+    });
+    // pétalos
+    for (var k = 0; k < 16; k++) {
+      var tot = celdas[k][0]+celdas[k][1]+celdas[k][2]+celdas[k][3];
+      if (!tot) continue;
+      var a0 = k * 22.5 - 10.6, a1 = k * 22.5 + 10.6, acum = 0;
+      for (var b = 0; b < 4; b++) {
+        if (!celdas[k][b]) continue;
+        var r0 = R * (acum / maxSec), r1 = R * ((acum + celdas[k][b]) / maxSec);
+        svg += '<path d="' + arco(r0, r1, a0, a1) + '" fill="' + BANDAS[b].color + '" opacity=".9"/>';
+        acum += celdas[k][b];
+      }
+    }
+    // rumbos cardinales
+    [['N',0],['E',90],['S',180],['O',270]].forEach(function(r){
+      var t = (r[1] - 90) * Math.PI / 180;
+      svg += '<text x="' + (cx + (R+13) * Math.cos(t)).toFixed(1) + '" y="' +
+             (cy + (R+13) * Math.sin(t) + 4).toFixed(1) + '" text-anchor="middle" ' +
+             'font-size="11" fill="#8fb3c9">' + r[0] + '</text>';
+    });
+    // de dónde vino más seguido
+    var mejor = 0, mejorN = -1;
+    celdas.forEach(function(c, i){ var t = c[0]+c[1]+c[2]+c[3]; if (t > mejorN) { mejorN = t; mejor = i; } });
+
+    var ley = BANDAS.map(function(b){
+      return '<span class="hoy__rosa-b"><i style="background:' + b.color + '"></i>' + b.nombre + '</span>';
+    }).join('');
+    return '<div class="hoy__g hoy__g--rosa"><h4>' + esc(titulo) + '</h4>' +
+      '<svg viewBox="0 0 ' + lado + ' ' + lado + '" width="' + lado + '" height="' + lado +
+      '" role="img" aria-label="Rosa de los vientos: de dónde vino el viento y con qué intensidad">' +
+      svg + '</svg>' +
+      '<p class="hoy__rosa-txt">De ' + utiles.length + ' lecturas, la dirección más frecuente fue el <b>' +
+      RUMBOS16[mejor] + '</b>. Cada pétalo mide cuántas veces sopló de ahí; el color, con qué fuerza.</p>' +
+      '<div class="hoy__rosa-ley">' + ley + '</div>' +
+      (nota ? '<p class="hoy__rosa-txt">' + nota + '</p>' : '') + '</div>';
+  }
+
+  function donaViento(titulo, lecturas){
+    var utiles = lecturas.filter(function(l){ return isFinite(l.kn); });
+    if (utiles.length < 3) return '';
+    var cuenta = [0,0,0,0];
+    utiles.forEach(function(l){ cuenta[bandaDe(l.kn)]++; });
+    var lado = 168, cx = lado/2, cy = lado/2, R = 62, r = 38, ang = -90, svg = '';
+    for (var b = 0; b < 4; b++) {
+      if (!cuenta[b]) continue;
+      var barre = cuenta[b] / utiles.length * 360;
+      if (barre >= 359.9) {
+        svg += '<circle cx="' + cx + '" cy="' + cy + '" r="' + ((R+r)/2) + '" fill="none" stroke="' +
+               BANDAS[b].color + '" stroke-width="' + (R-r) + '"/>';
+      } else {
+        var a0 = ang * Math.PI/180, a1 = (ang+barre) * Math.PI/180, gr = barre > 180 ? 1 : 0;
+        svg += '<path d="M' + (cx+R*Math.cos(a0)).toFixed(2) + ' ' + (cy+R*Math.sin(a0)).toFixed(2) +
+          'A' + R + ' ' + R + ' 0 ' + gr + ' 1 ' + (cx+R*Math.cos(a1)).toFixed(2) + ' ' + (cy+R*Math.sin(a1)).toFixed(2) +
+          'L' + (cx+r*Math.cos(a1)).toFixed(2) + ' ' + (cy+r*Math.sin(a1)).toFixed(2) +
+          'A' + r + ' ' + r + ' 0 ' + gr + ' 0 ' + (cx+r*Math.cos(a0)).toFixed(2) + ' ' + (cy+r*Math.sin(a0)).toFixed(2) +
+          'Z" fill="' + BANDAS[b].color + '" opacity=".92"/>';
+      }
+      ang += barre;
+    }
+    var nav = Math.round(100 * cuenta[2] / utiles.length);
+    svg += '<text x="' + cx + '" y="' + (cy-2) + '" text-anchor="middle" font-size="21" font-weight="700" fill="#e6f2fa">' +
+           nav + '%</text>' +
+           '<text x="' + cx + '" y="' + (cy+13) + '" text-anchor="middle" font-size="9" fill="#8fb3c9">navegable</text>';
+    var ley = BANDAS.map(function(b, i){
+      return '<span class="hoy__rosa-b"><i style="background:' + b.color + '"></i>' +
+             Math.round(100*cuenta[i]/utiles.length) + '% ' + b.que + '</span>';
+    }).join('');
+    return '<div class="hoy__g hoy__g--rosa"><h4>' + esc(titulo) + '</h4>' +
+      '<svg viewBox="0 0 ' + lado + ' ' + lado + '" width="' + lado + '" height="' + lado +
+      '" role="img" aria-label="Reparto del tiempo por intensidad de viento">' + svg + '</svg>' +
+      '<div class="hoy__rosa-ley">' + ley + '</div></div>';
+  }
+
   function grafico(titulo, series, unidad){
     var puntos = series.reduce(function(a, s){ return a.concat(s.datos); }, []);
     if (puntos.length < 2) return '';
@@ -5764,12 +5892,14 @@ document.addEventListener('DOMContentLoaded', function() {
     var pts = hist.map(function(e){
       var m = String(e.medidoEn || '').match(/(\d{2})-(\d{2})-(\d{4})\s+(\d{2}):(\d{2})/);
       if (!m) return null;
-      return { t: new Date(+m[3], +m[2] - 1, +m[1], +m[4], +m[5]).getTime(), kn: e.kn, alt: e.alturaCm };
+      return { t: new Date(+m[3], +m[2] - 1, +m[1], +m[4], +m[5]).getTime(), kn: e.kn, gr: e.grados, alt: e.alturaCm };
     }).filter(Boolean);
 
     if (pts.length >= 2) {
-      h += grafico('Viento', [{ nombre:'Norden', color:'#7fd8ee',
-             datos: pts.map(function(p){ return { x:p.t, y:p.kn }; }) }], 'kn');
+      var lectN = pts.filter(function(p){ return isFinite(p.gr); })
+                     .map(function(p){ return { kn:p.kn, dir:p.gr }; });
+      h += rosaViento('De dónde sopló — Pilote Norden', lectN, '');
+      h += donaViento('Cuánto tiempo hubo viento usable', pts.map(function(p){ return { kn:p.kn }; }));
       var conAlt = pts.filter(function(p){ return isFinite(p.alt); });
       if (conAlt.length >= 2) {
         h += grafico('Altura del río', [{ nombre:'Norden', color:'#e9c46a',
@@ -5801,12 +5931,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var m = c.meteo || [];
     if (m.length >= 2) {
-      h += grafico('Viento — últimas horas', [
-        { nombre:'Ráfaga', color:'#e9c46a', fina:true, datos: m.map(function(e){ return { x:e.t, y:e.raf }; }) },
-        { nombre:'Medio',  color:'#7fd8ee', datos: m.map(function(e){ return { x:e.t, y:e.kn }; }) }
-      ], 'kn');
-      h += grafico('Dirección del viento', [{ nombre:'Dirección', color:'#a78bfa',
-             datos: m.map(function(e){ return { x:e.t, y:e.dir }; }) }], 'grados');
+      var lect = m.map(function(e){ return { kn:e.kn, dir:e.dir }; });
+      h += rosaViento('De dónde sopló — últimas horas', lect,
+             'Ráfaga máxima del período: ' +
+             Math.max.apply(null, m.map(function(e){ return isFinite(e.raf) ? e.raf : 0; })).toFixed(1) + ' kn.');
+      h += donaViento('Cuánto tiempo hubo viento usable', lect);
     }
 
     var mar = c.mareas || [];
