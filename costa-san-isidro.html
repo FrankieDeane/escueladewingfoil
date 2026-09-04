@@ -56,6 +56,18 @@ canvas:active{cursor:grabbing}
 .nomapa p{margin:0;font-size:12.5px;line-height:1.5}
 .nomapa p b{color:var(--peligro)}
 .pista{position:absolute;left:15px;bottom:12px;font-size:11.5px;color:#6f8ea3}
+.marcas{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.marca{position:absolute;transform:translate(-50%,-100%);white-space:nowrap;
+ font-size:11.5px;line-height:1;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.95);
+ display:flex;flex-direction:column;align-items:center;gap:3px;transition:opacity .2s}
+.marca i{width:7px;height:7px;border-radius:50%;background:var(--accent);
+ box-shadow:0 0 0 2px rgba(0,0,0,.55);display:block;order:2}
+.marca.ref i{background:#e9c46a}
+.viento-rosa{position:absolute;right:15px;bottom:15px;width:78px;height:78px;
+ background:color-mix(in srgb,var(--surface) 84%,transparent);border:1px solid var(--border);
+ border-radius:50%;backdrop-filter:blur(9px);display:flex;align-items:center;justify-content:center}
+.viento-rosa svg{width:100%;height:100%}
+.viento-rosa.sin{opacity:.42}
 
 .mandos{background:var(--surface);border-bottom:1px solid var(--divider);padding:14px 0}
 .presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
@@ -130,6 +142,19 @@ footer .au{color:var(--text);font-weight:700}
     <p>La marea y el terreno están en datums verticales distintos y el desfase no es público.
       La mancha es <b>indicativa</b>. Para emergencias, el SHN y Defensa Civil.</p>
   </div>
+  <div class="marcas" id="marcas" aria-hidden="true"></div>
+  <div class="viento-rosa sin" id="rosa" title="Viento medido por el CNSI">
+    <svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-opacity=".22"/>
+      <text x="50" y="12" text-anchor="middle" font-size="9" fill="currentColor" opacity=".55">N</text>
+      <g id="rosaFlecha" transform="rotate(0 50 50)">
+        <path d="M50 18 L57 56 L50 50 L43 56 Z" fill="currentColor"/>
+      </g>
+      <text x="50" y="76" text-anchor="middle" font-size="15" font-weight="700"
+            fill="currentColor" id="rosaKn">—</text>
+      <text x="50" y="88" text-anchor="middle" font-size="8" fill="currentColor" opacity=".6">kn</text>
+    </svg>
+  </div>
   <div class="pista">arrastrá para girar · rueda para acercar</div>
 </div>
 
@@ -149,12 +174,16 @@ footer .au{color:var(--text);font-weight:700}
       la marea del Servicio de Hidrografía Naval. Se reconoce el Hipódromo, la marina del Club Náutico
       y la barranca cayendo al río.</p>
     <div class="rej">
-      <div class="tar"><h3>El relieve</h3><p>SRTM a 30 m de resolución. La barranca de San Isidro llega a
-        <b id="qMax">—</b> sobre el nivel del mar, y el <b id="qT">—</b> del recorte es tierra firme.</p></div>
+      <div class="tar"><h3>El recorte</h3><p>Toda la costa del partido, del <b>Hipódromo</b> al sur hasta
+        <b>Punta Chica</b> al norte: <b id="qKm">—</b>. Incluye el <b>Club Náutico San Isidro</b>, el
+        <b>Albatros</b> y el <b>Puerto</b>, marcados sobre el mapa.</p></div>
+      <div class="tar"><h3>El relieve</h3><p>Buenos Aires es plana: lo único que hay es la barranca, que
+        llega a <b id="qMax">—</b>. Alcanza para saber a dónde va el agua, que es lo que importa acá.</p></div>
       <div class="tar"><h3>El agua</h3><p>Los escenarios no son inventados: salen de la serie real del SHN
         y de lo que se midió en la sudestada del <b>19 de diciembre de 2023</b>.</p></div>
-      <div class="tar"><h3>El viento</h3><p>Medido por la estación del <b>Club Náutico San Isidro</b>,
-        no por un modelo. Es un anemómetro en el agua, en este mismo lugar.</p></div>
+      <div class="tar"><h3>El viento</h3><p>Los rastros sobre el agua corren en la <b>dirección medida
+        ahora mismo</b> por la estación del CNSI, y la picadura del agua crece con la intensidad real.
+        Si la estación no responde, no hay rastros: no inventamos movimiento.</p></div>
     </div>
   </section>
 
@@ -173,11 +202,12 @@ footer .au{color:var(--text);font-weight:700}
       <li><b>No es un mapa de inundación.</b> El desfase entre el datum de la marea (plano de reducción
         de sondajes) y el del terreno (nivel medio del mar) no está publicado para San Isidro. La
         superficie que se moja es indicativa, no la cota real de anegamiento.</li>
-      <li><b>El relieve está suavizado.</b> SRTM sobre ciudad densa mide techos, no suelo. Le aplicamos
-        mediana 5×5 y promedio 3×3 sobre las celdas de tierra: es filtrado sobre valores reales, pero
-        achata construcciones.</li>
-      <li><b>El relieve es de 30 m.</b> No ve un cordón de vereda ni un murallón costero de dos metros
-        de ancho — y sin embargo eso cambia todo.</li>
+      <li><b>El relieve es de 30 m y va suavizado.</b> SRTM sobre ciudad densa mide techos, no suelo, así
+        que le aplicamos una mediana 3×3 sobre tierra. No ve un cordón de vereda ni un murallón costero
+        de dos metros — y sin embargo eso cambia todo.</li>
+      <li><b>Los rastros de viento son una lectura, no un modelo.</b> Corren en la dirección y a una
+        velocidad proporcional a lo que mide el anemómetro del CNSI <b>en un punto</b>. No simulan
+        turbulencia, sombra de la barranca ni brisa térmica: el viento real no es uniforme sobre 9 km.</li>
       <li><b>La imagen es de una fecha, la marea de otra.</b> La foto muestra el río en el nivel que
         tenía cuando se tomó; la simulación la usa como textura fija.</li>
       <li><b>El fondo del río no está medido.</b> Según la capa de procedencia de GEBCO, sólo el 5,5 %
@@ -249,8 +279,8 @@ function traerImagen(bbox){
 }
 
 /* ======================== WebGL ======================== */
-var cv=$('c'),gl=null,pT=null,pA=null,tex=null,listo=false;
-var P,N,U,C,bP,bN,bU,bC,bI,bAg,idxLargo=0,W=0,H=0,ESC=1000;
+var cv=$('c'),gl=null,pT=null,pA=null,pV=null,tex=null,listo=false;
+var P,N,U,C,bP,bN,bU,bC,bI,bAg,bSem,bExt,nPart=0,idxLargo=0,W=0,H=0,ESC=1000;
 function sh(t,s){var x=gl.createShader(t);gl.shaderSource(x,s);gl.compileShader(x);
  if(!gl.getShaderParameter(x,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(x));return x}
 function prog(v,f){var p=gl.createProgram();gl.attachShader(p,sh(gl.VERTEX_SHADER,v));
@@ -273,12 +303,35 @@ function iniciarGL(){
    '  c=mix(c*0.82,vec3(0.34,0.24,0.17),0.30+0.55*f);'+
    '  if(bajo<0.16) c=mix(c,vec3(0.62,0.80,0.85),0.5);}'+
    ' gl_FragColor=vec4(c,1.0);}');
+  // el agua se pica mas cuanto mas viento medido hay: la amplitud y la
+  // frecuencia salen del dato del CNSI, no de un numero elegido a mano
   pA=prog(
    'attribute vec2 xz;uniform mat4 mvp;uniform float niv;varying vec2 v;'+
    'void main(){v=xz;gl_Position=mvp*vec4(xz.x,niv,xz.y,1.0);}',
-   'precision mediump float;varying vec2 v;uniform float t;'+
-   'void main(){float o=sin(v.x*7.0+t*0.9)*0.5+sin(v.y*9.0-t*0.7)*0.5;'+
-   ' gl_FragColor=vec4(mix(vec3(0.30,0.21,0.15),vec3(0.40,0.30,0.22),o*0.5+0.5),0.86);}');
+   'precision mediump float;varying vec2 v;uniform float t;uniform float vkn;uniform vec2 vdir;'+
+   'void main(){'+
+   ' float f=3.0+vkn*0.85;'+
+   ' float a=0.28+min(vkn,26.0)/26.0*0.55;'+
+   ' float o=sin(dot(v,vdir)*f+t*(1.2+vkn*0.14))*0.5'+
+   '        +sin(dot(v,vec2(-vdir.y,vdir.x))*f*0.62-t*0.8)*0.5;'+
+   ' vec3 c=mix(vec3(0.30,0.21,0.15),vec3(0.42,0.32,0.24),o*a+0.5);'+
+   ' gl_FragColor=vec4(c,0.86);}');
+
+  // rastros de viento: nacen, corren en la direccion medida y se apagan
+  pV=prog(
+   'attribute vec2 semilla;attribute float extremo;'+
+   'uniform mat4 mvp;uniform float t,niv,vel,largo;uniform vec2 dir,tam;'+
+   'varying float vA;'+
+   'void main(){'+
+   ' float fase=fract(semilla.x*7.13+semilla.y*3.71);'+
+   ' float rec=fract(t*vel+fase);'+
+   ' vec2 base=(semilla-0.5)*tam;'+
+   ' vec2 p=base+dir*rec*tam.x*0.22;'+
+   ' p-=dir*(1.0-extremo)*largo;'+
+   ' vA=sin(rec*3.14159)*extremo;'+
+   ' gl_Position=mvp*vec4(p.x,niv,p.y,1.0);}',
+   'precision mediump float;varying float vA;uniform float alfa;'+
+   'void main(){gl_FragColor=vec4(0.88,0.95,1.0,vA*alfa);}');
 }
 
 function armarMalla(){
@@ -301,6 +354,18 @@ function armarMalla(){
   bAg=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,bAg);
   gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(
     [-W/2,-H/2,W/2,-H/2,W/2,H/2,-W/2,-H/2,W/2,H/2,-W/2,H/2]),gl.STATIC_DRAW);
+  // 1400 rastros: dos vertices cada uno (cola y cabeza)
+  var NP=1400, sem=new Float32Array(NP*4), ext=new Float32Array(NP*2);
+  for(var q=0;q<NP;q++){
+    var rx=Math.random(), ry=Math.random();
+    sem[q*4]=rx; sem[q*4+1]=ry; sem[q*4+2]=rx; sem[q*4+3]=ry;
+    ext[q*2]=0; ext[q*2+1]=1;
+  }
+  bSem=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,bSem);
+  gl.bufferData(gl.ARRAY_BUFFER,sem,gl.STATIC_DRAW);
+  bExt=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,bExt);
+  gl.bufferData(gl.ARRAY_BUFFER,ext,gl.STATIC_DRAW);
+  nPart=NP;
 }
 function rehacer(ex){
   for(var j=0;j<NY;j++)for(var i=0;i<NX;i++){var k=j*NX+i;
@@ -371,15 +436,78 @@ function marco(ts){
       gl.enableVertexAttribArray(l);gl.vertexAttribPointer(l,a[2],gl.FLOAT,false,0,0)});
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,bI);
     gl.drawElements(gl.TRIANGLES,idxLargo,gl.UNSIGNED_INT,0);
+    var niv=nivel*exag/ESC;
+    // direccion HACIA donde sopla, en el plano del mapa (x=este, z=sur)
+    var kn=VIENTO?VIENTO.kn:0;
+    var hacia=((VIENTO?VIENTO.dir:0)+180)*Math.PI/180;
+    var dx=Math.sin(hacia), dz=-Math.cos(hacia);
+
     gl.useProgram(pA);gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
     gl.uniformMatrix4fv(gl.getUniformLocation(pA,'mvp'),false,M);
-    gl.uniform1f(gl.getUniformLocation(pA,'niv'),nivel*exag/ESC);
+    gl.uniform1f(gl.getUniformLocation(pA,'niv'),niv);
     gl.uniform1f(gl.getUniformLocation(pA,'t'),ts/1000);
+    gl.uniform1f(gl.getUniformLocation(pA,'vkn'),kn);
+    gl.uniform2f(gl.getUniformLocation(pA,'vdir'),dx,dz);
     var la=gl.getAttribLocation(pA,'xz');gl.bindBuffer(gl.ARRAY_BUFFER,bAg);
     gl.enableVertexAttribArray(la);gl.vertexAttribPointer(la,2,gl.FLOAT,false,0,0);
-    gl.drawArrays(gl.TRIANGLES,0,6);gl.disable(gl.BLEND);
+    gl.drawArrays(gl.TRIANGLES,0,6);
+
+    // rastros: solo si hay viento medido. Sin dato, no se inventa movimiento.
+    if(VIENTO && kn>0.4){
+      gl.useProgram(pV);
+      gl.uniformMatrix4fv(gl.getUniformLocation(pV,'mvp'),false,M);
+      gl.uniform1f(gl.getUniformLocation(pV,'t'),ts/1000);
+      gl.uniform1f(gl.getUniformLocation(pV,'niv'),niv+0.0015);
+      gl.uniform1f(gl.getUniformLocation(pV,'vel'),0.045+kn*0.012);
+      gl.uniform1f(gl.getUniformLocation(pV,'largo'),W*(0.006+Math.min(kn,26)/26*0.022));
+      gl.uniform2f(gl.getUniformLocation(pV,'dir'),dx,dz);
+      gl.uniform2f(gl.getUniformLocation(pV,'tam'),W,H);
+      gl.uniform1f(gl.getUniformLocation(pV,'alfa'),0.16+Math.min(kn,26)/26*0.42);
+      var ls=gl.getAttribLocation(pV,'semilla');gl.bindBuffer(gl.ARRAY_BUFFER,bSem);
+      gl.enableVertexAttribArray(ls);gl.vertexAttribPointer(ls,2,gl.FLOAT,false,0,0);
+      var le=gl.getAttribLocation(pV,'extremo');gl.bindBuffer(gl.ARRAY_BUFFER,bExt);
+      gl.enableVertexAttribArray(le);gl.vertexAttribPointer(le,1,gl.FLOAT,false,0,0);
+      gl.drawArrays(gl.LINES,0,nPart*2);
+    }
+    gl.disable(gl.BLEND);
+    ubicarMarcas(M);
   }
   requestAnimationFrame(marco);
+}
+
+/* ---- marcadores: proyecto lat/lon al lienzo en cada cuadro ---- */
+var MARCAS=[];
+function armarMarcas(){
+  var cont=$('marcas'); if(!cont||!D.lugares) return;
+  cont.innerHTML='';
+  MARCAS=D.lugares.map(function(l){
+    var el=document.createElement('div');
+    el.className='marca'+(l.tipo==='ref'?' ref':'');
+    el.innerHTML='<span>'+l.n+'</span><i></i>';
+    cont.appendChild(el);
+    // posicion en el mundo, con la cota del terreno debajo
+    var u=(l.lon-BBOX[0])/(BBOX[2]-BBOX[0]), v=(BBOX[3]-l.lat)/(BBOX[3]-BBOX[1]);
+    var i=Math.round(u*(NX-1)), j=Math.round(v*(NY-1));
+    var cota=(i>=0&&i<NX&&j>=0&&j<NY)?ALT[j*NX+i]:0;
+    return {el:el,u:u,v:v,cota:cota};
+  });
+}
+function ubicarMarcas(M){
+  if(!MARCAS.length) return;
+  var w=cv.clientWidth,h=cv.clientHeight;
+  for(var k=0;k<MARCAS.length;k++){
+    var m=MARCAS[k];
+    var x=(m.u-0.5)*W, z=(m.v-0.5)*H, y=Math.max(m.cota,nivel)*exag/ESC;
+    var cx=M[0]*x+M[4]*y+M[8]*z+M[12];
+    var cy=M[1]*x+M[5]*y+M[9]*z+M[13];
+    var cw=M[3]*x+M[7]*y+M[11]*z+M[15];
+    if(cw<=0){m.el.style.opacity='0';continue}
+    var sx=(cx/cw*0.5+0.5)*w, sy=(1-(cy/cw*0.5+0.5))*h;
+    var fuera=sx<-40||sx>w+40||sy<-20||sy>h+20;
+    m.el.style.opacity=fuera?'0':'1';
+    m.el.style.left=sx.toFixed(1)+'px';
+    m.el.style.top=sy.toFixed(1)+'px';
+  }
 }
 
 /* ======================== datos en vivo ======================== */
@@ -396,6 +524,12 @@ function vivo(){
     if(!isFinite(kn)||!isFinite(dir))return;
     VIENTO={kn:kn,dir:dir,raf:raf,t:f.created_at};
     $('hV').textContent=kn.toFixed(1)+' kn del '+rosa(dir)+(isFinite(raf)?' · ráf '+raf.toFixed(1):'');
+    // la flecha apunta hacia donde sopla, que es lo que empuja al que navega
+    $('rosaFlecha').setAttribute('transform','rotate('+((dir+180)%360).toFixed(1)+' 50 50)');
+    $('rosaKn').textContent=kn.toFixed(1);
+    $('rosa').classList.remove('sin');
+    $('rosa').setAttribute('title','Viento medido por el CNSI: '+kn.toFixed(1)+
+      ' kn del '+rosa(dir)+'. La flecha apunta hacia donde sopla.');
   });
   // marea: pronóstico del SHN
   ts(3447831,300).then(function(d){
@@ -429,7 +563,7 @@ fetch('/assets/terreno-san-isidro.json').then(function(r){
   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
   listo=true; $('cargando').style.display='none';
-  montarUI(); vivo(); requestAnimationFrame(marco);
+  armarMarcas(); montarUI(); vivo(); requestAnimationFrame(marco);
 }).catch(function(e){
   $('cargando').innerHTML='<span>No se pudo cargar el 3D: '+
     (e&&e.message?e.message:'error')+'.<br>Probá recargar la página.</span>';
@@ -457,7 +591,8 @@ function montarUI(){
   var mx=0,ti=0;
   for(var i=0;i<ALT.length;i++){if(ALT[i]>mx)mx=ALT[i];if(ALT[i]>0.3)ti++}
   $('qMax').textContent=mx.toFixed(1)+' m';
-  $('qT').textContent=(100*ti/ALT.length).toFixed(0)+' %';
+  var qt=$('qT'); if(qt) qt.textContent=(100*ti/ALT.length).toFixed(0)+' %';
+  $('qKm').textContent=(W).toFixed(1)+' × '+(H).toFixed(1)+' km';
   $('pNor').textContent=D.normal.toFixed(1)+'° ('+rosa(D.normal)+')';
   $('pOff').textContent=rosa((D.normal+180)%360)+' ('+((D.normal+180)%360).toFixed(0)+'°)';
   $('cifras').innerHTML=D.escenarios.map(function(e){
