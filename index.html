@@ -1258,11 +1258,21 @@ textarea{resize:vertical;min-height:90px}
 @keyframes hoyLatir{0%,100%{opacity:.45}50%{opacity:.8}}
 @media(prefers-reduced-motion:reduce){.hoy__skel{animation:none}}
 
+/* ============ IDIOMA ============ */
+.lang{display:inline-flex;align-items:center;border:1px solid var(--border);border-radius:99px;overflow:hidden;height:34px;background:var(--surface)}
+.lang button{border:none;background:none;color:var(--text-muted);font:inherit;font-size:11.5px;font-weight:700;letter-spacing:.04em;padding:0 10px;height:100%;cursor:pointer;transition:background .18s,color .18s}
+.lang button:hover{color:var(--text)}
+.lang button[aria-pressed="true"]{background:var(--primary);color:var(--text-inverse)}
+@media(max-width:900px){.lang{height:32px}.lang button{padding:0 8px;font-size:11px}}
+
   </style>
 
   <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
+  <link rel="alternate" hreflang="es" href="https://escueladewingfoil.com.ar/">
+  <link rel="alternate" hreflang="en" id="hreflangEn" href="https://escueladewingfoil.com.ar/?lang=en">
+  <link rel="alternate" hreflang="x-default" href="https://escueladewingfoil.com.ar/">
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -1296,22 +1306,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </span>
     </a>
     <nav class="nav-desktop" aria-label="Navegación principal">
-      <a href="#inicio">Inicio</a>
-      <a href="#empezar">Empezar</a>
-      <a href="#videos">Videos</a>
-      <a href="#anatomia">Anatomía</a>
-      <a href="#instructores">Instructores</a>
-      <a href="#spots">Mapa</a>
-      <a href="#venta-de-wingfoil">Equipos</a>
-      <a href="#riders">Riders</a>
-      <a href="#faq">FAQ</a>
-      <a href="#comparador">Comparador</a>
-      <a href="#camaras">📡 Cámaras</a>
+      <a href="#inicio" data-en="Home">Inicio</a>
+      <a href="#empezar" data-en="Start">Empezar</a>
+      <a href="#videos" data-en="Videos">Videos</a>
+      <a href="#anatomia" data-en="Anatomy">Anatomía</a>
+      <a href="#instructores" data-en="Instructors">Instructores</a>
+      <a href="#spots" data-en="Map">Mapa</a>
+      <a href="#venta-de-wingfoil" data-en="Gear">Equipos</a>
+      <a href="#riders" data-en="Riders">Riders</a>
+      <a href="#faq" data-en="FAQ">FAQ</a>
+      <a href="#comparador" data-en="Compare">Comparador</a>
+      <a href="#camaras" data-en="📡 Cameras">📡 Cámaras</a>
     </nav>
     <div class="header__actions">
       <a href="https://www.instagram.com/clubkitewing/" target="_blank" rel="noopener" class="btn-icon" aria-label="Instagram">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></svg>
       </a>
+      <div class="lang" id="langToggle" role="group" aria-label="Idioma del sitio / Site language">
+        <button type="button" data-lang="es" aria-pressed="true" lang="es">ES</button>
+        <button type="button" data-lang="en" aria-pressed="false" lang="en">EN</button>
+      </div>
       <button class="btn-icon" id="themeToggle" aria-label="Cambiar tema">
         <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
         <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -1373,18 +1387,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h1 class="hero__title">Aprendé <em>WingFoil</em> GRATIS</h1>
     <p class="hero__sub">La plataforma educativa #1 de habla hispana. Videos por nivel, spots en todo el país, instructores certificados y la comunidad más activa del Río de la Plata.</p>
     <div class="hero__ctas">
-      <a href="#videos" class="btn btn--primary">Empezar ahora →</a>
-      <a href="#spots" class="btn btn--white">Ver spots</a>
+      <a href="#videos" class="btn btn--primary" data-en="Start now →">Empezar ahora →</a>
+      <a href="#spots" class="btn btn--white" data-en="See the spots">Ver spots</a>
     </div>
     <div class="hero__stats">
-      <div class="hero__stat"><div class="hero__stat-num counter" data-target="22" data-suffix="+">0</div><div class="hero__stat-label">Spots Argentina</div></div>
-      <div class="hero__stat"><div class="hero__stat-num counter" data-target="3">0</div><div class="hero__stat-label">Niveles aprendizaje</div></div>
-      <div class="hero__stat"><div class="hero__stat-num counter" data-target="100" data-suffix="%">0</div><div class="hero__stat-label">Gratuito</div></div>
-      <div class="hero__stat"><div class="hero__stat-num counter" data-target="4">0</div><div class="hero__stat-label">Cable Parks</div></div>
+      <div class="hero__stat"><div class="hero__stat-num counter" data-target="22" data-suffix="+">0</div><div class="hero__stat-label" data-en="Spots in Argentina">Spots Argentina</div></div>
+      <div class="hero__stat"><div class="hero__stat-num counter" data-target="3">0</div><div class="hero__stat-label" data-en="Learning levels">Niveles aprendizaje</div></div>
+      <div class="hero__stat"><div class="hero__stat-num counter" data-target="100" data-suffix="%">0</div><div class="hero__stat-label" data-en="Free">Gratuito</div></div>
+      <div class="hero__stat"><div class="hero__stat-num counter" data-target="4">0</div><div class="hero__stat-label" data-en="Cable Parks">Cable Parks</div></div>
     </div>
   </div>
   <div class="hero__scroll">
-    <span class="hero__scroll-text">Scroll</span>
+    <span class="hero__scroll-text" data-en="Scroll">Scroll</span>
     <div class="hero__scroll-line"></div>
   </div>
 </section>
@@ -1441,27 +1455,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <div class="hoy__head">
       <div>
-        <span class="eyebrow">🌬️ Pronóstico cruzado con cada spot</span>
-        <h2>¿Salgo hoy?</h2>
-        <p class="hoy__resumen" id="hoyResumen">Mirando el viento en los spots del país…</p>
+        <span class="eyebrow" data-en="🌬️ Forecast matched to each spot">🌬️ Pronóstico cruzado con cada spot</span>
+        <h2 data-en="Should I go out today?">¿Salgo hoy?</h2>
+        <p class="hoy__resumen" id="hoyResumen" data-en="Checking the wind at spots around the country…">Mirando el viento en los spots del país…</p>
       </div>
       <div class="hoy__estado" id="hoyEstado"></div>
     </div>
     <p class="hoy__medido-intro" id="hoyMedidoIntro" hidden>Lo de más abajo es <strong>pronóstico</strong>: un modelo calculando qué viento va a haber. Esto de acá son <strong>instrumentos midiendo</strong> el que hay. Tocá una estación para ver sus gráficos.</p>
     <div class="hoy__medido">
       <button class="hoy__est" id="hoyNorden" type="button" aria-expanded="false" aria-controls="hoyGraficos">
-        <b>📍 Pilote Norden — medición real</b>
+        <b data-en="📍 Pilote Norden — real measurement">📍 Pilote Norden — medición real</b>
         <span class="hoy__est-val" id="nordenVal">—</span>
         <span class="hoy__est-det" id="nordenDet"></span>
         <span class="hoy__est-fuente">Mareógrafo de la <strong>Comisión Administradora del Río de la Plata (CARP)</strong>, Canal Martín García. Dato publicado por la CARP; acá solo lo mostramos y lo citamos.</span>
-        <span class="hoy__est-ver">Ver gráficos</span>
+        <span class="hoy__est-ver" data-en="See charts">Ver gráficos</span>
       </button>
       <button class="hoy__est" id="hoyCnsi" type="button" aria-expanded="false" aria-controls="hoyGraficos">
-        <b>📍 San Isidro — medición real</b>
+        <b data-en="📍 San Isidro — real measurement">📍 San Isidro — medición real</b>
         <span class="hoy__est-val" id="cnsiVal">—</span>
         <span class="hoy__est-det" id="cnsiDet"></span>
         <span class="hoy__est-fuente">Estación meteorológica del <strong>Club Náutico San Isidro (CNSI)</strong> y mareógrafo de su oficina de yachting. Datos publicados por el CNSI; acá solo los mostramos y los citamos.</span>
-        <span class="hoy__est-ver">Ver gráficos</span>
+        <span class="hoy__est-ver" data-en="See charts">Ver gráficos</span>
       </button>
     </div>
     <div class="hoy__graficos" id="hoyGraficos" role="region" aria-label="Gráficos de la estación"></div>
@@ -1469,7 +1483,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="hoy__skel"></div><div class="hoy__skel"></div><div class="hoy__skel"></div>
     </div>
     <details class="hoy__mas" id="hoyMas" hidden>
-      <summary id="hoyMasLabel">Ver el resto de los spots</summary>
+      <summary id="hoyMasLabel" data-en="See the rest of the spots">Ver el resto de los spots</summary>
       <div class="hoy__grid" id="hoyNo"></div>
     </details>
     <p class="hoy__nota">No es un pronóstico más: cruzamos el viento de las próximas 12 h con la <strong>dirección y el rango que cada spot necesita</strong> — los mismos que figuran en <a href="#spots">Aguas argentinas</a>. Pronóstico de <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a>; la medición del Río de la Plata es del mareógrafo Pilote Norden de la <a href="https://www.comisionriodelaplata.org" target="_blank" rel="noopener">CARP</a>. Es una orientación, no un parte meteorológico: mirá el agua antes de entrar.</p>
@@ -1479,8 +1493,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- ============================================================ QUICK START ============================================================ -->
 <section class="quickstart" id="empezar">
   <div class="container">
-    <span class="eyebrow">🚀 Empezar ahora</span>
-    <h2 class="section-title">¿Querés arrancar? <em>3 pasos</em>.</h2>
+    <span class="eyebrow" data-en="🚀 Start now">🚀 Empezar ahora</span>
+    <h2 class="section-title" data-en="Want to start? <em>3 steps</em>.">¿Querés arrancar? <em>3 pasos</em>.</h2>
     <p class="section-sub">La ruta rápida para sumarte al wingfoil. Elegí por dónde te conviene empezar según tu situación.</p>
     <div class="quickstart-grid">
 
@@ -1515,8 +1529,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- ============================================================ TESTIMONIOS ============================================================ -->
 <section class="section testimonials" id="testimonios">
   <div class="container">
-    <span class="eyebrow">💬 Comunidad</span>
-    <h2 class="section-title">La gente que ya está volando</h2>
+    <span class="eyebrow" data-en="💬 Community">💬 Comunidad</span>
+    <h2 class="section-title" data-en="People already flying">La gente que ya está volando</h2>
     <p class="section-sub">Testimonios reales de riders argentinos que arrancaron con la Escuela de Wingfoil.</p>
     <div class="testi-grid">
 
@@ -1577,8 +1591,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <div class="about__split">
       <div>
-        <span class="eyebrow">¿Nuevo en el deporte?</span>
-        <h2 class="section-title">¿Qué es el WingFoil?</h2>
+        <span class="eyebrow" data-en="New to the sport?">¿Nuevo en el deporte?</span>
+        <h2 class="section-title" data-en="What is WingFoil?">¿Qué es el WingFoil?</h2>
         <p class="section-sub">Combina un ala inflable de mano con una tabla con foil hidrodinámico. El viento impulsa el ala, el foil eleva al rider sobre el agua. La sensación: volar.</p>
         <div class="about__grid">
           <div class="about__card"><span class="about__card-icon">🏄</span><h3>Fácil de aprender</h3><p>Con la guía correcta podés estar volando en tus primeras sesiones. El Río de la Plata tiene condiciones ideales.</p></div>
@@ -1610,7 +1624,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="section" id="videos">
   <div class="container">
     <span class="eyebrow">Aprendizaje</span>
-    <h2 class="section-title">Videos por Nivel</h2>
+    <h2 class="section-title" data-en="Videos by Level">Videos por Nivel</h2>
     <p class="section-sub">Pasos ilustrados + videos en español. Todos los niveles con progresión clara desde tu primera vez en el agua hasta freestyle avanzado.</p>
 
     <div class="video-tabs" role="tablist">
@@ -1684,7 +1698,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="section anatomy" id="anatomia">
   <div class="container">
     <span class="eyebrow">Guía visual interactiva</span>
-    <h2 class="section-title">Anatomía del <span style="color:var(--primary)">Foil</span></h2>
+    <h2 class="section-title" data-en="Anatomy of the <span style=&quot;color:var(--primary)&quot;>Foil</span>">Anatomía del <span style="color:var(--primary)">Foil</span></h2>
     <p class="section-sub">Tocá cada parte para entender qué hace y por qué importa. Antes de comprar equipo, es clave saber de qué hablan los riders.</p>
     <div class="anatomy__body">
       <div class="anatomy__visual" style="padding:0;cursor:grab">
@@ -1713,7 +1727,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="section anatomy" id="anatomia-ala">
   <div class="container">
     <span class="eyebrow">Guía visual interactiva</span>
-    <h2 class="section-title">Anatomía del <span style="color:var(--primary)">Ala de Wing</span></h2>
+    <h2 class="section-title" data-en="Anatomy of the <span style=&quot;color:var(--primary)&quot;>Wing</span>">Anatomía del <span style="color:var(--primary)">Ala de Wing</span></h2>
     <p class="section-sub">El ala es lo que te propulsa. Entendé sus partes antes de comprar o alquilar: cada componente tiene un rol clave en tu control y seguridad.</p>
     <div class="anatomy__body">
       <div class="anatomy__visual" style="padding:0;cursor:default;overflow:hidden">
@@ -1760,7 +1774,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="section" id="spots">
   <div class="container">
     <span class="eyebrow">🇦🇷 Argentina</span>
-    <h2 class="section-title">Aguas argentinas</h2>
+    <h2 class="section-title" data-en="Argentine waters">Aguas argentinas</h2>
     <p class="section-sub">Un mapa de la República Argentina con todos los lugares donde se navega wingfoil. Hacé click para abrir el mapa interactivo.</p>
 
     <div class="spots-cta">
@@ -1780,7 +1794,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="section cameras-section" id="camaras">
   <div class="container">
     <span class="eyebrow">En vivo · Río de la Plata</span>
-    <h2 class="section-title">Cámaras de San Isidro</h2>
+    <h2 class="section-title" data-en="San Isidro live cameras">Cámaras de San Isidro</h2>
     <p class="section-sub">Mirá las condiciones del río en tiempo real antes de salir a navegar. Timelapse de las últimas 24hs cortesía de Windy.com.</p>
     
     <div class="cameras-grid">
@@ -1854,7 +1868,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="section calc-section" id="calculadora">
   <div class="container">
     <span class="eyebrow">Herramienta</span>
-    <h2 class="section-title">Calculadora de Equipo</h2>
+    <h2 class="section-title" data-en="Gear Calculator">Calculadora de Equipo</h2>
     <p class="section-sub">Ingresá tu peso, nivel y spot favorito. Te recomendamos el tamaño de ala, volumen de tabla y mástil ideal para empezar.</p>
     <div class="calc-wrap">
       <div class="calc-row">
@@ -1899,7 +1913,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="section instructors" id="instructores">
   <div class="container">
     <span class="eyebrow">Comunidad</span>
-    <h2 class="section-title">¿Sos Instructor?</h2>
+    <h2 class="section-title" data-en="Are you an Instructor?">¿Sos Instructor?</h2>
     <p class="section-sub">Publicá tu perfil gratis y hacete contactar por alumnos interesados en aprender wingfoil o kitesurf.</p>
     <div class="instructors-grid" id="instructorsGrid">
     </div>
@@ -1957,7 +1971,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="section" id="venta-de-wingfoil">
   <div class="container">
     <span class="eyebrow">Comunidad</span>
-    <h2 class="section-title">Equipos en Venta</h2>
+    <h2 class="section-title" data-en="Gear for Sale">Equipos en Venta</h2>
     <p class="section-sub">Comprá y vendé equipos de wingfoil entre riders de la comunidad.</p>
 
     <!-- COMUNIDAD -->
@@ -2015,14 +2029,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- FAQ -->
     <div class="faq-wrap">
       <span class="eyebrow">Preguntas frecuentes</span>
-      <h3 class="section-title" style="font-size:clamp(24px,3vw,36px)">Dudas comunes</h3>
+      <h3 class="section-title" style="font-size:clamp(24px,3vw,36px)" data-en="Common questions">Dudas comunes</h3>
       <p class="section-sub" style="margin-bottom:0">Respuestas rápidas para arrancar, elegir equipo y entender la plataforma.</p>
       <div class="faq-list">
         <details class="faq-item"><summary>¿En qué momento del año me conviene arrancar?</summary><div class="faq-answer"><p>La época ideal en el Río de la Plata arranca a fin de septiembre hasta marzo. Si arrancás en invierno los vientos son más de tierra, igualmente las clases vienen con un gomón.</p></div></details>
-        <details class="faq-item"><summary>¿Qué necesito para arrancar?</summary><div class="faq-answer"><p>Si tomás clases la escuela te da todo: neoprene, tabla, vela, casco y salvavidas. Si tenés base en kitesurf, windsurf, surf o vela: 1) tabla grande +100L, 2) ala 6-7m para viento moderado, 3) neoprene, botitas, casco y chaleco, 4) spot seguro.</p></div></details>
+        <details class="faq-item"><summary data-en="What do I need to get started?">¿Qué necesito para arrancar?</summary><div class="faq-answer"><p data-en="If you take lessons the school provides everything: wetsuit, board, wing, helmet and buoyancy aid. If you already have a base in kitesurfing, windsurfing, surfing or sailing: 1) a big board over 100 L, 2) a 6–7 m wing for moderate wind, 3) wetsuit, boots, helmet and impact vest, 4) a safe spot.">Si tomás clases la escuela te da todo: neoprene, tabla, vela, casco y salvavidas. Si tenés base en kitesurf, windsurf, surf o vela: 1) tabla grande +100L, 2) ala 6-7m para viento moderado, 3) neoprene, botitas, casco y chaleco, 4) spot seguro.</p></div></details>
         <details class="faq-item"><summary>¿Qué tabla necesito?</summary><div class="faq-answer"><p>Principiante: 100-115L. Intermedio (85kg+): 85-90L. Avanzado: 40-75L. La regla: peso corporal + 30-40L para empezar. Cuanta más flotación, más fácil aprender.</p></div></details>
         <details class="faq-item"><summary>¿Comprar nuevo o usado?</summary><div class="faq-answer"><p>Nuevo es mejor para reventa futura. Usado: revisá costuras del ala, tubos que inflen bien, foil sin corrosión. Hablá siempre con tu instructor antes de comprar.</p></div></details>
-        <details class="faq-item"><summary>¿Cuánto tiempo me lleva foilear?</summary><div class="faq-answer"><p>Depende del tiempo en el agua. Con clases regulares (2-3 veces por semana), la mayoría logra su primer foileo en 5-10 sesiones. Con experiencia previa en deportes de viento, mucho más rápido.</p></div></details>
+        <details class="faq-item"><summary data-en="How long does it take to get up on the foil?">¿Cuánto tiempo me lleva foilear?</summary><div class="faq-answer"><p data-en="It depends on time on the water. With regular lessons (2–3 times a week) most people get their first ride on the foil within 5–10 sessions. With previous wind-sport experience, much sooner.">Depende del tiempo en el agua. Con clases regulares (2-3 veces por semana), la mayoría logra su primer foileo en 5-10 sesiones. Con experiencia previa en deportes de viento, mucho más rápido.</p></div></details>
         <details class="faq-item"><summary>¿Cuánto cuesta el equipo?</summary><div class="faq-answer"><p>Equipos dolarizados. Nuevo: USD 2.500-3.000. Usado bueno: USD 1.000-1.500. Las clases varían por zona e instructor — consultá con los instructores listados.</p></div></details>
         <details class="faq-item"><summary>¿Qué foil para principiante?</summary><div class="faq-answer"><p>Río de la Plata: mástil 75-85 cm. Ala delantera grande (1.800-2.500 cm²) para arrancar con poco viento. Fuselaje largo para más estabilidad. Aluminio antes que carbono — más barato y tolerante a golpes.</p></div></details>
         <details class="faq-item"><summary>¿Hay competencias?</summary><div class="faq-answer"><p>Sí, regatas todo el año organizadas por distintos clubes. Hablá con tu instructor para sumarte al circuito.</p></div></details>
@@ -2038,7 +2052,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="section maniobras" id="maniobras">
   <div class="container">
     <span class="eyebrow">🎯 Catálogo</span>
-    <h2 class="section-title">Maniobras del WingFoil</h2>
+    <h2 class="section-title" data-en="WingFoil Manoeuvres">Maniobras del WingFoil</h2>
     <p class="section-sub">Las maniobras del deporte ordenadas por dificultad. Desde la primera vez que despegás hasta los trucos más avanzados.</p>
 
     <div class="man-filters" id="manFilters">
@@ -2057,7 +2071,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="section riders" id="riders">
   <div class="container">
     <span class="eyebrow">🌟 Inspiración</span>
-    <h2 class="section-title">Riders & Legends</h2>
+    <h2 class="section-title" data-en="Riders &amp; Legends">Riders &amp; Legends</h2>
     <p class="section-sub">Los referentes mundiales del wingfoil. Hacé click en cualquier video para verlo sin salir del sitio.</p>
     <div class="riders-grid">
 
@@ -2153,7 +2167,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="section glosario" id="glosario">
   <div class="container">
     <span class="eyebrow">📖 Diccionario</span>
-    <h2 class="section-title">Glosario del WingFoil</h2>
+    <h2 class="section-title" data-en="WingFoil Glossary">Glosario del WingFoil</h2>
     <p class="section-sub">Si recién arrancás te van a tirar 50 términos en inglés. Acá tenés los más usados, traducidos y explicados al criollo.</p>
 
     <div class="glosario-search">
@@ -2168,7 +2182,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="section blog-teaser" id="blog">
   <div class="container">
     <span class="eyebrow">📚 Recursos</span>
-    <h2 class="section-title">Guías y artículos</h2>
+    <h2 class="section-title" data-en="Guides and articles">Guías y artículos</h2>
     <p class="section-sub">Estamos preparando contenido en profundidad para cada etapa de tu aprendizaje. Pronto disponibles.</p>
     <div class="blog-grid">
 
@@ -2904,7 +2918,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="section brands" id="marcas">
   <div class="container">
     <span class="eyebrow">🏷️ Equipo</span>
-    <h2 class="section-title">Marcas que confiamos</h2>
+    <h2 class="section-title" data-en="Brands we trust">Marcas que confiamos</h2>
     <p class="section-sub">Las marcas líderes mundiales en wingfoil y kitesurf. Todas tienen distribución oficial o representantes en Argentina.</p>
     <div class="brands-grid">
 
@@ -3104,45 +3118,45 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- ============================================================ FAQ ============================================================ -->
 <section class="section" id="faq">
   <div class="container">
-    <span class="eyebrow">❓ Dudas frecuentes</span>
-    <h2 class="section-title">Preguntas frecuentes</h2>
-    <p class="section-sub">Todo lo que necesitás saber antes de arrancar con el wingfoil.</p>
+    <span class="eyebrow" data-en="❓ Common questions">❓ Dudas frecuentes</span>
+    <h2 class="section-title" data-en="Frequently asked questions">Preguntas frecuentes</h2>
+    <p class="section-sub" data-en="Everything you need to know before you start wingfoiling.">Todo lo que necesitás saber antes de arrancar con el wingfoil.</p>
     <div class="faq-list">
       <details class="faq-item">
-        <summary>¿En qué momento del año conviene arrancar con el wingfoil?</summary>
-        <p class="faq-answer">La época ideal en el Río de la Plata arranca a fines de septiembre hasta marzo. Si arrancás en invierno los vientos son más de tierra; igualmente las clases vienen con un gomón de seguridad.</p>
+        <summary data-en="When is the best time of year to start wingfoiling?">¿En qué momento del año conviene arrancar con el wingfoil?</summary>
+        <p class="faq-answer" data-en="The best season on the Río de la Plata runs from late September through March. If you start in winter the wind blows more off the land; either way, lessons come with a safety boat.">La época ideal en el Río de la Plata arranca a fines de septiembre hasta marzo. Si arrancás en invierno los vientos son más de tierra; igualmente las clases vienen con un gomón de seguridad.</p>
       </details>
       <details class="faq-item">
-        <summary>¿Qué necesito para arrancar?</summary>
-        <p class="faq-answer">Si tomás clases, la escuela te da todo: neoprene, tabla, vela, casco y salvavidas. Si tenés base en kitesurf, windsurf, surf o vela necesitás: tabla grande +100 L, ala 6–7 m para viento moderado, neoprene, botitas, casco, chaleco y un spot seguro.</p>
+        <summary data-en="What do I need to get started?">¿Qué necesito para arrancar?</summary>
+        <p class="faq-answer" data-en="If you take lessons the school provides everything: wetsuit, board, wing, helmet and buoyancy aid. If you already have a base in kitesurfing, windsurfing, surfing or sailing you need: a big board over 100 L, a 6–7 m wing for moderate wind, wetsuit, boots, helmet, impact vest and a safe spot.">Si tomás clases, la escuela te da todo: neoprene, tabla, vela, casco y salvavidas. Si tenés base en kitesurf, windsurf, surf o vela necesitás: tabla grande +100 L, ala 6–7 m para viento moderado, neoprene, botitas, casco, chaleco y un spot seguro.</p>
       </details>
       <details class="faq-item">
-        <summary>¿Qué tabla de wingfoil necesito para empezar?</summary>
-        <p class="faq-answer">Principiante: 100–115 L. Intermedio (85 kg+): 85–90 L. Avanzado: 40–75 L. La regla es peso corporal + 30–40 L para empezar. Cuanta más flotación, más fácil aprender.</p>
+        <summary data-en="What wingfoil board do I need to start?">¿Qué tabla de wingfoil necesito para empezar?</summary>
+        <p class="faq-answer" data-en="Beginner: 100–115 L. Intermediate (85 kg+): 85–90 L. Advanced: 40–75 L. The rule is body weight plus 30–40 L to start. The more flotation, the easier it is to learn.">Principiante: 100–115 L. Intermedio (85 kg+): 85–90 L. Avanzado: 40–75 L. La regla es peso corporal + 30–40 L para empezar. Cuanta más flotación, más fácil aprender.</p>
       </details>
       <details class="faq-item">
-        <summary>¿Conviene comprar equipo nuevo o usado?</summary>
-        <p class="faq-answer">Nuevo es mejor para reventa futura. Si comprás usado: revisá costuras del ala, que los tubos inflen bien y que el foil no tenga corrosión. Hablá siempre con tu instructor antes de comprar.</p>
+        <summary data-en="Should I buy new or used gear?">¿Conviene comprar equipo nuevo o usado?</summary>
+        <p class="faq-answer" data-en="New holds its resale value better. If you buy used: check the wing's seams, that the bladders hold pressure, and that the foil has no corrosion. Always talk to your instructor before buying.">Nuevo es mejor para reventa futura. Si comprás usado: revisá costuras del ala, que los tubos inflen bien y que el foil no tenga corrosión. Hablá siempre con tu instructor antes de comprar.</p>
       </details>
       <details class="faq-item">
-        <summary>¿Cuánto tiempo me lleva foilear?</summary>
-        <p class="faq-answer">Depende del tiempo en el agua. Con clases regulares (2–3 veces por semana), la mayoría logra su primer foileo en 5–10 sesiones. Con experiencia previa en deportes de viento, mucho más rápido.</p>
+        <summary data-en="How long does it take to get up on the foil?">¿Cuánto tiempo me lleva foilear?</summary>
+        <p class="faq-answer" data-en="It depends on time on the water. With regular lessons (2–3 times a week) most people get their first ride on the foil within 5–10 sessions. With previous wind-sport experience, much sooner.">Depende del tiempo en el agua. Con clases regulares (2–3 veces por semana), la mayoría logra su primer foileo en 5–10 sesiones. Con experiencia previa en deportes de viento, mucho más rápido.</p>
       </details>
       <details class="faq-item">
-        <summary>¿Cuánto cuesta el equipo en Argentina?</summary>
-        <p class="faq-answer">Los equipos están dolarizados. Nuevo: USD 2.500–3.000. Usado en buen estado: USD 1.000–1.500. Las clases varían por zona e instructor — consultá con los instructores listados en la plataforma.</p>
+        <summary data-en="How much does gear cost in Argentina?">¿Cuánto cuesta el equipo en Argentina?</summary>
+        <p class="faq-answer" data-en="Gear is priced in US dollars. New: USD 2,500–3,000. Used in good condition: USD 1,000–1,500. Lesson prices vary by area and instructor — check with the instructors listed on the platform.">Los equipos están dolarizados. Nuevo: USD 2.500–3.000. Usado en buen estado: USD 1.000–1.500. Las clases varían por zona e instructor — consultá con los instructores listados en la plataforma.</p>
       </details>
       <details class="faq-item">
-        <summary>¿Qué foil es mejor para principiante en el Río de la Plata?</summary>
-        <p class="faq-answer">Mástil 75–85 cm. Ala delantera grande (1.800–2.500 cm²) para arrancar con poco viento. Fuselaje largo para más estabilidad. Aluminio antes que carbono: más barato y tolerante a golpes.</p>
+        <summary data-en="Which foil is best for a beginner on the Río de la Plata?">¿Qué foil es mejor para principiante en el Río de la Plata?</summary>
+        <p class="faq-answer" data-en="A 75–85 cm mast. A large front wing (1,800–2,500 cm²) so you can get going in light wind. A long fuselage for stability. Aluminium before carbon: cheaper and far more forgiving of knocks.">Mástil 75–85 cm. Ala delantera grande (1.800–2.500 cm²) para arrancar con poco viento. Fuselaje largo para más estabilidad. Aluminio antes que carbono: más barato y tolerante a golpes.</p>
       </details>
       <details class="faq-item">
-        <summary>¿Hay competencias de wingfoil en Argentina?</summary>
-        <p class="faq-answer">Sí, hay regatas y competencias todo el año organizadas por distintos clubes. Hablá con tu instructor para sumarte al circuito argentino.</p>
+        <summary data-en="Are there wingfoil competitions in Argentina?">¿Hay competencias de wingfoil en Argentina?</summary>
+        <p class="faq-answer" data-en="Yes — clubs run races and events all year round. Talk to your instructor about joining the Argentine circuit.">Sí, hay regatas y competencias todo el año organizadas por distintos clubes. Hablá con tu instructor para sumarte al circuito argentino.</p>
       </details>
       <details class="faq-item">
-        <summary>¿La Escuela de Wingfoil dicta clases directamente?</summary>
-        <p class="faq-answer">La plataforma en sí no dicta clases — sí los instructores certificados que se sumaron. Los perfiles los publican los propios instructores. Verificá credenciales antes de contratar.</p>
+        <summary data-en="Does Escuela de Wingfoil teach lessons directly?">¿La Escuela de Wingfoil dicta clases directamente?</summary>
+        <p class="faq-answer" data-en="The platform itself does not teach — the certified instructors who joined it do. Instructors publish their own profiles, so check credentials before booking.">La plataforma en sí no dicta clases — sí los instructores certificados que se sumaron. Los perfiles los publican los propios instructores. Verificá credenciales antes de contratar.</p>
       </details>
     </div>
   </div>
@@ -3152,7 +3166,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="section" id="comparador">
   <div class="container">
     <span class="eyebrow">🏷️ Marcas</span>
-    <h2 class="section-title">Comparador de marcas</h2>
+    <h2 class="section-title" data-en="Brand comparison">Comparador de marcas</h2>
     <p class="section-sub">Las principales marcas de wingfoil cara a cara. Expandí cada una para ver nivel ideal, precio y disponibilidad en Argentina.</p>
 
     <div class="faq-list" style="max-width:860px">
@@ -3301,7 +3315,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <svg width="32" height="32" viewBox="0 0 36 36" fill="none"><path d="M18 16 C14 10 7 8 2 10 C7 11 12 13 15 17 Z" fill="currentColor" opacity=".9"/><path d="M18 16 C22 10 29 8 34 10 C29 11 24 13 21 17 Z" fill="currentColor" opacity=".75"/><circle cx="21.5" cy="16" r="2" fill="currentColor"/></svg>
           <span class="logo__text">Escuela de Wingfoil</span>
         </a>
-        <p class="footer__desc">La plataforma educativa gratuita de wingfoil más completa de Argentina. Creada por riders, para riders.</p>
+        <p class="footer__desc" data-en="The most complete free wingfoil learning platform in Argentina. Made by riders, for riders.">La plataforma educativa gratuita de wingfoil más completa de Argentina. Creada por riders, para riders.</p>
       </div>
       <div class="footer__links">
         <div class="footer__col">
@@ -3345,7 +3359,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div>
         <p>Copyright 2026. <strong style="color:var(--text-muted)">Escuela de Wingfoil</strong>. Todos los derechos reservados. Francisco Deane</p>
         <p class="footer__credit">Hecho con 🌊 por <strong>Francisco Deane</strong> · La libertad es volar sobre el agua</p>
-        <button class="bram-volver" id="bramVolver" type="button" hidden>🤙 Mostrar a Bramador</button>
+        <button class="bram-volver" id="bramVolver" type="button" hidden data-en="🤙 Show Bramador">🤙 Mostrar a Bramador</button>
       </div>
       <a href="https://www.instagram.com/clubkitewing/" target="_blank" rel="noopener" class="footer__ig-btn" aria-label="Instagram">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></svg>
@@ -4817,16 +4831,16 @@ document.addEventListener('DOMContentLoaded', function() {
     <span class="bram-cara" id="bramCara" aria-hidden="true">🤙</span>
     <span>
       <b>Bramador</b>
-      <small id="bramEstado">Esperando que entre el S/SO</small>
+      <small id="bramEstado" data-en="Waiting for the SW to kick in">Esperando que entre el S/SO</small>
     </span>
-    <button class="bram-ocultar" id="bramOcultar" type="button" title="Sacar a Bramador de la pantalla. Lo traés de vuelta desde el pie de página.">Ocultar</button>
+    <button class="bram-ocultar" id="bramOcultar" type="button" title="Sacar a Bramador de la pantalla. Lo traés de vuelta desde el pie de página." data-en-title="Hide Bramador. You can bring him back from the footer." data-en="Hide">Ocultar</button>
     <button class="bram-x" id="bramX" type="button" aria-label="Cerrar a Bramador">×</button>
   </div>
   <div class="bram-msgs" id="bramMsgs" role="log" aria-live="polite"></div>
   <div class="bram-chips" id="bramChips"></div>
   <form class="bram-form" id="bramForm" autocomplete="off">
-    <label for="bramInput" class="bram-sr">Escribile a Bramador</label>
-    <input type="text" id="bramInput" placeholder="Preguntale algo a Bramador…" maxlength="200">
+    <label for="bramInput" class="bram-sr" data-en="Write to Bramador">Escribile a Bramador</label>
+    <input type="text" id="bramInput" placeholder="Preguntale algo a Bramador…" data-en-placeholder="Ask Bramador something…" maxlength="200">
     <button type="submit" aria-label="Enviar">➤</button>
   </form>
 </div>
@@ -5834,6 +5848,78 @@ document.addEventListener('DOMContentLoaded', function() {
     // Sin pronóstico, la sección no aparece: mejor que mostrar una vacía o rota.
     sec.hidden = true;
   });
+})();
+</script>
+
+<!-- ===== IDIOMA ===== -->
+<script>
+// Traducción sin registro de claves: cada nodo lleva su inglés al lado, en
+// data-en (o data-en-placeholder / data-en-aria-label para atributos). Así el
+// castellano sigue siendo el HTML de verdad — el que ve Google y el que se lee
+// sin JavaScript — y la traducción no se desincroniza de su original.
+(function(){
+  var caja = document.getElementById('langToggle');
+  if(!caja) return;
+  var LS = 'wf-lang';
+  // El documento declara es-AR: al volver al castellano hay que devolver ese
+  // valor, no un "es" pelado — la variante rioplatense es parte del contenido.
+  var LANG_ES = document.documentElement.lang || 'es';
+
+  function leer(){ try{ return localStorage.getItem(LS); }catch(e){ return null; } }
+  function guardar(v){ try{ localStorage.setItem(LS, v); }catch(e){} }
+
+  // El castellano original se guarda la primera vez, así volver es exacto.
+  function original(el, prop){
+    var k = 'es' + prop;
+    if(el.dataset[k] === undefined) el.dataset[k] = prop === 'Texto' ? el.innerHTML : (el.getAttribute(prop) || '');
+    return el.dataset[k];
+  }
+
+  function aplicar(lang){
+    var en = lang === 'en';
+    document.documentElement.lang = en ? 'en' : LANG_ES;
+
+    document.querySelectorAll('[data-en]').forEach(function(el){
+      var es = original(el, 'Texto');
+      el.innerHTML = en ? el.getAttribute('data-en') : es;
+    });
+    [['data-en-placeholder','placeholder'], ['data-en-aria-label','aria-label'], ['data-en-title','title']]
+      .forEach(function(par){
+        document.querySelectorAll('[' + par[0] + ']').forEach(function(el){
+          var es = original(el, par[1]);
+          el.setAttribute(par[1], en ? el.getAttribute(par[0]) : es);
+        });
+      });
+
+    caja.querySelectorAll('button').forEach(function(b){
+      b.setAttribute('aria-pressed', String(b.dataset.lang === lang));
+    });
+
+    // Para compartir el link ya traducido y para que Google vea dos versiones.
+    var u = new URL(location.href);
+    if(en) u.searchParams.set('lang', 'en'); else u.searchParams.delete('lang');
+    history.replaceState(null, '', u.pathname + u.search + u.hash);
+
+    var alt = document.getElementById('hreflangEn');
+    if(alt) alt.href = location.origin + location.pathname + '?lang=en';
+
+    document.dispatchEvent(new CustomEvent('wf:lang', { detail:{ lang:lang } }));
+  }
+
+  caja.addEventListener('click', function(e){
+    var b = e.target.closest('button[data-lang]');
+    if(!b) return;
+    guardar(b.dataset.lang);
+    aplicar(b.dataset.lang);
+  });
+
+  // Orden: lo que pide la URL, después lo que eligió antes, y recién ahí el
+  // idioma del navegador. Un argentino ve castellano; un extranjero, inglés.
+  var pedido = new URLSearchParams(location.search).get('lang');
+  var lang = (pedido === 'en' || pedido === 'es') ? pedido
+           : leer()
+           || ((navigator.language || 'es').toLowerCase().indexOf('es') === 0 ? 'es' : 'en');
+  aplicar(lang);   // también en castellano: fija <html lang> y el estado del botón
 })();
 </script>
 
