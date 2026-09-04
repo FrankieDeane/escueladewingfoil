@@ -34,7 +34,8 @@ const linea = '='.repeat(78);
 console.log(linea);
 console.log('PRUEBA REAL DEL "¿SALGO HOY?" — ' + new Date().toLocaleString('es-AR', { timeZone:'America/Argentina/Buenos_Aires' }));
 console.log(linea);
-console.log('Spots de viento    :', ((w.__EWF||{}).SPOTS||[]).filter(s=>s.w&&/\\d+\\s*-\\s*\\d+/.test(s.w)&&isFinite(s.lat)).length, 'de', ((w.__EWF||{}).SPOTS||[]).length, 'totales');
+const deViento = ((w.__EWF||{}).SPOTS||[]).filter(sp => sp.w && /\d+\s*-\s*\d+/.test(sp.w) && isFinite(sp.lat));
+console.log('Spots de viento    :', deViento.length, 'de', ((w.__EWF||{}).SPOTS||[]).length, 'totales (el resto son cable parks)');
 var aMeteo = pedidos.filter(u => u.includes('open-meteo'));
 console.log('Requests a la API  :', aMeteo.length, aMeteo.length === 1 ? '(uno solo para todos los spots, como se diseñó)' : '(!)');
 console.log('Otros fetch (sitio):', pedidos.length - aMeteo.length, '(instructores, equipos)');
@@ -76,25 +77,31 @@ if (!si.length) console.log('\n(ninguno con ventana en las próximas 12 h)');
 console.log('\n' + linea);
 console.log('NO DAN (' + no.length + ') — con el motivo, que es lo que ningún pronóstico te dice');
 console.log(linea);
-no.forEach(c => console.log('  ' + c.spot.padEnd(30) + c.dato.padEnd(30) + '→ ' + c.extra));
+no.forEach(c => console.log('  ' + c.spot.padEnd(30) + c.dato.padEnd(34) + ' → ' + c.extra));
 
 // Chequeos de sanidad sobre datos reales
 console.log('\n' + linea);
 console.log('CHEQUEOS DE SANIDAD');
 console.log(linea);
 const todas = [...si, ...no];
-const nums = todas.map(c => +c.dato.match(/^(\d+) kn/)[1]);
+const nums = todas.map(c => +c.dato.match(/(\d+) kn/)[1]);
 const dirs = todas.map(c => +c.dato.match(/(\d+)°/)[1]);
 const chk = (ok, txt) => console.log((ok ? '  ✓ ' : '  ✗ ') + txt);
 let malas = 0; const must = (ok, txt) => { if (!ok) malas++; chk(ok, txt); };
 
-const deViento = ((w.__EWF||{}).SPOTS||[]).filter(s=>s.w&&/\d+\s*-\s*\d+/.test(s.w)&&isFinite(s.lat));
 must(todas.length === deViento.length, 'aparecen los ' + deViento.length + ' spots de viento (los cable parks quedan afuera): ' + todas.length);
 must(!todas.some(c=>/Cable Park|Wake Park/.test(c.spot)), 'ningún cable park en la lista');
 must(!todas.some(c=>/sin regla/.test(c.extra)), 'ninguno queda sin motivo real');
 must(nums.every(n => n >= 0 && n < 90), 'velocidades plausibles: ' + Math.min(...nums) + '–' + Math.max(...nums) + ' kn');
 must(dirs.every(dg => dg >= 0 && dg <= 360), 'direcciones válidas: ' + Math.min(...dirs) + '°–' + Math.max(...dirs) + '°');
 must(si.every(c => /hora(s)? navegable/.test(c.extra)), 'los "sí" muestran las horas concretas');
+must(si.every(c => /^(Ahora|A las \d\d:\d\d) · /.test(c.dato)), 'los "sí" dicen a qué hora corresponde el viento que muestran');
+must(si.every(c => {
+  const kn = +c.dato.match(/(\d+) kn/)[1];
+  const [, mn, mx] = c.regla.match(/(\d+)-(\d+) kn/);
+  return kn >= +mn && kn <= +mx;
+}), 'ninguna tarjeta en verde se contradice con la regla de su spot');
+must(no.every(c => /^Ahora · /.test(c.dato)), 'los "no" muestran el viento de ahora, y lo dicen');
 must(no.every(c => /poco viento|demasiado viento|dirección no sirve|sin regla/.test(c.extra)), 'los "no" siempre dicen por qué');
 must(todas.every(c => /Este spot pide .+ kn/.test(c.regla)), 'todos muestran la regla del spot');
 
