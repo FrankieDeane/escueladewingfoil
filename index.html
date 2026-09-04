@@ -5329,12 +5329,22 @@ document.addEventListener('DOMContentLoaded', function() {
     if(tiene(q,['camara','camaras','en vivo','ver el agua','webcam','camera','cameras','live','see the water'])){
       return {m:'sorpresa', h:T('Sí, hay ','Yes, there are ')+ir('camaras',T('cámaras en vivo de San Isidro','live cameras in San Isidro'))+T(' 😮 — mirás el agua antes de cargar el auto.',' 😮 — check the water before loading the car.'), s: enIngles() ? ['Where can I sail?','San Isidro'] : ['¿Dónde navego?','San Isidro']};
     }
-    if(tiene(q,['empezar','arrancar','soy nuevo','principiante','nunca hice','como empiezo','primera vez','desde cero','start','get started','i am new','never done','how do i begin','from scratch','first time'])){
-      return {m:'feliz', h:T('Arrancás así 😄:\n\n1. Read ', 'Here is how you start 😄:\n\n1. Read ')+ir('que-es',T('qué es el wingfoil','what wingfoil is'))+T(' para entender el deporte.\n2. Mirá ', ' to understand the sport.\n2. Look at ')+ir('empezar',T('los 3 pasos para arrancar','the 3 steps to get started'))+T('.\n3. Buscá un ', '.\n3. Find an ')+ir('instructores',T('instructor','instructor'))+T(' cerca tuyo.\n\nNo compres equipo antes de la primera clase. En serio.', ' near you.\n\nDo not buy gear before your first lesson. Seriously.'),
+    if(tiene(q,['empezar','arrancar','soy nuevo','principiante','nunca hice','como empiezo','primera vez','desde cero','aprender','aprendo','donde aprendo','quiero aprender','ensenan','enseñan','start','get started','i am new','never done','how do i begin','from scratch','first time','learn','want to learn','where do i learn'])){
+      return {m:'feliz', h:T('Arrancás así 😄:\n\n1. Leé ', 'Here is how you start 😄:\n\n1. Read ')+ir('que-es',T('qué es el wingfoil','what wingfoil is'))+T(' para entender el deporte.\n2. Mirá ', ' to understand the sport.\n2. Look at ')+ir('empezar',T('los 3 pasos para arrancar','the 3 steps to get started'))+T('.\n3. Buscá un ', '.\n3. Find an ')+ir('instructores',T('instructor','instructor'))+T(' cerca tuyo.\n\nNo compres equipo antes de la primera clase. En serio.', ' near you.\n\nDo not buy gear before your first lesson. Seriously.'),
               s: enIngles() ? ['What board suits me?','How long until I foil?','Where can I sail?'] : ['¿Qué tabla me conviene?','¿Cuánto tardo en foilear?','¿Dónde navego?']};
     }
     if(tiene(q,['que es el wingfoil','que es wingfoil','de que se trata','explicame el deporte','what is wingfoil','what is wing foiling','explain the sport'])){
       return {m:'epico', h:T('Wingfoil = tabla con hydrofoil + un ala inflable que sostenés con las manos. 🤩\n\nCuando agarrás velocidad el foil levanta la tabla y volás sobre el agua, en silencio. Sin líneas, sin barra, sin arnés obligatorio.\n\nTodo explicado en ', 'Wingfoil = a board with a hydrofoil + an inflatable wing you hold in your hands. 🤩\n\nOnce you pick up speed the foil lifts the board and you fly over the water, in silence. No lines, no bar, no harness required.\n\nAll explained in ')+ir('que-es',T('¿Qué es el WingFoil?','What is WingFoil?'))+'.', s: enIngles() ? ['How do I start?','What board suits me?','Show me videos'] : ['¿Cómo empiezo?','¿Qué tabla me conviene?','Mostrame videos']};
+    }
+    // 'foil' a secas, después de la regla de wingfoil: tiene() busca substrings
+    // y 'foil' vive adentro de 'wingfoil', así que puesta antes le robaría la
+    // pregunta a "¿qué es el wingfoil?".
+    if(tiene(q,['foil'])){
+      return {m:'epico', h:T('El foil es el ala sumergida que te levanta del agua. 🤩\n\nVa abajo de la tabla y tiene cuatro piezas: mástil, fuselaje, ala delantera y stabilizer. Cuando tomás velocidad, el ala delantera genera sustentación y la tabla despega.\n\nLo tenés desarmado pieza por pieza en ',
+                             'The foil is the submerged wing that lifts you out of the water. 🤩\n\nIt sits under the board and has four parts: mast, fuselage, front wing and stabiliser. Once you pick up speed, the front wing generates lift and the board takes off.\n\nYou have it taken apart piece by piece in ')
+                 +ir('anatomia',T('Anatomía del Foil','Anatomy of the Foil'))+'.',
+              s: enIngles() ? ['What is pumping?','What is wingfoil?','What board suits me?']
+                            : ['¿Qué es pumpear?','¿Qué es el wingfoil?','¿Qué tabla me conviene?']};
     }
     if(tiene(q,['seccion','secciones','que hay en el sitio','que tiene la pagina','menu','indice','que puedo ver','section','sections','what is on the site','what does the site have','index','what can i see'])){
       var ls = [];
@@ -5446,13 +5456,23 @@ document.addEventListener('DOMContentLoaded', function() {
     arrastrando = true; movio = false;
     sx = e.clientX; sy = e.clientY;
     ox = e.clientX - r.left; oy = e.clientY - r.top;
-    try{ dock.setPointerCapture(e.pointerId); }catch(err){}
+    // Ojo: NO capturar el puntero acá. La captura redirige el click al elemento
+    // que captura — el dock — y el handler que abre el panel vive en el botón,
+    // que es su hijo: los eventos suben, no bajan, así que nunca se enteraba.
+    // Con mouse el panel no abría nunca; en touch andaba porque el click
+    // sintético se genera de otra forma. La captura solo hace falta mientras
+    // se arrastra de verdad, así que se pide recién al cruzar el umbral.
   });
   dock.addEventListener('pointermove', function(e){
     if(!arrastrando) return;
     // Umbral: sin esto, cualquier temblor del dedo cancelaría el click de abrir.
     if(!movio && Math.abs(e.clientX - sx) + Math.abs(e.clientY - sy) < 6) return;
-    if(!movio){ movio = true; dock.classList.add('bram-dock--drag'); }
+    if(!movio){
+      movio = true;
+      dock.classList.add('bram-dock--drag');
+      // recién ahora: es un arrastre de verdad y el click ya no importa
+      try{ dock.setPointerCapture(e.pointerId); }catch(err){}
+    }
     e.preventDefault();
     ubicarFab(e.clientX - ox, e.clientY - oy);
     if(abierto) ubicarPanel();
