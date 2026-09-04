@@ -1,0 +1,7 @@
+nivel tras sudestada: 3.60 | bajo agua: 6.7 % de la tierra
+lienzo-media.png             1280x492  2984 colores distintos de 12993 muestras
+   promedio RGB (32, 33, 34) | pixeles verdosos 592 (4.6%) | pixeles marrones 2758 (21.2%)
+   veredicto: TEXTURA SATELITAL PRESENTE
+lienzo-sudestada.png         1280x492  2942 colores distintos de 12993 muestras
+   promedio RGB (32, 33, 34) | pixeles verdosos 591 (4.5%) | pixeles marrones 2729 (21.0%)
+   veredicto: TEXTURA SATELITAL PRESENTE
