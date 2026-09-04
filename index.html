@@ -1193,7 +1193,14 @@ textarea{resize:vertical;min-height:90px}
 .hoy__fondo{position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.5}
 .hoy__fondo svg{width:100%;height:100%;display:block}
 .hoy .container{position:relative;z-index:1}
-.hoy__head{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.hoy__head{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px;cursor:pointer;list-style:none;padding:4px 0;transition:opacity .18s}
+.hoy__head::-webkit-details-marker{display:none}
+.hoy__head:hover{opacity:.88}
+.hoy__head:focus-visible{outline:2px solid #7fd8ee;outline-offset:6px;border-radius:10px}
+.hoy__acc:not([open]) .hoy__head{margin-bottom:0}
+.hoy__flecha{margin-left:6px;align-self:center;width:11px;height:11px;border-right:2.5px solid #7fd8ee;border-bottom:2.5px solid #7fd8ee;transform:rotate(45deg);transition:transform .22s;flex:0 0 auto}
+.hoy__acc[open] .hoy__flecha{transform:rotate(-135deg)}
+@media(prefers-reduced-motion:reduce){.hoy__flecha{transition:none}}
 .hoy__head h2{font-family:'Clash Display',sans-serif;font-size:clamp(28px,3.6vw,44px);line-height:1.03;margin:0;color:#f0f8ff}
 .hoy .eyebrow{color:#7fd8ee}
 .hoy__resumen{font-size:14.5px;color:#a9cfe2;margin:8px 0 0;max-width:56ch}
@@ -1202,6 +1209,7 @@ textarea{resize:vertical;min-height:90px}
 .hoy__estado{margin-left:auto;font-size:12px;color:#7fa9c1;text-align:right;line-height:1.5}
 @media(max-width:680px){
   .hoy{padding:40px 0 36px}
+  .hoy__flecha{margin-left:auto}
   .hoy__head{gap:10px;margin-bottom:18px}
   .hoy__estado{margin-left:0;text-align:left}
   .hoy__graficos{padding:14px}
@@ -1469,14 +1477,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </svg>
     </div>
   <div class="container">
-    <div class="hoy__head">
-      <div>
-        <span class="eyebrow" data-en="🌬️ Forecast matched to each spot">🌬️ Pronóstico cruzado con cada spot</span>
-        <h2 data-en="Should I go out today?">¿Salgo hoy?</h2>
-        <p class="hoy__resumen" id="hoyResumen" data-en="Checking the wind at spots around the country…">Mirando el viento en los spots del país…</p>
-      </div>
-      <div class="hoy__estado" id="hoyEstado"></div>
-    </div>
+    <!-- Acordeón: plegado igual da la respuesta, porque el resumen vive en la
+         cabecera. El que no quiere ver el detalle lo cierra y se lo recuerda. -->
+    <details class="hoy__acc" id="hoyAcc" open>
+      <summary class="hoy__head">
+        <div>
+          <span class="eyebrow" data-en="🌬️ Forecast matched to each spot">🌬️ Pronóstico cruzado con cada spot</span>
+          <h2 data-en="Should I go out today?">¿Salgo hoy?</h2>
+          <p class="hoy__resumen" id="hoyResumen" data-en="Checking the wind at spots around the country…">Mirando el viento en los spots del país…</p>
+        </div>
+        <div class="hoy__estado" id="hoyEstado"></div>
+        <span class="hoy__flecha" aria-hidden="true"></span>
+      </summary>
     <p class="hoy__medido-intro" id="hoyMedidoIntro" hidden>Lo de más abajo es <strong>pronóstico</strong>: un modelo calculando qué viento va a haber. Esto de acá son <strong>instrumentos midiendo</strong> el que hay. Tocá una estación para ver sus gráficos.</p>
     <div class="hoy__medido">
       <button class="hoy__est" id="hoyNorden" type="button" aria-expanded="false" aria-controls="hoyGraficos">
@@ -1503,6 +1515,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="hoy__grid" id="hoyNo"></div>
     </details>
     <p class="hoy__nota">No es un pronóstico más: cruzamos el viento de las próximas 12 h con la <strong>dirección y el rango que cada spot necesita</strong> — los mismos que figuran en <a href="#spots">Aguas argentinas</a>. Pronóstico de <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a>; la medición del Río de la Plata es del mareógrafo Pilote Norden de la <a href="https://www.comisionriodelaplata.org" target="_blank" rel="noopener">CARP</a>. Es una orientación, no un parte meteorológico: mirá el agua antes de entrar.</p>
+    </details>
   </div>
 </section>
 
@@ -5866,6 +5879,20 @@ document.addEventListener('DOMContentLoaded', function() {
     window.__EWF.NORDEN = n;
   }).catch(function(){ /* sin medición: la tarjeta no se muestra */ });
 
+  // Si el usuario pliega el acordeón, se lo recordamos. Abierto por defecto:
+  // alguien que entra por primera vez tiene que ver de qué se trata; el que no
+  // lo quiere lo cierra una vez y listo.
+  (function(){
+    var acc = document.getElementById('hoyAcc');
+    if(!acc) return;
+    try{
+      if(localStorage.getItem('wf-hoy') === 'cerrado') acc.removeAttribute('open');
+    }catch(e){}
+    acc.addEventListener('toggle', function(){
+      try{ localStorage.setItem('wf-hoy', acc.open ? 'abierto' : 'cerrado'); }catch(e){}
+    });
+  })();
+
   // Open-Meteo acepta todas las coordenadas en un solo pedido.
   var url = 'https://api.open-meteo.com/v1/forecast'
     + '?latitude='  + SPOTS.map(function(s){ return s.lat; }).join(',')
@@ -6019,12 +6046,19 @@ document.addEventListener('DOMContentLoaded', function() {
     aplicar(b.dataset.lang);
   });
 
-  // Orden: lo que pide la URL, después lo que eligió antes, y recién ahí el
-  // idioma del navegador. Un argentino ve castellano; un extranjero, inglés.
+  // Este sitio es de Argentina: por defecto, castellano. Punto.
+  //
+  // Antes esto miraba navigator.language, y estaba mal: mucha gente acá usa el
+  // navegador en inglés, así que un argentino abría el sitio traducido. El
+  // inglés queda como una elección, no como una suposición.
+  //
+  // Orden: lo que pide la URL (para compartir un link ya traducido), después
+  // lo que el usuario eligió a mano, y si no, castellano.
   var pedido = new URLSearchParams(location.search).get('lang');
+  var guardado = leer();
   var lang = (pedido === 'en' || pedido === 'es') ? pedido
-           : leer()
-           || ((navigator.language || 'es').toLowerCase().indexOf('es') === 0 ? 'es' : 'en');
+           : (guardado === 'en' || guardado === 'es') ? guardado
+           : 'es';
   aplicar(lang);   // también en castellano: fija <html lang> y el estado del botón
 })();
 </script>
