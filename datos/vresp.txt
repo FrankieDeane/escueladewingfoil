@@ -1,0 +1,17 @@
+--- iPhone 14 390x844 --- tiles:80 touch:pan-y
+    marcadores: [CNSI, Albatros, Puerto, Hipódromo] | viento: 7.3 kn del O · ráf 12.9
+    pista: deslizá de costado para girar · dos dedos pa
+    ✗ control de 42px
+--- Android chico 360x740 --- tiles:80 touch:pan-y
+    marcadores: [CNSI, Albatros, Puerto, Hipódromo] | viento: 7.3 kn del O · ráf 12.9
+    pista: deslizá de costado para girar · dos dedos pa
+    ✗ control de 42px
+--- iPad 768x1024 --- tiles:80 touch:pan-y
+    marcadores: [CNSI, Albatros, Puerto, Hipódromo] | viento: 7.3 kn del O · ráf 12.9
+    pista: deslizá de costado para girar · dos dedos pa
+    ✓ sin problemas
+--- Escritorio 1440x900 --- tiles:80 touch:pan-y
+    marcadores: [CNSI, Albatros, Puerto, Hipódromo] | viento: 7.3 kn del O · ráf 12.9
+    pista: arrastrá para girar · rueda para acercar
+    ✓ sin problemas
+sin errores JS
