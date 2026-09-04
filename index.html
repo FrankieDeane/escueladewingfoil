@@ -1134,14 +1134,20 @@ textarea{resize:vertical;min-height:90px}
 @media(max-width:520px){.share-btn span{display:none}.share-btn{padding:9px 12px;gap:0}}
 
 /* ============ BRAMADOR (asistente) ============ */
-.bram-fab{position:fixed;bottom:calc(22px + var(--bram-lift,0px));right:22px;z-index:120;touch-action:none;width:60px;height:60px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(145deg,var(--primary),var(--accent));color:#fff;font-size:29px;line-height:1;box-shadow:0 6px 24px rgba(0,0,0,.32);display:flex;align-items:center;justify-content:center;transition:transform .2s,box-shadow .2s}
+.bram-fab{position:relative;width:60px;height:60px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(145deg,var(--primary),var(--accent));color:#fff;font-size:29px;line-height:1;box-shadow:0 6px 24px rgba(0,0,0,.32);display:flex;align-items:center;justify-content:center;transition:transform .2s,box-shadow .2s}
 .bram-fab:hover{transform:scale(1.08)}
-.bram-fab[hidden]{display:none}
+.bram-dock{position:fixed;bottom:calc(22px + var(--bram-lift,0px));right:22px;z-index:120;touch-action:none}
+.bram-dock[hidden]{display:none}
 /* Cuando el usuario lo arrastra pasamos a top/left y soltamos el anclaje del CSS. */
-.bram-fab--movido{bottom:auto;right:auto}
-.bram-fab--drag{cursor:grabbing;transition:none;box-shadow:0 10px 30px rgba(0,0,0,.45)}
-.bram-fab--drag:hover{transform:none}
-.bram-fab__dot{position:absolute;top:2px;right:2px;width:13px;height:13px;border-radius:50%;background:#34d399;border:2px solid var(--bg)}
+.bram-dock--movido{bottom:auto;right:auto}
+.bram-dock--drag .bram-fab{cursor:grabbing;transition:none;transform:none;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+/* La × va sobre el círculo: se esconde sin tener que abrir el chat primero. */
+.bram-min{position:absolute;top:-3px;right:-3px;width:24px;height:24px;border-radius:50%;border:2px solid var(--bg);background:var(--surface-2);color:var(--text-muted);font-size:15px;line-height:1;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.bram-min:hover{background:var(--surface);color:var(--text);transform:scale(1.12)}
+/* Escondido queda esta pestaña pegada al borde: un toque y vuelve. */
+.bram-tab{position:fixed;right:0;bottom:calc(96px + var(--bram-lift,0px));z-index:120;width:32px;height:48px;padding:0;border:1px solid var(--border);border-right:none;border-radius:13px 0 0 13px;background:var(--surface);color:var(--text);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:-4px 4px 16px rgba(0,0,0,.28);transition:width .18s,background .18s}
+.bram-tab[hidden]{display:none}
+.bram-tab:hover{width:40px;background:var(--surface-2)}
 .bram-panel{position:fixed;bottom:calc(94px + var(--bram-lift,0px));right:22px;z-index:120;width:min(92vw,382px);max-height:min(74vh,600px);background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:0 18px 54px rgba(0,0,0,.42);display:none;flex-direction:column;overflow:hidden}
 .bram-panel[data-open="1"]{display:flex}
 .bram-head{display:flex;align-items:center;gap:11px;padding:14px 16px;border-bottom:1px solid var(--divider);background:linear-gradient(145deg,color-mix(in oklab,var(--primary),transparent 88%),transparent)}
@@ -1174,8 +1180,33 @@ textarea{resize:vertical;min-height:90px}
 .bram--feliz,.bram--epico,.bram--riendo{animation:bramSalta .45s ease-in-out 2}
 .bram--llorando{animation:bramCae 1.1s ease-in-out 2}
 @media(prefers-reduced-motion:reduce){.bram--enojado,.bram--feliz,.bram--epico,.bram--riendo,.bram--llorando{animation:none}}
-@media(max-width:480px){.bram-panel{right:10px;left:10px;width:auto;bottom:calc(88px + var(--bram-lift,0px))}.bram-fab{bottom:calc(16px + var(--bram-lift,0px));right:16px}}
+@media(max-width:480px){.bram-panel{right:10px;left:10px;width:auto;bottom:calc(88px + var(--bram-lift,0px))}.bram-dock{bottom:calc(16px + var(--bram-lift,0px));right:16px}.bram-tab{bottom:calc(84px + var(--bram-lift,0px))}}
 .bram-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* ============ ¿SALGO HOY? ============ */
+.hoy{padding:52px 0 44px;border-bottom:1px solid var(--divider)}
+.hoy__head{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.hoy__head h2{font-family:'Clash Display',sans-serif;font-size:clamp(26px,3.4vw,40px);line-height:1.05;margin:0}
+.hoy__resumen{font-size:14px;color:var(--text-muted);margin:6px 0 0}
+.hoy__resumen b{color:var(--text)}
+.hoy__estado{margin-left:auto;font-size:12px;color:var(--text-muted);text-align:right;line-height:1.5}
+.hoy__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:13px}
+.hoy__card{background:var(--surface);border:1px solid var(--border);border-left:3px solid #34d399;border-radius:13px;padding:15px 17px}
+.hoy__card--no{border-left-color:var(--border);opacity:.62}
+.hoy__card h3{font-size:15px;margin:0 0 3px;font-weight:700}
+.hoy__prov{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em}
+.hoy__dato{font-size:13.5px;margin:9px 0 0;line-height:1.55}
+.hoy__horas{font-size:12.5px;color:#34d399;font-weight:700;margin:7px 0 0}
+.hoy__motivo{font-size:12.5px;color:var(--text-muted);margin:7px 0 0}
+.hoy__regla{font-size:11.5px;color:var(--text-muted);margin:6px 0 0}
+.hoy__mas{margin-top:16px}
+.hoy__mas summary{cursor:pointer;font-size:13px;color:var(--text-muted);padding:9px 0}
+.hoy__mas summary:hover{color:var(--text)}
+.hoy__mas .hoy__grid{margin-top:12px}
+.hoy__nota{font-size:11.5px;color:var(--text-muted);margin:18px 0 0;line-height:1.6}
+.hoy__skel{height:96px;border-radius:13px;background:var(--surface-2);border:1px solid var(--border);animation:hoyLatir 1.3s ease-in-out infinite}
+@keyframes hoyLatir{0%,100%{opacity:.45}50%{opacity:.8}}
+@media(prefers-reduced-motion:reduce){.hoy__skel{animation:none}}
 
   </style>
 
@@ -1305,6 +1336,28 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="hero__scroll">
     <span class="hero__scroll-text">Scroll</span>
     <div class="hero__scroll-line"></div>
+  </div>
+</section>
+
+<!-- ============================================================ ¿SALGO HOY? ============================================================ -->
+<section class="section hoy" id="salgo-hoy" hidden>
+  <div class="container">
+    <div class="hoy__head">
+      <div>
+        <span class="eyebrow">🌬️ Pronóstico cruzado con cada spot</span>
+        <h2>¿Salgo hoy?</h2>
+        <p class="hoy__resumen" id="hoyResumen">Mirando el viento en los spots del país…</p>
+      </div>
+      <div class="hoy__estado" id="hoyEstado"></div>
+    </div>
+    <div class="hoy__grid" id="hoySi">
+      <div class="hoy__skel"></div><div class="hoy__skel"></div><div class="hoy__skel"></div>
+    </div>
+    <details class="hoy__mas" id="hoyMas" hidden>
+      <summary id="hoyMasLabel">Ver el resto de los spots</summary>
+      <div class="hoy__grid" id="hoyNo"></div>
+    </details>
+    <p class="hoy__nota">No es un pronóstico más: cruzamos el viento de las próximas 12 h con la <strong>dirección y el rango que cada spot necesita</strong> — los mismos que figuran en <a href="#spots">Aguas argentinas</a>. Datos de <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a>. Es una orientación, no un parte meteorológico: mirá el agua antes de entrar.</p>
   </div>
 </section>
 
@@ -4639,9 +4692,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 <!-- ============================================================ BRAMADOR — asistente ============================================================ -->
-<button class="bram-fab" id="bramFab" type="button" title="Bramador — arrastrame para moverme de lugar" aria-label="Abrir a Bramador, el asistente del sitio. Se puede arrastrar para moverlo" aria-expanded="false" aria-controls="bramPanel">
-  🤙<span class="bram-fab__dot" aria-hidden="true"></span>
-</button>
+<div class="bram-dock" id="bramDock">
+  <button class="bram-fab" id="bramFab" type="button" title="Bramador — arrastrame para moverme de lugar" aria-label="Abrir a Bramador, el asistente del sitio. Se puede arrastrar para moverlo" aria-expanded="false" aria-controls="bramPanel">🤙</button>
+  <button class="bram-min" id="bramMin" type="button" title="Esconder a Bramador mientras navegás" aria-label="Esconder a Bramador">×</button>
+</div>
+<button class="bram-tab" id="bramTab" type="button" hidden title="Traer a Bramador de vuelta" aria-label="Traer a Bramador de vuelta">🤙</button>
 <div class="bram-panel" id="bramPanel" role="dialog" aria-modal="false" aria-label="Bramador, asistente de la Escuela de Wingfoil">
   <div class="bram-head">
     <span class="bram-cara" id="bramCara" aria-hidden="true">🤙</span>
@@ -4669,9 +4724,10 @@ document.addEventListener('DOMContentLoaded', function() {
   var D = window.__EWF || {};
   var SPOTS = D.SPOTS || [], GLOSSARY = D.GLOSSARY || [], MANIOBRAS = D.MANIOBRAS || [];
 
+  var dock  = document.getElementById('bramDock');
   var fab   = document.getElementById('bramFab');
   var panel = document.getElementById('bramPanel');
-  if(!fab || !panel) return;
+  if(!fab || !panel || !dock) return;
 
   var msgs   = document.getElementById('bramMsgs');
   var cara   = document.getElementById('bramCara');
@@ -4707,6 +4763,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // ---- Mapa de secciones reales del sitio ----
   var SECCIONES = [
+    {id:'salgo-hoy',        t:'¿Salgo hoy? — pronóstico por spot'},
     {id:'empezar',          t:'¿Querés arrancar? 3 pasos'},
     {id:'que-es',           t:'¿Qué es el WingFoil?'},
     {id:'videos',           t:'Videos por nivel'},
@@ -4872,7 +4929,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  var SUGE_BASE = ['¿Qué tabla me conviene?','¿Dónde navego?','¿Qué es pumpear?','¿Cuánto sale un equipo?','Contame un chiste'];
+  var SUGE_BASE = ['¿Salgo hoy?','¿Qué tabla me conviene?','¿Dónde navego?','¿Qué es pumpear?','Contame un chiste'];
 
   // ============ El cerebro ============
   function responder(txt){
@@ -4963,10 +5020,25 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- Viento / pronóstico ---
-    if(tiene(q,['viento','pronostico','kn','nudos','rafaga','cuando navegar','salgo hoy','esta bueno hoy','condiciones'])){
+    if(tiene(q,['viento','pronostico','kn','nudos','rafaga','cuando navegar','salgo hoy','salgo','esta bueno hoy','condiciones','se puede navegar','hay ola'])){
+      var hoy = (window.__EWF || {}).HOY;
+      if(hoy && hoy.si){
+        if(hoy.si.length){
+          var top = hoy.si.slice(0, 4).map(function(r){
+            return '• <strong>'+esc(r.spot.n)+'</strong> — '+r.ahora.kn+' kn, '+r.horas.length+'h ('+r.horas[0]+' en adelante)';
+          });
+          return {m:'epico', h:'¡Sí! 🤩 Ahora mismo hay ventana en <strong>'+hoy.si.length+'</strong> spot'+(hoy.si.length>1?'s':'')+':\n\n'+top.join('\n')+
+                    (hoy.si.length > 4 ? '\n\ny '+(hoy.si.length-4)+' más.' : '')+
+                    '\n\nEl detalle completo, con los que no dan y por qué, está en '+ir('salgo-hoy','¿Salgo hoy?')+'.',
+                  s:['¿Qué tabla me conviene?','¿Dónde navego?','Mostrame maniobras']};
+        }
+        return {m:'llorando', h:'Hoy no. 😭 Miré los '+(hoy.si.length + hoy.no.length)+' spots y ninguno tiene ventana en las próximas 12 h.\n\nEl detalle de por qué no da cada uno está en '+ir('salgo-hoy','¿Salgo hoy?')+'. Plan B: '+ir('videos','videos')+' o '+ir('glosario','glosario')+'.',
+                s:['¿Qué tabla me conviene?','Mostrame maniobras','Contame un chiste']};
+      }
+      // Todavía no llegó el pronóstico: al menos la regla de cada spot sí la sé.
       var ej = [];
       for(var i=0;i<SPOTS.length && ej.length<4;i++){ if(SPOTS[i].w) ej.push('• <strong>'+esc(SPOTS[i].n)+'</strong>: '+esc(SPOTS[i].w)); }
-      return {m:'pensando', h:'No tengo pronóstico en vivo (todavía), pero sí sé la <strong>regla de viento de cada spot</strong>: 🤔\n\n'+ej.join('\n')+'\n\nLos 21 están en '+ir('spots','Aguas argentinas')+' con su dirección y rango. Para ver el agua ahora mismo: '+ir('camaras','cámaras de San Isidro')+'.',
+      return {m:'pensando', h:'Estoy trayendo el pronóstico. 🤔 Mientras tanto, la <strong>regla de viento</strong> de cada spot:\n\n'+ej.join('\n')+'\n\nLos '+SPOTS.length+' están en '+ir('spots','Aguas argentinas')+', y el cruce con el pronóstico de hoy en '+ir('salgo-hoy','¿Salgo hoy?')+'.',
               s:['San Isidro','Mar del Plata','¿Qué tabla me conviene?']};
     }
 
@@ -5085,7 +5157,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // ---- Se puede arrastrar por la pantalla y se puede sacar de encima ----
-  var LS_POS = 'bram-pos', LS_OFF = 'bram-oculto';
+  var LS_POS = 'bram-pos', LS_OFF = 'bram-oculto', LS_MIN = 'bram-escondido';
   var volver = document.getElementById('bramVolver');
   var btnOcultar = document.getElementById('bramOcultar');
   var arrastrando = false, movio = false, sx = 0, sy = 0, ox = 0, oy = 0;
@@ -5095,21 +5167,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Lo deja siempre dentro de la pantalla, aunque la ventana cambie de tamaño.
   function ubicarFab(x, y){
-    var m = 8, w = fab.offsetWidth || 60, h = fab.offsetHeight || 60;
+    var m = 8, w = dock.offsetWidth || 60, h = dock.offsetHeight || 60;
     x = Math.max(m, Math.min(x, window.innerWidth  - w - m));
     y = Math.max(m, Math.min(y, window.innerHeight - h - m));
-    fab.classList.add('bram-fab--movido');
-    fab.style.left = x + 'px';
-    fab.style.top  = y + 'px';
+    dock.classList.add('bram-dock--movido');
+    dock.style.left = x + 'px';
+    dock.style.top  = y + 'px';
   }
 
   // El panel sigue al botón: se abre para el lado donde hay lugar.
   function ubicarPanel(){
-    if(!fab.classList.contains('bram-fab--movido')){
+    if(!dock.classList.contains('bram-dock--movido')){
       panel.style.left = panel.style.right = panel.style.top = panel.style.bottom = '';
       return;
     }
-    var r = fab.getBoundingClientRect(), m = 10;
+    var r = dock.getBoundingClientRect(), m = 10;
     var ph = panel.offsetHeight, pw = panel.offsetWidth;
     var arriba = r.top < window.innerHeight / 2;           // botón arriba → panel abajo
     var top = arriba ? r.bottom + 12 : r.top - ph - 12;
@@ -5126,19 +5198,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  fab.addEventListener('pointerdown', function(e){
+  dock.addEventListener('pointerdown', function(e){
     if(e.pointerType === 'mouse' && e.button !== 0) return;
-    var r = fab.getBoundingClientRect();
+    if(e.target.closest('.bram-min')) return;   // la × no arrastra
+    var r = dock.getBoundingClientRect();
     arrastrando = true; movio = false;
     sx = e.clientX; sy = e.clientY;
     ox = e.clientX - r.left; oy = e.clientY - r.top;
-    try{ fab.setPointerCapture(e.pointerId); }catch(err){}
+    try{ dock.setPointerCapture(e.pointerId); }catch(err){}
   });
-  fab.addEventListener('pointermove', function(e){
+  dock.addEventListener('pointermove', function(e){
     if(!arrastrando) return;
     // Umbral: sin esto, cualquier temblor del dedo cancelaría el click de abrir.
     if(!movio && Math.abs(e.clientX - sx) + Math.abs(e.clientY - sy) < 6) return;
-    if(!movio){ movio = true; fab.classList.add('bram-fab--drag'); }
+    if(!movio){ movio = true; dock.classList.add('bram-dock--drag'); }
     e.preventDefault();
     ubicarFab(e.clientX - ox, e.clientY - oy);
     if(abierto) ubicarPanel();
@@ -5146,28 +5219,48 @@ document.addEventListener('DOMContentLoaded', function() {
   function soltar(e){
     if(!arrastrando) return;
     arrastrando = false;
-    fab.classList.remove('bram-fab--drag');
-    try{ fab.releasePointerCapture(e.pointerId); }catch(err){}
+    dock.classList.remove('bram-dock--drag');
+    try{ dock.releasePointerCapture(e.pointerId); }catch(err){}
     if(movio){
-      var r = fab.getBoundingClientRect();
+      var r = dock.getBoundingClientRect();
       guardar(LS_POS, JSON.stringify({x:r.left, y:r.top}));
     }
   }
-  fab.addEventListener('pointerup', soltar);
-  fab.addEventListener('pointercancel', soltar);
+  dock.addEventListener('pointerup', soltar);
+  dock.addEventListener('pointercancel', soltar);
+
+  // Dos niveles distintos, a propósito:
+  //   escondido → se va a una pestañita del borde, vuelve con un toque.
+  //   oculto    → desaparece del todo, vuelve desde el pie del sitio.
+  var btnMin = document.getElementById('bramMin');
+  var tab    = document.getElementById('bramTab');
 
   function aplicarVisibilidad(){
-    var oculto = leer(LS_OFF) === '1';
-    fab.hidden = oculto;
-    if(oculto) cerrar();
+    var oculto    = leer(LS_OFF) === '1';
+    var escondido = leer(LS_MIN) === '1';
+    dock.hidden = oculto || escondido;
+    if(tab) tab.hidden = oculto || !escondido;
     if(volver) volver.hidden = !oculto;
+    if(oculto || escondido) cerrar();
   }
+  if(btnMin) btnMin.addEventListener('click', function(e){
+    e.stopPropagation();           // que no dispare también el click del círculo
+    guardar(LS_MIN, '1');
+    aplicarVisibilidad();
+    if(tab) tab.focus();
+  });
+  if(tab) tab.addEventListener('click', function(){
+    guardar(LS_MIN, '0');
+    aplicarVisibilidad();
+    fab.focus();
+  });
   if(btnOcultar) btnOcultar.addEventListener('click', function(){
     guardar(LS_OFF, '1');
     aplicarVisibilidad();
   });
   if(volver) volver.addEventListener('click', function(){
     guardar(LS_OFF, '0');
+    guardar(LS_MIN, '0');          // desde el pie vuelve entero, no a la pestaña
     aplicarVisibilidad();
     fab.focus();
   });
@@ -5184,8 +5277,8 @@ document.addEventListener('DOMContentLoaded', function() {
   })();
 
   window.addEventListener('resize', function(){
-    if(fab.classList.contains('bram-fab--movido')){
-      ubicarFab(parseFloat(fab.style.left) || 0, parseFloat(fab.style.top) || 0);
+    if(dock.classList.contains('bram-dock--movido')){
+      ubicarFab(parseFloat(dock.style.left) || 0, parseFloat(dock.style.top) || 0);
     }
     if(abierto) ubicarPanel();
   });
@@ -5237,5 +5330,143 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 })();
 </script>
+<!-- ===== ¿SALGO HOY? ===== -->
+<script>
+// Cruza el pronóstico de Open-Meteo con la regla de viento que cada spot ya
+// tiene declarada en el sitio ("S/SO 12-25 kn"). Es la misma lógica que se
+// verificó contra la API real antes de construir esto.
+(function(){
+  var sec = document.getElementById('salgo-hoy');
+  if(!sec) return;
+
+  if(typeof fetch !== 'function') return;   // navegador viejo: la sección no aparece
+
+  var SPOTS = ((window.__EWF || {}).SPOTS || []).filter(function(sp){
+    return sp && sp.w && isFinite(sp.lat) && isFinite(sp.lng);
+  });
+  if(!SPOTS.length) return;
+
+  // Rosa de los vientos en español: O = Oeste (no W).
+  var RUMBOS = {N:0, NE:45, E:90, SE:135, S:180, SO:225, O:270, NO:315};
+
+  // 'S/SO 12-25 kn' → {dirs:[180,225], min:12, max:25}
+  function parseRegla(w){
+    var rango = w.match(/(\d+)\s*-\s*(\d+)/);
+    var dirs = w.split(/\s+/)[0].split('/').map(function(d){ return RUMBOS[d.toUpperCase()]; })
+                .filter(function(d){ return d !== undefined; });
+    return {dirs:dirs, min: rango ? +rango[1] : null, max: rango ? +rango[2] : null};
+  }
+  function difAngular(a, b){ var d = Math.abs(a - b) % 360; return d > 180 ? 360 - d : d; }
+
+  // Tolerancia de ±45° sobre la dirección ideal: el viento nunca entra exacto.
+  function evaluar(regla, kn, deg){
+    if(regla.min === null) return {ok:false, motivo:'sin regla de viento cargada'};
+    if(kn < regla.min)  return {ok:false, motivo:'poco viento (' + kn + ' kn, necesitás ' + regla.min + '+)'};
+    if(kn > regla.max)  return {ok:false, motivo:'demasiado viento (' + kn + ' kn, el máximo del spot es ' + regla.max + ')'};
+    var cerca = regla.dirs.some(function(d){ return difAngular(d, deg) <= 45; });
+    if(!cerca) return {ok:false, motivo:'la dirección no sirve (' + Math.round(deg) + '°)'};
+    return {ok:true, motivo:kn + ' kn en la dirección correcta'};
+  }
+
+  function esc(t){
+    return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function card(r){
+    var h = '<div class="hoy__card' + (r.ok ? '' : ' hoy__card--no') + '">' +
+            '<span class="hoy__prov">' + esc(r.spot.prov) + '</span>' +
+            '<h3>' + esc(r.spot.n) + '</h3>' +
+            '<p class="hoy__dato">' + r.ahora.kn + ' kn · ráfagas ' + r.ahora.raf + ' · ' + r.ahora.dir + '°</p>';
+    if(r.ok){
+      h += '<p class="hoy__horas">✓ ' + r.horas.length + (r.horas.length === 1 ? ' hora navegable' : ' horas navegables') +
+           ': ' + r.horas.join(', ') + '</p>';
+    }else{
+      h += '<p class="hoy__motivo">' + esc(r.motivo) + '</p>';
+    }
+    return h + '<p class="hoy__regla">Este spot pide ' + esc(r.spot.w) + '</p></div>';
+  }
+
+  // Open-Meteo acepta todas las coordenadas en un solo pedido.
+  var url = 'https://api.open-meteo.com/v1/forecast'
+    + '?latitude='  + SPOTS.map(function(s){ return s.lat; }).join(',')
+    + '&longitude=' + SPOTS.map(function(s){ return s.lng; }).join(',')
+    + '&hourly=wind_speed_10m,wind_gusts_10m,wind_direction_10m'
+    + '&wind_speed_unit=kn&timezone=America%2FArgentina%2FBuenos_Aires&forecast_days=2';
+
+  fetch(url).then(function(res){
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  }).then(function(data){
+    var arr = Array.isArray(data) ? data : [data];
+    var ahoraISO = new Date().toISOString().slice(0, 13);
+    var resultados = [];
+
+    arr.forEach(function(d, i){
+      var spot = SPOTS[i];
+      if(!spot || !d || !d.hourly || !d.hourly.wind_speed_10m) return;
+      var H = d.hourly, regla = parseRegla(spot.w);
+      var ini = H.time.findIndex(function(t){ return t.slice(0, 13) >= ahoraISO; });
+      if(ini < 0) ini = 0;
+
+      var horas = [];
+      for(var h = ini; h < Math.min(ini + 12, H.time.length); h++){
+        if(evaluar(regla, Math.round(H.wind_speed_10m[h]), H.wind_direction_10m[h]).ok){
+          horas.push(H.time[h].slice(11, 16));
+        }
+      }
+      var ev = evaluar(regla, Math.round(H.wind_speed_10m[ini]), H.wind_direction_10m[ini]);
+      resultados.push({
+        spot: spot,
+        ok: horas.length > 0,
+        horas: horas,
+        motivo: ev.motivo,
+        ahora: {
+          kn:  Math.round(H.wind_speed_10m[ini]),
+          raf: Math.round(H.wind_gusts_10m[ini]),
+          dir: Math.round(H.wind_direction_10m[ini])
+        }
+      });
+    });
+
+    if(!resultados.length) throw new Error('sin datos utilizables');
+
+    var si = resultados.filter(function(r){ return r.ok; })
+                       .sort(function(a, b){ return b.horas.length - a.horas.length; });
+    var no = resultados.filter(function(r){ return !r.ok; });
+
+    // Bramador contesta con esto mismo, sin volver a pedirlo.
+    window.__EWF = window.__EWF || {};
+    window.__EWF.HOY = {si:si, no:no, actualizado:new Date()};
+
+    var resumen = document.getElementById('hoyResumen');
+    if(si.length){
+      resumen.innerHTML = 'Ahora mismo se puede navegar en <b>' + si.length +
+        (si.length === 1 ? ' spot</b> de ' : ' spots</b> de ') + resultados.length + '.';
+    }else{
+      resumen.innerHTML = 'Ahora mismo <b>no hay ventana en ninguno</b> de los ' + resultados.length +
+        ' spots. Día de mirar <a href="#videos">videos</a> o leer el <a href="#glosario">glosario</a>.';
+    }
+
+    document.getElementById('hoyEstado').innerHTML =
+      'Próximas 12 h<br>Actualizado ' + new Date().toLocaleTimeString('es-AR', {hour:'2-digit', minute:'2-digit'});
+
+    document.getElementById('hoySi').innerHTML = si.length
+      ? si.map(card).join('')
+      : '<p class="hoy__motivo">Ninguno de los ' + resultados.length + ' spots tiene ventana en las próximas 12 h.</p>';
+
+    if(no.length){
+      document.getElementById('hoyNo').innerHTML = no.map(card).join('');
+      document.getElementById('hoyMasLabel').textContent =
+        'Ver los otros ' + no.length + ' spots y por qué no dan';
+      document.getElementById('hoyMas').hidden = false;
+    }
+    sec.hidden = false;
+  }).catch(function(){
+    // Sin pronóstico, la sección no aparece: mejor que mostrar una vacía o rota.
+    sec.hidden = true;
+  });
+})();
+</script>
+
 </body>
 </html>
