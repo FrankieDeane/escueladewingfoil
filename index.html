@@ -1142,8 +1142,9 @@ textarea{resize:vertical;min-height:90px}
 .bram-dock--movido{bottom:auto;right:auto}
 .bram-dock--drag .bram-fab{cursor:grabbing;transition:none;transform:none;box-shadow:0 10px 30px rgba(0,0,0,.45)}
 /* La × va sobre el círculo: se esconde sin tener que abrir el chat primero. */
-.bram-min{position:absolute;top:-3px;right:-3px;width:24px;height:24px;border-radius:50%;border:2px solid var(--bg);background:var(--surface-2);color:var(--text-muted);font-size:15px;line-height:1;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.bram-min:hover{background:var(--surface);color:var(--text);transform:scale(1.12)}
+.bram-min{position:absolute;top:-9px;right:-9px;width:36px;height:36px;border:none;background:none;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.bram-min::before{content:'×';width:26px;height:26px;border-radius:50%;border:2px solid var(--bg);background:var(--surface-2);color:var(--text-muted);font-size:16px;line-height:22px;text-align:center;transition:background .18s,color .18s,transform .18s}
+.bram-min:hover::before{background:var(--surface);color:var(--text);transform:scale(1.12)}
 /* Escondido queda esta pestaña pegada al borde: un toque y vuelve. */
 .bram-tab{position:fixed;right:0;bottom:calc(96px + var(--bram-lift,0px));z-index:120;width:32px;height:48px;padding:0;border:1px solid var(--border);border-right:none;border-radius:13px 0 0 13px;background:var(--surface);color:var(--text);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:-4px 4px 16px rgba(0,0,0,.28);transition:width .18s,background .18s}
 .bram-tab[hidden]{display:none}
@@ -1189,7 +1190,7 @@ textarea{resize:vertical;min-height:90px}
    tormenta dibujados a mano — y no una foto, para que no dependa de que un
    servidor ajeno siga sirviendo la imagen dentro de dos años. */
 .hoy{position:relative;padding:56px 0 48px;background:var(--hero-grad);overflow:hidden;isolation:isolate}
-.hoy__fondo{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.hoy__fondo{position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.5}
 .hoy__fondo svg{width:100%;height:100%;display:block}
 .hoy .container{position:relative;z-index:1}
 .hoy__head{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
@@ -1199,6 +1200,14 @@ textarea{resize:vertical;min-height:90px}
 .hoy__resumen b{color:#fff}
 .hoy__resumen a{color:#7fd8ee;font-weight:700}
 .hoy__estado{margin-left:auto;font-size:12px;color:#7fa9c1;text-align:right;line-height:1.5}
+@media(max-width:680px){
+  .hoy{padding:40px 0 36px}
+  .hoy__head{gap:10px;margin-bottom:18px}
+  .hoy__estado{margin-left:0;text-align:left}
+  .hoy__graficos{padding:14px}
+  .hoy__grid{grid-template-columns:1fr}
+  .hoy__medido{grid-template-columns:1fr}
+}
 /* Rachas de viento cruzando la banda */
 @keyframes hoyRacha{from{transform:translateX(-14%)}to{transform:translateX(14%)}}
 .hoy__racha{animation:hoyRacha linear infinite alternate}
@@ -1213,7 +1222,7 @@ textarea{resize:vertical;min-height:90px}
 .hoy__medido-intro{font-size:12.5px;color:#a9cfe2;margin:0 0 12px;line-height:1.6;max-width:74ch}
 .hoy__medido-intro strong{color:#fff}
 .hoy__medido{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:13px;margin:0 0 18px}
-.hoy__est{display:none;text-align:left;width:100%;padding:14px 17px;border-radius:13px;background:rgba(233,196,106,.08);border:1px solid rgba(233,196,106,.28);color:inherit;font:inherit;cursor:pointer;transition:border-color .2s,background .2s}
+.hoy__est{display:none;text-align:left;width:100%;padding:14px 17px;border-radius:13px;background:linear-gradient(rgba(6,18,32,.66),rgba(6,18,32,.66)),rgba(233,196,106,.1);border:1px solid rgba(233,196,106,.28);color:inherit;font:inherit;cursor:pointer;transition:border-color .2s,background .2s}
 .hoy__est[data-hay="1"]{display:block}
 .hoy__est:hover{background:rgba(233,196,106,.14);border-color:rgba(233,196,106,.5)}
 .hoy__est[aria-expanded="true"]{background:rgba(233,196,106,.14);border-color:rgba(233,196,106,.55)}
@@ -1224,22 +1233,22 @@ textarea{resize:vertical;min-height:90px}
 .hoy__est-ver{font-size:11.5px;color:#f2d999;font-weight:700;margin-top:9px;display:inline-block}
 .hoy__est-ver::after{content:' ▾'}
 .hoy__est[aria-expanded="true"] .hoy__est-ver::after{content:' ▴'}
-.hoy__graficos{display:none;margin:0 0 20px;padding:18px;border-radius:13px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.13)}
+.hoy__graficos{display:none;margin:0 0 20px;padding:18px;border-radius:13px;background:rgba(6,18,32,.66);border:1px solid rgba(255,255,255,.13)}
 .hoy__graficos[data-abierto="1"]{display:block}
 .hoy__graficos h3{font-family:'Clash Display',sans-serif;font-size:16px;color:#f0f8ff;margin:0 0 3px}
 .hoy__graficos .hoy__est-fuente{margin:0 0 16px}
 .hoy__g{margin:0 0 20px}
 .hoy__g:last-child{margin-bottom:0}
 .hoy__g h4{font-size:12px;color:#a9cfe2;margin:0 0 8px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
-.hoy__g svg{width:100%;height:auto;display:block;overflow:visible}
+.hoy__g svg{max-width:100%;height:auto;display:block;overflow:visible}
 .hoy__g-vacio{font-size:12.5px;color:#93b6c9;line-height:1.6;margin:0}
 .hoy__mareas{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:9px}
-.hoy__mareas li{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.11);border-radius:10px;padding:9px 12px}
+.hoy__mareas li{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.11);border-radius:10px;padding:9px 12px}
 .hoy__mareas .m-tipo{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:#7fd8ee;font-weight:700}
 .hoy__mareas .m-hora{font-size:17px;color:#fff;font-weight:700;font-family:'Clash Display',sans-serif}
 .hoy__mareas .m-alt{font-size:12px;color:#a9cfe2}
 .hoy__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:13px}
-.hoy__card{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.14);border-left:3px solid #34d399;border-radius:13px;padding:15px 17px;backdrop-filter:blur(3px)}
+.hoy__card{background:rgba(6,18,32,.62);border:1px solid rgba(255,255,255,.14);border-left:3px solid #34d399;border-radius:13px;padding:15px 17px;backdrop-filter:blur(3px)}
 .hoy__card--no{border-left-color:rgba(255,255,255,.2);opacity:.72}
 .hoy__card h3{font-size:15px;margin:0 0 3px;font-weight:700;color:#f0f8ff}
 .hoy__prov{font-size:11px;color:#7fa9c1;text-transform:uppercase;letter-spacing:.06em}
@@ -1254,16 +1263,23 @@ textarea{resize:vertical;min-height:90px}
 .hoy__nota{font-size:11.5px;color:#7fa9c1;margin:20px 0 0;line-height:1.6;max-width:74ch}
 .hoy__nota a{color:#9ed5e8}
 .hoy__nota strong{color:#c5dfec}
-.hoy__skel{height:96px;border-radius:13px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);animation:hoyLatir 1.3s ease-in-out infinite}
+.hoy__skel{height:96px;border-radius:13px;background:rgba(6,18,32,.55);border:1px solid rgba(255,255,255,.1);animation:hoyLatir 1.3s ease-in-out infinite}
 @keyframes hoyLatir{0%,100%{opacity:.45}50%{opacity:.8}}
 @media(prefers-reduced-motion:reduce){.hoy__skel{animation:none}}
 
 /* ============ IDIOMA ============ */
 .lang{display:inline-flex;align-items:center;border:1px solid var(--border);border-radius:99px;overflow:hidden;height:34px;background:var(--surface)}
-.lang button{border:none;background:none;color:var(--text-muted);font:inherit;font-size:11.5px;font-weight:700;letter-spacing:.04em;padding:0 10px;height:100%;cursor:pointer;transition:background .18s,color .18s}
+.lang button{border:none;background:none;color:var(--text-muted);font:inherit;font-size:11.5px;font-weight:700;letter-spacing:.04em;padding:0 12px;min-width:42px;height:100%;cursor:pointer;transition:background .18s,color .18s}
 .lang button:hover{color:var(--text)}
 .lang button[aria-pressed="true"]{background:var(--primary);color:var(--text-inverse)}
-@media(max-width:900px){.lang{height:32px}.lang button{padding:0 8px;font-size:11px}}
+@media(max-width:900px){.lang{height:38px}.lang button{padding:0 11px;min-width:40px;font-size:11px}}
+
+/* La barra de arriba es fija: sin esto, saltar a una sección — por el menú,
+   por un link de Bramador o por una URL con #ancla — deja el título tapado. */
+:root{--barra-alta:78px}
+@media(max-width:900px){:root{--barra-alta:72px}}
+section[id], details[id], [id^="salgo"], #comparador, #camaras{scroll-margin-top:var(--barra-alta)}
+html{scroll-padding-top:var(--barra-alta)}
 
   </style>
 
@@ -1410,7 +1426,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <defs>
           <linearGradient id="hoyRacha" x1="0" x2="1">
             <stop offset="0" stop-color="#7fd8ee" stop-opacity="0"/>
-            <stop offset=".45" stop-color="#7fd8ee" stop-opacity=".5"/>
+            <stop offset=".45" stop-color="#7fd8ee" stop-opacity=".38"/>
             <stop offset="1" stop-color="#7fd8ee" stop-opacity="0"/>
           </linearGradient>
           <linearGradient id="hoyNube" x1="0" y1="0" x2="0" y2="1">
@@ -4823,7 +4839,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- ============================================================ BRAMADOR — asistente ============================================================ -->
 <div class="bram-dock" id="bramDock">
   <button class="bram-fab" id="bramFab" type="button" title="Bramador — arrastrame para moverme de lugar" aria-label="Abrir a Bramador, el asistente del sitio. Se puede arrastrar para moverlo" aria-expanded="false" aria-controls="bramPanel">🤙</button>
-  <button class="bram-min" id="bramMin" type="button" title="Esconder a Bramador mientras navegás" aria-label="Esconder a Bramador">×</button>
+  <button class="bram-min" id="bramMin" type="button" title="Esconder a Bramador mientras navegás" data-en-title="Hide Bramador while you browse" aria-label="Esconder a Bramador" data-en-aria-label="Hide Bramador"></button>
 </div>
 <button class="bram-tab" id="bramTab" type="button" hidden title="Traer a Bramador de vuelta" aria-label="Traer a Bramador de vuelta">🤙</button>
 <div class="bram-panel" id="bramPanel" role="dialog" aria-modal="false" aria-label="Bramador, asistente de la Escuela de Wingfoil">
@@ -4867,10 +4883,22 @@ document.addEventListener('DOMContentLoaded', function() {
   var btnX   = document.getElementById('bramX');
 
   var CARAS = {neutral:'🤙',feliz:'😄',riendo:'🤣',enojado:'😡',llorando:'😭',epico:'🤩',pensando:'🤔',sorpresa:'😮'};
+  // Bramador habla los dos idiomas. En inglés es el mismo personaje, pero
+  // además le explica a alguien de afuera cosas que un argentino ya sabe:
+  // qué es el S/SO, que los precios están en dólares. El voseo no sobrevive a
+  // una traducción literal, así que cada respuesta está escrita dos veces.
+  function enIngles(){ return document.documentElement.lang === 'en'; }
+  function T(es, en){ return enIngles() ? en : es; }
+
   var ESTADOS = {
-    neutral:'Esperando que entre el S/SO', feliz:'De buen humor', riendo:'No puede parar',
-    enojado:'Enojadísimo', llorando:'Llorando otra vez', epico:'Modo épico',
-    pensando:'Pensando…', sorpresa:'No lo puede creer'
+    neutral: ['Esperando que entre el S/SO', 'Waiting for the SW to kick in'],
+    feliz:   ['De buen humor', 'In a good mood'],
+    riendo:  ['No puede parar', 'Can\'t stop laughing'],
+    enojado: ['Enojadísimo', 'Furious'],
+    llorando:['Llorando otra vez', 'Crying again'],
+    epico:   ['Modo épico', 'Epic mode'],
+    pensando:['Pensando…', 'Thinking…'],
+    sorpresa:['No lo puede creer', 'Can\'t believe it']
   };
   var MOODCLS = ['bram--enojado','bram--feliz','bram--epico','bram--riendo','bram--llorando'];
 
@@ -4892,25 +4920,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // ---- Mapa de secciones reales del sitio ----
   var SECCIONES = [
-    {id:'salgo-hoy',        t:'¿Salgo hoy? — pronóstico por spot'},
-    {id:'empezar',          t:'¿Querés arrancar? 3 pasos'},
-    {id:'que-es',           t:'¿Qué es el WingFoil?'},
-    {id:'videos',           t:'Videos por nivel'},
-    {id:'anatomia',         t:'Anatomía del Foil'},
-    {id:'anatomia-ala',     t:'Anatomía del Ala'},
-    {id:'spots',            t:'Aguas argentinas'},
-    {id:'camaras',          t:'Cámaras de San Isidro'},
-    {id:'calculadora',      t:'Calculadora de equipo'},
-    {id:'instructores',     t:'Instructores'},
-    {id:'venta-de-wingfoil',t:'Equipos en venta'},
-    {id:'maniobras',        t:'Maniobras del WingFoil'},
-    {id:'riders',           t:'Riders & Legends'},
-    {id:'glosario',         t:'Glosario del WingFoil'},
-    {id:'blog',             t:'Guías y artículos'},
-    {id:'marcas',           t:'Marcas que confiamos'},
-    {id:'comparador',       t:'Comparador de marcas'},
-    {id:'faq',              t:'Preguntas frecuentes'},
-    {id:'testimonios',      t:'La gente que ya está volando'}
+    {id:'salgo-hoy',        t:'¿Salgo hoy? — pronóstico por spot', en:'Should I go out today? — forecast per spot'},
+    {id:'empezar',          t:'¿Querés arrancar? 3 pasos', en:'Want to start? 3 steps'},
+    {id:'que-es',           t:'¿Qué es el WingFoil?', en:'What is WingFoil?'},
+    {id:'videos',           t:'Videos por nivel', en:'Videos by level'},
+    {id:'anatomia',         t:'Anatomía del Foil', en:'Anatomy of the Foil'},
+    {id:'anatomia-ala',     t:'Anatomía del Ala', en:'Anatomy of the Wing'},
+    {id:'spots',            t:'Aguas argentinas', en:'Argentine waters'},
+    {id:'camaras',          t:'Cámaras de San Isidro', en:'San Isidro live cameras'},
+    {id:'calculadora',      t:'Calculadora de equipo', en:'Gear calculator'},
+    {id:'instructores',     t:'Instructores', en:'Instructors'},
+    {id:'venta-de-wingfoil',t:'Equipos en venta', en:'Gear for sale'},
+    {id:'maniobras',        t:'Maniobras del WingFoil', en:'WingFoil manoeuvres'},
+    {id:'riders',           t:'Riders & Legends', en:'Riders &amp; Legends'},
+    {id:'glosario',         t:'Glosario del WingFoil', en:'WingFoil glossary'},
+    {id:'blog',             t:'Guías y artículos', en:'Guides and articles'},
+    {id:'marcas',           t:'Marcas que confiamos', en:'Brands we trust'},
+    {id:'comparador',       t:'Comparador de marcas', en:'Brand comparison'},
+    {id:'faq',              t:'Preguntas frecuentes', en:'Frequently asked questions'},
+    {id:'testimonios',      t:'La gente que ya está volando', en:'People already flying'}
   ];
 
   // ---- FAQ del sitio, leída del DOM (una sola fuente de verdad) ----
@@ -5012,11 +5040,15 @@ document.addEventListener('DOMContentLoaded', function() {
     return {faq:best, score:score};
   }
   function respFaq(f){
-    return {m:'feliz', h:'<strong>'+esc(f.q)+'</strong> 😄\n\n'+esc(f.a)+'\n\nHay '+FAQ.length+' preguntas más en '+ir('faq','Preguntas frecuentes')+'.', s:SUGE_BASE};
+    return {m:'feliz', h:'<strong>'+esc(f.q)+'</strong> 😄\n\n'+esc(f.a)+
+            T('\n\nHay '+FAQ.length+' preguntas más en ', '\n\nThere are '+FAQ.length+' more questions in ')+
+            ir('faq',T('Preguntas frecuentes','Frequently asked questions'))+'.', s:sugeBase()};
   }
   function respGlos(g){
-    return {m:'feliz', h:'<strong>'+esc(g.n)+'</strong> — '+esc(g.tag)+' 😄\n\n'+esc(g.d)+'\n\nHay '+GLOSSARY.length+' términos más en '+ir('glosario','el glosario')+'.',
-            s:['¿Qué es pumpear?','Mostrame maniobras','¿Dónde navego?']};
+    return {m:'feliz', h:'<strong>'+esc(g.n)+'</strong> — '+esc(g.tag)+' 😄\n\n'+esc(g.d)+
+            T('\n\nHay '+GLOSSARY.length+' términos más en ', '\n\n(Definition in Spanish for now.) There are '+GLOSSARY.length+' more terms in ')+
+            ir('glosario',T('el glosario','the glossary'))+'.',
+            s: enIngles() ? ['What is pumping?','Show me manoeuvres','Where can I sail?'] : ['¿Qué es pumpear?','Mostrame maniobras','¿Dónde navego?']};
   }
 
   // ---- Calculadora: misma fórmula que la sección #calculadora ----
@@ -5032,7 +5064,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // ---- Estado emocional ----
   function humor(m){
     cara.textContent = CARAS[m] || CARAS.neutral;
-    estado.textContent = ESTADOS[m] || ESTADOS.neutral;
+    var e = ESTADOS[m] || ESTADOS.neutral;
+    estado.textContent = T(e[0], e[1]);
     for(var i=0;i<MOODCLS.length;i++) cara.classList.remove(MOODCLS[i]);
     var cls = {enojado:'bram--enojado',feliz:'bram--feliz',epico:'bram--epico',
                riendo:'bram--riendo',llorando:'bram--llorando'}[m];
@@ -5058,58 +5091,70 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  var SUGE_BASE = ['¿Salgo hoy?','¿Qué tabla me conviene?','¿Dónde navego?','¿Qué es pumpear?','Contame un chiste'];
+  var SUGE_ES = ['¿Salgo hoy?','¿Qué tabla me conviene?','¿Dónde navego?','¿Qué es pumpear?','Contame un chiste'];
+  var SUGE_EN = ['Can I go out today?','What board suits me?','Where can I sail?','What is pumping?','Tell me a joke'];
+  function sugeBase(){ return enIngles() ? SUGE_EN.slice() : SUGE_ES.slice(); }
 
   // ============ El cerebro ============
   function responder(txt){
     var q = norm(txt);
     // El glosario está en inglés técnico; la gente pregunta en castellano.
-    q = q.replace(/\bnudos?\b/g, 'nudos knots').replace(/\bbombear\b/g, 'bombear pumpear');
-    if(!q) return {m:'pensando', h:'Escribiste nada. Nada. Y yo acá, esperándote. 🤔', s:SUGE_BASE};
+    q = q.replace(/\bnudos?\b/g, 'nudos knots').replace(/\b(bombear|pumping|pump)\b/g, '$1 pumpear')
+         .replace(/\bgybe|jibe\b/g, 'gybe trasluchada').replace(/\btack\b/g, 'tack virada');
+    if(!q) return {m:'pensando', h:T('Escribiste nada. Nada. Y yo acá, esperándote. 🤔', 'You wrote nothing. Nothing at all. And here I am, waiting. 🤔'), s:sugeBase()};
 
     // --- Puteadas / bardo ---
-    if(tiene(q,['boludo','pelotudo','forro','la concha','conchuda','mierda','sos un','careta','inutil','no servis','no funciona nada'])){
-      return {m:'enojado', h:'¡PARÁ! 😤 Yo soy un robot con dignidad, no un poste de la Costanera.\n\nRespirá, contame bien qué necesitás y te lo resuelvo. Si querés algo concreto: '+ir('calculadora','calculadora de equipo')+', '+ir('spots','spots')+' o '+ir('instructores','instructores')+'.', s:SUGE_BASE};
+    if(tiene(q,['boludo','pelotudo','forro','la concha','conchuda','mierda','sos un','careta','inutil','no servis','no funciona nada','fuck','shit','stupid','useless','you suck','idiot'])){
+      return {m:'enojado', h:T('¡PARÁ! 😤 Yo soy un robot con dignidad, no un poste de la Costanera.\n\nRespirá, contame bien qué necesitás y te lo resuelvo. Si querés algo concreto: ', 'HEY! 😤 I am a robot with dignity, not a pole on the riverfront.\n\nBreathe. Tell me properly what you need and I will sort it out. Something concrete: ')+ir('calculadora',T('calculadora de equipo','gear calculator'))+', '+ir('spots',T('spots','spots'))+' o '+ir('instructores',T('instructores','instructors'))+'.', s:sugeBase()};
     }
 
     // --- Chistes / humor ---
-    if(tiene(q,['chiste','joke','contame algo','hace reir','algo gracioso','divertime'])){
-      var CH = [
+    if(tiene(q,['chiste','joke','contame algo','hace reir','algo gracioso','divertime','make me laugh','something funny','tell me something'])){
+      var CH_ES = [
         'El wingfoil es el único deporte donde pagás miles de dólares para caerte al agua con estilo. 🤣',
         '—¿Cuántos nudos hay? —Ocho. —Uh, poquito. —Ocho spots, no ocho nudos. Viento cero. 🤣',
         'Mi terapeuta me dijo que suelte lo que no puedo controlar. Solté el ala. Ahora está en Uruguay. 🤣',
         'El pronóstico decía 20 kn. Llegué y había 4. El pronóstico también es un chamuyo argentino. 🤣'
       ];
-      return {m:'riendo', h:CH[Math.floor(Math.random()*CH.length)]+'\n\nSi ya te reíste, mirá '+ir('maniobras','las maniobras')+' que ahí sí me pongo serio.', s:SUGE_BASE};
+      // Reescritos, no traducidos: un chiste traducido literal deja de serlo.
+      // El del ala en Uruguay funciona porque Uruguay está cruzando el río.
+      var CH_EN = [
+        'Wingfoil is the only sport where you pay thousands of dollars to fall in the water with style. 🤣',
+        'My therapist told me to let go of what I cannot control. I let go of the wing. It is in Uruguay now — that is the country across the river. 🤣',
+        'The forecast said 20 knots. I got there and found 4. Forecasts lie in every language. 🤣',
+        'Two riders on the beach. "How is the wind?" "Eight." "That is nothing." "Eight people waiting. The wind is zero." 🤣'
+      ];
+      var CH = enIngles() ? CH_EN : CH_ES;
+      return {m:'riendo', h:CH[Math.floor(Math.random()*CH.length)]+T('\n\nSi ya te reíste, mirá ', '\n\nIf you are done laughing, have a look at ')+ir('maniobras',T('las maniobras','the manoeuvres'))+T(' que ahí sí me pongo serio.', ' — there I do get serious.'), s:sugeBase()};
     }
 
     // --- Tristeza / no hay viento ---
-    if(tiene(q,['no hay viento','sin viento','viento cero','esta planchado','planchado','me aburro','triste','bajon'])){
-      return {m:'llorando', h:'No me hablés de días planchados que me pongo mal. 😭\n\nPlan B para día sin viento: '+ir('videos','videos por nivel')+', '+ir('glosario','el glosario')+' (30 términos) o '+ir('riders','Riders & Legends')+'. Y si querés espiar el agua en vivo: '+ir('camaras','cámaras de San Isidro')+'.', s:['¿Dónde navego?','¿Qué es pumpear?','Mostrame maniobras']};
+    if(tiene(q,['no hay viento','sin viento','viento cero','esta planchado','planchado','me aburro','triste','bajon','no wind','flat day','glassy','bored','nothing today'])){
+      return {m:'llorando', h:T('No me hablés de días planchados que me pongo mal. 😭\n\nPlan B para día sin viento: ', 'Do not talk to me about flat days, it upsets me. 😭\n\nPlan B for a windless day: ')+ir('videos',T('videos por nivel','videos by level'))+', '+ir('glosario',T('el glosario','the glossary'))+T(' (30 términos) o ', ' (30 terms) or ')+ir('riders',T('Riders & Legends','Riders &amp; Legends'))+T('. Y si querés espiar el agua en vivo: ', '. And if you want to spy on the water live: ')+ir('camaras',T('cámaras de San Isidro','the San Isidro cameras'))+'.', s: enIngles() ? ['Where can I sail?','What is pumping?','Show me manoeuvres'] : ['¿Dónde navego?','¿Qué es pumpear?','Mostrame maniobras']};
     }
 
     // --- Saludos ---
-    if(/^(hola|buenas|buen dia|buenas tardes|buenas noches|hey|holis|que tal|como andas|como estas|todo bien)\b/.test(q)){
-      return {m:'feliz', h:'¡Hola! 😄 Soy Bramador, el robot de la Escuela de Wingfoil. Me sé todo lo que hay en este sitio: spots, maniobras, glosario, equipo, precios e instructores.\n\nPreguntame cualquier cosa.', s:SUGE_BASE};
+    if(/^(hola|buenas|buen dia|buenas tardes|buenas noches|hey|holis|que tal|como andas|como estas|todo bien|hi|hello|good morning|good afternoon|good evening|whats up|how are you)\b/.test(q)){
+      return {m:'feliz', h:T('¡Hola! 😄 Soy Bramador, el robot de la Escuela de Wingfoil. Me sé todo lo que hay en este sitio: spots, maniobras, glosario, equipo, precios e instructores.\n\nPreguntame cualquier cosa.', 'Hi! 😄 I am Bramador, the robot of Escuela de Wingfoil — the Argentine wingfoil school. I know everything on this site: spots, manoeuvres, glossary, gear, prices and instructors.\n\nAsk me anything.'), s:sugeBase()};
     }
 
     // --- Quién sos ---
-    if(tiene(q,['quien sos','quien eres','que sos','como te llamas','tu nombre','bramador'])){
-      return {m:'epico', h:'Soy <strong>Bramador</strong>. 🤩 Me llamo así porque cuando entra el viento fuerte, brama.\n\nNo soy instructor ni pronóstico: soy el que te encuentra rápido lo que ya está en este sitio. Sé de '+ir('spots','21 spots')+', '+ir('maniobras','maniobras')+', '+ir('glosario','30 términos del glosario')+', '+ir('calculadora','medidas de equipo')+' y '+ir('faq','las dudas frecuentes')+'.', s:SUGE_BASE};
+    if(tiene(q,['quien sos','quien eres','que sos','como te llamas','tu nombre','bramador','who are you','what are you','your name'])){
+      return {m:'epico', h:T('Soy <strong>Bramador</strong>. 🤩 Me llamo así porque cuando entra el viento fuerte, brama.\n\nNo soy instructor ni pronóstico: soy el que te encuentra rápido lo que ya está en este sitio. Sé de ', 'I am <strong>Bramador</strong>. 🤩 The name means <em>the roaring one</em> — that is what strong wind does here.\n\nI am not an instructor and I am not a forecast: I am the one who finds you fast what is already on this site. I know about ')+ir('spots',T('21 spots', '21 spots'))+', '+ir('maniobras',T('maniobras','manoeuvres'))+', '+ir('glosario',T('30 términos del glosario', '30 glossary terms'))+', '+ir('calculadora',T('medidas de equipo', 'gear sizing'))+' y '+ir('faq',T('las dudas frecuentes', 'the common questions'))+'.', s:sugeBase()};
     }
 
     // --- Gracias / despedida ---
-    if(tiene(q,['gracias','grasias','sos un genio','buenisimo','excelente','crack','capo'])){
-      return {m:'feliz', h:'¡De nada! 😄 Para eso estoy.\n\nSi te sirvió, pasale el sitio a alguien que esté arrancando. Y si sos instructor, sumate acá: '+ir('instructores','¿Sos instructor?')+'.', s:SUGE_BASE};
+    if(tiene(q,['gracias','grasias','sos un genio','buenisimo','excelente','crack','capo','thanks','thank you','awesome','great','nice one'])){
+      return {m:'feliz', h:T('¡De nada! 😄 Para eso estoy.\n\nSi te sirvió, pasale el sitio a alguien que esté arrancando. Y si sos instructor, sumate acá: ', 'You are welcome! 😄 That is what I am here for.\n\nIf it helped, pass the site to someone who is starting out. And if you are an instructor, join here: ')+ir('instructores',T('¿Sos instructor?','Are you an instructor?'))+'.', s:sugeBase()};
     }
-    if(tiene(q,['chau','adios','nos vemos','hasta luego','me voy'])){
-      return {m:'llorando', h:'¿Ya te vas? 😭 Bueno. Andá a navegar, que es mejor que hablar conmigo.\n\nDejo el botón acá abajo por si volvés.', s:SUGE_BASE};
+    if(tiene(q,['chau','adios','nos vemos','hasta luego','me voy','bye','goodbye','see you','later'])){
+      return {m:'llorando', h:T('¿Ya te vas? 😭 Bueno. Andá a navegar, que es mejor que hablar conmigo.\n\nDejo el botón acá abajo por si volvés.', 'Leaving already? 😭 Fine. Go sail, it beats talking to me.\n\nI will leave the button down here in case you come back.'), s:sugeBase()};
     }
 
     // --- Calculadora de equipo ---
     var pesoM = q.match(/(\d{2,3})\s*(kg|kilo|kilos|k)?\b/);
-    var pideMedida = tiene(q,['que tabla','cuantos litros','litros','que ala','que medida','tamano de tabla','tamano de ala','mastil','calculadora','que equipo me','que equipo necesito','me conviene','medida de'])
-                  || (!!pesoM && tiene(q,['peso','peso ','kg','kilos','principiante','intermedio','avanzado']));
+    var pideMedida = tiene(q,['que tabla','cuantos litros','litros','que ala','que medida','tamano de tabla','tamano de ala','mastil','calculadora','que equipo me','que equipo necesito','me conviene','medida de','what board','how many litres','how many liters','liters','litres','what wing','what size','board size','wing size','mast','calculator','what gear','suits me','which board'])
+                  || (!!pesoM && tiene(q,['peso','peso ','kg','kilos','principiante','intermedio','avanzado','weigh','beginner','intermediate','advanced']));
     if(pideMedida && pesoM && +pesoM[1] >= 35 && +pesoM[1] <= 160){
       var peso = +pesoM[1];
       var nivel = tiene(q,['avanzado','experto','pro']) ? 'a'
@@ -5117,19 +5162,23 @@ document.addEventListener('DOMContentLoaded', function() {
       var cond  = tiene(q,['poco viento','viento flojo','flojo','liviano','light','10 kn','12 kn']) ? 'light'
                 : tiene(q,['mucho viento','viento fuerte','fuerte','25 kn','30 kn']) ? 'strong' : 'medium';
       var r = calcular(peso, nivel, cond);
-      var nivLbl = {b:'principiante',i:'intermedio',a:'avanzado'}[nivel];
-      var conLbl = {light:'viento flojo (10-15 kn)',medium:'viento medio (15-22 kn)',strong:'viento fuerte (22-30 kn)'}[cond];
-      return {m:'epico', h:'Listo, '+peso+' kg, nivel '+nivLbl+', '+conLbl+': 🤩\n\n<strong>Tabla:</strong> ~'+r.tabla+' L\n<strong>Ala:</strong> ~'+r.ala+' m²\n<strong>Mástil:</strong> ~'+r.mastil+' cm\n\nEs la misma cuenta que hace '+ir('calculadora','la calculadora del sitio')+' — entrá ahí si querés cambiar nivel o condición. Y antes de comprar, charlalo con un '+ir('instructores','instructor')+'.',
-              s:['¿Cuánto sale un equipo?','¿Nuevo o usado?','¿Dónde navego?']};
+      var nivLbl = T({b:'principiante',i:'intermedio',a:'avanzado'}[nivel], {b:'beginner',i:'intermediate',a:'advanced'}[nivel]);
+      var conLbl = T({light:'viento flojo (10-15 kn)',medium:'viento medio (15-22 kn)',strong:'viento fuerte (22-30 kn)'}[cond],
+                     {light:'light wind (10-15 kn)',medium:'moderate wind (15-22 kn)',strong:'strong wind (22-30 kn)'}[cond]);
+      return {m:'epico', h:T('Listo, '+peso+' kg, nivel '+nivLbl+', '+conLbl+': 🤩\n\n<strong>Tabla:</strong> ~'+r.tabla+' L\n<strong>Ala:</strong> ~'+r.ala+' m²\n<strong>Mástil:</strong> ~'+r.mastil+' cm\n\nEs la misma cuenta que hace ',
+                            'Right — '+peso+' kg, '+nivLbl+', '+conLbl+': 🤩\n\n<strong>Board:</strong> ~'+r.tabla+' L\n<strong>Wing:</strong> ~'+r.ala+' m²\n<strong>Mast:</strong> ~'+r.mastil+' cm\n\nSame maths as ')+ir('calculadora',T('la calculadora del sitio','the calculator on the site'))+
+                    T(' — entrá ahí si querés cambiar nivel o condición. Y antes de comprar, charlalo con un ',
+                      ' — go there to change level or conditions. And before buying anything, talk it over with an ')+ir('instructores',T('instructor','instructor'))+'.',
+              s: enIngles() ? ['What does gear cost?','New or used?','Where can I sail?'] : ['¿Cuánto sale un equipo?','¿Nuevo o usado?','¿Dónde navego?']};
     }
     if(pideMedida){
-      return {m:'pensando', h:'Te la calculo acá mismo. 🤔 Decime tu peso y tu nivel, por ejemplo: <em>"peso 80 kg soy principiante"</em>.\n\nO usá directo '+ir('calculadora','la calculadora de equipo')+', que además te deja elegir la condición de viento.', s:['Peso 80 kg soy principiante','Peso 95 kg intermedio','¿Nuevo o usado?']};
+      return {m:'pensando', h:T('Te la calculo acá mismo. 🤔 Decime tu peso y tu nivel, por ejemplo: <em>"peso 80 kg soy principiante"</em>.\n\nO usá directo ', 'I will work it out right here. 🤔 Tell me your weight and level, for example: <em>"80 kg beginner"</em>.\n\nOr go straight to ')+ir('calculadora',T('la calculadora de equipo', 'the gear calculator'))+T(', que además te deja elegir la condición de viento.', ', which also lets you pick the wind conditions.'), s: enIngles() ? ['I weigh 80 kg, beginner','I weigh 95 kg, intermediate','New or used?'] : ['Peso 80 kg soy principiante','Peso 95 kg intermedio','¿Nuevo o usado?']};
     }
 
     // --- Definiciones: "¿qué es X?" va derecho al glosario, antes que
     //     cualquier otra intención ("¿qué son los nudos?" es una definición,
     //     no una consulta de viento) ---
-    if(/^que\s*(es|son|significa|quiere decir)\b/.test(q) || tiene(q,['significa','definicion','quiere decir'])){
+    if(/^(que\s*(es|son|significa|quiere decir)|what\s*(is|are|does)|whats)\b/.test(q) || tiene(q,['significa','definicion','quiere decir','means','definition','stands for'])){
       var gDef = mejorMatch(GLOSSARY, 'n', q);
       if(gDef) return respGlos(gDef);
     }
@@ -5144,12 +5193,15 @@ document.addEventListener('DOMContentLoaded', function() {
     var spot = buscarSpot(q);
     if(spot){
       var extra = spot.tags && spot.tags.length ? '\n<strong>Tags:</strong> '+esc(spot.tags.join(' · ')) : '';
-      return {m:'epico', h:'<strong>'+esc(spot.n)+'</strong> ('+esc(spot.prov)+') 🤩\n\n'+esc(spot.d)+'\n\n<strong>Viento ideal:</strong> '+esc(spot.w||'sin dato')+extra+'\n\nEstá fichado en '+ir('spots','Aguas argentinas')+' con mapa y detalle.',
-              s:['¿Dónde navego?','¿Qué tabla me conviene?','Mostrame maniobras']};
+      return {m:'epico', h:'<strong>'+esc(spot.n)+'</strong> ('+esc(spot.prov)+') 🤩\n\n'+
+                    T(esc(spot.d)+'\n\n<strong>Viento ideal:</strong> ', '<strong>Wind it needs:</strong> ')+esc(spot.w||T('sin dato','no data'))+extra+
+                    T('\n\nEstá fichado en ', '\n\nIt is listed in ')+ir('spots',T('Aguas argentinas','Argentine waters'))+
+                    T(' con mapa y detalle.', ' with a map and the full detail — description in Spanish for now.'),
+              s: enIngles() ? ['Where can I sail?','What board suits me?','Show me manoeuvres'] : ['¿Dónde navego?','¿Qué tabla me conviene?','Mostrame maniobras']};
     }
 
     // --- Viento / pronóstico ---
-    if(tiene(q,['viento','pronostico','kn','nudos','rafaga','cuando navegar','salgo hoy','salgo','esta bueno hoy','condiciones','se puede navegar','hay ola'])){
+    if(tiene(q,['viento','pronostico','kn','nudos','rafaga','cuando navegar','salgo hoy','salgo','esta bueno hoy','condiciones','se puede navegar','hay ola','wind','forecast','knots','gust','go out today','conditions','is it good today'])){
       var hoy = (window.__EWF || {}).HOY;
       var nrd = (window.__EWF || {}).NORDEN;
       var medido = nrd && isFinite(nrd.kn)
@@ -5164,25 +5216,29 @@ document.addEventListener('DOMContentLoaded', function() {
                    (r.ahoraEsBuena ? 'ahora' : 'a las '+r.horas[0])+
                    ', '+r.horas.length+'h navegable'+(r.horas.length>1?'s':'');
           });
-          return {m:'epico', h:'¡Sí! 🤩 Ahora mismo hay ventana en <strong>'+hoy.si.length+'</strong> spot'+(hoy.si.length>1?'s':'')+':\n\n'+top.join('\n')+
-                    (hoy.si.length > 4 ? '\n\ny '+(hoy.si.length-4)+' más.' : '')+
-                    '\n\nEl detalle completo, con los que no dan y por qué, está en '+ir('salgo-hoy','¿Salgo hoy?')+'.'+medido,
-                  s:['¿Qué tabla me conviene?','¿Dónde navego?','Mostrame maniobras']};
+          return {m:'epico', h:T('¡Sí! 🤩 Ahora mismo hay ventana en <strong>'+hoy.si.length+'</strong> spot'+(hoy.si.length>1?'s':'')+':\n\n',
+                      'Yes! 🤩 Right now there is a window at <strong>'+hoy.si.length+'</strong> spot'+(hoy.si.length>1?'s':'')+':\n\n')+top.join('\n')+
+                    (hoy.si.length > 4 ? T('\n\ny '+(hoy.si.length-4)+' más.', '\n\nand '+(hoy.si.length-4)+' more.') : '')+
+                    T('\n\nEl detalle completo, con los que no dan y por qué, está en ',
+                      '\n\nThe full detail, including the ones that do not work and why, is in ')+ir('salgo-hoy',T('¿Salgo hoy?','Should I go out today?'))+'.'+medido,
+                  s: enIngles() ? ['What board suits me?','Where can I sail?','Show me manoeuvres'] : ['¿Qué tabla me conviene?','¿Dónde navego?','Mostrame maniobras']};
         }
-        return {m:'llorando', h:'Hoy no. 😭 Miré los '+(hoy.si.length + hoy.no.length)+' spots y ninguno tiene ventana en las próximas 12 h.\n\nEl detalle de por qué no da cada uno está en '+ir('salgo-hoy','¿Salgo hoy?')+'. Plan B: '+ir('videos','videos')+' o '+ir('glosario','glosario')+'.'+medido,
-                s:['¿Qué tabla me conviene?','Mostrame maniobras','Contame un chiste']};
+        return {m:'llorando', h:T('Hoy no. 😭 Miré los '+(hoy.si.length + hoy.no.length)+' spots y ninguno tiene ventana en las próximas 12 h.\n\nEl detalle de por qué no da cada uno está en ',
+              'Not today. 😭 I checked all '+(hoy.si.length + hoy.no.length)+' spots and none has a window in the next 12 hours.\n\nWhy each one fails is in ')+ir('salgo-hoy',T('¿Salgo hoy?','Should I go out today?'))+T('. Plan B: ', '. Plan B: ')+ir('videos',T('videos','videos'))+' o '+ir('glosario',T('glosario','glossary'))+'.'+medido,
+                s: enIngles() ? ['What board suits me?','Show me manoeuvres','Tell me a joke'] : ['¿Qué tabla me conviene?','Mostrame maniobras','Contame un chiste']};
       }
       // Todavía no llegó el pronóstico: al menos la regla de cada spot sí la sé.
       var ej = [];
       for(var i=0;i<SPOTS.length && ej.length<4;i++){ if(SPOTS[i].w) ej.push('• <strong>'+esc(SPOTS[i].n)+'</strong>: '+esc(SPOTS[i].w)); }
-      return {m:'pensando', h:'Estoy trayendo el pronóstico. 🤔 Mientras tanto, la <strong>regla de viento</strong> de cada spot:\n\n'+ej.join('\n')+'\n\nLos '+SPOTS.length+' están en '+ir('spots','Aguas argentinas')+', y el cruce con el pronóstico de hoy en '+ir('salgo-hoy','¿Salgo hoy?')+'.',
-              s:['San Isidro','Mar del Plata','¿Qué tabla me conviene?']};
+      return {m:'pensando', h:T('Estoy trayendo el pronóstico. 🤔 Mientras tanto, la <strong>regla de viento</strong> de cada spot:\n\n', 'I am fetching the forecast. 🤔 Meanwhile, here is the <strong>wind rule</strong> each spot needs:\n\n')+ej.join('\n')+'\n\nLos '+SPOTS.length+' están en '+ir('spots',T('Aguas argentinas','Argentine waters'))+T(', y el cruce con el pronóstico de hoy en ', ', and today\'s forecast matched against them in ')+ir('salgo-hoy',T('¿Salgo hoy?','Should I go out today?'))+'.',
+              s: enIngles() ? ['San Isidro','Mar del Plata','What board suits me?'] : ['San Isidro','Mar del Plata','¿Qué tabla me conviene?']};
     }
 
     var man = mejorMatch(MANIOBRAS, 'n', q);
     if(man){
-      return {m:'epico', h:'<strong>'+esc(man.n)+'</strong>'+(man.sub?' <em>('+esc(man.sub)+')</em>':'')+' — '+esc(man.catLabel||'')+' 🤩\n\n'+esc(man.d)+'\n\nEstá con video en '+ir('maniobras','Maniobras del WingFoil')+'.',
-              s:['Mostrame maniobras','¿Qué es pumpear?','¿Dónde navego?']};
+      return {m:'epico', h:'<strong>'+esc(man.n)+'</strong>'+(man.sub?' <em>('+esc(man.sub)+')</em>':'')+' — '+esc(man.catLabel||'')+' 🤩\n\n'+
+                    T(esc(man.d)+'\n\nEstá con video en ', 'There is a video for it in ')+ir('maniobras',T('Maniobras del WingFoil','WingFoil manoeuvres'))+'.',
+              s: enIngles() ? ['Show me manoeuvres','What is pumping?','Where can I sail?'] : ['Mostrame maniobras','¿Qué es pumpear?','¿Dónde navego?']};
     }
 
     var g = mejorMatch(GLOSSARY, 'n', q);
@@ -5193,63 +5249,68 @@ document.addEventListener('DOMContentLoaded', function() {
     var zona = buscarZona(q);
     if(zona && tiene(q,['spot','spots','navegar','navego','donde','lugares','hay algo','se puede','practicar'])){
       var lz = zona.spots.map(function(sp){ return '• <strong>'+esc(sp.n)+'</strong> — '+esc(sp.w||'sin dato de viento'); });
-      return {m:'epico', h:'En esa zona tengo <strong>'+zona.spots.length+'</strong> spot'+(zona.spots.length>1?'s':'')+': 🤩\n\n'+lz.join('\n')+'\n\nCada uno con mapa y detalle en '+ir('spots','Aguas argentinas')+'. Nombrame uno y te lo cuento.',
-              s:['¿Qué tabla me conviene?','Mostrame maniobras','¿Dónde navego?']};
+      return {m:'epico', h:T('En esa zona tengo <strong>'+zona.spots.length+'</strong> spot'+(zona.spots.length>1?'s':'')+': 🤩\n\n',
+                      'In that area I have <strong>'+zona.spots.length+'</strong> spot'+(zona.spots.length>1?'s':'')+': 🤩\n\n')+lz.join('\n')+
+                    T('\n\nCada uno con mapa y detalle en ', '\n\nEach with a map and full detail in ')+ir('spots',T('Aguas argentinas','Argentine waters'))+T('. Nombrame uno y te lo cuento.', '. Name one and I will tell you about it.'),
+              s: enIngles() ? ['What board suits me?','Show me manoeuvres','Where can I sail?'] : ['¿Qué tabla me conviene?','Mostrame maniobras','¿Dónde navego?']};
     }
 
-    if(tiene(q,['donde navego','donde puedo navegar','spots','spot','lugares','donde se navega','playas','donde practicar'])){
+    if(tiene(q,['donde navego','donde puedo navegar','spots','spot','lugares','donde se navega','playas','donde practicar','where can i sail','where to sail','where do i go','beaches','places to ride'])){
       var prov = {};
       for(var k=0;k<SPOTS.length;k++){ prov[SPOTS[k].prov] = (prov[SPOTS[k].prov]||0)+1; }
       var ln = [];
       for(var p in prov){ if(Object.prototype.hasOwnProperty.call(prov,p)) ln.push('• '+esc(p)+': '+prov[p]); }
-      return {m:'epico', h:'Tengo <strong>'+SPOTS.length+' spots</strong> fichados en el país: 🤩\n\n'+ln.join('\n')+'\n\nMapa y detalle de cada uno en '+ir('spots','Aguas argentinas')+'. Nombrame uno y te cuento el viento que necesita.',
-              s:['San Isidro','Mar del Plata','Bariloche']};
+      return {m:'epico', h:T('Tengo <strong>'+SPOTS.length+' spots</strong> fichados en el país: 🤩\n\n', 'I have <strong>'+SPOTS.length+' spots</strong> logged around Argentina: 🤩\n\n')+ln.join('\n')+T('\n\nMapa y detalle de cada uno en ', '\n\nMap and detail for each in ')+ir('spots',T('Aguas argentinas','Argentine waters'))+T('. Nombrame uno y te cuento el viento que necesita.', '. Name one and I will tell you the wind it needs.'),
+              s: enIngles() ? ['San Isidro','Mar del Plata','Bariloche'] : ['San Isidro','Mar del Plata','Bariloche']};
     }
-    if(tiene(q,['maniobra','maniobras','trucos','que puedo aprender','progresion'])){
-      return {m:'epico', h:'Hay <strong>'+MANIOBRAS.length+' maniobras</strong> cargadas, de básicas a avanzadas, cada una con video. 🤩\n\nArrancás por foileo → pumpear → upwind, y después viene la trabuchada, que es la que separa aguas.\n\nTodas en '+ir('maniobras','Maniobras del WingFoil')+'.',
-              s:['¿Qué es pumpear?','¿Qué es una trabuchada?','Videos por nivel']};
+    if(tiene(q,['maniobra','maniobras','trucos','que puedo aprender','progresion','manoeuvre','manoeuvres','maneuver','maneuvers','tricks','what can i learn','progression'])){
+      return {m:'epico', h:T('Hay <strong>'+MANIOBRAS.length+' maniobras</strong> cargadas, de básicas a avanzadas, cada una con video. 🤩\n\nArrancás por foileo → pumpear → upwind, y después viene la trabuchada, que es la que separa aguas.\n\nTodas en ',
+              'There are <strong>'+MANIOBRAS.length+' manoeuvres</strong> here, from basic to advanced, each with a video. 🤩\n\nYou start with the first ride on the foil → pumping → going upwind, and then comes the gybe, the one that separates people.\n\nAll of them in ')+ir('maniobras',T('Maniobras del WingFoil','WingFoil manoeuvres'))+'.',
+              s: enIngles() ? ['What is pumping?','What is a gybe?','Videos by level'] : ['¿Qué es pumpear?','¿Qué es una trabuchada?','Videos por nivel']};
     }
-    if(tiene(q,['glosario','que significa','que quiere decir','terminos','vocabulario','jerga'])){
-      return {m:'feliz', h:'Tengo <strong>'+GLOSSARY.length+' términos</strong> en '+ir('glosario','el glosario')+' 😄 — técnica, maniobras, equipo y unidades.\n\nDecime cuál no entendés y te lo explico acá mismo.',
-              s:['¿Qué es pumpear?','¿Qué es un touch down?','¿Qué son los nudos?']};
+    if(tiene(q,['glosario','que significa','que quiere decir','terminos','vocabulario','jerga','glossary','what does it mean','terms','vocabulary','slang','jargon'])){
+      return {m:'feliz', h:T('Tengo <strong>'+GLOSSARY.length+' términos</strong> en ', 'I have <strong>'+GLOSSARY.length+' terms</strong> in ')+ir('glosario',T('el glosario','the glossary'))+T(' 😄 — técnica, maniobras, equipo y unidades.\n\nDecime cuál no entendés y te lo explico acá mismo.',
+                  ' 😄 — technique, manoeuvres, gear and units.\n\nTell me which one you do not know and I will explain it right here. The definitions are still in Spanish.'),
+              s: enIngles() ? ['What is pumping?','What is a touch down?','What are knots?'] : ['¿Qué es pumpear?','¿Qué es un touch down?','¿Qué son los nudos?']};
     }
-    if(tiene(q,['clase','clases','instructor','instructores','profesor','aprender con alguien','escuela','curso'])){
-      return {m:'feliz', h:'La plataforma no dicta clases: los que dictan son los <strong>instructores certificados</strong> que se sumaron. 😄\n\nLos ves en '+ir('instructores','la sección de instructores')+' — y si sos instructor, ahí mismo cargás tu perfil gratis.\n\nOjo: los perfiles los publican ellos, verificá credenciales antes de contratar.',
-              s:['¿Cuánto tardo en foilear?','¿Dónde navego?','¿Qué tabla me conviene?']};
+    if(tiene(q,['clase','clases','instructor','instructores','profesor','aprender con alguien','escuela','curso','lesson','lessons','teacher','coach','school','course','learn with someone'])){
+      return {m:'feliz', h:T('La plataforma no dicta clases: los que dictan son los <strong>instructores certificados</strong> que se sumaron. 😄\n\nLos ves en ', 'The platform itself does not teach: the <strong>certified instructors</strong> who joined it do. 😄\n\nYou will find them in ')+ir('instructores',T('la sección de instructores', 'the instructors section'))+T(' — y si sos instructor, ahí mismo cargás tu perfil gratis.\n\nOjo: los perfiles los publican ellos, verificá credenciales antes de contratar.', ' — and if you are an instructor, that is where you add your profile, free.\n\nHeads up: instructors publish their own profiles, so check credentials before booking.'),
+              s: enIngles() ? ['How long until I foil?','Where can I sail?','What board suits me?'] : ['¿Cuánto tardo en foilear?','¿Dónde navego?','¿Qué tabla me conviene?']};
     }
-    if(tiene(q,['comprar','precio','precios','cuanto sale','cuanto cuesta','vender','venta','usado','segunda mano','equipos en venta','marketplace'])){
-      return {m:'pensando', h:'Precios de referencia en Argentina (equipo dolarizado): 🤔\n\n<strong>Nuevo:</strong> USD 2.500–3.000\n<strong>Usado en buen estado:</strong> USD 1.000–1.500\n\nEn '+ir('venta-de-wingfoil','Equipos en venta')+' está el listado entre riders. Si comprás usado: revisá costuras del ala, que los tubos inflen bien y que el foil no tenga corrosión.',
-              s:['¿Qué tabla me conviene?','¿Nuevo o usado?','Ver marcas']};
+    if(tiene(q,['comprar','precio','precios','cuanto sale','cuanto cuesta','vender','venta','usado','segunda mano','equipos en venta','marketplace','buy','price','prices','how much','cost','sell','used','second hand','gear for sale'])){
+      return {m:'pensando', h:T('Precios de referencia en Argentina (equipo dolarizado): 🤔\n\n<strong>Nuevo:</strong> USD 2.500–3.000\n<strong>Usado en buen estado:</strong> USD 1.000–1.500\n\nEn ', 'Reference prices in Argentina — gear is priced in US dollars, not pesos: 🤔\n\n<strong>New:</strong> USD 2,500–3,000\n<strong>Used, good condition:</strong> USD 1,000–1,500\n\nIn ')+ir('venta-de-wingfoil',T('Equipos en venta','Gear for sale'))+T(' está el listado entre riders. Si comprás usado: revisá costuras del ala, que los tubos inflen bien y que el foil no tenga corrosión.', ' you will find the rider-to-rider listings. If you buy used: check the wing\'s seams, that the bladders hold pressure, and that the foil has no corrosion.'),
+              s: enIngles() ? ['What board suits me?','New or used?','See brands'] : ['¿Qué tabla me conviene?','¿Nuevo o usado?','Ver marcas']};
     }
-    if(tiene(q,['marca','marcas','duotone','naish','fone','armstrong','cual marca','comparador'])){
-      return {m:'feliz', h:'Las marcas que seguimos están en '+ir('marcas','Marcas que confiamos')+' 😄, y si querés verlas enfrentadas, está el '+ir('comparador','comparador de marcas')+'.', s:['¿Cuánto sale un equipo?','¿Qué tabla me conviene?']};
+    if(tiene(q,['marca','marcas','duotone','naish','fone','armstrong','cual marca','comparador','brand','brands','which brand','compare'])){
+      return {m:'feliz', h:T('Las marcas que seguimos están en ', 'The brands we follow are in ')+ir('marcas',T('Marcas que confiamos','Brands we trust'))+T(' 😄, y si querés verlas enfrentadas, está el ', ' 😄, and if you want them side by side there is the ')+ir('comparador',T('comparador de marcas','brand comparison'))+'.', s: enIngles() ? ['What does gear cost?','What board suits me?'] : ['¿Cuánto sale un equipo?','¿Qué tabla me conviene?']};
     }
-    if(tiene(q,['video','videos','tutorial','ver como se hace'])){
-      return {m:'feliz', h:'Hay '+ir('videos','videos organizados por nivel')+' 😄 — principiante, intermedio y avanzado. Y cada maniobra de '+ir('maniobras','esta sección')+' viene con su propio video.', s:['Mostrame maniobras','¿Qué es pumpear?']};
+    if(tiene(q,['video','videos','tutorial','ver como se hace','watch','how it is done','show me how'])){
+      return {m:'feliz', h:'Hay '+ir('videos',T('videos organizados por nivel','videos organised by level'))+' 😄 — principiante, intermedio y avanzado. Y cada maniobra de '+ir('maniobras',T('esta sección','this section'))+' viene con su propio video.', s: enIngles() ? ['Show me manoeuvres','What is pumping?'] : ['Mostrame maniobras','¿Qué es pumpear?']};
     }
-    if(tiene(q,['anatomia','partes','fuselaje','stabilizer','ala delantera','como es un foil','partes del ala','leading edge','bladder'])){
-      return {m:'epico', h:'Tengo las dos anatomías desarmadas pieza por pieza: 🤩\n\n• '+ir('anatomia','Anatomía del Foil')+' — mástil, fuselaje, ala delantera y stabilizer.\n• '+ir('anatomia-ala','Anatomía del Ala')+' — leading edge, strut, handles y ventana.', s:['¿Qué es pumpear?','¿Qué tabla me conviene?']};
+    if(tiene(q,['anatomia','partes','fuselaje','stabilizer','ala delantera','como es un foil','partes del ala','leading edge','bladder','anatomy','parts','fuselage','front wing','what is a foil made of'])){
+      return {m:'epico', h:T('Tengo las dos anatomías desarmadas pieza por pieza: 🤩\n\n• ', 'I have both anatomies taken apart piece by piece: 🤩\n\n• ')+ir('anatomia',T('Anatomía del Foil','Anatomy of the Foil'))+T(' — mástil, fuselaje, ala delantera y stabilizer.\n• ', ' — mast, fuselage, front wing and stabiliser.\n• ')+ir('anatomia-ala',T('Anatomía del Ala','Anatomy of the Wing'))+T(' — leading edge, strut, handles y ventana.', ' — leading edge, strut, handles and window.'), s: enIngles() ? ['What is pumping?','What board suits me?'] : ['¿Qué es pumpear?','¿Qué tabla me conviene?']};
     }
-    if(tiene(q,['rider','riders','legends','quien es el mejor','profesionales','competencia','regata'])){
-      return {m:'epico', h:'Los referentes del deporte están en '+ir('riders','Riders & Legends')+' 🤩.\n\nY sí, en Argentina hay regatas y competencias todo el año organizadas por distintos clubes — hablalo con tu '+ir('instructores','instructor')+' para sumarte al circuito.', s:['Mostrame maniobras','¿Dónde navego?']};
+    if(tiene(q,['rider','riders','legends','quien es el mejor','profesionales','competencia','regata','who is the best','pros','competition','race','regatta'])){
+      return {m:'epico', h:T('Los referentes del deporte están en ', 'The names that made this sport are in ')+ir('riders',T('Riders & Legends','Riders &amp; Legends'))+T(' 🤩.\n\nY sí, en Argentina hay regatas y competencias todo el año organizadas por distintos clubes — hablalo con tu ',
+                    ' 🤩.\n\nAnd yes, clubs in Argentina run races all year round — talk to your ')+ir('instructores',T('instructor','instructor'))+T(' para sumarte al circuito.', ' about joining the circuit.'), s: enIngles() ? ['Show me manoeuvres','Where can I sail?'] : ['Mostrame maniobras','¿Dónde navego?']};
     }
-    if(tiene(q,['blog','articulo','articulos','guia','guias','leer','nota'])){
-      return {m:'feliz', h:'Las notas largas están en '+ir('blog','Guías y artículos')+' 😄.', s:SUGE_BASE};
+    if(tiene(q,['blog','articulo','articulos','guia','guias','leer','nota','article','articles','guide','guides','read'])){
+      return {m:'feliz', h:T('Las notas largas están en ', 'The long reads are in ')+ir('blog',T('Guías y artículos','Guides and articles'))+' 😄.', s:sugeBase()};
     }
-    if(tiene(q,['camara','camaras','en vivo','ver el agua','webcam'])){
-      return {m:'sorpresa', h:'Sí, hay '+ir('camaras','cámaras en vivo de San Isidro')+' 😮 — mirás el agua antes de cargar el auto.', s:['¿Dónde navego?','San Isidro']};
+    if(tiene(q,['camara','camaras','en vivo','ver el agua','webcam','camera','cameras','live','see the water'])){
+      return {m:'sorpresa', h:T('Sí, hay ','Yes, there are ')+ir('camaras',T('cámaras en vivo de San Isidro','live cameras in San Isidro'))+T(' 😮 — mirás el agua antes de cargar el auto.',' 😮 — check the water before loading the car.'), s: enIngles() ? ['Where can I sail?','San Isidro'] : ['¿Dónde navego?','San Isidro']};
     }
-    if(tiene(q,['empezar','arrancar','soy nuevo','principiante','nunca hice','como empiezo','primera vez','desde cero'])){
-      return {m:'feliz', h:'Arrancás así 😄:\n\n1. Leé '+ir('que-es','qué es el wingfoil')+' para entender el deporte.\n2. Mirá '+ir('empezar','los 3 pasos para arrancar')+'.\n3. Buscá un '+ir('instructores','instructor')+' cerca tuyo.\n\nNo compres equipo antes de la primera clase. En serio.',
-              s:['¿Qué tabla me conviene?','¿Cuánto tardo en foilear?','¿Dónde navego?']};
+    if(tiene(q,['empezar','arrancar','soy nuevo','principiante','nunca hice','como empiezo','primera vez','desde cero','start','get started','i am new','never done','how do i begin','from scratch','first time'])){
+      return {m:'feliz', h:T('Arrancás así 😄:\n\n1. Read ', 'Here is how you start 😄:\n\n1. Read ')+ir('que-es',T('qué es el wingfoil','what wingfoil is'))+T(' para entender el deporte.\n2. Mirá ', ' to understand the sport.\n2. Look at ')+ir('empezar',T('los 3 pasos para arrancar','the 3 steps to get started'))+T('.\n3. Buscá un ', '.\n3. Find an ')+ir('instructores',T('instructor','instructor'))+T(' cerca tuyo.\n\nNo compres equipo antes de la primera clase. En serio.', ' near you.\n\nDo not buy gear before your first lesson. Seriously.'),
+              s: enIngles() ? ['What board suits me?','How long until I foil?','Where can I sail?'] : ['¿Qué tabla me conviene?','¿Cuánto tardo en foilear?','¿Dónde navego?']};
     }
-    if(tiene(q,['que es el wingfoil','que es wingfoil','de que se trata','explicame el deporte'])){
-      return {m:'epico', h:'Wingfoil = tabla con hydrofoil + un ala inflable que sostenés con las manos. 🤩\n\nCuando agarrás velocidad el foil levanta la tabla y volás sobre el agua, en silencio. Sin líneas, sin barra, sin arnés obligatorio.\n\nTodo explicado en '+ir('que-es','¿Qué es el WingFoil?')+'.', s:['¿Cómo empiezo?','¿Qué tabla me conviene?','Mostrame videos']};
+    if(tiene(q,['que es el wingfoil','que es wingfoil','de que se trata','explicame el deporte','what is wingfoil','what is wing foiling','explain the sport'])){
+      return {m:'epico', h:T('Wingfoil = tabla con hydrofoil + un ala inflable que sostenés con las manos. 🤩\n\nCuando agarrás velocidad el foil levanta la tabla y volás sobre el agua, en silencio. Sin líneas, sin barra, sin arnés obligatorio.\n\nTodo explicado en ', 'Wingfoil = a board with a hydrofoil + an inflatable wing you hold in your hands. 🤩\n\nOnce you pick up speed the foil lifts the board and you fly over the water, in silence. No lines, no bar, no harness required.\n\nAll explained in ')+ir('que-es',T('¿Qué es el WingFoil?','What is WingFoil?'))+'.', s: enIngles() ? ['How do I start?','What board suits me?','Show me videos'] : ['¿Cómo empiezo?','¿Qué tabla me conviene?','Mostrame videos']};
     }
-    if(tiene(q,['seccion','secciones','que hay en el sitio','que tiene la pagina','menu','indice','que puedo ver'])){
+    if(tiene(q,['seccion','secciones','que hay en el sitio','que tiene la pagina','menu','indice','que puedo ver','section','sections','what is on the site','what does the site have','index','what can i see'])){
       var ls = [];
-      for(var z=0; z<SECCIONES.length; z++) ls.push('• '+ir(SECCIONES[z].id, SECCIONES[z].t));
-      return {m:'epico', h:'Esto es todo lo que hay acá adentro 🤩:\n\n'+ls.join('\n'), s:SUGE_BASE};
+      for(var z=0; z<SECCIONES.length; z++) ls.push('• '+ir(SECCIONES[z].id, T(SECCIONES[z].t, SECCIONES[z].en)));
+      return {m:'epico', h:T('Esto es todo lo que hay acá adentro 🤩:\n\n', 'This is everything inside 🤩:\n\n')+ls.join('\n'), s:sugeBase()};
     }
 
     // --- FAQ del sitio (segunda pasada, umbral bajo) ---
@@ -5257,8 +5318,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if(faq2.score >= 2) return respFaq(faq2.faq);
 
     // --- No entendí ---
-    return {m:'llorando', h:'Uf, esa no me la sé. 😭 Soy un robot de wingfoil, no de la vida.\n\nProbá con algo de acá: spots, maniobras, glosario, equipo, precios, instructores o clases. También podés pedirme <em>"qué hay en el sitio"</em> y te tiro el índice completo.',
-            s:['¿Qué hay en el sitio?','¿Dónde navego?','¿Qué tabla me conviene?']};
+    return {m:'llorando', h:T('Uf, esa no me la sé. 😭 Soy un robot de wingfoil, no de la vida.\n\nProbá con algo de acá: spots, maniobras, glosario, equipo, precios, instructores o clases. También podés pedirme <em>"qué hay en el sitio"</em> y te tiro el índice completo.', 'Ugh, that one I do not know. 😭 I am a wingfoil robot, not a life coach.\n\nTry something from here: spots, manoeuvres, glossary, gear, prices, instructors or lessons. You can also ask me <em>"what is on the site"</em> and I will give you the full index.'),
+            s: enIngles() ? ['What is on the site?','Where can I sail?','What board suits me?'] : ['¿Qué hay en el sitio?','¿Dónde navego?','¿Qué tabla me conviene?']};
   }
 
   // ============ Interacción ============
@@ -5269,8 +5330,14 @@ document.addEventListener('DOMContentLoaded', function() {
       var r = responder(txt);
       humor(r.m);
       decir(r.h, 'bot');
-      sugerir(r.s || SUGE_BASE);
+      sugerir(r.s || sugeBase());
     }, 380);
+  }
+
+  function saludo(){
+    return T(
+      '¡Buenas! Soy <strong>Bramador</strong> 😄, el robot de la Escuela de Wingfoil.\n\nMe sé de memoria todo lo que hay en este sitio: '+SPOTS.length+' spots, '+MANIOBRAS.length+' maniobras, '+GLOSSARY.length+' términos del glosario, la calculadora de equipo y las dudas frecuentes.\n\nPreguntame lo que quieras. Puedo enojarme, reírme o llorar, pero siempre te contesto.',
+      'Hello! I am <strong>Bramador</strong> 😄, the robot of Escuela de Wingfoil — the Argentine wingfoil school.\n\nI know this site by heart: '+SPOTS.length+' spots around Argentina, '+MANIOBRAS.length+' manoeuvres, '+GLOSSARY.length+' glossary terms, the gear calculator and the common questions.\n\nAsk me anything. I can get angry, laugh or cry, but I always answer.');
   }
 
   var abierto = false, saludado = false;
@@ -5282,8 +5349,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if(!saludado){
       saludado = true;
       humor('feliz');
-      decir('¡Buenas! Soy <strong>Bramador</strong> 😄, el robot de la Escuela de Wingfoil.\n\nMe sé de memoria todo lo que hay en este sitio: '+SPOTS.length+' spots, '+MANIOBRAS.length+' maniobras, '+GLOSSARY.length+' términos del glosario, la calculadora de equipo y las dudas frecuentes.\n\nPreguntame lo que quieras. Puedo enojarme, reírme o llorar, pero siempre te contesto.', 'bot');
-      sugerir(SUGE_BASE);
+      decir(saludo(), 'bot');
+      sugerir(sugeBase());
     }
     setTimeout(function(){ input.focus(); }, 60);
   }
@@ -5426,8 +5493,12 @@ document.addEventListener('DOMContentLoaded', function() {
     var banner = document.getElementById('cookieBanner');
     if(!banner) return;
     function ajustar(){
-      var visible = !banner.hidden && banner.offsetParent !== null;
-      var alto = visible ? banner.offsetHeight + 14 : 0;
+      // Ojo: un elemento position:fixed no tiene offsetParent, así que
+      // comprobarlo daba siempre "invisible" y el banner nunca levantaba a
+      // Bramador. Hay que medirlo por su rectángulo.
+      var caja = banner.getBoundingClientRect();
+      var visible = !banner.hidden && caja.height > 0;
+      var alto = visible ? Math.round(caja.height) + 14 : 0;
       document.documentElement.style.setProperty('--bram-lift', alto + 'px');
     }
     ajustar();
@@ -5440,6 +5511,17 @@ document.addEventListener('DOMContentLoaded', function() {
   fab.addEventListener('click', function(){
     if(movio){ movio = false; return; }   // fue un arrastre, no un click
     abierto ? cerrar() : abrir();
+  });
+
+  // Si el usuario cambia de idioma, Bramador empieza de nuevo en el idioma
+  // nuevo: dejar la conversación mitad en castellano y mitad en inglés sería
+  // peor que perderla.
+  document.addEventListener('wf:lang', function(){
+    msgs.innerHTML = '';
+    saludado = false;
+    humor('neutral');
+    sugerir(sugeBase());
+    if(abierto){ saludado = true; humor('feliz'); decir(saludo(), 'bot'); }
   });
   btnX.addEventListener('click', cerrar);
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && abierto) cerrar(); });
@@ -5560,10 +5642,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Gráfico de líneas propio. Sin librería: son dos series y el sitio ya
   // tiene sus colores; traer Highcharts para esto sería 200 kB de más.
+  function anchoUtil(){
+    var c = panel && panel.clientWidth ? panel.clientWidth - 36 : 0;   // menos el padding
+    return Math.max(260, Math.min(c || 640, 900));
+  }
+
   function grafico(titulo, series, unidad){
     var puntos = series.reduce(function(a, s){ return a.concat(s.datos); }, []);
     if (puntos.length < 2) return '';
-    var W = 640, H = 190, mI = 42, mD = 10, mS = 14, mB = 26;
+    var W = Math.round(anchoUtil());
+    var angosto = W < 380;
+    var H = angosto ? 140 : 175;
+    var mI = angosto ? 30 : 40, mD = 8, mS = 16, mB = 24;
+    var fs = angosto ? 9 : 10.5;
     var xs = puntos.map(function(p){ return p.x; }), ys = puntos.map(function(p){ return p.y; });
     var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs);
     var y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
@@ -5578,14 +5669,14 @@ document.addEventListener('DOMContentLoaded', function() {
       var v = y0 + (y1 - y0) * i / 3, y = py(v);
       h += '<line x1="' + mI + '" y1="' + y.toFixed(1) + '" x2="' + (W - mD) + '" y2="' + y.toFixed(1) +
            '" stroke="rgba(255,255,255,.13)" stroke-width="1"/>' +
-           '<text x="' + (mI - 7) + '" y="' + (y + 3.5).toFixed(1) + '" text-anchor="end" font-size="10" fill="#7fa9c1">' +
+           '<text x="' + (mI - 6) + '" y="' + (y + 3.5).toFixed(1) + '" text-anchor="end" font-size="' + fs + '" fill="#7fa9c1">' +
            (Math.abs(v) >= 100 ? Math.round(v) : v.toFixed(1)) + '</text>';
     }
     // Horas
     [0, 0.5, 1].forEach(function(f){
       var x = mI + f * (W - mI - mD);
       h += '<text x="' + x.toFixed(1) + '" y="' + (H - 8) + '" text-anchor="' +
-           (f === 0 ? 'start' : f === 1 ? 'end' : 'middle') + '" font-size="10" fill="#7fa9c1">' +
+           (f === 0 ? 'start' : f === 1 ? 'end' : 'middle') + '" font-size="' + fs + '" fill="#7fa9c1">' +
            hhmm(new Date(x0 + f * (x1 - x0))) + '</text>';
     });
     series.forEach(function(s){
@@ -5598,11 +5689,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Leyenda
     var lx = mI;
     series.forEach(function(s){
-      h += '<rect x="' + lx + '" y="2" width="9" height="3" rx="1.5" fill="' + s.color + '"/>' +
-           '<text x="' + (lx + 13) + '" y="7" font-size="10" fill="#a9cfe2">' + esc(s.nombre) + '</text>';
-      lx += 22 + s.nombre.length * 5.6;
+      h += '<rect x="' + lx + '" y="3" width="9" height="3" rx="1.5" fill="' + s.color + '"/>' +
+           '<text x="' + (lx + 13) + '" y="' + (fs - 1.5) + '" font-size="' + fs + '" fill="#a9cfe2">' + esc(s.nombre) + '</text>';
+      lx += 20 + s.nombre.length * fs * 0.56;
     });
-    h += '<text x="' + (W - mD) + '" y="7" text-anchor="end" font-size="10" fill="#7fa9c1">' + esc(unidad) + '</text>';
+    h += '<text x="' + (W - mD) + '" y="' + (fs - 1.5) + '" text-anchor="end" font-size="' + fs + '" fill="#7fa9c1">' + esc(unidad) + '</text>';
     return '<div class="hoy__g"><h4>' + esc(titulo) + '</h4>' + h + '</svg></div>';
   }
 
@@ -5623,8 +5714,10 @@ document.addEventListener('DOMContentLoaded', function() {
     abiertaAhora = cual;
     if (btnNorden) btnNorden.setAttribute('aria-expanded', String(cual === 'norden'));
     if (btnCnsi) btnCnsi.setAttribute('aria-expanded', String(cual === 'cnsi'));
-    panel.innerHTML = cual === 'norden' ? htmlNorden() : htmlCnsi();
+    // Mostrar primero y dibujar después: el gráfico se arma con el ancho real
+    // del panel, y mientras está en display:none ese ancho es cero.
     panel.setAttribute('data-abierto', '1');
+    panel.innerHTML = cual === 'norden' ? htmlNorden() : htmlCnsi();
     panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
   }
 
@@ -5699,6 +5792,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if (btnNorden) btnNorden.addEventListener('click', function(){ pintar('norden'); });
   if (btnCnsi) btnCnsi.addEventListener('click', function(){ pintar('cnsi'); });
+
+  // El gráfico se dibuja al ancho real, así que un cambio de tamaño o de
+  // orientación pide redibujarlo. Con espera, para no hacerlo en cada píxel.
+  var esperaRedibujo;
+  window.addEventListener('resize', function(){
+    if (!abiertaAhora) return;
+    clearTimeout(esperaRedibujo);
+    esperaRedibujo = setTimeout(function(){
+      panel.innerHTML = abiertaAhora === 'norden' ? htmlNorden() : htmlCnsi();
+    }, 180);
+  });
 
   // ── CNSI: ThingSpeak manda CORS, así que se lee directo, sin intermediario.
   (function(){
@@ -5870,7 +5974,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // El castellano original se guarda la primera vez, así volver es exacto.
   function original(el, prop){
-    var k = 'es' + prop;
+    // dataset no acepta guiones en la clave: "esaria-label" tira SyntaxError y
+    // se lleva puesta toda la función. Hay que pasarlo a camelCase.
+    var k = 'es' + prop.replace(/-(\w)/g, function(_, c){ return c.toUpperCase(); });
     if(el.dataset[k] === undefined) el.dataset[k] = prop === 'Texto' ? el.innerHTML : (el.getAttribute(prop) || '');
     return el.dataset[k];
   }
