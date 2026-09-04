@@ -1208,12 +1208,36 @@ textarea{resize:vertical;min-height:90px}
 @keyframes hoyLluvia{from{transform:translate(0,0);opacity:.55}to{transform:translate(-9px,26px);opacity:0}}
 .hoy__gota{animation:hoyLluvia 1.5s linear infinite}
 @media(prefers-reduced-motion:reduce){.hoy__racha,.hoy__gota{animation:none}.hoy__gota{opacity:.45}}
-.hoy__norden{display:none;align-items:center;gap:14px 20px;flex-wrap:wrap;margin:0 0 20px;padding:14px 18px;border-radius:13px;background:rgba(233,196,106,.09);border:1px solid rgba(233,196,106,.3)}
-.hoy__norden[data-hay="1"]{display:flex}
-.hoy__norden b{color:#f2d999;font-size:12px;text-transform:uppercase;letter-spacing:.07em;display:block}
-.hoy__norden-val{font-size:19px;color:#fff;font-weight:700;font-family:'Clash Display',sans-serif}
-.hoy__norden-det{font-size:12.5px;color:#c9b48a}
-.hoy__norden-por{flex:1 1 260px;font-size:11.5px;color:#a8967a;line-height:1.55;min-width:200px}
+/* Mediciones reales: instrumentos midiendo, no modelo. Van juntas y aparte
+   del pronóstico, cada una citando a quien publica el dato. */
+.hoy__medido-intro{font-size:12.5px;color:#a9cfe2;margin:0 0 12px;line-height:1.6;max-width:74ch}
+.hoy__medido-intro strong{color:#fff}
+.hoy__medido{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:13px;margin:0 0 18px}
+.hoy__est{display:none;text-align:left;width:100%;padding:14px 17px;border-radius:13px;background:rgba(233,196,106,.08);border:1px solid rgba(233,196,106,.28);color:inherit;font:inherit;cursor:pointer;transition:border-color .2s,background .2s}
+.hoy__est[data-hay="1"]{display:block}
+.hoy__est:hover{background:rgba(233,196,106,.14);border-color:rgba(233,196,106,.5)}
+.hoy__est[aria-expanded="true"]{background:rgba(233,196,106,.14);border-color:rgba(233,196,106,.55)}
+.hoy__est b{color:#f2d999;font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:3px}
+.hoy__est-val{font-size:19px;color:#fff;font-weight:700;font-family:'Clash Display',sans-serif;display:block}
+.hoy__est-det{font-size:12.5px;color:#c9b48a;display:block;margin-top:2px}
+.hoy__est-fuente{font-size:11px;color:#9c8a6f;display:block;margin-top:8px;line-height:1.5}
+.hoy__est-ver{font-size:11.5px;color:#f2d999;font-weight:700;margin-top:9px;display:inline-block}
+.hoy__est-ver::after{content:' ▾'}
+.hoy__est[aria-expanded="true"] .hoy__est-ver::after{content:' ▴'}
+.hoy__graficos{display:none;margin:0 0 20px;padding:18px;border-radius:13px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.13)}
+.hoy__graficos[data-abierto="1"]{display:block}
+.hoy__graficos h3{font-family:'Clash Display',sans-serif;font-size:16px;color:#f0f8ff;margin:0 0 3px}
+.hoy__graficos .hoy__est-fuente{margin:0 0 16px}
+.hoy__g{margin:0 0 20px}
+.hoy__g:last-child{margin-bottom:0}
+.hoy__g h4{font-size:12px;color:#a9cfe2;margin:0 0 8px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.hoy__g svg{width:100%;height:auto;display:block;overflow:visible}
+.hoy__g-vacio{font-size:12.5px;color:#93b6c9;line-height:1.6;margin:0}
+.hoy__mareas{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:9px}
+.hoy__mareas li{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.11);border-radius:10px;padding:9px 12px}
+.hoy__mareas .m-tipo{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:#7fd8ee;font-weight:700}
+.hoy__mareas .m-hora{font-size:17px;color:#fff;font-weight:700;font-family:'Clash Display',sans-serif}
+.hoy__mareas .m-alt{font-size:12px;color:#a9cfe2}
 .hoy__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:13px}
 .hoy__card{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.14);border-left:3px solid #34d399;border-radius:13px;padding:15px 17px;backdrop-filter:blur(3px)}
 .hoy__card--no{border-left-color:rgba(255,255,255,.2);opacity:.72}
@@ -1423,14 +1447,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="hoy__estado" id="hoyEstado"></div>
     </div>
-    <div class="hoy__norden" id="hoyNorden">
-      <div>
+    <p class="hoy__medido-intro" id="hoyMedidoIntro" hidden>Lo de más abajo es <strong>pronóstico</strong>: un modelo calculando qué viento va a haber. Esto de acá son <strong>instrumentos midiendo</strong> el que hay. Tocá una estación para ver sus gráficos.</p>
+    <div class="hoy__medido">
+      <button class="hoy__est" id="hoyNorden" type="button" aria-expanded="false" aria-controls="hoyGraficos">
         <b>📍 Pilote Norden — medición real</b>
-        <span class="hoy__norden-val" id="nordenVal">—</span>
-        <span class="hoy__norden-det" id="nordenDet"></span>
-      </div>
-      <p class="hoy__norden-por">Mareógrafo de la <strong>CARP</strong> en el Río de la Plata (Canal Martín García). Todo lo de abajo es pronóstico — un modelo. Esto es un instrumento midiendo el viento que hay.</p>
+        <span class="hoy__est-val" id="nordenVal">—</span>
+        <span class="hoy__est-det" id="nordenDet"></span>
+        <span class="hoy__est-fuente">Mareógrafo de la <strong>Comisión Administradora del Río de la Plata (CARP)</strong>, Canal Martín García. Dato publicado por la CARP; acá solo lo mostramos y lo citamos.</span>
+        <span class="hoy__est-ver">Ver gráficos</span>
+      </button>
+      <button class="hoy__est" id="hoyCnsi" type="button" aria-expanded="false" aria-controls="hoyGraficos">
+        <b>📍 San Isidro — medición real</b>
+        <span class="hoy__est-val" id="cnsiVal">—</span>
+        <span class="hoy__est-det" id="cnsiDet"></span>
+        <span class="hoy__est-fuente">Estación meteorológica del <strong>Club Náutico San Isidro (CNSI)</strong> y mareógrafo de su oficina de yachting. Datos publicados por el CNSI; acá solo los mostramos y los citamos.</span>
+        <span class="hoy__est-ver">Ver gráficos</span>
+      </button>
     </div>
+    <div class="hoy__graficos" id="hoyGraficos" role="region" aria-label="Gráficos de la estación"></div>
     <div class="hoy__grid" id="hoySi">
       <div class="hoy__skel"></div><div class="hoy__skel"></div><div class="hoy__skel"></div>
     </div>
@@ -5499,23 +5533,220 @@ document.addEventListener('DOMContentLoaded', function() {
     return h + '<p class="hoy__regla">Este spot pide ' + esc(r.spot.w) + '</p></div>';
   }
 
-  // Pilote Norden: medición real, aparte del pronóstico. Va por su cuenta —
-  // si falla, la franja no aparece y el resto de la sección sigue igual.
+
+  // ─── Mediciones reales: Pilote Norden (CARP) y San Isidro (CNSI) ─────────
+  // Las dos son instrumentos midiendo, no modelo. Van aparte del pronóstico y
+  // cada una cita a quien publica el dato: nosotros no lo generamos.
+  var RUMBOS16 = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSO','SO','OSO','O','ONO','NO','NNO'];
+  function rumboDe(g){ return RUMBOS16[Math.round(((g % 360) + 360) % 360 / 22.5) % 16]; }
+  function hhmm(d){
+    return d.toLocaleTimeString('es-AR', { hour:'2-digit', minute:'2-digit', hour12:false,
+                                           timeZone:'America/Argentina/Buenos_Aires' });
+  }
+
+  // Gráfico de líneas propio. Sin librería: son dos series y el sitio ya
+  // tiene sus colores; traer Highcharts para esto sería 200 kB de más.
+  function grafico(titulo, series, unidad){
+    var puntos = series.reduce(function(a, s){ return a.concat(s.datos); }, []);
+    if (puntos.length < 2) return '';
+    var W = 640, H = 190, mI = 42, mD = 10, mS = 14, mB = 26;
+    var xs = puntos.map(function(p){ return p.x; }), ys = puntos.map(function(p){ return p.y; });
+    var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs);
+    var y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+    if (y1 === y0) { y1 = y0 + 1; }
+    var pad = (y1 - y0) * 0.12; y0 -= pad; y1 += pad;
+    var px = function(x){ return mI + (x1 === x0 ? 0 : (x - x0) / (x1 - x0)) * (W - mI - mD); };
+    var py = function(y){ return mS + (1 - (y - y0) / (y1 - y0)) * (H - mS - mB); };
+
+    var h = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(titulo) + '">';
+    // Rejilla y escala
+    for (var i = 0; i <= 3; i++) {
+      var v = y0 + (y1 - y0) * i / 3, y = py(v);
+      h += '<line x1="' + mI + '" y1="' + y.toFixed(1) + '" x2="' + (W - mD) + '" y2="' + y.toFixed(1) +
+           '" stroke="rgba(255,255,255,.13)" stroke-width="1"/>' +
+           '<text x="' + (mI - 7) + '" y="' + (y + 3.5).toFixed(1) + '" text-anchor="end" font-size="10" fill="#7fa9c1">' +
+           (Math.abs(v) >= 100 ? Math.round(v) : v.toFixed(1)) + '</text>';
+    }
+    // Horas
+    [0, 0.5, 1].forEach(function(f){
+      var x = mI + f * (W - mI - mD);
+      h += '<text x="' + x.toFixed(1) + '" y="' + (H - 8) + '" text-anchor="' +
+           (f === 0 ? 'start' : f === 1 ? 'end' : 'middle') + '" font-size="10" fill="#7fa9c1">' +
+           hhmm(new Date(x0 + f * (x1 - x0))) + '</text>';
+    });
+    series.forEach(function(s){
+      var d = s.datos.map(function(p, i){
+        return (i ? 'L' : 'M') + px(p.x).toFixed(1) + ' ' + py(p.y).toFixed(1);
+      }).join(' ');
+      h += '<path d="' + d + '" fill="none" stroke="' + s.color + '" stroke-width="' + (s.fina ? 1.4 : 2.2) +
+           '" stroke-linejoin="round" stroke-linecap="round"' + (s.fina ? ' opacity=".65"' : '') + '/>';
+    });
+    // Leyenda
+    var lx = mI;
+    series.forEach(function(s){
+      h += '<rect x="' + lx + '" y="2" width="9" height="3" rx="1.5" fill="' + s.color + '"/>' +
+           '<text x="' + (lx + 13) + '" y="7" font-size="10" fill="#a9cfe2">' + esc(s.nombre) + '</text>';
+      lx += 22 + s.nombre.length * 5.6;
+    });
+    h += '<text x="' + (W - mD) + '" y="7" text-anchor="end" font-size="10" fill="#7fa9c1">' + esc(unidad) + '</text>';
+    return '<div class="hoy__g"><h4>' + esc(titulo) + '</h4>' + h + '</svg></div>';
+  }
+
+  var panel = document.getElementById('hoyGraficos');
+  var intro = document.getElementById('hoyMedidoIntro');
+  function hayEstacion(){ if (intro) intro.hidden = false; }
+  var btnNorden = document.getElementById('hoyNorden');
+  var btnCnsi = document.getElementById('hoyCnsi');
+  var abiertaAhora = null;
+
+  function pintar(cual){
+    if (abiertaAhora === cual) {   // segundo click: cerrar
+      panel.removeAttribute('data-abierto');
+      abiertaAhora = null;
+      [btnNorden, btnCnsi].forEach(function(b){ if (b) b.setAttribute('aria-expanded', 'false'); });
+      return;
+    }
+    abiertaAhora = cual;
+    if (btnNorden) btnNorden.setAttribute('aria-expanded', String(cual === 'norden'));
+    if (btnCnsi) btnCnsi.setAttribute('aria-expanded', String(cual === 'cnsi'));
+    panel.innerHTML = cual === 'norden' ? htmlNorden() : htmlCnsi();
+    panel.setAttribute('data-abierto', '1');
+    panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+
+  function htmlNorden(){
+    var n = (window.__EWF || {}).NORDEN;
+    var h = '<h3>Pilote Norden — Río de la Plata</h3>' +
+            '<p class="hoy__est-fuente">Datos medidos y publicados por la <strong>Comisión Administradora del Río de la Plata (CARP)</strong>. ' +
+            '<a href="https://www.comisionriodelaplata.org/servicios_main.php?sid=VM" target="_blank" rel="noopener">Ver la fuente original</a>.</p>';
+    var hist = (n && n.historial) || [];
+    var pts = hist.map(function(e){
+      var m = String(e.medidoEn || '').match(/(\d{2})-(\d{2})-(\d{4})\s+(\d{2}):(\d{2})/);
+      if (!m) return null;
+      return { t: new Date(+m[3], +m[2] - 1, +m[1], +m[4], +m[5]).getTime(), kn: e.kn, alt: e.alturaCm };
+    }).filter(Boolean);
+
+    if (pts.length >= 2) {
+      h += grafico('Viento', [{ nombre:'Norden', color:'#7fd8ee',
+             datos: pts.map(function(p){ return { x:p.t, y:p.kn }; }) }], 'kn');
+      var conAlt = pts.filter(function(p){ return isFinite(p.alt); });
+      if (conAlt.length >= 2) {
+        h += grafico('Altura del río', [{ nombre:'Norden', color:'#e9c46a',
+               datos: conAlt.map(function(p){ return { x:p.t, y:p.alt }; }) }], 'cm');
+      }
+    } else {
+      // La CARP no publica la serie: la construimos guardando cada lectura.
+      h += '<p class="hoy__g-vacio">Todavía no hay serie para graficar.<br><br>' +
+           'La CARP publica el dato del momento y los históricos anuales en ZIP, pero no la serie de las últimas horas ' +
+           'en ningún formato que se pueda leer. Así que la vamos guardando nosotros: una lectura cada 10 minutos, ' +
+           'desde que esto se publicó. En unas horas el gráfico aparece solo.' +
+           (pts.length === 1 ? '<br><br>Llevamos 1 lectura guardada.' : '') + '</p>';
+    }
+    if (n) {
+      h += '<div class="hoy__g"><h4>Ahora</h4><ul class="hoy__mareas"><li>' +
+           '<span class="m-tipo">Viento</span><span class="m-hora">' + n.kn + ' kn</span>' +
+           '<span class="m-alt">del ' + esc(n.rumbo) + ' · ' + n.grados + '°</span></li>' +
+           (isFinite(n.alturaCm) ? '<li><span class="m-tipo">Altura</span><span class="m-hora">' + n.alturaCm +
+             '</span><span class="m-alt">cm</span></li>' : '') + '</ul></div>';
+    }
+    return h;
+  }
+
+  function htmlCnsi(){
+    var c = (window.__EWF || {}).CNSI || {};
+    var h = '<h3>San Isidro — Club Náutico San Isidro</h3>' +
+            '<p class="hoy__est-fuente">Datos medidos y publicados por el <strong>Club Náutico San Isidro (CNSI)</strong>: estación meteorológica del SMN en el club y regleta electrónica frente a la oficina de yachting. ' +
+            '<a href="https://cnsi.org.ar/yachting/estacion-meteorologica/" target="_blank" rel="noopener">Ver la fuente original</a>. Pronóstico de mareas del <strong>Servicio de Hidrografía Naval</strong>.</p>';
+
+    var m = c.meteo || [];
+    if (m.length >= 2) {
+      h += grafico('Viento — últimas horas', [
+        { nombre:'Ráfaga', color:'#e9c46a', fina:true, datos: m.map(function(e){ return { x:e.t, y:e.raf }; }) },
+        { nombre:'Medio',  color:'#7fd8ee', datos: m.map(function(e){ return { x:e.t, y:e.kn }; }) }
+      ], 'kn');
+      h += grafico('Dirección del viento', [{ nombre:'Dirección', color:'#a78bfa',
+             datos: m.map(function(e){ return { x:e.t, y:e.dir }; }) }], 'grados');
+    }
+
+    var mar = c.mareas || [];
+    if (mar.length) {
+      h += '<div class="hoy__g"><h4>Mareas de hoy — pronóstico del SHN</h4><ul class="hoy__mareas">' +
+           mar.map(function(x){
+             return '<li><span class="m-tipo">' + (x.alta ? '▲ Pleamar' : '▼ Bajamar') + '</span>' +
+                    '<span class="m-hora">' + hhmm(new Date(x.t)) + '</span>' +
+                    '<span class="m-alt">' + x.m.toFixed(2) + ' m</span></li>';
+           }).join('') + '</ul></div>';
+    }
+    if (m.length < 2 && !mar.length) {
+      h += '<p class="hoy__g-vacio">La estación no devolvió datos en este momento.</p>';
+    }
+    return h;
+  }
+
+  if (btnNorden) btnNorden.addEventListener('click', function(){ pintar('norden'); });
+  if (btnCnsi) btnCnsi.addEventListener('click', function(){ pintar('cnsi'); });
+
+  // ── CNSI: ThingSpeak manda CORS, así que se lee directo, sin intermediario.
+  (function(){
+    var CANAL_METEO = 1506798;   // Meteorología CNSI Yachting
+    var CANAL_SHN   = 3447831;   // Datos Hidrografía: pronóstico de marea del SHN
+    var ts = function(canal, n){
+      return fetch('https://api.thingspeak.com/channels/' + canal + '/feeds.json?results=' + n)
+        .then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
+    };
+
+    Promise.all([ts(CANAL_METEO, 144), ts(CANAL_SHN, 24)]).then(function(res){
+      var datos = { meteo: [], mareas: [] };
+
+      if (res[0] && res[0].feeds) {
+        datos.meteo = res[0].feeds.map(function(f){
+          return { t: new Date(f.created_at).getTime(),
+                   kn: parseFloat(f.field3), raf: parseFloat(f.field2), dir: parseFloat(f.field4),
+                   temp: parseFloat(f.field5), hum: parseFloat(f.field6), pres: parseFloat(f.field7) };
+        }).filter(function(e){ return isFinite(e.t) && isFinite(e.kn) && isFinite(e.dir); });
+      }
+
+      if (res[1] && res[1].feeds) {
+        var hoyISO = new Date().toISOString().slice(0, 10);
+        datos.mareas = res[1].feeds.map(function(f){
+          return { t: parseInt(f.field2, 10) * 1000, m: parseFloat(f.field1), alta: f.field3 === '1' };
+        }).filter(function(x){ return isFinite(x.t) && isFinite(x.m); })
+          .filter(function(x){ return Math.abs(x.t - Date.now()) < 36 * 3600e3; })
+          .sort(function(a, b){ return a.t - b.t; })
+          .slice(0, 6);
+      }
+
+      var ult = datos.meteo[datos.meteo.length - 1];
+      if (!ult) return;   // sin lectura utilizable: la tarjeta no aparece
+
+      window.__EWF = window.__EWF || {};
+      window.__EWF.CNSI = datos;
+
+      document.getElementById('cnsiVal').textContent = ult.kn.toFixed(1) + ' kn del ' + rumboDe(ult.dir);
+      var det = ['ráfaga ' + ult.raf.toFixed(1)];
+      if (isFinite(ult.temp)) det.push(ult.temp.toFixed(1) + '°C');
+      if (isFinite(ult.pres)) det.push(ult.pres + ' hPa');
+      det.push(hhmm(new Date(ult.t)));
+      document.getElementById('cnsiDet').textContent = det.join(' · ');
+      if (btnCnsi) { btnCnsi.setAttribute('data-hay', '1'); hayEstacion(); }
+    }).catch(function(){ /* sin datos del CNSI: la tarjeta no aparece */ });
+  })();
+
+  // Norden va por su cuenta: si falla, su tarjeta no aparece y el resto sigue.
   fetch('/api/norden').then(function(r){
     return r.ok ? r.json() : null;
   }).then(function(n){
-    if(!n || !isFinite(n.kn)) return;
-    var caja = document.getElementById('hoyNorden');
-    if(!caja) return;
+    if(!n || !isFinite(n.kn) || !btnNorden) return;
     document.getElementById('nordenVal').textContent = n.kn + ' kn del ' + n.rumbo;
     var det = [n.grados + '°'];
-    if(isFinite(n.alturaCm)) det.push('marea ' + n.alturaCm + ' cm');
+    if(isFinite(n.alturaCm)) det.push('altura ' + n.alturaCm + ' cm');
     if(n.medidoEn) det.push((n.vencido ? 'último dato ' : '') + n.medidoEn.split(' ').pop());
-    document.getElementById('nordenDet').textContent = ' · ' + det.join(' · ');
-    caja.setAttribute('data-hay', '1');
+    document.getElementById('nordenDet').textContent = det.join(' · ');
+    btnNorden.setAttribute('data-hay', '1');
+    hayEstacion();
     window.__EWF = window.__EWF || {};
     window.__EWF.NORDEN = n;
-  }).catch(function(){ /* sin medición: la franja no se muestra */ });
+  }).catch(function(){ /* sin medición: la tarjeta no se muestra */ });
 
   // Open-Meteo acepta todas las coordenadas en un solo pedido.
   var url = 'https://api.open-meteo.com/v1/forecast'
