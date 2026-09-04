@@ -1184,27 +1184,47 @@ textarea{resize:vertical;min-height:90px}
 .bram-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
 /* ============ ¿SALGO HOY? ============ */
-.hoy{padding:52px 0 44px;border-bottom:1px solid var(--divider)}
+/* Banda oscura, como el hero: es lo primero después de la portada y tiene que
+   cortar con el resto de la página. El fondo es un SVG propio — viento y
+   tormenta dibujados a mano — y no una foto, para que no dependa de que un
+   servidor ajeno siga sirviendo la imagen dentro de dos años. */
+.hoy{position:relative;padding:56px 0 48px;background:var(--hero-grad);overflow:hidden;isolation:isolate}
+.hoy__fondo{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.hoy__fondo svg{width:100%;height:100%;display:block}
+.hoy .container{position:relative;z-index:1}
 .hoy__head{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
-.hoy__head h2{font-family:'Clash Display',sans-serif;font-size:clamp(26px,3.4vw,40px);line-height:1.05;margin:0}
-.hoy__resumen{font-size:14px;color:var(--text-muted);margin:6px 0 0}
-.hoy__resumen b{color:var(--text)}
-.hoy__estado{margin-left:auto;font-size:12px;color:var(--text-muted);text-align:right;line-height:1.5}
+.hoy__head h2{font-family:'Clash Display',sans-serif;font-size:clamp(28px,3.6vw,44px);line-height:1.03;margin:0;color:#f0f8ff}
+.hoy .eyebrow{color:#7fd8ee}
+.hoy__resumen{font-size:14.5px;color:#a9cfe2;margin:8px 0 0;max-width:56ch}
+.hoy__resumen b{color:#fff}
+.hoy__resumen a{color:#7fd8ee;font-weight:700}
+.hoy__estado{margin-left:auto;font-size:12px;color:#7fa9c1;text-align:right;line-height:1.5}
+/* Rachas de viento cruzando la banda */
+@keyframes hoyRacha{from{transform:translateX(-14%)}to{transform:translateX(14%)}}
+.hoy__racha{animation:hoyRacha linear infinite alternate}
+.hoy__racha--1{animation-duration:7s}
+.hoy__racha--2{animation-duration:11s;animation-direction:alternate-reverse}
+.hoy__racha--3{animation-duration:9s}
+@keyframes hoyLluvia{from{transform:translate(0,0);opacity:.55}to{transform:translate(-9px,26px);opacity:0}}
+.hoy__gota{animation:hoyLluvia 1.5s linear infinite}
+@media(prefers-reduced-motion:reduce){.hoy__racha,.hoy__gota{animation:none}.hoy__gota{opacity:.45}}
 .hoy__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:13px}
-.hoy__card{background:var(--surface);border:1px solid var(--border);border-left:3px solid #34d399;border-radius:13px;padding:15px 17px}
-.hoy__card--no{border-left-color:var(--border);opacity:.62}
-.hoy__card h3{font-size:15px;margin:0 0 3px;font-weight:700}
-.hoy__prov{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em}
-.hoy__dato{font-size:13.5px;margin:9px 0 0;line-height:1.55}
-.hoy__horas{font-size:12.5px;color:#34d399;font-weight:700;margin:7px 0 0}
-.hoy__motivo{font-size:12.5px;color:var(--text-muted);margin:7px 0 0}
-.hoy__regla{font-size:11.5px;color:var(--text-muted);margin:6px 0 0}
+.hoy__card{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.14);border-left:3px solid #34d399;border-radius:13px;padding:15px 17px;backdrop-filter:blur(3px)}
+.hoy__card--no{border-left-color:rgba(255,255,255,.2);opacity:.72}
+.hoy__card h3{font-size:15px;margin:0 0 3px;font-weight:700;color:#f0f8ff}
+.hoy__prov{font-size:11px;color:#7fa9c1;text-transform:uppercase;letter-spacing:.06em}
+.hoy__dato{font-size:13.5px;margin:9px 0 0;line-height:1.55;color:#dceaf3}
+.hoy__horas{font-size:12.5px;color:#4ade80;font-weight:700;margin:7px 0 0}
+.hoy__motivo{font-size:12.5px;color:#93b6c9;margin:7px 0 0}
+.hoy__regla{font-size:11.5px;color:#6d94ab;margin:6px 0 0}
 .hoy__mas{margin-top:16px}
-.hoy__mas summary{cursor:pointer;font-size:13px;color:var(--text-muted);padding:9px 0}
-.hoy__mas summary:hover{color:var(--text)}
+.hoy__mas summary{cursor:pointer;font-size:13px;color:#93b6c9;padding:9px 0}
+.hoy__mas summary:hover{color:#fff}
 .hoy__mas .hoy__grid{margin-top:12px}
-.hoy__nota{font-size:11.5px;color:var(--text-muted);margin:18px 0 0;line-height:1.6}
-.hoy__skel{height:96px;border-radius:13px;background:var(--surface-2);border:1px solid var(--border);animation:hoyLatir 1.3s ease-in-out infinite}
+.hoy__nota{font-size:11.5px;color:#7fa9c1;margin:20px 0 0;line-height:1.6;max-width:74ch}
+.hoy__nota a{color:#9ed5e8}
+.hoy__nota strong{color:#c5dfec}
+.hoy__skel{height:96px;border-radius:13px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);animation:hoyLatir 1.3s ease-in-out infinite}
 @keyframes hoyLatir{0%,100%{opacity:.45}50%{opacity:.8}}
 @media(prefers-reduced-motion:reduce){.hoy__skel{animation:none}}
 
@@ -1341,6 +1361,53 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- ============================================================ ¿SALGO HOY? ============================================================ -->
 <section class="section hoy" id="salgo-hoy" hidden>
+    <div class="hoy__fondo" aria-hidden="true">
+      <svg viewBox="0 0 1200 340" preserveAspectRatio="xMidYMid slice" role="presentation" focusable="false">
+        <defs>
+          <linearGradient id="hoyRacha" x1="0" x2="1">
+            <stop offset="0" stop-color="#7fd8ee" stop-opacity="0"/>
+            <stop offset=".45" stop-color="#7fd8ee" stop-opacity=".5"/>
+            <stop offset="1" stop-color="#7fd8ee" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="hoyNube" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#9fc4d8" stop-opacity=".5"/>
+            <stop offset="1" stop-color="#4d7f99" stop-opacity=".22"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Rachas de viento cruzando la banda -->
+        <g fill="none" stroke="url(#hoyRacha)" stroke-linecap="round">
+          <g class="hoy__racha hoy__racha--1" stroke-width="2.4">
+            <path d="M-90 78 C 200 52, 430 104, 720 74 S 1160 44, 1310 66"/>
+            <path d="M-90 262 C 240 236, 470 288, 760 256 S 1170 228, 1310 248"/>
+          </g>
+          <g class="hoy__racha hoy__racha--2" stroke-width="1.5" opacity=".7">
+            <path d="M-90 128 C 260 100, 500 152, 800 120 S 1180 92, 1310 112"/>
+            <path d="M-90 196 C 210 172, 460 220, 740 190 S 1150 164, 1310 182"/>
+            <path d="M-90 312 C 280 292, 520 330, 820 302 S 1190 280, 1310 296"/>
+          </g>
+          <g class="hoy__racha hoy__racha--3" stroke-width="1" opacity=".45">
+            <path d="M-90 44 C 230 22, 480 66, 780 38 S 1170 14, 1310 32"/>
+            <path d="M-90 168 C 250 146, 500 190, 790 162 S 1180 138, 1310 154"/>
+          </g>
+        </g>
+
+        <!-- Nube de tormenta con lluvia -->
+        <g transform="translate(905 44)">
+          <path d="M40 92 A34 34 0 0 1 46 25 A46 46 0 0 1 134 30 A30 30 0 0 1 140 92 Z"
+                fill="url(#hoyNube)" stroke="#a8cddf" stroke-opacity=".3" stroke-width="1.5"/>
+          <g stroke="#7fd8ee" stroke-width="2.6" stroke-linecap="round" opacity=".55">
+            <line class="hoy__gota" x1="58"  y1="102" x2="52"  y2="118" style="animation-delay:0s"/>
+            <line class="hoy__gota" x1="84"  y1="102" x2="78"  y2="118" style="animation-delay:.42s"/>
+            <line class="hoy__gota" x1="110" y1="102" x2="104" y2="118" style="animation-delay:.18s"/>
+            <line class="hoy__gota" x1="136" y1="102" x2="130" y2="118" style="animation-delay:.62s"/>
+          </g>
+          <!-- Rayo -->
+          <path d="M97 100 L83 128 L95 128 L86 156 L112 120 L99 120 Z"
+                fill="#e9c46a" opacity=".8"/>
+        </g>
+      </svg>
+    </div>
   <div class="container">
     <div class="hoy__head">
       <div>
