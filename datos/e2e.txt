@@ -1,0 +1,7 @@
+=== 1. la pagina 3D en /costa-san-isidro ===
+{"cargandoOculto":true,"cargandoTxt":"Trayendo la imagen satelital de Esri…","webgl":true,"nivel":"1.09","viento":"5.1 kn del O · ráf 7.5","sub":"120 extremos del SHN · viento del CNSI","presets":5,"fuentes":6,"coloresDistintos":1}
+tiles de Esri: 25 ok, 0 fallidas
+=== 2. el link en el sitio y Bramador ===
+{"seccionVisible":true,"linkVisible":true,"linkHref":"/costa-san-isidro","bramadorVisible":true,"cnsi":"4.1 kn del OSO"}
+ERRORES:
+CONS: Refused to frame 'https://app.netlify.com/' because it violates the following Content Security Policy directive: "frame-src 'self' https://w
