@@ -4,25 +4,16 @@ jobs:
   sonda:
     runs-on: ubuntu-latest
     steps:
-      - name: GeoServer del SHN
+      - name: Capas del GeoServer del SHN
         run: |
           set +e
-          echo 'aW1wb3J0IHJlLCBzeXMKZiwgZXRpcXVldGEgPSBzeXMuYXJndlsxXSwgc3lzLmFyZ3ZbMl0KeCA9IG9wZW4oZiwgZW5jb2Rpbmc9J3V0Zi04JywgZXJyb3JzPSdyZXBsYWNlJykucmVhZCgpCmNhcGFzID0gcmUuZmluZGFsbChyJzxOYW1lPihbXjxdKyk8L05hbWU+XHMqPFRpdGxlPihbXjxdKik8L1RpdGxlPicsIHgpCnByaW50KCIlczogJWQgY2FwYXMiICUgKGV0aXF1ZXRhLCBsZW4oY2FwYXMpKSkKZm9yIG4sIHQgaW4gY2FwYXM6CiAgICBwcmludCgiICAlLTUwcyB8ICVzIiAlIChuWzo1MF0sIHRbOjc1XSkpCmlmICd3ZnMnIGluIGV0aXF1ZXRhLmxvd2VyKCk6CiAgICBmbXRzID0gc29ydGVkKHNldChyZS5maW5kYWxsKHInPG93czpWYWx1ZT4oW148XSooPzpqc29ufEpTT058c2hhcGV8Y3N2fGdtbClbXjxdKik8L293czpWYWx1ZT4nLCB4KSkpCiAgICBwcmludCgiLS0tIGZvcm1hdG9zIGRlIHNhbGlkYSBXRlMgLS0tIikKICAgIGZvciB2IGluIGZtdHNbOjIwXToKICAgICAgICBwcmludCgiICAgIiwgdikK' | base64 -d > /tmp/capas.py
-          echo "############ 1. CORS del GeoServer ############"
-          curl -sS -D - -o /dev/null --max-time 30 -H "Origin: https://escueladewingfoil.com" "https://geoportal.shn.gob.ar/geoserver/ows?service=WMS&version=1.3.0&request=GetCapabilities" | grep -iE 'HTTP/|access-control|content-type'
-          echo "############ 2. Capas WMS ############"
+          echo 'aW1wb3J0IHJlLCBzeXMKeCA9IG9wZW4oc3lzLmFyZ3ZbMV0sIGVuY29kaW5nPSd1dGYtOCcsIGVycm9ycz0ncmVwbGFjZScpLnJlYWQoKQpldCA9IHN5cy5hcmd2WzJdCmNhcGFzID0gcmUuZmluZGFsbChyJzxOYW1lPihbXjxdKyk8L05hbWU+XHMqPFRpdGxlPihbXjxdKik8L1RpdGxlPicsIHgpCnByaW50KCIlczogJWQgY2FwYXMiICUgKGV0LCBsZW4oY2FwYXMpKSkKY2xhdmUgPSByZS5jb21waWxlKHInYmF0aW18c29uZGF8cHJvZnVuZHxpc29iYXR8Y2FydGF8bmF1dHxuw6F1dHxkZXB0aHxiYXRoeXxyaW8uP2RlLj9sYS4/cGxhdGF8cGxhdGEnLCByZS5JKQpwcmludCgiLS0tIGxhcyBxdWUgc3VlbmFuIGEgcHJvZnVuZGlkYWQgLyBjYXJ0YXMgLS0tIikKZm9yIG4sIHQgaW4gY2FwYXM6CiAgICBpZiBjbGF2ZS5zZWFyY2gobikgb3IgY2xhdmUuc2VhcmNoKHQpOgogICAgICAgIHByaW50KCIgICogJS00NXMgfCAlcyIgJSAobls6NDVdLCB0Wzo3MF0pKQpwcmludCgiLS0tIHRvZGFzIC0tLSIpCmZvciBuLCB0IGluIGNhcGFzOgogICAgcHJpbnQoIiAgICAlLTQ1cyB8ICVzIiAlIChuWzo0NV0sIHRbOjcwXSkpCg==' | base64 -d > /tmp/capas.py
+          echo "=== CORS (esto decide si se puede leer desde el navegador) ==="
+          curl -sS -D - -o /dev/null --max-time 30 -H "Origin: https://escueladewingfoil.com" "https://geoportal.shn.gob.ar/geoserver/ows?service=WMS&version=1.3.0&request=GetCapabilities" | grep -iE 'HTTP/|access-control'
+          echo "=== WMS ==="
           curl -sS --max-time 40 "https://geoportal.shn.gob.ar/geoserver/ows?service=WMS&version=1.3.0&request=GetCapabilities" -o /tmp/wms.xml
           python3 /tmp/capas.py /tmp/wms.xml WMS
-          echo "############ 3. Feature types WFS ############"
+          echo "=== WFS ==="
           curl -sS --max-time 40 "https://geoportal.shn.gob.ar/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities" -o /tmp/wfs.xml
           python3 /tmp/capas.py /tmp/wfs.xml WFS
-          echo "############ 4. SHN Datos Abiertos ############"
-          curl -sSL --max-time 40 "https://www.hidro.gov.ar/DA/DatosAbiertos.asp" -o /tmp/da.html -w "http=%{http_code} bytes=%{size_download}\n"
-          grep -oiE 'href="[^"]{3,120}"' /tmp/da.html | sort -u | head -40
-          echo "--- texto visible ---"
-          sed 's/<[^>]*>/ /g' /tmp/da.html | tr -s ' \n' ' \n' | grep -viE '^[[:space:]]*$' | head -60
-          echo "############ 5. SHN download.asp ############"
-          curl -sSL --max-time 40 "https://www.hidro.gov.ar/download/download.asp" -o /tmp/dl.html -w "http=%{http_code} bytes=%{size_download}\n"
-          sed 's/<[^>]*>/ /g' /tmp/dl.html | tr -s ' \n' ' \n' | grep -viE '^[[:space:]]*$' | head -50
-          grep -oiE 'href="[^"]{3,120}"' /tmp/dl.html | sort -u | head -30
-          echo "FIN SONDA 4"
+          echo "FIN"
