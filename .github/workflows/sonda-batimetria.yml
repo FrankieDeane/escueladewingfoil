@@ -4,58 +4,48 @@ jobs:
   sonda:
     runs-on: ubuntu-latest
     steps:
-      - name: SHN datos abiertos y geoportal
+      - name: GeoServer del SHN
         run: |
           set +e
-          probe () {
-            echo "=========================================="
-            echo "URL: $1"
-            curl -sSL --max-time 40 -o /tmp/o.bin -D /tmp/h.txt -w "http=%{http_code} bytes=%{size_download} type=%{content_type} final=%{url_effective}\n" "$1"
-            grep -iE 'access-control-allow-origin|content-type' /tmp/h.txt | head -3
-            head -c 900 /tmp/o.bin | tr -d '\000' | sed 's/[[:cntrl:]]/ /g'
-            echo ""
-          }
+          echo "############ 1. CORS del GeoServer (decide si se puede usar desde el navegador) ############"
+          curl -sS -D - -o /dev/null --max-time 30 -H "Origin: https://escueladewingfoil.com" \
+            "https://geoportal.shn.gob.ar/geoserver/ows?service=WMS&version=1.3.0&request=GetCapabilities" | grep -iE 'HTTP/|access-control|content-type'
 
-          echo "############ 1. SHN Datos Abiertos ############"
-          probe "https://www.hidro.gov.ar/DA/DatosAbiertos.asp"
-          echo "--- que ofrece para descargar ---"
-          grep -oiE 'href="[^"]{3,120}"' /tmp/o.bin | sort -u | head -40
-          grep -oiE '[A-Za-z0-9_./%-]+\.(zip|csv|txt|xyz|json|geojson|shp|kmz|kml|tif|xlsx?)' /tmp/o.bin | sort -u | head -30
+          echo "############ 2. Que capas publica (WMS) ############"
+          curl -sS --max-time 40 "https://geoportal.shn.gob.ar/geoserver/ows?service=WMS&version=1.3.0&request=GetCapabilities" -o /tmp/wms.xml
+          echo "bytes: $(wc -c < /tmp/wms.xml)"
+          python3 - <<'PYEOF'
+import re
+x = open('/tmp/wms.xml', encoding='utf-8', errors='replace').read()
+capas = re.findall(r'<Name>([^<]+)</Name>\s*<Title>([^<]*)</Title>', x)
+print("total capas:", len(capas))
+for n, t in capas:
+    print("  %-45s | %s" % (n[:45], t[:70]))
+PYEOF
 
-          echo "############ 2. SHN download ############"
-          probe "https://www.hidro.gov.ar/download/download.asp"
-          grep -oiE 'href="[^"]{3,120}"' /tmp/o.bin | sort -u | head -40
+          echo "############ 3. Que publica por WFS (esto SI se puede bajar como datos) ############"
+          curl -sS --max-time 40 "https://geoportal.shn.gob.ar/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities" -o /tmp/wfs.xml
+          python3 - <<'PYEOF'
+import re
+x = open('/tmp/wfs.xml', encoding='utf-8', errors='replace').read()
+tipos = re.findall(r'<Name>([^<]+)</Name>\s*<Title>([^<]*)</Title>', x)
+print("total feature types:", len(tipos))
+for n, t in tipos:
+    print("  %-45s | %s" % (n[:45], t[:70]))
+print("--- formatos de salida ---")
+print(sorted(set(re.findall(r'<ows:Value>(application/[^<]+|[a-zA-Z0-9/+.-]*json[^<]*)</ows:Value>', x)))[:15])
+PYEOF
 
-          echo "############ 3. Geoportal SHN ############"
-          probe "https://geoportal.shn.gob.ar/"
-          probe "https://geoportal.shn.gob.ar/#/geoportal"
-          echo "--- scripts que carga (ahi suele estar la URL del servicio de mapas) ---"
-          grep -oiE '(src|href)="[^"]{3,120}"' /tmp/o.bin | sort -u | head -40
+          echo "############ 4. SHN Datos Abiertos ############"
+          curl -sSL --max-time 40 "https://www.hidro.gov.ar/DA/DatosAbiertos.asp" -o /tmp/da.html -w "http=%{http_code} bytes=%{size_download}\n"
+          grep -oiE 'href="[^"]{3,120}"' /tmp/da.html | sort -u | head -40
+          echo "--- archivos ---"
+          grep -oiE '[A-Za-z0-9_./%-]+\.(zip|csv|txt|xyz|json|geojson|shp|kmz|kml|tif|xlsx?)' /tmp/da.html | sort -u | head -30
+          echo "--- texto visible ---"
+          sed 's/<[^>]*>/ /g' /tmp/da.html | tr -s ' \n' ' \n' | grep -viE '^\s*$' | head -60
 
-          echo "############ 4. Servicios de mapas tipicos detras de un geoportal ############"
-          for u in \
-            "https://geoportal.shn.gob.ar/geoserver/web/" \
-            "https://geoportal.shn.gob.ar/geoserver/ows?service=WMS&version=1.3.0&request=GetCapabilities" \
-            "https://geoportal.shn.gob.ar/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities" \
-            "https://geoportal.shn.gob.ar/arcgis/rest/services?f=json" \
-            "https://geoportal.shn.gob.ar/api/" \
-            "https://servicios.shn.gob.ar/" \
-            ; do
-            echo "  $(curl -sS -o /tmp/q.bin -w '%{http_code} %{size_download} %{content_type}' --max-time 25 "$u")  <- $u"
-            head -c 200 /tmp/q.bin | tr -d '\000' | sed 's/[[:cntrl:]]/ /g'; echo ""
-          done
-
-          echo "############ 5. GEBCO GetFeatureInfo: sirve numeros por punto? ############"
-          for p in "-58.500 -34.470" "-58.330 -34.370" "-57.700 -34.700" "-56.500 -35.500"; do
-            set -- $p
-            curl -sS --max-time 30 "https://wms.gebco.net/mapserv?request=GetFeatureInfo&service=WMS&version=1.3.0&layers=GEBCO_LATEST&query_layers=GEBCO_LATEST&info_format=application/json&crs=EPSG:4326&bbox=$(python3 -c "print(f'{$2-0.05},{$1-0.05},{$2+0.05},{$1+0.05}')")&width=101&height=101&i=50&j=50" | head -c 350
-            echo "   <- lon=$1 lat=$2"
-          done
-          echo "--- capa TID (dice si el dato es medido o estimado) ---"
-          curl -sS --max-time 30 "https://wms.gebco.net/mapserv?request=GetFeatureInfo&service=WMS&version=1.3.0&layers=GEBCO_LATEST_TID&query_layers=GEBCO_LATEST_TID&info_format=application/json&crs=EPSG:4326&bbox=-34.42,-58.38,-34.32,-58.28&width=101&height=101&i=50&j=50" | head -c 350
-          echo ""
-
-          echo "############ 6. Cartas nauticas del SHN: hay alguna del Rio de la Plata online? ############"
-          probe "https://www.hidro.gov.ar/ventas/ventas.asp"
-          probe "https://www.hidro.gov.ar/ServiciosNauticos.asp"
-          echo "FIN SONDA 3"
+          echo "############ 5. SHN download.asp ############"
+          curl -sSL --max-time 40 "https://www.hidro.gov.ar/download/download.asp" -o /tmp/dl.html -w "http=%{http_code} bytes=%{size_download}\n"
+          sed 's/<[^>]*>/ /g' /tmp/dl.html | tr -s ' \n' ' \n' | grep -viE '^\s*$' | head -50
+          grep -oiE 'href="[^"]{3,120}"' /tmp/dl.html | sort -u | head -30
+          echo "FIN SONDA 4"
