@@ -2,7 +2,7 @@
  "fuente": "GEBCO 2026 Grid via Source Cooperative (giswqs/gebco-bathymetry)",
  "archivo_profundidad": "https://data.source.coop/giswqs/gebco-bathymetry/gebco_2026/gebco_2026_n0.0_s-90.0_w-90.0_e0.0.tif",
  "archivo_procedencia": "https://data.source.coop/giswqs/gebco-bathymetry/gebco_2026_tid/gebco_2026_tid_n0.0_s-90.0_w-90.0_e0.0.tif",
- "fecha_acceso": "2026-09-04T17:37:29+00:00",
+ "fecha_acceso": "2026-09-04T17:46:15+00:00",
  "ventanas": {
   "san-isidro": {
    "bbox": [
