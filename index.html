@@ -5024,8 +5024,12 @@ document.addEventListener('DOMContentLoaded', function() {
       var hoy = (window.__EWF || {}).HOY;
       if(hoy && hoy.si){
         if(hoy.si.length){
+          // El viento que nombra tiene que ser el de la hora que sirve, igual
+          // que en las tarjetas: si no, dice "13 kn" de un spot que pide 15+.
           var top = hoy.si.slice(0, 4).map(function(r){
-            return '• <strong>'+esc(r.spot.n)+'</strong> — '+r.ahora.kn+' kn, '+r.horas.length+'h ('+r.horas[0]+' en adelante)';
+            return '• <strong>'+esc(r.spot.n)+'</strong> — '+r.ventana.kn+' kn '+
+                   (r.ahoraEsBuena ? 'ahora' : 'a las '+r.horas[0])+
+                   ', '+r.horas.length+'h navegable'+(r.horas.length>1?'s':'');
           });
           return {m:'epico', h:'¡Sí! 🤩 Ahora mismo hay ventana en <strong>'+hoy.si.length+'</strong> spot'+(hoy.si.length>1?'s':'')+':\n\n'+top.join('\n')+
                     (hoy.si.length > 4 ? '\n\ny '+(hoy.si.length-4)+' más.' : '')+
