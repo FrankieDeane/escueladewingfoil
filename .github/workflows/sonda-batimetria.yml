@@ -7,98 +7,26 @@ jobs:
       - name: Cuanta resolucion hay realmente
         run: |
           set +e
-          pip install pillow -q 2>/dev/null
+          pip install pillow -q
+          echo 'aW1wb3J0IG1hdGgsIHVybGxpYi5yZXF1ZXN0LCBpbywganNvbgpmcm9tIFBJTCBpbXBvcnQgSW1hZ2UKCmRlZiB0aWxlKGxhdCwgbG9uLCB6KToKICAgIG4gPSAyKip6CiAgICB4ID0gaW50KChsb24rMTgwKS8zNjAqbikKICAgIHkgPSBpbnQoKDEgLSBtYXRoLmxvZyhtYXRoLnRhbihtYXRoLnJhZGlhbnMobGF0KSkgKyAxL21hdGguY29zKG1hdGgucmFkaWFucyhsYXQpKSkvbWF0aC5waSkvMipuKQogICAgcmV0dXJuIHgsIHkKCmRlZiBweChsYXQsIGxvbiwgeik6CiAgICBuID0gMioqegogICAgZnggPSAobG9uKzE4MCkvMzYwKm4KICAgIGZ5ID0gKDEgLSBtYXRoLmxvZyhtYXRoLnRhbihtYXRoLnJhZGlhbnMobGF0KSkgKyAxL21hdGguY29zKG1hdGgucmFkaWFucyhsYXQpKSkvbWF0aC5waSkvMipuCiAgICByZXR1cm4gaW50KChmeCAlIDEpKjI1NiksIGludCgoZnkgJSAxKSoyNTYpCgpwdW50b3MgPSBbCiAgICAoIlNhbiBJc2lkcm8gY29zdGEiLCAtMzQuNDcwLCAtNTguNTAwKSwKICAgICgiMSBrbSBhZnVlcmEiLCAgICAgIC0zNC40NjIsIC01OC40ODYpLAogICAgKCI1IGttIGFmdWVyYSIsICAgICAgLTM0LjQzNiwgLTU4LjQ0MyksCiAgICAoIjE1IGttIGFmdWVyYSIsICAgICAtMzQuMzcwLCAtNTguMzMwKSwKICAgICgiQ2FuYWwgTWl0cmUiLCAgICAgIC0zNC41MjAsIC01OC4yMDApLAogICAgKCJtZWRpbyBkZWwgcmlvIiwgICAgLTM0LjcwMCwgLTU3LjcwMCksCiAgICAoImJvY2EgZGVsIHJpbyIsICAgICAtMzUuNTAwLCAtNTYuNTAwKSwKXQoKcHJpbnQoIiMjIyMjIyMjIyMjIyBBLiBMb3MgdGVycmFpbiB0aWxlcyAoQVdTIHRlcnJhcml1bSk6IGhheSBmb25kbyBkZSByaW8gbyBhZ3VhIHBsYW5hPyAjIyMjIyMjIyMjIyMiKQpjYWNoZSA9IHt9CmRlZiBpbWcoeiwgeCwgeSk6CiAgICBrID0gKHosIHgsIHkpCiAgICBpZiBrIG5vdCBpbiBjYWNoZToKICAgICAgICB1ID0gImh0dHBzOi8vczMuYW1hem9uYXdzLmNvbS9lbGV2YXRpb24tdGlsZXMtcHJvZC90ZXJyYXJpdW0vJWQvJWQvJWQucG5nIiAlICh6LCB4LCB5KQogICAgICAgIGNhY2hlW2tdID0gSW1hZ2Uub3Blbihpby5CeXRlc0lPKHVybGxpYi5yZXF1ZXN0LnVybG9wZW4odSwgdGltZW91dD00NSkucmVhZCgpKSkuY29udmVydCgiUkdCIikKICAgIHJldHVybiBjYWNoZVtrXQoKZm9yIHogaW4gKDgsIDEwLCAxMik6CiAgICBwcmludCgiLS0tIHpvb20gJWQgLS0tIiAlIHopCiAgICBmb3Igbm9tLCBsYXQsIGxvbiBpbiBwdW50b3M6CiAgICAgICAgdHJ5OgogICAgICAgICAgICB4LCB5ID0gdGlsZShsYXQsIGxvbiwgeikKICAgICAgICAgICAgaW0gPSBpbWcoeiwgeCwgeSkKICAgICAgICAgICAgYSwgYiA9IHB4KGxhdCwgbG9uLCB6KQogICAgICAgICAgICByLCBnLCBibCA9IGltLmdldHBpeGVsKChhLCBiKSkKICAgICAgICAgICAgaCA9IChyKjI1NiArIGcgKyBibC8yNTYpIC0gMzI3NjgKICAgICAgICAgICAgcHJpbnQoIiAgJS0xOHMgLT4gJTguMWYgbSIgJSAobm9tLCBoKSkKICAgICAgICBleGNlcHQgRXhjZXB0aW9uIGFzIGU6CiAgICAgICAgICAgIHByaW50KCIgICUtMThzIC0+IEVSUk9SICVzIiAlIChub20sIGUpKQogICAgdHJ5OgogICAgICAgIHgsIHkgPSB0aWxlKC0zNC43MCwgLTU3LjcwLCB6KQogICAgICAgIGltID0gaW1nKHosIHgsIHkpCiAgICAgICAgdmFscyA9IFtdCiAgICAgICAgZm9yIGkgaW4gcmFuZ2UoMCwgMjU2LCA0KToKICAgICAgICAgICAgZm9yIGogaW4gcmFuZ2UoMCwgMjU2LCA0KToKICAgICAgICAgICAgICAgIHIsIGcsIGJsID0gaW0uZ2V0cGl4ZWwoKGksIGopKQogICAgICAgICAgICAgICAgdmFscy5hcHBlbmQocm91bmQoKHIqMjU2K2crYmwvMjU2KSAtIDMyNzY4LCAyKSkKICAgICAgICBwcmludCgiICB0aWxlIGRlbCBtZWRpbyBkZWwgcmlvOiAlZCB2YWxvcmVzIGRpc3RpbnRvcyBkZSAlZCBtdWVzdHJhcywgbWluPSVzIG1heD0lcyIKICAgICAgICAgICAgICAlIChsZW4oc2V0KHZhbHMpKSwgbGVuKHZhbHMpLCBtaW4odmFscyksIG1heCh2YWxzKSkpCiAgICBleGNlcHQgRXhjZXB0aW9uIGFzIGU6CiAgICAgICAgcHJpbnQoIiAgdGlsZSBtZWRpbzoiLCBlKQoKcHJpbnQoIiMjIyMjIyMjIyMjIyBCLiBOT0FBIERFTSBnbG9iYWwgbW9zYWljICh0aWVuZSBDT1JTKTogdHJhbnNlY3RhICMjIyMjIyMjIyMjIyIpCmZvciBub20sIGxhdCwgbG9uIGluIHB1bnRvczoKICAgIHRyeToKICAgICAgICB1ID0gKCJodHRwczovL2dpcy5uZ2RjLm5vYWEuZ292L2FyY2dpcy9yZXN0L3NlcnZpY2VzL0RFTV9tb3NhaWNzL0RFTV9nbG9iYWxfbW9zYWljL0ltYWdlU2VydmVyL2lkZW50aWZ5IgogICAgICAgICAgICAgIj9nZW9tZXRyeT0lJTdCJSUyMnglJTIyJSUzQSVzJSUyQyUlMjJ5JSUyMiUlM0ElcyUlMkMlJTIyc3BhdGlhbFJlZmVyZW5jZSUlMjIlJTNBJSU3QiUlMjJ3a2lkJSUyMiUlM0E0MzI2JSU3RCUlN0QiCiAgICAgICAgICAgICAiJmdlb21ldHJ5VHlwZT1lc3JpR2VvbWV0cnlQb2ludCZyZXR1cm5HZW9tZXRyeT1mYWxzZSZyZXR1cm5DYXRhbG9nSXRlbXM9ZmFsc2UmZj1qc29uIiAlIChsb24sIGxhdCkpCiAgICAgICAgZCA9IGpzb24ubG9hZHModXJsbGliLnJlcXVlc3QudXJsb3Blbih1LCB0aW1lb3V0PTM1KS5yZWFkKCkuZGVjb2RlKCkpCiAgICAgICAgcHJpbnQoIiAgJS0xOHMgLT4gdmFsdWU9JXMgICh0b2RvczogJXMpIiAlIChub20sIGQuZ2V0KCJ2YWx1ZSIpLCBkLmdldCgicHJvcGVydGllcyIsIHt9KS5nZXQoIlZhbHVlcyIpKSkKICAgIGV4Y2VwdCBFeGNlcHRpb24gYXMgZToKICAgICAgICBwcmludCgiICAlLTE4cyAtPiBFUlJPUiAlcyIgJSAobm9tLCBlKSkKCnByaW50KCIjIyMjIyMjIyMjIyMgQjIuIE5PQUE6IHF1ZSB0YW4gZmlubz8gcGlkbyBwaXhlbGVzIGNhZGEgfjIwMCBtIGZyZW50ZSBhIFNhbiBJc2lkcm8gIyMjIyMjIyMjIyMjIikKdHJ5OgogICAgdSA9ICgiaHR0cHM6Ly9naXMubmdkYy5ub2FhLmdvdi9hcmNnaXMvcmVzdC9zZXJ2aWNlcy9ERU1fbW9zYWljcy9ERU1fZ2xvYmFsX21vc2FpYy9JbWFnZVNlcnZlci9leHBvcnRJbWFnZSIKICAgICAgICAgIj9iYm94PS01OC42MCwtMzQuNTUsLTU4LjI1LC0zNC4zNSZiYm94U1I9NDMyNiZzaXplPTIwMCwxMjAmaW1hZ2VTUj00MzI2JmZvcm1hdD10aWZmJnBpeGVsVHlwZT1GMzImZj1qc29uIikKICAgIGQgPSBqc29uLmxvYWRzKHVybGxpYi5yZXF1ZXN0LnVybG9wZW4odSwgdGltZW91dD00NSkucmVhZCgpLmRlY29kZSgpKQogICAgcHJpbnQoIiAgZXhwb3J0SW1hZ2U6IiwganNvbi5kdW1wcyhkKVs6NDAwXSkKZXhjZXB0IEV4Y2VwdGlvbiBhcyBlOgogICAgcHJpbnQoIiAgZXhwb3J0SW1hZ2UgRVJST1IiLCBlKQo=' | base64 -d > /tmp/sonda.py
+          python3 /tmp/sonda.py
 
-          echo "############ A. Los terrain tiles, tienen fondo de rio o agua plana? ############"
-          # Terrarium: altura = (R*256 + G + B/256) - 32768
-          for z in 8 10 12; do
-            python3 - "$z" <<'PYEOF'
-import sys, math, urllib.request
-from PIL import Image
-import io
-z = int(sys.argv[1])
-def tile(lat, lon, z):
-    n = 2**z
-    x = int((lon+180)/360*n)
-    y = int((1 - math.log(math.tan(math.radians(lat)) + 1/math.cos(math.radians(lat)))/math.pi)/2*n)
-    return x, y
-def px(lat, lon, z):
-    n = 2**z
-    fx = (lon+180)/360*n
-    fy = (1 - math.log(math.tan(math.radians(lat)) + 1/math.cos(math.radians(lat)))/math.pi)/2*n
-    return int((fx % 1)*256), int((fy % 1)*256)
-# transecta: de la costa de San Isidro hacia el medio del rio
-puntos = [
-    ("San Isidro costa", -34.470, -58.500),
-    ("1 km afuera",      -34.462, -58.486),
-    ("5 km afuera",      -34.436, -58.443),
-    ("15 km afuera",     -34.370, -58.330),
-    ("medio del rio",    -34.700, -57.700),
-    ("Canal Mitre",      -34.520, -58.200),
-    ("boca del rio",     -35.500, -56.500),
-]
-print(f"--- zoom {z} ---")
-cache = {}
-for nom, lat, lon in puntos:
-    x, y = tile(lat, lon, z)
-    key = (z, x, y)
-    if key not in cache:
-        try:
-            u = f"https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"
-            cache[key] = Image.open(io.BytesIO(urllib.request.urlopen(u, timeout=40).read())).convert("RGB")
-        except Exception as e:
-            print(f"  {nom}: ERROR {e}"); continue
-    im = cache[key]
-    a, b = px(lat, lon, z)
-    r, g, bl = im.getpixel((a, b))
-    h = (r*256 + g + bl/256) - 32768
-    print(f"  {nom:18s} lat={lat} lon={lon} -> {h:8.1f} m")
-# cuanta variedad hay adentro de un tile de agua? si es todo igual, es agua plana
-x, y = tile(-34.70, -57.70, z)
-try:
-    u = f"https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"
-    im = Image.open(io.BytesIO(urllib.request.urlopen(u, timeout=40).read())).convert("RGB")
-    vals = set()
-    for i in range(0, 256, 8):
-        for j in range(0, 256, 8):
-            r, g, bl = im.getpixel((i, j))
-            vals.add(round((r*256+g+bl/256)-32768, 1))
-    print(f"  tile del medio del rio: {len(vals)} valores distintos, min={min(vals)} max={max(vals)}")
-except Exception as e:
-    print("  tile medio:", e)
-PYEOF
-          done
-
-          echo "############ B. NOAA: transecta de profundidad con CORS ############"
-          for p in "-58.500,-34.470" "-58.486,-34.462" "-58.443,-34.436" "-58.330,-34.370" "-58.200,-34.520" "-57.700,-34.700" "-56.500,-35.500"; do
-            lon=${p%,*}; lat=${p#*,}
-            v=$(curl -sS --max-time 30 "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/DEM_global_mosaic/ImageServer/identify?geometry=%7B%22x%22%3A${lon}%2C%22y%22%3A${lat}%2C%22spatialReference%22%3A%7B%22wkid%22%3A4326%7D%7D&geometryType=esriGeometryPoint&returnGeometry=false&returnCatalogItems=false&f=json")
-            echo "  lon=$lon lat=$lat -> $(echo "$v" | head -c 200)"
-          done
-
-          echo "############ C. GEBCO WMS: que capas ofrece y sirve numeros? ############"
+          echo "############ C. GEBCO WMS: capas y si sirve numeros ############"
           curl -sS --max-time 40 "https://wms.gebco.net/mapserv?request=getcapabilities&service=wms&version=1.3.0" -o /tmp/cap.xml
           echo "--- capas ---"
           grep -oE '<Name>[^<]+</Name>' /tmp/cap.xml | sort -u | head -20
           echo "--- formatos de GetFeatureInfo ---"
-          grep -A6 'GetFeatureInfo' /tmp/cap.xml | grep -oE '<Format>[^<]+</Format>' | sort -u | head -10
-          echo "--- pido una imagen del Rio de la Plata ---"
-          curl -sS --max-time 60 -o /tmp/g.png -w "http=%{http_code} bytes=%{size_download} type=%{content_type}\n" \
-            "https://wms.gebco.net/mapserv?request=GetMap&service=WMS&version=1.3.0&layers=GEBCO_LATEST&format=image/png&crs=EPSG:4326&bbox=-36.6,-59,-34,-55&width=800&height=520"
+          grep -oE '<Format>[^<]+</Format>' /tmp/cap.xml | sort -u | head -12
+          echo "--- imagen del Rio de la Plata ---"
+          curl -sS --max-time 60 -o /tmp/g.png -w "http=%{http_code} bytes=%{size_download} type=%{content_type}\n" "https://wms.gebco.net/mapserv?request=GetMap&service=WMS&version=1.3.0&layers=GEBCO_LATEST&format=image/png&crs=EPSG:4326&bbox=-36.6,-59,-34,-55&width=800&height=520"
           file /tmp/g.png
 
-          echo "############ D. SHN: donde estan las cartas y si hay datos ############"
+          echo "############ D. SHN: links y secciones ############"
           curl -sSL --max-time 40 "https://www.hidro.gov.ar/" -o /tmp/shn.html
-          echo "--- links del SHN ---"
-          grep -oiE 'href="[^"]{3,90}"' /tmp/shn.html | sort -u | head -50
-          for sub in "cartas/cartasnauticas.asp" "oceanografia/mareas/form2.asp" "Nautica/Cartas.asp" "productos.asp"; do
-            echo "  -> $sub : $(curl -sS -o /dev/null -w '%{http_code} %{size_download}' --max-time 25 "https://www.hidro.gov.ar/$sub")"
-          done
+          grep -oiE 'href="[^"]{3,90}"' /tmp/shn.html | sort -u | head -60
 
-          echo "############ E. Cartas nauticas raster libres (NOAA/OpenSeaMap) ############"
-          curl -sS -o /tmp/osm.png -D /tmp/osmh.txt -w "OpenSeaMap seamark z12 http=%{http_code} bytes=%{size_download} type=%{content_type}\n" --max-time 40 \
-            "https://tiles.openseamap.org/seamark/12/1450/2455.png"
+          echo "############ E. OpenSeaMap (cartas nauticas libres) ############"
+          curl -sS -o /tmp/osm.png -D /tmp/osmh.txt -w "seamark z12 http=%{http_code} bytes=%{size_download} type=%{content_type}\n" --max-time 40 "https://tiles.openseamap.org/seamark/12/1450/2455.png"
           grep -i 'access-control' /tmp/osmh.txt | head -3
           file /tmp/osm.png
-
           echo "FIN DE LA SONDA 2"
