@@ -280,13 +280,31 @@ input,textarea,select{font:inherit;color:inherit}
 .logo__text-mobile{display:none}
 @media(max-width:520px){.logo__text{display:none}.logo__text-mobile{display:block;font-size:14px}}
 
-/* DESKTOP NAV */
-.nav-desktop{display:flex;gap:2px;align-items:center;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;-ms-overflow-style:none;min-width:0;flex:1;margin-inline:8px}
+/* DESKTOP NAV
+   El menú no entra en 1200 px y antes el último item quedaba pegado al ES/EN:
+   parecía tapado. Ahora vive en un riel que se corre de costado — rueda, arrastre,
+   flechas o teclado — con un respiro fijo a la derecha para que nunca toque
+   los botones de idioma y tema. */
+.nav-rail{position:relative;display:flex;align-items:center;flex:1;min-width:0;margin-left:8px;margin-right:14px}
+.nav-rail::before,.nav-rail::after{content:'';position:absolute;top:0;bottom:0;width:38px;pointer-events:none;opacity:0;transition:opacity .18s;z-index:1}
+.nav-rail::before{left:0;background:linear-gradient(90deg,var(--bg) 12%,transparent)}
+.nav-rail::after{right:0;background:linear-gradient(270deg,var(--bg) 12%,transparent)}
+.nav-rail.can-prev::before,.nav-rail.can-next::after{opacity:1}
+.nav-rail__arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:2;display:none;align-items:center;justify-content:center;width:26px;height:26px;padding:0;border:1px solid var(--border);border-radius:99px;background:var(--surface);color:var(--text);font:700 15px/1 system-ui,sans-serif;cursor:pointer;transition:background .15s,color .15s,box-shadow .15s}
+.nav-rail__arrow:hover{background:var(--primary);color:var(--text-inverse)}
+.nav-rail__arrow:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.nav-rail__arrow--prev{left:-2px}
+.nav-rail__arrow--next{right:-2px}
+.nav-rail.can-prev .nav-rail__arrow--prev,.nav-rail.can-next .nav-rail__arrow--next{display:flex}
+.nav-desktop{display:flex;gap:2px;align-items:center;overflow-x:auto;overflow-y:hidden;flex-wrap:nowrap;scrollbar-width:none;-ms-overflow-style:none;min-width:0;flex:1;padding-right:26px;scroll-behavior:smooth;overscroll-behavior-x:contain;scroll-padding-inline:30px}
 .nav-desktop::-webkit-scrollbar{display:none}
+.nav-desktop.is-dragging{scroll-behavior:auto;cursor:grabbing}
+.nav-desktop.is-dragging a{pointer-events:none}
 .nav-desktop a{font-size:13px;font-weight:500;color:var(--text-muted);padding:7px 10px;border-radius:4px;transition:all .15s;letter-spacing:.01em;white-space:nowrap;flex-shrink:0}
 .nav-desktop a:hover{color:var(--text);background:var(--surface)}
 @media(max-width:1100px){.nav-desktop a{font-size:12px;padding:6px 8px}}
-@media(max-width:900px){.nav-desktop{display:none}}
+@media(prefers-reduced-motion:reduce){.nav-desktop{scroll-behavior:auto}}
+@media(max-width:900px){.nav-rail{display:none}}
 
 .header__actions{display:flex;align-items:center;gap:6px}
 [data-theme='light'] .icon-moon{display:none}
@@ -1338,7 +1356,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <span class="logo__sub">Argentina</span>
       </span>
     </a>
-    <nav class="nav-desktop" aria-label="Navegación principal">
+    <div class="nav-rail" id="navRail">
+      <button class="nav-rail__arrow nav-rail__arrow--prev" id="navPrev" type="button" tabindex="-1" aria-label="Ver opciones anteriores del menú" data-en-aria-label="Show previous menu items">‹</button>
+      <nav class="nav-desktop" id="navDesktop" aria-label="Navegación principal" data-en-aria-label="Main navigation">
       <a href="#inicio" data-en="Home">Inicio</a>
       <a href="#empezar" data-en="Start">Empezar</a>
       <a href="#videos" data-en="Videos">Videos</a>
@@ -1350,7 +1370,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <a href="#faq" data-en="FAQ">FAQ</a>
       <a href="#comparador" data-en="Compare">Comparador</a>
       <a href="#camaras" data-en="📡 Cameras">📡 Cámaras</a>
-    </nav>
+      </nav>
+      <button class="nav-rail__arrow nav-rail__arrow--next" id="navNext" type="button" tabindex="-1" aria-label="Ver más opciones del menú" data-en-aria-label="Show more menu items">›</button>
+    </div>
     <div class="header__actions">
       <a href="https://www.instagram.com/clubkitewing/" target="_blank" rel="noopener" class="btn-icon" aria-label="Instagram">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></svg>
@@ -3484,6 +3506,89 @@ function closeNav(){drawer.classList.remove('open');backdrop.classList.remove('o
 if(burger)burger.addEventListener('click',function(){drawer.classList.contains('open')?closeNav():openNav()});
 if(backdrop)backdrop.addEventListener('click',closeNav);
 drawer.querySelectorAll('a').forEach(function(a){a.addEventListener('click',closeNav)});
+
+// ============ MENÚ DESKTOP: RIEL HORIZONTAL ============
+// Once secciones no entran en el ancho del header. En vez de achicar la
+// tipografía hasta que no se lea, el menú se corre de costado: rueda del mouse,
+// arrastre, flechas laterales y teclado. Las flechas y el degradado sólo
+// aparecen cuando hay algo más para ver, así que en pantallas anchas el header
+// se ve igual que siempre.
+(function(){
+  var riel = document.getElementById('navRail');
+  var nav  = document.getElementById('navDesktop');
+  if(!riel || !nav) return;
+  var prev = document.getElementById('navPrev');
+  var next = document.getElementById('navNext');
+  var TOL = 2; // el scrollLeft fraccionario del zoom del navegador no llega al borde exacto
+
+  function estado(){
+    var max = nav.scrollWidth - nav.clientWidth;
+    riel.classList.toggle('can-prev', nav.scrollLeft > TOL);
+    riel.classList.toggle('can-next', max > TOL && nav.scrollLeft < max - TOL);
+  }
+  function correr(signo){
+    nav.scrollBy({ left: signo * Math.max(120, nav.clientWidth * 0.6), behavior: 'smooth' });
+  }
+  if(prev) prev.addEventListener('click', function(){ correr(-1); });
+  if(next) next.addEventListener('click', function(){ correr(1); });
+
+  nav.addEventListener('scroll', estado, {passive:true});
+  addEventListener('resize', estado);
+  // Las fuentes propias cambian el ancho de los items después del primer pintado.
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(estado).catch(function(){});
+
+  // Rueda vertical → desplazamiento horizontal. Sólo consumimos el evento si el
+  // riel todavía tiene a dónde ir; si no, la rueda sigue haciendo scroll de página.
+  nav.addEventListener('wheel', function(e){
+    if(Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;  // trackpad horizontal: nativo
+    var max = nav.scrollWidth - nav.clientWidth;
+    if(max <= TOL) return;
+    var d = e.deltaY;
+    if((d < 0 && nav.scrollLeft <= TOL) || (d > 0 && nav.scrollLeft >= max - TOL)) return;
+    e.preventDefault();
+    nav.scrollLeft += d;
+  }, {passive:false});
+
+  // Arrastre con el mouse. El umbral de 4 px evita que un click normal en un
+  // link se interprete como arrastre y se pierda la navegación.
+  var arrastrando = false, movio = false, x0 = 0, s0 = 0, idPtr = null;
+  nav.addEventListener('pointerdown', function(e){
+    if(e.pointerType === 'touch') return;   // en táctil el scroll nativo ya funciona
+    if(e.button !== 0) return;
+    arrastrando = true; movio = false; x0 = e.clientX; s0 = nav.scrollLeft; idPtr = e.pointerId;
+  });
+  nav.addEventListener('pointermove', function(e){
+    if(!arrastrando || e.pointerId !== idPtr) return;
+    var dx = e.clientX - x0;
+    if(!movio && Math.abs(dx) < 4) return;
+    if(!movio){ movio = true; nav.classList.add('is-dragging'); try{ nav.setPointerCapture(idPtr); }catch(err){} }
+    nav.scrollLeft = s0 - dx;
+  });
+  function soltar(e){
+    if(!arrastrando || (e && e.pointerId !== idPtr)) return;
+    arrastrando = false;
+    if(movio){ try{ nav.releasePointerCapture(idPtr); }catch(err){} }
+    // El pointer-events:none de .is-dragging tiene que sobrevivir al click que
+    // viene atrás del mouseup, si no el arrastre termina navegando.
+    setTimeout(function(){ nav.classList.remove('is-dragging'); }, 0);
+    idPtr = null;
+  }
+  nav.addEventListener('pointerup', soltar);
+  nav.addEventListener('pointercancel', soltar);
+  nav.addEventListener('dragstart', function(e){ if(movio) e.preventDefault(); });
+
+  // Teclado: con el foco dentro del menú, izquierda y derecha lo corren.
+  nav.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight'){ e.preventDefault(); correr(1); }
+    else if(e.key === 'ArrowLeft'){ e.preventDefault(); correr(-1); }
+  });
+  // Tabular hasta un item que quedó fuera de vista tiene que traerlo a la vista.
+  nav.addEventListener('focusin', function(e){
+    if(e.target && e.target.scrollIntoView) e.target.scrollIntoView({block:'nearest', inline:'nearest'});
+  });
+
+  estado();
+})();
 
 // ============ HEADER SCROLL ============
 var header=document.getElementById('header');
