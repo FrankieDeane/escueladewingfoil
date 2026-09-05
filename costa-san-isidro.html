@@ -102,7 +102,7 @@ canvas:active{cursor:grabbing}
  flex-direction:column;gap:10px;color:var(--text-muted);font-size:14px;background:#02080f}
 .barra{width:190px;height:3px;background:var(--surface-2);border-radius:2px;overflow:hidden}
 .barra i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
-.hud{position:absolute;left:15px;top:15px;background:color-mix(in srgb,var(--surface) 86%,transparent);
+.hud{position:absolute;z-index:3;left:15px;top:15px;background:color-mix(in srgb,var(--surface) 86%,transparent);
  border:1px solid var(--border);border-radius:12px;padding:12px 14px;backdrop-filter:blur(9px);min-width:186px}
 .hud .k{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--text-muted);display:block}
 .hud .v{font-size:32px;font-weight:700;line-height:1.05;color:var(--accent);font-family:'Clash Display',sans-serif}
@@ -110,7 +110,7 @@ canvas:active{cursor:grabbing}
 .hud .n{font-size:12.5px;color:var(--text-muted);margin-top:4px}
 .hud .n b{color:var(--text);font-weight:500}
 .hud hr{border:0;border-top:1px solid var(--divider);margin:9px 0}
-.nomapa{position:absolute;right:15px;top:15px;max-width:246px;
+.nomapa{position:absolute;z-index:3;right:15px;top:15px;max-width:246px;
  background:color-mix(in srgb,var(--peligro) 15%,var(--surface));
  border:1px solid color-mix(in srgb,var(--peligro) 45%,transparent);border-radius:12px;
  padding:10px 12px;backdrop-filter:blur(9px)}
@@ -118,15 +118,37 @@ canvas:active{cursor:grabbing}
  text-transform:uppercase;margin-bottom:4px}
 .nomapa p{margin:0;font-size:12.5px;line-height:1.5}
 .nomapa p b{color:var(--peligro)}
+.hud .desglose{font-size:11.5px;color:var(--text-muted);letter-spacing:.01em}
+.hud .desglose b{font-weight:600}
+.hud .desglose .sube{color:var(--peligro)}
+.hud .desglose .baja{color:#5fd3f0}
+.hud .reloj{display:flex;gap:4px;margin-top:9px;padding-top:9px;border-top:1px solid var(--divider)}
+.hud .reloj button{flex:1;min-width:0;min-height:30px;padding:0 6px;border:1px solid var(--border);
+ border-radius:7px;background:var(--surface-2);color:var(--text-muted);cursor:pointer;
+ font:600 11px 'Satoshi',sans-serif;transition:border-color .15s,color .15s}
+.hud .reloj button:hover{border-color:var(--accent);color:var(--text)}
+.hud .reloj button[aria-pressed=true]{background:color-mix(in srgb,var(--accent) 20%,transparent);
+ border-color:var(--accent);color:var(--text)}
+/* Las dos superficies necesitan que alguien diga cuál es cuál, si no son dos
+   colores lindos y nada más. */
+.leyenda-agua{position:absolute;z-index:3;left:15px;bottom:36px;display:flex;flex-direction:column;gap:5px;
+ background:color-mix(in srgb,var(--surface) 86%,transparent);border:1px solid var(--border);
+ border-radius:10px;padding:8px 11px;backdrop-filter:blur(9px);font-size:11.5px;max-width:236px}
+.leyenda-agua span{display:flex;align-items:flex-start;gap:8px;color:var(--text-muted);
+ line-height:1.45}
+.leyenda-agua i{width:13px;height:9px;border-radius:2px;flex:none;margin-top:4px}
+.leyenda-agua em{font-style:normal}
+.leyenda-agua b{color:var(--text);font-weight:600}
 .pista{position:absolute;left:15px;bottom:12px;font-size:11.5px;color:#6f8ea3}
-.marcas{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.marcas{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
 .marca{position:absolute;transform:translate(-50%,-100%);white-space:nowrap;
  font-size:11.5px;line-height:1;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.95);
  display:flex;flex-direction:column;align-items:center;gap:3px;transition:opacity .2s}
 .marca i{width:7px;height:7px;border-radius:50%;background:var(--accent);
  box-shadow:0 0 0 2px rgba(0,0,0,.55);display:block;order:2}
 .marca.ref i{background:#e9c46a}
-.viento-rosa{position:absolute;right:15px;bottom:15px;width:78px;height:78px;
+
+.viento-rosa{position:absolute;z-index:3;right:15px;bottom:15px;width:78px;height:78px;
  background:color-mix(in srgb,var(--surface) 84%,transparent);border:1px solid var(--border);
  border-radius:50%;backdrop-filter:blur(9px);display:flex;align-items:center;justify-content:center}
 .viento-rosa svg{width:100%;height:100%}
@@ -240,6 +262,10 @@ footer .au{color:var(--text);font-weight:700}
   .hud .n{font-size:11px;margin-top:3px}
   .hud hr{margin:6px 0}
   .hud .oculto-tel{display:none}          /* el detalle vive abajo, no encima del mapa */
+  .hud .desglose{font-size:10.5px}
+  .hud .reloj{margin-top:7px;padding-top:7px}
+  .hud .reloj button{min-height:34px;font-size:10.5px;padding:0 4px}
+  .leyenda-agua{left:10px;right:78px;bottom:30px;max-width:none;padding:6px 9px;font-size:10.5px;gap:3px}
   .nomapa{position:static;margin:10px 14px 0;max-width:none;backdrop-filter:none}
   .viento-rosa{width:60px;height:60px;right:10px;bottom:10px}
   .pista{font-size:10px;bottom:8px;left:10px;right:74px}
@@ -291,14 +317,22 @@ footer .au{color:var(--text);font-weight:700}
     <span class="barra"><i id="cargaBar"></i></span>
   </div>
   <div class="hud">
-    <span class="k">Nivel del agua</span>
+    <span class="k" id="hCuando">Nivel del agua</span>
     <div class="v"><span id="hN">—</span><small> m</small></div>
+    <div class="n desglose" id="hDesglose" hidden></div>
     <div class="n" id="hEsc">—</div>
     <hr class="oculto-tel">
     <div class="n oculto-tel">Bajo agua <b id="hSum">—</b></div>
     <div class="n">Viento <b id="hV">—</b></div>
     <div class="n oculto-tel" id="hFuente">—</div>
+    <div class="reloj" id="reloj" hidden>
+      <button type="button" id="rAntes" aria-label="Una hora antes">◀</button>
+      <button type="button" id="rAhora">ahora</button>
+      <button type="button" id="rDespues" aria-label="Una hora después">▶</button>
+      <button type="button" id="rPlay" aria-label="Correr las horas">▶▶</button>
+    </div>
   </div>
+  <div class="leyenda-agua" id="leyAgua" hidden></div>
   <div class="marcas" id="marcas" aria-hidden="true"></div>
   <div class="viento-rosa sin" id="rosa" title="Viento medido por el CNSI">
     <svg viewBox="0 0 100 100">
@@ -382,8 +416,11 @@ footer .au{color:var(--text);font-weight:700}
         <b>Albatros</b> y el <b>Puerto</b>, marcados sobre el mapa.</p></div>
       <div class="tar"><h3>El relieve</h3><p>Buenos Aires es plana: lo único que hay es la barranca, que
         llega a <b id="qMax">—</b>. Alcanza para saber a dónde va el agua, que es lo que importa acá.</p></div>
-      <div class="tar"><h3>El agua</h3><p>Los escenarios no son inventados: salen de la serie real del SHN
-        y de lo que se midió en la sudestada del <b>19 de diciembre de 2023</b>.</p></div>
+      <div class="tar"><h3>El agua</h3><p>Cuando hay una hora elegida el río se dibuja <b>dos veces</b>:
+        abajo la marea del SHN sola, y encima un velo hasta el nivel que le deja el viento. La franja
+        de costa que queda pintada entre las dos es lo que agrega —o lo que se lleva— la sudestada.
+        Los escenarios sueltos salen de la serie real del SHN y de lo que se midió el
+        <b>19 de diciembre de 2023</b>.</p></div>
       <div class="tar"><h3>El viento</h3><p>Los rastros sobre el agua corren en la <b>dirección medida
         ahora mismo</b> por la estación del CNSI, y la picadura del agua crece con la intensidad real.
         Si la estación no responde, no hay rastros: no inventamos movimiento.</p></div>
@@ -423,7 +460,8 @@ footer .au{color:var(--text);font-weight:700}
         fórmula sencilla: la componente del viento perpendicular a la costa al cuadrado, más un
         centímetro por cada hectopascal que falta de presión. El coeficiente está calibrado contra una
         sola sudestada, la del 19/12/2023. Sirve para saber si un día pinta grande o chico; no reemplaza
-        al modelo de pronóstico de crecidas del SHN.</li>
+        al modelo de pronóstico de crecidas del SHN. <b>La franja pintada sobre la costa hereda esa
+        misma incertidumbre</b>: marca la diferencia entre dos alturas, y la de arriba es estimada.</li>
       <li><b>El pronóstico se termina.</b> El viento y la presión llegan hasta unos 16 días para
         adelante, y el reanálisis medido tiene unos días de atraso. En el medio hay una zona donde el
         dato es pronóstico y no medición: el gráfico lo dice, pero conviene tenerlo presente.</li>
@@ -514,27 +552,39 @@ function iniciarGL(){
    'uniform mat4 mvp;varying vec2 vUV;varying float vC;varying vec3 vN;'+
    'void main(){vUV=uv;vC=cota;vN=nor;gl_Position=mvp*vec4(pos,1.0);}',
    'precision mediump float;varying vec2 vUV;varying float vC;varying vec3 vN;'+
-   'uniform sampler2D tex;uniform float nivel;uniform vec3 luz;'+
+   'uniform sampler2D tex;uniform float nivel;uniform float nivelRef;uniform vec3 banda;'+
+   'uniform vec3 luz;'+
    'void main(){vec3 c=texture2D(tex,vUV).rgb;'+
    ' float lam=max(dot(normalize(vN),normalize(luz)),0.0);c*=0.62+0.55*lam;'+
-   ' float bajo=nivel-vC;'+
+   ' float lo=min(nivel,nivelRef), hi=max(nivel,nivelRef);'+
+   ' float bajo=lo-vC;'+
    ' if(bajo>0.0){float f=clamp(bajo/2.2,0.0,1.0);'+
    '  c=mix(c*0.82,vec3(0.34,0.24,0.17),0.30+0.55*f);'+
    '  if(bajo<0.16) c=mix(c,vec3(0.62,0.80,0.85),0.5);}'+
+   ' else if(vC<hi){'+
+   // La costa que sólo se moja (o sólo queda seca) por el viento. Es la franja
+   // que importa: la marea sola no la toca.
+   '  float g=clamp((hi-vC)/max(hi-lo,0.001),0.0,1.0);'+
+   '  c=mix(c,banda,0.34+0.42*g);}'+
    ' gl_FragColor=vec4(c,1.0);}');
   // el agua se pica mas cuanto mas viento medido hay: la amplitud y la
   // frecuencia salen del dato del CNSI, no de un numero elegido a mano
+  // El agua se dibuja dos veces: abajo la marea del SHN sola, arriba una lámina
+  // translúcida con lo que le suma (o le saca) el viento. La franja de costa que
+  // queda entre las dos es, literalmente, la sudestada. Por eso el color, la
+  // opacidad y la picadura entran por uniform en vez de estar fijos.
   pA=prog(
    'attribute vec2 xz;uniform mat4 mvp;uniform float niv;varying vec2 v;'+
    'void main(){v=xz;gl_Position=mvp*vec4(xz.x,niv,xz.y,1.0);}',
    'precision mediump float;varying vec2 v;uniform float t;uniform float vkn;uniform vec2 vdir;'+
+   'uniform vec3 colA;uniform vec3 colB;uniform float alfa;uniform float pica;'+
    'void main(){'+
    ' float f=3.0+vkn*0.85;'+
-   ' float a=0.28+min(vkn,26.0)/26.0*0.55;'+
+   ' float a=(0.28+min(vkn,26.0)/26.0*0.55)*pica;'+
    ' float o=sin(dot(v,vdir)*f+t*(1.2+vkn*0.14))*0.5'+
    '        +sin(dot(v,vec2(-vdir.y,vdir.x))*f*0.62-t*0.8)*0.5;'+
-   ' vec3 c=mix(vec3(0.30,0.21,0.15),vec3(0.42,0.32,0.24),o*a+0.5);'+
-   ' gl_FragColor=vec4(c,0.86);}');
+   ' vec3 c=mix(colA,colB,o*a+0.5);'+
+   ' gl_FragColor=vec4(c,alfa);}');
 
   // rastros de viento: nacen, corren en la direccion medida y se apagan
   pV=prog(
@@ -675,6 +725,9 @@ var nivel=1.09,exag=7,corriendo=false,idxH=0,SERIE=[],VIENTO=null,cacheS={};
 // mostrar el viento de ahora y muestra el de esa hora: si no, el agua se mueve
 // con un viento que no es el del momento que se está mirando.
 var HORA=null;
+// La marea astronómica sola de esa misma hora. Con las dos alturas se puede
+// dibujar la diferencia; sin ella, el agua se dibuja como siempre.
+var MAREA_SOLA=null;
 function vientoActivo(){
   // Para la hora que está pasando ahora mandan los datos del anemómetro del
   // CNSI: es una medición, no un modelo. Para cualquier otra hora del rango,
@@ -700,6 +753,93 @@ function pintarHUD(){
     rt.innerHTML='Deja bajo el agua el <b>'+cacheS[k].toFixed(1)+' %</b> de la tierra del recorte. '+
                  (e? e.d+'.' : 'Nivel elegido a mano.');
   }
+  pintarMomento();
+}
+
+// De qué hora es lo que se está viendo, y de dónde sale ese número. Sin esto el
+// 3D muestra un nivel sin decir a qué momento corresponde.
+function pintarMomento(){
+  var cuando=$('hCuando'), des=$('hDesglose'), ley=$('leyAgua');
+  if(!cuando) return;
+  if(!HORA){
+    cuando.textContent='Nivel del agua';
+    if(des) des.hidden=true;
+    if(ley) ley.hidden=true;
+    return;
+  }
+  var esAhora = Math.abs(HORA.t-Date.now()) <= 3600e3;
+  cuando.textContent = (esAhora?'Ahora · ':'') + (HORA.etq||'');
+
+  // montarUI() vuelve a pintar el HUD cuando termina de cargar el 3D, así que
+  // estos dos renglones se resuelven acá y no a mano después de marcar la hora:
+  // si no, el último en correr los pisaba.
+  $('hEsc').textContent = comoSeLlama(nivel);
+  $('hFuente').textContent = 'marea del SHN + viento y presión de esa hora';
+
+  if(des){
+    if(MAREA_SOLA===null){ des.hidden=true; }
+    else{
+      var d = nivel - MAREA_SOLA;
+      des.hidden=false;
+      des.innerHTML = 'marea <b>'+MAREA_SOLA.toFixed(2)+'</b> ' +
+        (Math.abs(d)<0.005 ? '· sin aporte del viento'
+          : '<span class="'+(d>0?'sube':'baja')+'">'+(d>0?'+':'−')+Math.abs(d).toFixed(2)+
+            ' por viento y presión</span>');
+    }
+  }
+  if(ley){
+    var hay = MAREA_SOLA!==null && Math.abs(nivel-MAREA_SOLA) > 0.03;
+    ley.hidden = !hay;
+    if(hay){
+      var crecida = nivel > MAREA_SOLA;
+      ley.innerHTML =
+        '<span><i style="background:#5a4029"></i><em>Río a la <b>marea del SHN</b>: '+
+          MAREA_SOLA.toFixed(2)+' m</em></span>' +
+        '<span><i style="background:'+(crecida?'#b53a52':'#3f7f9e')+'"></i><em>' +
+          (crecida ? 'Lo que le <b>suma el viento</b>: hasta '+nivel.toFixed(2)+' m'
+                   : 'Sin viento llegaría a <b>'+MAREA_SOLA.toFixed(2)+' m</b>; ahora está en '+
+                     nivel.toFixed(2)+' m') +
+        '</em></span>';
+    }
+  }
+}
+
+// Los mismos nombres y cortes que la tabla de alturas del sitio: si acá dijera
+// otra cosa que allá, no serviría ninguno de los dos.
+function comoSeLlama(h){
+  if(h < 0.60) return 'bajante fuerte';
+  if(h < 1.00) return 'bajante';
+  if(h < 1.80) return 'nivel normal';
+  if(h < 2.50) return 'creciente';
+  if(h < 3.20) return 'sudestada';
+  return 'sudestada fuerte';
+}
+
+// La rosa y el renglón de viento siguen a la hora que se está mirando, no a la
+// última lectura del anemómetro: si no, el agua se pica con un viento y el
+// cartel dice otro.
+function pintarViento(){
+  var V=vientoActivo();
+  var hv=$('hV'), rz=$('rosa');
+  if(!V || !isFinite(V.kn)){
+    if(hv) hv.textContent='—';
+    if(rz){ rz.classList.add('sin'); rz.setAttribute('title','Sin viento para esta hora'); }
+    $('rosaKn').textContent='—';
+    return;
+  }
+  var medido = V === VIENTO;
+  var det=[V.kn.toFixed(1)+' kn del '+rosa(V.dir)];
+  if(isFinite(V.raf) && V.raf!==null) det.push('ráf '+V.raf.toFixed(1));
+  if(hv) hv.textContent=det.join(' · ');
+  $('rosaFlecha').setAttribute('transform','rotate('+((V.dir+180)%360).toFixed(1)+' 50 50)');
+  $('rosaKn').textContent=V.kn.toFixed(1);
+  if(rz){
+    rz.classList.remove('sin');
+    rz.setAttribute('title', (medido
+      ? 'Viento medido ahora por el CNSI: '
+      : 'Viento de esa hora según Open-Meteo: ') + V.kn.toFixed(1)+' kn del '+rosa(V.dir)+
+      '. La flecha apunta hacia donde sopla.');
+  }
 }
 function marco(ts){
   var w=cv.clientWidth,h=cv.clientHeight,dpr=Math.min(devicePixelRatio||1,2);
@@ -710,7 +850,12 @@ function marco(ts){
     var M=mvp();
     gl.useProgram(pT);
     gl.uniformMatrix4fv(gl.getUniformLocation(pT,'mvp'),false,M);
+    var refT = MAREA_SOLA === null ? nivel : MAREA_SOLA;
+    var subeT = nivel > refT;
     gl.uniform1f(gl.getUniformLocation(pT,'nivel'),nivel);
+    gl.uniform1f(gl.getUniformLocation(pT,'nivelRef'),refT);
+    gl.uniform3f(gl.getUniformLocation(pT,'banda'),
+      subeT?0.72:0.24, subeT?0.16:0.55, subeT?0.30:0.68);
     gl.uniform3f(gl.getUniformLocation(pT,'luz'),-0.5,0.78,0.38);
     gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,tex);
     gl.uniform1i(gl.getUniformLocation(pT,'tex'),0);
@@ -719,7 +864,6 @@ function marco(ts){
       gl.enableVertexAttribArray(l);gl.vertexAttribPointer(l,a[2],gl.FLOAT,false,0,0)});
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,bI);
     gl.drawElements(gl.TRIANGLES,idxLargo,gl.UNSIGNED_INT,0);
-    var niv=nivel*exag/ESC;
     // direccion HACIA donde sopla, en el plano del mapa (x=este, z=sur)
     var VA=vientoActivo();
     var kn=VA?VA.kn:0;
@@ -728,20 +872,45 @@ function marco(ts){
 
     gl.useProgram(pA);gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
     gl.uniformMatrix4fv(gl.getUniformLocation(pA,'mvp'),false,M);
-    gl.uniform1f(gl.getUniformLocation(pA,'niv'),niv);
     gl.uniform1f(gl.getUniformLocation(pA,'t'),ts/1000);
     gl.uniform1f(gl.getUniformLocation(pA,'vkn'),kn);
     gl.uniform2f(gl.getUniformLocation(pA,'vdir'),dx,dz);
     var la=gl.getAttribLocation(pA,'xz');gl.bindBuffer(gl.ARRAY_BUFFER,bAg);
     gl.enableVertexAttribArray(la);gl.vertexAttribPointer(la,2,gl.FLOAT,false,0,0);
-    gl.drawArrays(gl.TRIANGLES,0,6);
+
+    // Cuando conocemos la marea sola, el río se dibuja al nivel más bajo de los
+    // dos y encima va una lámina hasta el más alto. Si el viento sube el agua la
+    // lámina es de aviso; si la saca, es celeste y marca hasta dónde llegaría
+    // sin viento. Sin marea conocida hay un solo plano, como antes.
+    var hayDoble = MAREA_SOLA !== null && Math.abs(nivel-MAREA_SOLA) > 0.03;
+    var hBajo = hayDoble ? Math.min(nivel,MAREA_SOLA) : nivel;
+    var hAlto = hayDoble ? Math.max(nivel,MAREA_SOLA) : nivel;
+    var crecida = hayDoble && nivel > MAREA_SOLA;
+
+    function plano(h,ca,cb,alfa,pica){
+      gl.uniform1f(gl.getUniformLocation(pA,'niv'),h*exag/ESC);
+      gl.uniform3f(gl.getUniformLocation(pA,'colA'),ca[0],ca[1],ca[2]);
+      gl.uniform3f(gl.getUniformLocation(pA,'colB'),cb[0],cb[1],cb[2]);
+      gl.uniform1f(gl.getUniformLocation(pA,'alfa'),alfa);
+      gl.uniform1f(gl.getUniformLocation(pA,'pica'),pica);
+      gl.drawArrays(gl.TRIANGLES,0,6);
+    }
+    plano(hBajo,[0.30,0.21,0.15],[0.42,0.32,0.24],0.86,1.0);
+    if(hayDoble){
+      // La franja de costa ya la pinta el terreno; acá alcanza con un velo que
+      // diga a qué altura está la superficie, sin taparle el río al que mira.
+      plano(hAlto,
+        crecida ? [0.50,0.13,0.23] : [0.16,0.38,0.52],
+        crecida ? [0.72,0.24,0.34] : [0.30,0.58,0.72],
+        0.20, 1.0);
+    }
 
     // rastros: solo si hay viento medido. Sin dato, no se inventa movimiento.
     if(VA && kn>0.4){
       gl.useProgram(pV);
       gl.uniformMatrix4fv(gl.getUniformLocation(pV,'mvp'),false,M);
       gl.uniform1f(gl.getUniformLocation(pV,'t'),ts/1000);
-      gl.uniform1f(gl.getUniformLocation(pV,'niv'),niv+0.0015);
+      gl.uniform1f(gl.getUniformLocation(pV,'niv'),hAlto*exag/ESC+0.0015);
       gl.uniform1f(gl.getUniformLocation(pV,'vel'),0.045+kn*0.012);
       gl.uniform1f(gl.getUniformLocation(pV,'largo'),W*(0.006+Math.min(kn,26)/26*0.022));
       gl.uniform2f(gl.getUniformLocation(pV,'dir'),dx,dz);
@@ -842,13 +1011,10 @@ function vivo(){
     var kn=parseFloat(f.field3),dir=parseFloat(f.field4),raf=parseFloat(f.field2);
     if(!isFinite(kn)||!isFinite(dir))return;
     VIENTO={kn:kn,dir:dir,raf:raf,t:f.created_at};
-    $('hV').textContent=kn.toFixed(1)+' kn del '+rosa(dir)+(isFinite(raf)?' · ráf '+raf.toFixed(1):'');
-    // la flecha apunta hacia donde sopla, que es lo que empuja al que navega
-    $('rosaFlecha').setAttribute('transform','rotate('+((dir+180)%360).toFixed(1)+' 50 50)');
-    $('rosaKn').textContent=kn.toFixed(1);
-    $('rosa').classList.remove('sin');
-    $('rosa').setAttribute('title','Viento medido por el CNSI: '+kn.toFixed(1)+
-      ' kn del '+rosa(dir)+'. La flecha apunta hacia donde sopla.');
+    // La flecha apunta hacia donde sopla, que es lo que empuja al que navega.
+    // Quién gana entre esta medición y el viento de la hora elegida lo decide
+    // vientoActivo(), así que el pintado es uno solo para los dos casos.
+    pintarViento();
   });
   // marea: pronóstico del SHN
   ts(3447831,300).then(function(d){
@@ -907,18 +1073,19 @@ function montarUI(){
   $('pres').innerHTML=D.escenarios.map(function(e){
     return '<button class="pb'+(e.h>=3?' alto':'')+'" data-h="'+e.h+'" aria-pressed="false" title="'+
       e.d+'">'+e.n+'<b>'+e.h.toFixed(2)+' m</b></button>'}).join('');
+  function salirDeLaSerie(){ HORA=null; MAREA_SOLA=null; pintarViento(); }
   document.querySelectorAll('.pb').forEach(function(b){b.onclick=function(){
-    corriendo=false;$('play').textContent='▶ Correr la marea';
+    corriendo=false;$('play').textContent='▶ Correr la marea';salirDeLaSerie();
     nivel=+b.dataset.h;$('sh').value=String(Math.round(nivel*100));pintarHUD()}});
   $('sh').oninput=function(){corriendo=false;$('play').textContent='▶ Correr la marea';
-    nivel=+this.value/100;pintarHUD()};
+    salirDeLaSerie();nivel=+this.value/100;pintarHUD()};
   $('sx').oninput=function(){exag=+this.value;$('vx').textContent=exag;rehacer(exag)};
   $('play').onclick=function(){
     if(!SERIE.length){this.textContent='sin serie del SHN';return}
     corriendo=!corriendo;this.textContent=corriendo?'❚❚ Pausar':'▶ Correr la marea'};
   setInterval(function(){
     if(!corriendo||!SERIE.length)return;
-    idxH=(idxH+1)%SERIE.length; nivel=SERIE[idxH].h;
+    idxH=(idxH+1)%SERIE.length; nivel=SERIE[idxH].h; HORA=null; MAREA_SOLA=null;
     $('sh').value=String(Math.round(nivel*100)); pintarHUD();
   },300);
 
@@ -1260,7 +1427,11 @@ function montarSerie(){
     if(!HORAS.length) return;
     iSel = Math.max(0, Math.min(HORAS.length-1, i));
     var h = HORAS[iSel];
+    h.etq = etiqueta(h.t);
     HORA = h;
+    // La marea sola de esa hora es lo que le permite al 3D dibujar las dos
+    // superficies: el río sin viento y lo que el viento le suma encima.
+    MAREA_SOLA = (h.marea === null || h.nivel === null) ? null : h.marea;
     // Si el 3D no llegó a cargar (Esri caído, sin WebGL), el panel de datos sigue
     // funcionando solo: es la parte que más falta hace.
     if(moverAgua !== false && h.nivel !== null && D && ALT){
@@ -1268,8 +1439,9 @@ function montarSerie(){
       nivel = h.nivel;
       $('sh').value = String(Math.round(nivel*100));
       pintarHUD();
-      $('hFuente').textContent = 'SHN + viento del ' + etiqueta(h.t);
     }
+    pintarViento();
+    actualizarReloj();
     var txt = '<b>'+etiqueta(h.t)+'</b> · ';
     txt += h.marea === null ? 'sin pronóstico de marea del SHN para esta hora'
          : 'marea SHN <b>'+h.marea.toFixed(2)+' m</b>';
@@ -1319,6 +1491,7 @@ function montarSerie(){
   function pararSerie(){
     if(timerSerie){ clearInterval(timerSerie); timerSerie = null; }
     el.play.textContent = '▶ Correr el rango';
+    actualizarReloj();
   }
   el.play.addEventListener('click', function(){
     if(timerSerie){ pararSerie(); return; }
@@ -1327,7 +1500,45 @@ function montarSerie(){
     timerSerie = setInterval(function(){
       marcar((iSel+1) % HORAS.length);
     }, 220);
+    actualizarReloj();
   });
+
+  /* ---------------- reloj sobre la escena ---------------- */
+  // Los mismos controles que el gráfico, pero arriba del 3D: mover una hora no
+  // puede obligar a bajar la página y perder de vista el mapa, que es lo que se
+  // está mirando.
+  var reloj = $('reloj');
+  function actualizarReloj(){
+    if(!reloj) return;
+    reloj.hidden = !HORAS.length;
+    var rp = $('rPlay');
+    if(rp){
+      rp.setAttribute('aria-pressed', String(!!timerSerie));
+      rp.textContent = timerSerie ? '❚❚' : '▶▶';
+      rp.setAttribute('aria-label', timerSerie ? 'Pausar' : 'Correr las horas');
+    }
+    var ra = $('rAhora');
+    if(ra){
+      var i = indiceDeAhora();
+      ra.disabled = i < 0;
+      ra.setAttribute('aria-pressed', String(i >= 0 && i === iSel));
+    }
+  }
+  function indiceDeAhora(){
+    if(!HORAS.length) return -1;
+    var i = Math.round((Date.now()-HORAS[0].t)/3600e3);
+    return (i >= 0 && i < HORAS.length) ? i : -1;
+  }
+  if(reloj){
+    $('rAntes').addEventListener('click', function(){ pararSerie(); marcar(iSel-1); });
+    $('rDespues').addEventListener('click', function(){ pararSerie(); marcar(iSel+1); });
+    $('rAhora').addEventListener('click', function(){
+      pararSerie();
+      var i = indiceDeAhora();
+      if(i >= 0) marcar(i);
+    });
+    $('rPlay').addEventListener('click', function(){ el.play.click(); });
+  }
 
   /* ---------------- pedido ---------------- */
 
