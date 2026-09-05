@@ -80,6 +80,10 @@
 [data-theme='dark']{--bg:#040e1a;--surface:#081525;--surface-2:#0b1c30;--border:#123350;--divider:#102b44;--text:#e6f2fa;--text-muted:#8fb3c9;--primary:#38b6dd;
  --accent:#5fd3f0;--peligro:#ff8fae}
 *{box-sizing:border-box}
+/* La leyenda y el reloj se ocultan con el atributo hidden, pero sus reglas les
+   ponen display:flex y el CSS de autor le gana al del navegador: quedaban a la
+   vista igual. */
+[hidden]{display:none !important}
 body{margin:0;background:var(--bg);color:var(--text);font-family:'Satoshi',system-ui,sans-serif;
  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
 h1,h2,h3{font-family:'Clash Display','Satoshi',sans-serif;margin:0;text-wrap:balance}
@@ -174,8 +178,6 @@ canvas:active{cursor:grabbing}
 .play:hover{filter:brightness(1.12)}
 input[type=range]{flex:1;min-width:170px;accent-color:var(--accent)}
 button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-.lab{font-size:12.5px;color:var(--text-muted);display:flex;align-items:center;gap:8px}
-.lab input[type=range]{width:100px;flex:none;min-width:0}
 
 /* --- Serie real por rango de fechas --- */
 .serie{background:var(--surface-2);border-bottom:1px solid var(--divider);padding:16px 0 18px}
@@ -275,8 +277,6 @@ footer .au{color:var(--text);font-weight:700}
   .play{padding:13px 18px;font-size:14px}
   .pb{padding:11px 13px}
 
-  .lab{width:100%;justify-content:space-between}
-  .lab input[type=range]{flex:1;width:auto;min-width:0}
   section>h2{font-size:19px}
   .rej,.fuentes{grid-template-columns:1fr}
 }
@@ -361,7 +361,6 @@ footer .au{color:var(--text);font-weight:700}
   <div class="fila">
     <button class="play" id="play">▶ Correr la marea</button>
     <input type="range" id="sh" min="-50" max="400" value="109" aria-label="Nivel del agua en centímetros">
-    <span class="lab">Relieve ×<input type="range" id="sx" min="2" max="25" value="7"><b class="mono" id="vx">7</b></span>
   </div>
 </div></div>
 
@@ -720,6 +719,9 @@ cv.addEventListener('wheel',function(e){e.preventDefault();
  cam.dist=Math.max(W*0.26,Math.min(W*2.6,cam.dist*(1+Math.sign(e.deltaY)*0.11)))},{passive:false});
 
 /* ======================== estado ======================== */
+// La barranca de San Isidro es de pocos metros sobre un partido plano: sin
+// exagerar la vertical no se ve nada. ×7 es lo que se venía usando por
+// defecto y es la que deja reconocer la barranca sin volverla un acantilado.
 var nivel=1.09,exag=7,corriendo=false,idxH=0,SERIE=[],VIENTO=null,cacheS={};
 // Cuando el usuario se para sobre una hora de la serie por fechas, el 3D deja de
 // mostrar el viento de ahora y muestra el de esa hora: si no, el agua se mueve
@@ -1079,7 +1081,6 @@ function montarUI(){
     nivel=+b.dataset.h;$('sh').value=String(Math.round(nivel*100));pintarHUD()}});
   $('sh').oninput=function(){corriendo=false;$('play').textContent='▶ Correr la marea';
     salirDeLaSerie();nivel=+this.value/100;pintarHUD()};
-  $('sx').oninput=function(){exag=+this.value;$('vx').textContent=exag;rehacer(exag)};
   $('play').onclick=function(){
     if(!SERIE.length){this.textContent='sin serie del SHN';return}
     corriendo=!corriendo;this.textContent=corriendo?'❚❚ Pausar':'▶ Correr la marea'};
@@ -1320,8 +1321,11 @@ function montarSerie(){
 
   function pintar(){
     var svg = el.svg, n = HORAS.length;
-    if(!n){ svg.hidden = true; el.vacio.hidden = false; return; }
-    el.vacio.hidden = true; svg.hidden = false;
+    // Ojo: en un <svg> la propiedad .hidden no refleja el atributo, así que
+    // asignarla no lo saca del marcado y el gráfico queda oculto para siempre.
+    // Con el atributo a mano funciona en los dos sentidos.
+    if(!n){ svg.setAttribute('hidden',''); el.vacio.hidden = false; return; }
+    el.vacio.hidden = true; svg.removeAttribute('hidden');
     var caja = svg.getBoundingClientRect();
     if(caja.width > 40) VB_W = Math.round(caja.width);
     if(caja.height > 40) VB_H = Math.round(caja.height);
