@@ -1594,9 +1594,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </svg>
     </div>
   <div class="container">
-    <!-- Acordeón: plegado igual da la respuesta, porque el resumen vive en la
-         cabecera. El que no quiere ver el detalle lo cierra y se lo recuerda. -->
-    <details class="hoy__acc" id="hoyAcc" open>
+    <!-- Acordeón: arranca plegado. La respuesta igual está, porque el resumen
+         vive en la cabecera; el que quiere el detalle lo abre, y si lo abre se
+         lo recordamos para la próxima visita. -->
+    <details class="hoy__acc" id="hoyAcc">
       <summary class="hoy__head">
         <div>
           <span class="eyebrow" data-en="🌬️ Forecast matched to each spot">🌬️ Pronóstico cruzado con cada spot</span>
@@ -6336,14 +6337,14 @@ document.addEventListener('DOMContentLoaded', function() {
     window.__EWF.NORDEN = n;
   }).catch(function(){ /* sin medición: la tarjeta no se muestra */ });
 
-  // Si el usuario pliega el acordeón, se lo recordamos. Abierto por defecto:
-  // alguien que entra por primera vez tiene que ver de qué se trata; el que no
-  // lo quiere lo cierra una vez y listo.
+  // El acordeón arranca cerrado: la cabecera ya dice en cuántos spots se puede
+  // navegar, que es la respuesta. Sólo se abre solo si el visitante lo abrió
+  // alguna vez — ahí sí sabemos que quiere el detalle.
   (function(){
     var acc = document.getElementById('hoyAcc');
     if(!acc) return;
     try{
-      if(localStorage.getItem('wf-hoy') === 'cerrado') acc.removeAttribute('open');
+      if(localStorage.getItem('wf-hoy') === 'abierto') acc.setAttribute('open','');
     }catch(e){}
     acc.addEventListener('toggle', function(){
       try{ localStorage.setItem('wf-hoy', acc.open ? 'abierto' : 'cerrado'); }catch(e){}
