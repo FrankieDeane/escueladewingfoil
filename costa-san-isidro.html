@@ -950,7 +950,6 @@ function montarUI(){
        f[3].replace(/^https?:\/\//,'').slice(0,42)+'</a></dd>'+
      '<dt>detalle</dt><dd>'+f[4]+'</dd><dt>acceso</dt><dd>'+f[5]+'</dd></dl></div>'}).join('');
   pintarHUD();
-  montarSerie();
 }
 
 /* ===================================================================
@@ -1139,14 +1138,18 @@ function montarSerie(){
 
   /* ---------------- gráfico ---------------- */
 
+  // El viewBox se arma con el tamaño real del SVG en pantalla: si se estira uno
+  // fijo, en un teléfono las cifras y las fechas salen deformadas.
   var VB_W = 1000, VB_H = 216, MI = 36, MD = 10, MS = 12, MB = 26;
 
   function pintar(){
     var svg = el.svg, n = HORAS.length;
     if(!n){ svg.hidden = true; el.vacio.hidden = false; return; }
     el.vacio.hidden = true; svg.hidden = false;
+    var caja = svg.getBoundingClientRect();
+    if(caja.width > 40) VB_W = Math.round(caja.width);
+    if(caja.height > 40) VB_H = Math.round(caja.height);
     svg.setAttribute('viewBox','0 0 '+VB_W+' '+VB_H);
-    svg.setAttribute('preserveAspectRatio','none');
 
     var vals = [];
     HORAS.forEach(function(h){
@@ -1249,7 +1252,9 @@ function montarSerie(){
     iSel = Math.max(0, Math.min(HORAS.length-1, i));
     var h = HORAS[iSel];
     HORA = h;
-    if(moverAgua !== false && h.nivel !== null){
+    // Si el 3D no llegó a cargar (Esri caído, sin WebGL), el panel de datos sigue
+    // funcionando solo: es la parte que más falta hace.
+    if(moverAgua !== false && h.nivel !== null && D && ALT){
       corriendo = false; $('play').textContent = '▶ Correr la marea';
       nivel = h.nivel;
       $('sh').value = String(Math.round(nivel*100));
@@ -1278,6 +1283,13 @@ function montarSerie(){
     var u = (vx-MI)/(VB_W-MI-MD);
     return Math.round(u*(HORAS.length-1));
   }
+  var tRedibujo = null;
+  addEventListener('resize', function(){
+    if(!HORAS.length) return;
+    clearTimeout(tRedibujo);
+    tRedibujo = setTimeout(pintar, 150);
+  });
+
   el.svg.addEventListener('pointerdown', function(e){
     if(!HORAS.length) return;
     tocando = true; pararSerie();
@@ -1414,6 +1426,7 @@ function montarSerie(){
   if(b0) b0.setAttribute('aria-pressed','false');
   pedir();
 }
+montarSerie();
 </script>
 </body>
 </html>
