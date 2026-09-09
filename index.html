@@ -3543,7 +3543,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     </div>
 
-    <p style="font-size:12px;color:var(--text-muted);margin-top:20px;text-align:center;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px">
+    <p style="font-size:12px;color:var(--text-muted);margin-top:20px;text-align:center;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;box-sizing:border-box;max-width:100%;overflow-wrap:break-word;word-break:break-word">
       ⚠️ <strong>Aviso:</strong> Los precios son orientativos en USD para kit completo (ala + foil + tabla) salvo indicación. Los valores pueden variar según el tipo de cambio, stock y punto de venta. Consultá siempre con un distribuidor o instructor antes de comprar. La Escuela de Wingfoil no tiene relación comercial con ninguna de estas marcas.
     </p>
   </div>
@@ -3685,6 +3685,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h3 class="modal__title" id="coffeeModalTitle">Invitame a un cafecito</h3>
     <p class="modal__sub">Proyecto independiente que vive gracias a los curiosos del deporte</p>
     <a href="https://www.mercadopago.com.ar/payment-link/v1/redirect?preference-id=198206295-deaf014f-84e6-4da5-9c07-6aaa0d6bf549&source=link" target="_blank" rel="noopener" class="btn btn--primary" style="width:100%;justify-content:center" id="coffeeModalCta">☕ Invitame a un cafecito</a>
+  </div>
+</div>
+
+<!-- SPONSOR POPUP -->
+<div class="modal" id="sponsorModal" hidden role="dialog" aria-modal="true" aria-labelledby="sponsorModalTitle">
+  <div class="modal__box">
+    <div class="modal__bg"></div>
+    <button class="modal__close" id="sponsorModalClose" aria-label="Cerrar">✕</button>
+    <div class="modal__emoji">🚀</div>
+    <h3 class="modal__title" id="sponsorModalTitle" data-en="Want to sponsor us?">¿Querés ser sponsor?</h3>
+    <p class="modal__sub" data-en="Your brand in front of the wingfoil community in Argentina. Tell us your proposal.">Tu marca frente a toda la comunidad de wingfoil en Argentina. Contanos tu propuesta.</p>
+    <a href="#participa" class="btn btn--primary" style="width:100%;justify-content:center" id="sponsorModalCta" data-en="I want to sponsor →">Quiero ser sponsor →</a>
   </div>
 </div>
 
@@ -4132,32 +4144,54 @@ var cDecline=document.getElementById('cookieDecline');
 if(cAccept)cAccept.addEventListener('click',hideCookie);
 if(cDecline)cDecline.addEventListener('click',hideCookie);
 
-// ============ CAFECITO POPUP ============
-// Aparece siempre en la primera visita; después solo a veces (25% de las visitas)
-// y nunca más de una vez cada 5 días, para no hartar.
+// ============ CAFECITO / SPONSOR POPUPS (rotan entre sí) ============
+// En cada visita "elegible" se muestra UNO solo de los dos, alternando por turno.
+// Elegible: siempre en la primera visita (arranca con el de cafecito); después
+// solo a veces (25% de las visitas) y nunca más de una vez cada 5 días, para no hartar.
 var coffeeModal=document.getElementById('coffeeModal');
-if(coffeeModal){
+var sponsorModal=document.getElementById('sponsorModal');
+if(coffeeModal&&sponsorModal){
   var coffeeClose=document.getElementById('coffeeModalClose');
   var coffeeCta=document.getElementById('coffeeModalCta');
+  var sponsorClose=document.getElementById('sponsorModalClose');
+  var sponsorCta=document.getElementById('sponsorModalCta');
   function hideCoffee(){coffeeModal.hidden=true}
-  function markCoffeeShown(){try{localStorage.setItem('wf-cafecito','' + Date.now())}catch(e){}}
+  function hideSponsor(){sponsorModal.hidden=true}
   if(coffeeClose)coffeeClose.addEventListener('click',hideCoffee);
   if(coffeeCta)coffeeCta.addEventListener('click',hideCoffee);
   coffeeModal.addEventListener('click',function(e){if(e.target===coffeeModal)hideCoffee()});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!coffeeModal.hidden)hideCoffee()});
-  var coffeeShouldShow=false;
+  if(sponsorClose)sponsorClose.addEventListener('click',hideSponsor);
+  if(sponsorCta)sponsorCta.addEventListener('click',hideSponsor);
+  sponsorModal.addEventListener('click',function(e){if(e.target===sponsorModal)hideSponsor()});
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Escape')return;
+    if(!coffeeModal.hidden)hideCoffee();
+    if(!sponsorModal.hidden)hideSponsor();
+  });
+
+  var popupShouldShow=false;
+  var popupTurn='coffee'; // qué popup toca esta vez
   try{
-    var lastCoffee=localStorage.getItem('wf-cafecito');
-    if(!lastCoffee){
-      coffeeShouldShow=true; // primera visita: se muestra siempre
+    var lastPopup=localStorage.getItem('wf-popup')||localStorage.getItem('wf-cafecito'); // wf-cafecito: compat con visitas previas
+    var storedTurn=localStorage.getItem('wf-popup-turn');
+    if(storedTurn==='coffee'||storedTurn==='sponsor')popupTurn=storedTurn;
+    if(!lastPopup){
+      popupShouldShow=true; // primera visita: se muestra siempre (empieza con cafecito)
     }else{
-      var daysSince=(Date.now()-parseInt(lastCoffee,10))/(1000*60*60*24);
-      coffeeShouldShow=daysSince>=5&&Math.random()<.25;
+      var daysSince=(Date.now()-parseInt(lastPopup,10))/(1000*60*60*24);
+      popupShouldShow=daysSince>=5&&Math.random()<.25;
     }
   }catch(e){}
-  if(coffeeShouldShow){
+  if(popupShouldShow){
     // Delay aleatorio de 8 a 20 segundos para que no interrumpa apenas entra
-    setTimeout(function(){coffeeModal.hidden=false;markCoffeeShown()},8000+Math.random()*12000);
+    setTimeout(function(){
+      var modal=popupTurn==='coffee'?coffeeModal:sponsorModal;
+      modal.hidden=false;
+      try{
+        localStorage.setItem('wf-popup',''+Date.now());
+        localStorage.setItem('wf-popup-turn',popupTurn==='coffee'?'sponsor':'coffee');
+      }catch(e){}
+    },8000+Math.random()*12000);
   }
 }
 
