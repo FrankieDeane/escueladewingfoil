@@ -239,6 +239,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <form name="equipo-form" netlify netlify-honeypot="bot-field" hidden>
     <input name="tipo"/><input name="marca"/><input name="precio"/><input name="ubicacion"/><input name="descripcion"/><input name="whatsapp"/>
   </form>
+  <form name="survey-form" netlify netlify-honeypot="bot-field" hidden>
+    <input name="falta"/><input name="email"/>
+  </form>
+  <form name="sponsor-form" netlify netlify-honeypot="bot-field" hidden>
+    <input name="marca"/><input name="contacto"/><input name="email"/><input name="mensaje"/>
+  </form>
 
   <link rel="manifest" href="/manifest.json"/>
   <meta name="theme-color" content="#00b4d8"/>
@@ -613,6 +619,9 @@ input,textarea,select{font:inherit;color:inherit}
 
 /* FORMS */
 .form-wrap{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:clamp(24px,4vw,48px);max-width:720px;margin:0 auto}
+.dual-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;max-width:1100px;margin:0 auto}
+@media(max-width:768px){.dual-form-grid{grid-template-columns:1fr}}
+.form-wrap--half{max-width:none;margin:0}
 .form-header{display:flex;align-items:center;gap:14px;margin-bottom:14px;flex-wrap:wrap}
 .form-header h3{font-size:22px;font-weight:700}
 .badge--free{display:inline-flex;padding:4px 12px;border-radius:99px;background:#25d366;color:#fff;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
@@ -3540,6 +3549,53 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </section>
 
+<!-- ============================================================ ENCUESTA + SPONSORS ============================================================ -->
+<section class="section" id="participa">
+  <div class="container">
+    <span class="eyebrow">🤝 Participá</span>
+    <h2 class="section-title" data-en="Help us improve & sponsors">Ayudanos a mejorar y sumate como sponsor</h2>
+    <p class="section-sub" data-en="Two minutes of your time to make this platform better, or a way to get in touch if your brand wants to support the community.">Dos minutos de tu tiempo para mejorar esta plataforma, o una forma de contactarnos si tu marca quiere sumarse como sponsor.</p>
+
+    <div class="dual-form-grid">
+      <!-- ENCUESTA -->
+      <div class="form-wrap form-wrap--half">
+        <div class="form-header"><h3>💡 ¿Qué le falta a la web?</h3></div>
+        <p class="form-note">Contanos qué mejorarías, qué información falta o qué funcionalidad te gustaría ver. Es 100% anónimo.</p>
+        <form id="surveyForm" name="survey-form" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+          <input type="hidden" name="form-name" value="survey-form" />
+          <input type="hidden" name="bot-field" />
+          <div class="form-group">
+            <label for="survey-falta">Tu idea o sugerencia <span class="form-required">*</span></label>
+            <textarea id="survey-falta" name="falta" rows="4" placeholder="Ej: me gustaría ver un mapa de spots, más videos de maniobras, precios de clases..." required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="survey-email">Email <span class="form-optional">(opcional, por si querés que te respondamos)</span></label>
+            <input type="email" id="survey-email" name="email" placeholder="tu@email.com"/>
+          </div>
+          <div id="surveyMsg" class="form-msg" hidden></div>
+          <button type="submit" class="btn btn--primary btn--full">Enviar sugerencia →</button>
+        </form>
+      </div>
+
+      <!-- SPONSORS -->
+      <div class="form-wrap form-wrap--half">
+        <div class="form-header"><h3>🚀 ¿Querés ser sponsor?</h3></div>
+        <p class="form-note">Si tu marca o negocio quiere apoyar a la comunidad de wingfoil, dejanos tus datos y te contactamos.</p>
+        <form id="sponsorForm" name="sponsor-form" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+          <input type="hidden" name="form-name" value="sponsor-form" />
+          <input type="hidden" name="bot-field" />
+          <div class="form-group"><label for="sponsor-marca">Marca / Empresa <span class="form-required">*</span></label><input type="text" id="sponsor-marca" name="marca" placeholder="Nombre de tu marca" required/></div>
+          <div class="form-group"><label for="sponsor-contacto">Nombre de contacto <span class="form-required">*</span></label><input type="text" id="sponsor-contacto" name="contacto" placeholder="Tu nombre" required/></div>
+          <div class="form-group"><label for="sponsor-email">Email <span class="form-required">*</span></label><input type="email" id="sponsor-email" name="email" placeholder="tu@email.com" required/></div>
+          <div class="form-group"><label for="sponsor-mensaje">Mensaje <span class="form-required">*</span></label><textarea id="sponsor-mensaje" name="mensaje" rows="4" placeholder="Contanos tu propuesta de sponsoreo..." required></textarea></div>
+          <div id="sponsorMsg" class="form-msg" hidden></div>
+          <button type="submit" class="btn btn--primary btn--full">Enviar propuesta →</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============================================================ DISCLAIMER ============================================================ -->
 <section class="disclaimer-section">
   <div class="container">
@@ -3589,6 +3645,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <li><a href="#venta-de-wingfoil">Equipos en venta</a></li>
             <li><a href="#testimonios">Testimonios</a></li>
             <li><a href="#marcas">Marcas</a></li>
+            <li><a href="#participa">Encuesta y Sponsors</a></li>
           </ul>
         </div>
         <div class="footer__col">
@@ -4154,6 +4211,44 @@ if(instrForm){
     document.getElementById('instructorsGrid').appendChild(card);
     msg.hidden=false;msg.className='form-msg form-msg--ok';msg.textContent='✓ Perfil publicado.';
     instrForm.reset();instrFotoData=null;if(instrFotoPreview)instrFotoPreview.innerHTML='';
+    setTimeout(function(){msg.hidden=true},4000);
+  });
+}
+
+// ============ SURVEY FORM ============
+var surveyForm=document.getElementById('surveyForm');
+if(surveyForm){
+  surveyForm.addEventListener('submit',function(e){
+    e.preventDefault();
+    var falta=document.getElementById('survey-falta').value.trim();
+    var email=document.getElementById('survey-email').value.trim();
+    var msg=document.getElementById('surveyMsg');
+    if(!falta){msg.hidden=false;msg.className='form-msg form-msg--err';msg.textContent='Contanos tu idea antes de enviar.';return}
+    var surveyBot=(surveyForm.querySelector('[name="bot-field"]')||{}).value||'';
+    var surveyParams=new URLSearchParams({falta:falta,email:email,'bot-field':surveyBot,'form-name':'survey-form'});
+    fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:surveyParams.toString()}).catch(function(){});
+    msg.hidden=false;msg.className='form-msg form-msg--ok';msg.textContent='✓ ¡Gracias por tu sugerencia!';
+    surveyForm.reset();
+    setTimeout(function(){msg.hidden=true},4000);
+  });
+}
+
+// ============ SPONSOR FORM ============
+var sponsorForm=document.getElementById('sponsorForm');
+if(sponsorForm){
+  sponsorForm.addEventListener('submit',function(e){
+    e.preventDefault();
+    var marca=document.getElementById('sponsor-marca').value.trim();
+    var contacto=document.getElementById('sponsor-contacto').value.trim();
+    var email=document.getElementById('sponsor-email').value.trim();
+    var mensaje=document.getElementById('sponsor-mensaje').value.trim();
+    var msg=document.getElementById('sponsorMsg');
+    if(!marca||!contacto||!email||!mensaje){msg.hidden=false;msg.className='form-msg form-msg--err';msg.textContent='Completá todos los campos.';return}
+    var sponsorBot=(sponsorForm.querySelector('[name="bot-field"]')||{}).value||'';
+    var sponsorParams=new URLSearchParams({marca:marca,contacto:contacto,email:email,mensaje:mensaje,'bot-field':sponsorBot,'form-name':'sponsor-form'});
+    fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:sponsorParams.toString()}).catch(function(){});
+    msg.hidden=false;msg.className='form-msg form-msg--ok';msg.textContent='✓ ¡Gracias! Te vamos a contactar a la brevedad.';
+    sponsorForm.reset();
     setTimeout(function(){msg.hidden=true},4000);
   });
 }
