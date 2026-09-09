@@ -1384,6 +1384,21 @@ function montarSerie(){
                'fill="currentColor" opacity=".6">'+pad(p.d)+'/'+pad(p.m)+'</text>');
     });
 
+    // Límite del pronóstico de marea del SHN: si el rango pedido va más allá,
+    // la línea de nivel simplemente se corta. Sin este cartel se ve como si
+    // el gráfico estuviera roto en vez de "el SHN todavía no publicó más".
+    var limiteMarea = -1;
+    for(var iM = 0; iM < n; iM++){ if(HORAS[iM].marea !== null) limiteMarea = iM; }
+    if(limiteMarea >= 0 && limiteMarea < n-1){
+      var xl = X(limiteMarea);
+      var msgLim = 'el SHN todavía no publicó pronóstico de marea más allá de acá';
+      var cercaBorde = xl > VB_W - 170;
+      out.push('<line x1="'+xl.toFixed(1)+'" y1="'+MS+'" x2="'+xl.toFixed(1)+'" y2="'+(VB_H-MB)+
+               '" stroke="var(--peligro)" stroke-opacity=".55" stroke-width="1.2" stroke-dasharray="2 3"/>');
+      out.push('<text x="'+(cercaBorde?(xl-4):(xl+4)).toFixed(1)+'" y="'+(MS+12)+'" font-size="10" '+
+               'text-anchor="'+(cercaBorde?'end':'start')+'" fill="var(--peligro)" opacity=".85">'+msgLim+'</text>');
+    }
+
     function camino(campo){
       var d = '', abierto = false;
       HORAS.forEach(function(h,i){
