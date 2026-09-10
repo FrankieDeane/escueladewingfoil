@@ -3314,8 +3314,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- SPOT EXPANDED CARD MODAL -->
 <div class="spot-expanded" id="spotExpanded" role="dialog" aria-modal="true" aria-labelledby="spotExpandedName">
-  <button class="spot-expanded__back" id="spotExpandedBack" aria-label="Volver al mapa">← Volver al mapa</button>
-  <button class="spot-expanded__close" id="spotExpandedClose" aria-label="Cerrar">✕</button>
+  <button class="spot-expanded__back" id="spotExpandedBack" aria-label="Volver al mapa" data-en-aria-label="Back to map" data-en="← Back to map">← Volver al mapa</button>
+  <button class="spot-expanded__close" id="spotExpandedClose" aria-label="Cerrar" data-en-aria-label="Close">✕</button>
   <div class="spot-expanded__inner">
     <div class="spot-expanded__hero">
       <span class="spot-expanded__type-badge" id="spotExpandedType">WingFoil</span>
@@ -3331,27 +3331,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <p class="spot-expanded__desc" id="spotExpandedDesc"></p>
       <div class="spot-expanded__meta">
         <div class="spot-expanded__meta-item">
-          <span class="spot-expanded__meta-label">💨 Viento</span>
+          <span class="spot-expanded__meta-label" data-en="💨 Wind">💨 Viento</span>
           <span class="spot-expanded__meta-value" id="spotExpandedWind"></span>
-          <span class="spot-expanded__meta-note">Rango habitual navegable, no ráfagas máximas. Chequeá siempre el pronóstico del día.</span>
+          <span class="spot-expanded__meta-note" data-en="Usual navigable range, not maximum gusts. Always check the day's forecast.">Rango habitual navegable, no ráfagas máximas. Chequeá siempre el pronóstico del día.</span>
         </div>
         <div class="spot-expanded__meta-item">
-          <span class="spot-expanded__meta-label">🎯 Nivel sugerido</span>
+          <span class="spot-expanded__meta-label" data-en="🎯 Suggested level">🎯 Nivel sugerido</span>
           <span class="spot-expanded__meta-value" id="spotExpandedLevel"></span>
         </div>
         <div class="spot-expanded__meta-item" style="grid-column:1/-1">
-          <span class="spot-expanded__meta-label">🏷️ Características</span>
+          <span class="spot-expanded__meta-label" data-en="🏷️ Features">🏷️ Características</span>
           <div class="spot-expanded__tags" id="spotExpandedTags"></div>
         </div>
       </div>
       <div id="spotExpandedComing" class="spot-expanded__coming">
-        <span class="spot-expanded__coming-label">Próximamente en este spot</span>
+        <span class="spot-expanded__coming-label" data-en="Coming soon for this spot">Próximamente en este spot</span>
         <ul class="spot-expanded__coming-list">
-          <li>Descripción extendida con detalles del lugar</li>
-          <li>Mejores meses del año para ir</li>
-          <li>Cómo llegar y dónde estacionar</li>
-          <li>Instructores y escuelas cercanas</li>
-          <li>Galería de fotos de la comunidad</li>
+          <li data-en="Extended description with details about the place">Descripción extendida con detalles del lugar</li>
+          <li data-en="Best months of the year to go">Mejores meses del año para ir</li>
+          <li data-en="How to get there and where to park">Cómo llegar y dónde estacionar</li>
+          <li data-en="Nearby instructors and schools">Instructores y escuelas cercanas</li>
+          <li data-en="Community photo gallery">Galería de fotos de la comunidad</li>
         </ul>
       </div>
       <div id="spotExpandedExtended"></div>
@@ -3916,7 +3916,11 @@ wingParts.forEach(function(p,i){p.addEventListener('click',function(){activateWi
 wingImgDots.forEach(function(d,i){d.addEventListener('click',function(){activateWing(i)})})
 
 // ============ SPOTS GRID ============
+// Helper compartido por todo el render de spots (mapa, tarjetas, panel
+// expandido): decide en qué idioma mostrar los datos que vienen de SPOTS.
+function spotsEnIngles(){ return document.documentElement.lang === 'en'; }
 var LV={b:'Principiante',i:'Intermedio',a:'Avanzado',c:'Cable Park'};
+var LV_EN={b:'Beginner',i:'Intermediate',a:'Advanced',c:'Cable Park'};
 function renderSpotsGrid(prov){
   var grid=document.getElementById('spotsGrid');
   if(!grid)return;
@@ -4671,9 +4675,10 @@ function renderMapModalList(){
 function showMapModalDetail(s){
   var detail = document.getElementById('mapModalDetail');
   if(!detail) return;
+  var en = spotsEnIngles();
   document.getElementById('mmDetailName').textContent = s.n;
   document.getElementById('mmDetailProv').textContent = s.prov;
-  document.getElementById('mmDetailDesc').textContent = s.d;
+  document.getElementById('mmDetailDesc').textContent = (en && s.dEn) ? s.dEn : s.d;
   document.getElementById('mmDetailWind').textContent = '💨 ' + s.w;
   detail.classList.add('show');
 }
@@ -4932,13 +4937,18 @@ var spotExpandedBack = document.getElementById('spotExpandedBack');
 
 var levelLabels = {b:'Principiante', i:'Intermedio', a:'Avanzado', c:'Cable Park'};
 
+var spotExpandedActual = null;
+
 function openSpotExpanded(s){
   if(!spotExpanded) return;
+  spotExpandedActual = s;
+  var en = spotsEnIngles();
   document.getElementById('spotExpandedName').textContent = s.n;
   document.getElementById('spotExpandedProv').textContent = s.prov;
-  document.getElementById('spotExpandedDesc').textContent = s.d;
+  document.getElementById('spotExpandedDesc').textContent = (en && s.dEn) ? s.dEn : s.d;
   document.getElementById('spotExpandedWind').textContent = s.w;
-  document.getElementById('spotExpandedLevel').textContent = s.lvLabel || levelLabels[s.lv] || s.lv;
+  document.getElementById('spotExpandedLevel').textContent =
+    en ? (s.lvLabelEn || LV_EN[s.lv] || s.lv) : (s.lvLabel || levelLabels[s.lv] || s.lv);
 
   var typeBadge = document.getElementById('spotExpandedType');
   if(s.cable){
@@ -4951,10 +4961,11 @@ function openSpotExpanded(s){
 
   var img = document.getElementById('spotExpandedImg');
   img.src = s.img;
-  img.alt = 'Foto de ' + s.n;
+  img.alt = (en ? 'Photo of ' : 'Foto de ') + s.n;
 
   var tagsContainer = document.getElementById('spotExpandedTags');
-  tagsContainer.innerHTML = s.tags.map(function(t){
+  var tagList = (en && s.tagsEn) ? s.tagsEn : s.tags;
+  tagsContainer.innerHTML = tagList.map(function(t){
     return '<span class="spot-expanded__tag">' + t + '</span>';
   }).join('');
 
@@ -4964,37 +4975,43 @@ function openSpotExpanded(s){
   if(s.months || s.howTo || s.safety || s.tips || s.schools || s.gallery){
     if(coming) coming.style.display = 'none';
     var html = '';
-    if(s.months){
-      html += '<h3 class="spot-expanded__section-title">📅 Mejores meses</h3>';
-      html += '<div class="spot-expanded__section-text">'+s.months+'</div>';
+    var months = (en && s.monthsEn) ? s.monthsEn : s.months;
+    var safety = (en && s.safetyEn) ? s.safetyEn : s.safety;
+    var tips = (en && s.tipsEn) ? s.tipsEn : s.tips;
+    var howTo = (en && s.howToEn) ? s.howToEn : s.howTo;
+    if(months){
+      html += '<h3 class="spot-expanded__section-title">'+(en?'📅 Best months':'📅 Mejores meses')+'</h3>';
+      html += '<div class="spot-expanded__section-text">'+months+'</div>';
     }
-    if(s.safety){
-      html += '<h3 class="spot-expanded__section-title">🦺 Seguridad</h3>';
-      html += '<div class="spot-expanded__section-text">'+s.safety+'</div>';
+    if(safety){
+      html += '<h3 class="spot-expanded__section-title">'+(en?'🦺 Safety':'🦺 Seguridad')+'</h3>';
+      html += '<div class="spot-expanded__section-text">'+safety+'</div>';
     }
-    if(s.tips){
-      html += '<h3 class="spot-expanded__section-title">💡 Tips locales</h3>';
-      html += '<div class="spot-expanded__section-text">'+s.tips+'</div>';
+    if(tips){
+      html += '<h3 class="spot-expanded__section-title">'+(en?'💡 Local tips':'💡 Tips locales')+'</h3>';
+      html += '<div class="spot-expanded__section-text">'+tips+'</div>';
     }
-    if(s.howTo){
-      html += '<h3 class="spot-expanded__section-title">🚗 Cómo llegar y estacionar</h3>';
-      html += '<div class="spot-expanded__section-text">'+s.howTo+'</div>';
+    if(howTo){
+      html += '<h3 class="spot-expanded__section-title">'+(en?'🚗 Getting there and parking':'🚗 Cómo llegar y estacionar')+'</h3>';
+      html += '<div class="spot-expanded__section-text">'+howTo+'</div>';
     }
     if(s.schools && s.schools.length){
-      html += '<h3 class="spot-expanded__section-title">🏫 Escuelas y puntos de acceso</h3>';
+      html += '<h3 class="spot-expanded__section-title">'+(en?'🏫 Schools and access points':'🏫 Escuelas y puntos de acceso')+'</h3>';
       s.schools.forEach(function(sc){
+        var scD = (en && sc.dEn) ? sc.dEn : sc.d;
+        var scAcc = (en && sc.accEn) ? sc.accEn : sc.acc;
         html += '<div class="spot-expanded__school">'+
           '<img src="'+sc.img+'" alt="'+sc.n+'" loading="lazy"/>'+
           '<div class="spot-expanded__school-body">'+
             '<div class="spot-expanded__school-name">'+sc.n+'</div>'+
-            '<div class="spot-expanded__school-desc">'+sc.d+'</div>'+
-            '<span class="spot-expanded__school-acc">'+sc.acc+'</span>'+
+            '<div class="spot-expanded__school-desc">'+scD+'</div>'+
+            '<span class="spot-expanded__school-acc">'+scAcc+'</span>'+
           '</div>'+
         '</div>';
       });
     }
     if(s.gallery && s.gallery.length){
-      html += '<h3 class="spot-expanded__section-title">📸 Galería de la comunidad</h3>';
+      html += '<h3 class="spot-expanded__section-title">'+(en?'📸 Community gallery':'📸 Galería de la comunidad')+'</h3>';
       html += '<div class="spot-expanded__gallery">'+
         s.gallery.map(function(g){ return '<img src="'+g+'" loading="lazy"/>'; }).join('')+
       '</div>';
@@ -5025,6 +5042,13 @@ if(spotExpandedBack) spotExpandedBack.addEventListener('click', closeSpotExpande
 document.addEventListener('keydown', function(e){
   if(e.key === 'Escape' && spotExpanded && spotExpanded.classList.contains('show')){
     closeSpotExpanded();
+  }
+});
+
+// Si cambian de idioma con el panel de un spot abierto, retraducimos al toque.
+document.addEventListener('wf:lang', function(){
+  if(spotExpandedActual && spotExpanded && spotExpanded.classList.contains('show')){
+    openSpotExpanded(spotExpandedActual);
   }
 });
 
