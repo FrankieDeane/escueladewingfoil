@@ -2923,26 +2923,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <article class="blog-card" id="blogCardSpots" style="cursor:pointer" onclick="document.getElementById('articleSpots').showModal()">
         <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.unsplash.com/photo-1730134427096-c167c128e119?w=800&auto=format&fit=crop&q=60" alt="Wingfoil en lago patagónico argentina" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
-          <span class="blog-card__cat">Guía de spots</span>
-          <h3 class="blog-card__title">Los mejores spots de wingfoil en Argentina 2026</h3>
-          <p class="blog-card__excerpt">Río de la Plata, Patagonia, Lagos del Sur y el Atlántico. Guía completa con nivel requerido, mejor época y cómo llegar.</p>
+          <span class="blog-card__cat" data-en="Spot guide">Guía de spots</span>
+          <h3 class="blog-card__title" data-en="The best wingfoil spots in Argentina 2026">Los mejores spots de wingfoil en Argentina 2026</h3>
+          <p class="blog-card__excerpt" data-en="Río de la Plata, Patagonia, the Southern Lakes and the Atlantic. A complete guide with required level, best season and how to get there.">Río de la Plata, Patagonia, Lagos del Sur y el Atlántico. Guía completa con nivel requerido, mejor época y cómo llegar.</p>
           <div class="blog-card__meta">
-            <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--primary)">Leer artículo →</span>
-            <span>· 15 min lectura</span>
+            <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--primary)" data-en="Read article →">Leer artículo →</span>
+            <span data-en="· 15 min read">· 15 min lectura</span>
           </div>
         </div>
       </article>
 
       <dialog id="articleSpots" style="max-width:760px;width:94vw;max-height:90vh;overflow-y:auto;border-radius:16px;border:1px solid var(--border);background:var(--surface);color:var(--text);padding:0;box-shadow:0 32px 80px rgba(0,0,0,.5)">
         <div style="position:sticky;top:0;z-index:2;background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between">
-          <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary)">Guía de spots · 15 min lectura</span>
-          <button onclick="document.getElementById('articleSpots').close()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:22px;line-height:1;padding:4px 8px">&times;</button>
+          <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary)" data-en="Spot guide · 15 min read">Guía de spots · 15 min lectura</span>
+          <button onclick="document.getElementById('articleSpots').close()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:22px;line-height:1;padding:4px 8px" aria-label="Cerrar" data-en-aria-label="Close">&times;</button>
         </div>
         <div style="padding:36px 32px 48px">
           <img src="https://images.unsplash.com/photo-1730134427096-c167c128e119?w=760&auto=format&fit=crop&q=60" alt="Wingfoil en lago patagónico argentina" style="width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:28px" loading="lazy"/>
-          <h2 style="font-family:'Clash Display',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;line-height:1.15;margin-bottom:12px">Los mejores spots de wingfoil en Argentina 2026</h2>
-          <p style="color:var(--text-muted);font-size:14px;margin-bottom:36px">Por el equipo de Escuela de Wingfoil · Mayo 2026</p>
+          <h2 style="font-family:'Clash Display',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;line-height:1.15;margin-bottom:12px" data-en="The best wingfoil spots in Argentina 2026">Los mejores spots de wingfoil en Argentina 2026</h2>
+          <p style="color:var(--text-muted);font-size:14px;margin-bottom:36px" data-en="By the Escuela de Wingfoil team · May 2026">Por el equipo de Escuela de Wingfoil · Mayo 2026</p>
 
+<div class="es-only">
           <p>Argentina tiene una geografía privilegiada para el wingfoil: el Río de la Plata como laboratorio de principiantes, el Atlántico para los que buscan olas, y los lagos patagónicos para los que quieren condiciones épicas. Esta guía cubre los 22+ spots registrados en la plataforma, organizados por región y nivel.</p>
 
           <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Región 1: Río de la Plata (Buenos Aires)</h3>
@@ -2986,6 +2987,52 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </tbody>
           </table></div>
           <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">¿Querés explorar todos los spots con mapa interactivo? Visitá la sección <a href="#spots" onclick="document.getElementById('articleSpots').close()" style="color:var(--primary)">Spots</a> de la plataforma.</p>
+          </div>
+          <div class="en-only">
+          <p>Argentina has a privileged geography for wingfoil: the Río de la Plata as a beginners' laboratory, the Atlantic for those chasing waves, and the Patagonian lakes for those after epic conditions. This guide covers the 22+ spots registered on the platform, organised by region and level.</p>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Region 1: Río de la Plata (Buenos Aires)</h3>
+          <p>The Río de la Plata is the learning spot par excellence. Flat water, a predictable afternoon thermal wind (S/SW, 1-7pm) and an active community year-round.</p>
+          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
+            <li><strong>San Isidro (Perú Beach, La Plazita de Martínez, CASI):</strong> The epicentre. Multiple access points, established schools, every level. S/SW thermal wind 12-25 kn from October to March.</li>
+            <li><strong>Chascomús — Laguna:</strong> Freshwater lagoon, completely flat. Ideal for your first rides on the foil. Steady S afternoon thermal. Beginner to intermediate level.</li>
+            <li><strong>Pinamar — La Frontera:</strong> Atlantic coast, steady S/SE wind. Family-friendly. Beginner level with an instructor.</li>
+            <li><strong>Mar del Plata — Waikiki:</strong> Atlantic coast with waves. Intermediate to advanced level. S/SE wind 15-30 kn.</li>
+          </ul>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Region 2: The littoral (Entre Ríos and Corrientes)</h3>
+          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
+            <li><strong>Paraná — Laguna Setúbal:</strong> A sheet of water between islands. N/NE wind, ideal for learning. Beginner level.</li>
+            <li><strong>Gualeguaychú — Río Uruguay:</strong> Great for downwinders. E/NE wind. Intermediate level.</li>
+            <li><strong>Paso de la Patria (Corrientes):</strong> Paraná-Paraguay confluence. The most epic spot in the north, N wind up to 35 kn. Advanced level only.</li>
+          </ul>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Region 3: Córdoba</h3>
+          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
+            <li><strong>Embalse Río Tercero:</strong> Man-made lake with an active community. Strong S/SW thermal wind. Intermediate level.</li>
+            <li><strong>Laguna Mar Chiquita:</strong> The biggest lagoon in Argentina, salt water. N/NE wind up to 35 kn. Advanced only.</li>
+          </ul>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Region 4: Patagonia — the country's best</h3>
+          <p>The Patagonian spots are the most technical and the most impressive. Strong winds, cold water and other-worldly scenery.</p>
+          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
+            <li><strong>Nahuel Huapi — Dina Huapi (Bariloche):</strong> The iconic spot. Cerro Catedral in the background, W wind up to 35 kn. Advanced level only. Best season: December to March.</li>
+            <li><strong>Lago Lolog — San Martín de los Andes:</strong> Andean Patagonian lake, brutal thermal wind in summer. Advanced level.</li>
+            <li><strong>Puerto Madryn — Golfo Nuevo:</strong> Southern Atlantic with whales and orcas. Steady S wind 18-35 kn. Advanced level.</li>
+            <li><strong>Rawson — Playa Unión:</strong> Dolphins while you foil. Very steady S wind. Intermediate to advanced level.</li>
+          </ul>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Summary table: pick your spot by level</h3>
+          <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px">
+            <thead><tr style="border-bottom:2px solid var(--border)"><th style="padding:10px 12px;text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em">Level</th><th style="padding:10px 12px;text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em">Recommended spot</th><th style="padding:10px 12px;text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em">Province</th></tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px;font-weight:700">Beginner</td><td style="padding:10px 12px;color:var(--text-muted)">San Isidro / Chascomús / Paraná Setúbal</td><td style="padding:10px 12px;color:var(--text-muted)">Buenos Aires / Entre Ríos</td></tr>
+              <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px;font-weight:700">Intermediate</td><td style="padding:10px 12px;color:var(--text-muted)">Pinamar / Gualeguaychú / Embalse R.Tercero</td><td style="padding:10px 12px;color:var(--text-muted)">Buenos Aires / Entre Ríos / Córdoba</td></tr>
+              <tr><td style="padding:10px 12px;font-weight:700">Advanced</td><td style="padding:10px 12px;color:var(--text-muted)">Nahuel Huapi / Mar del Plata / Puerto Madryn</td><td style="padding:10px 12px;color:var(--text-muted)">Río Negro / Buenos Aires / Chubut</td></tr>
+            </tbody>
+          </table></div>
+          <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">Want to explore every spot with an interactive map? Visit the platform's <a href="#spots" onclick="document.getElementById('articleSpots').close()" style="color:var(--primary)">Spots</a> section.</p>
+          </div>
           <div class="article-share">
             <span class="article-share__label" data-en="Share">Compartir</span>
             <button class="share-btn share-btn--wa" onclick="shareArticle('wa',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.867-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg><span>WhatsApp</span></button>
