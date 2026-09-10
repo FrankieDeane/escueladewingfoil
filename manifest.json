@@ -1,0 +1,18 @@
+{
+  "name": "Escuela de Wingfoil Argentina",
+  "short_name": "WingFoil ARG",
+  "description": "La plataforma educativa gratuita de wingfoil más completa de Argentina. Videos por nivel, spots, instructores certificados y el nivel del Río de la Plata en tiempo real.",
+  "start_url": "/?utm_source=pwa&utm_medium=homescreen",
+  "id": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#040e1a",
+  "theme_color": "#00b4d8",
+  "lang": "es-AR",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
