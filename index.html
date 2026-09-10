@@ -2768,12 +2768,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <img src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=800&auto=format&fit=crop&q=60&crop=entropy" alt="Playa costera con viento" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/>
         </div>
         <div class="blog-card__body">
-          <span class="blog-card__cat">Técnica</span>
-          <h3 class="blog-card__title">Cómo leer el viento como un pro</h3>
-          <p class="blog-card__excerpt">Apps, modelos meteorológicos, lectura del agua. Identificá el momento ideal para salir y evitá las trampas del viento.</p>
+          <span class="blog-card__cat" data-en="Technique">Técnica</span>
+          <h3 class="blog-card__title" data-en="How to read the wind like a pro">Cómo leer el viento como un pro</h3>
+          <p class="blog-card__excerpt" data-en="Apps, weather models, reading the water. Spot the ideal moment to head out and avoid the wind's traps.">Apps, modelos meteorológicos, lectura del agua. Identificá el momento ideal para salir y evitá las trampas del viento.</p>
           <div class="blog-card__meta">
-            <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--primary)">Leer artículo →</span>
-            <span>· 10 min lectura</span>
+            <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--primary)" data-en="Read article →">Leer artículo →</span>
+            <span data-en="· 10 min read">· 10 min lectura</span>
           </div>
         </div>
       </article>
@@ -2781,14 +2781,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <!-- ARTICLE MODAL VIENTO -->
       <dialog id="articleViento" style="max-width:760px;width:94vw;max-height:90vh;overflow-y:auto;border-radius:16px;border:1px solid var(--border);background:var(--surface);color:var(--text);padding:0;box-shadow:0 32px 80px rgba(0,0,0,.5)">
         <div style="position:sticky;top:0;z-index:2;background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between">
-          <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary)">Técnica · 10 min lectura</span>
-          <button onclick="document.getElementById('articleViento').close()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:22px;line-height:1;padding:4px 8px">&times;</button>
+          <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary)" data-en="Technique · 10 min read">Técnica · 10 min lectura</span>
+          <button onclick="document.getElementById('articleViento').close()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:22px;line-height:1;padding:4px 8px" aria-label="Cerrar" data-en-aria-label="Close">&times;</button>
         </div>
         <div style="padding:36px 32px 48px">
           <img src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=760&auto=format&fit=crop&q=60&crop=entropy" alt="Playa costera con viento" style="width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:28px" loading="lazy"/>
-          <h2 style="font-family:'Clash Display',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;line-height:1.15;margin-bottom:12px">Cómo leer el viento como un pro</h2>
-          <p style="color:var(--text-muted);font-size:14px;margin-bottom:36px">Por el equipo de Escuela de Wingfoil · Mayo 2026</p>
+          <h2 style="font-family:'Clash Display',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;line-height:1.15;margin-bottom:12px" data-en="How to read the wind like a pro">Cómo leer el viento como un pro</h2>
+          <p style="color:var(--text-muted);font-size:14px;margin-bottom:36px" data-en="By the Escuela de Wingfoil team · May 2026">Por el equipo de Escuela de Wingfoil · Mayo 2026</p>
 
+<div class="es-only">
           <p>El error más común del principiante no es técnico: es salir al agua cuando no debería. Aprender a leer el viento antes de cada sesión es tan importante como saber volar el ala. Esta guía te enseña a interpretar el pronóstico, las apps y las señales del agua para tomar la mejor decisión.</p>
 
           <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">1. Las mejores apps de viento para Argentina</h3>
@@ -2847,6 +2848,67 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </div>
 
           <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">¿Querés aprender a leer el viento en el campo? Consultá a los <a href="#instructores" onclick="document.getElementById('articleViento').close()" style="color:var(--primary)">instructores</a> — muchos hacen clases de meteorología incluidas en el paquete.</p>
+          </div>
+          <div class="en-only">
+          <p>The most common beginner mistake isn't technical: it's going out on the water when they shouldn't. Learning to read the wind before every session is as important as knowing how to fly the wing. This guide teaches you to interpret the forecast, the apps and the water's own signals to make the best call.</p>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">1. The best wind apps for Argentina</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0">
+            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
+              <div style="font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif;font-size:16px;margin-bottom:4px">🌬️ Windguru</div>
+              <div style="font-size:13px;color:var(--text-muted)">The community's favourite. GFS and WRF models. Excellent for the Río de la Plata.</div>
+            </div>
+            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
+              <div style="font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif;font-size:16px;margin-bottom:4px">⚡ Windy.com</div>
+              <div style="font-size:13px;color:var(--text-muted)">Animated wind map. Perfect for watching fronts and understanding the whole system.</div>
+            </div>
+            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
+              <div style="font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif;font-size:16px;margin-bottom:4px">📡 iKitesurf</div>
+              <div style="font-size:13px;color:var(--text-muted)">Real-time weather stations. Confirms the forecast.</div>
+            </div>
+            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
+              <div style="font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif;font-size:16px;margin-bottom:4px">🇦🇷 SMN</div>
+              <div style="font-size:13px;color:var(--text-muted)">Argentina's national weather service. Strong-wind alerts. A must-check.</div>
+            </div>
+          </div>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">2. Weather models: GFS vs ECMWF</h3>
+          <p><strong>GFS (Global Forecast System)</strong>: the most used because it's free. Accurate 3-4 days out. By day 7 it starts to diverge from reality. You'll see it in Windguru as the first row of data.</p>
+          <p><strong>ECMWF (the European model)</strong>: the most accurate in the world, available for free up to 10 days out at 3-hour resolution. On Windy you'll find it in the model menu. When GFS and ECMWF agree, the forecast is reliable.</p>
+          <p><strong>WRF</strong>: a high-resolution model for specific areas. Windguru shows it for several spots in Argentina. It's the most accurate for local winds like the Río de la Plata's thermal.</p>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">3. Reading the water: signs the forecast won't tell you</h3>
+          <p>The forecast gives you the framework, but the water tells you the real-time truth:</p>
+          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
+            <li><strong>Small waves or a uniform ripple:</strong> steady, consistent wind. Good conditions.</li>
+            <li><strong>Completely flat water:</strong> the wind hasn't arrived yet or there's a lull. Wait 15 minutes.</li>
+            <li><strong>Choppy, messy water:</strong> variable, inconsistent wind. Hard for beginners.</li>
+            <li><strong>Ripple in just one strip:</strong> there's a thermal wind line. Ride in that area.</li>
+            <li><strong>White foam on the water:</strong> +20 kn. Check your level before going in.</li>
+          </ul>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">4. The Río de la Plata's thermal wind</h3>
+          <p>Argentina's most popular spot has its own wind pattern that's worth understanding well:</p>
+          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
+            <li><strong>Timing:</strong> the thermal kicks in between 1pm and 4pm, and usually drops at sunset (6-7pm).</li>
+            <li><strong>Direction:</strong> generally S/SW in summer. NE in winter.</li>
+            <li><strong>Strength:</strong> 12-22 kn on normal days. Ocean swell creates coastal wind "lulls".</li>
+            <li><strong>Arrival sign:</strong> the water starts rippling from the bottom toward the shore. Get ready 20 minutes ahead.</li>
+          </ul>
+          <p>The Martínez Norte camera you can see on this site is perfect for confirming whether the wind has already arrived without having to drive to the spot.</p>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">5. Danger signs you should never ignore</h3>
+          <div style="background:rgba(232,90,90,.08);border:1px solid rgba(232,90,90,.3);border-left:4px solid #e85a5a;border-radius:10px;padding:20px;margin:20px 0">
+            <ul style="list-style:none;padding:0;margin:0;display:grid;gap:8px">
+              <li style="font-size:14px;color:var(--text)">🚨 <strong>Gusty wind</strong>: gusts that swing 30%+ up and down within seconds. Very dangerous for foiling.</li>
+              <li style="font-size:14px;color:var(--text)">🚨 <strong>Offshore</strong>: wind blowing you away from the coast. If something fails, it carries you out into the river.</li>
+              <li style="font-size:14px;color:var(--text)">🚨 <strong>Storm fronts</strong>: the wind before a storm can be treacherous. Get off the water.</li>
+              <li style="font-size:14px;color:var(--text)">🚨 <strong>Wind holes</strong>: losing the wind while foiling means falling into the water. Dangerous with a shallow bottom.</li>
+            </ul>
+          </div>
+
+          <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">Want to learn to read the wind out in the field? Ask the <a href="#instructores" onclick="document.getElementById('articleViento').close()" style="color:var(--primary)">instructors</a> — many include weather lessons in their package.</p>
+          </div>
           <div class="article-share">
             <span class="article-share__label" data-en="Share">Compartir</span>
             <button class="share-btn share-btn--wa" onclick="shareArticle('wa',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.867-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg><span>WhatsApp</span></button>
