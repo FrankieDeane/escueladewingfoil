@@ -1433,8 +1433,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="topbar" role="banner" id="topbar">
   <span class="topbar__icon" id="topbarIcon">🌊</span>
   <span class="topbar__text" id="topbarText">
-    <strong>Educación gratuita de WingFoil en Argentina</strong>
-    <span class="topbar__hide-mobile">· Comunidad #1 de habla hispana</span>
+    <strong data-en="Free WingFoil education in Argentina">Educación gratuita de WingFoil en Argentina</strong>
+    <span class="topbar__hide-mobile" data-en="· #1 Spanish-speaking community">· Comunidad #1 de habla hispana</span>
   </span>
 </div>
 
@@ -4155,20 +4155,34 @@ if(calcBtn){
   if(!barra || !icono || !texto) return;
 
   var DATOS = [
-    {i:'🗺️', t:'22 spots de wingfoil y 4 cable parks mapeados en todo el país', h:'#spots',              c:'Ver el mapa'},
-    {i:'🌊', t:'Mirá el nivel del Río de la Plata hora por hora, con marea del SHN', h:'/costa-san-isidro', c:'Ver la costa en 3D'},
-    {i:'🏄', t:'Instructores certificados de todo el país, gratis',               h:'#instructores',       c:'Buscar profe'},
-    {i:'🪂', t:'Comprá y vendé equipo usado entre riders de la comunidad',        h:'#venta-de-wingfoil',  c:'Ver equipos'},
-    {i:'🧮', t:'Calculá qué tabla y qué ala te corresponden según tu peso',       h:'#calculadora',        c:'Usar calculadora'},
-    {i:'🎬', t:'Videos ordenados por nivel, de cero hasta foilear',               h:'#videos',             c:'Ver videos'},
-    {i:'🦈', t:'La anatomía del foil explicada pieza por pieza',                  h:'#anatomia',           c:'Aprender'},
-    {i:'⚖️', t:'Comparador de marcas: nivel, precio y disponibilidad en Argentina', h:'#comparador',       c:'Comparar'},
-    {i:'💨', t:'Qué es la sudestada y cuándo hace crecer el río',                 h:'#sudestada',          c:'Entender'},
-    {i:'📷', t:'Cámaras en vivo para ver cómo está el agua ahora',                h:'#camaras',            c:'Mirar'},
-    {i:'📚', t:'Glosario de wingfoil, de "pumping" a "drift"',                    h:'#glosario',           c:'Ver glosario'},
-    {i:'🏆', t:'Los riders que hicieron grande el wingfoil en el mundo',          h:'#riders',             c:'Conocerlos'},
-    {i:'❓', t:'Las dudas más comunes antes de arrancar, respondidas',            h:'#faq',                c:'Ver respuestas'},
-    {i:'💡', t:'¿Qué le falta a la web? Contanos en 30 segundos',                 h:'#participa',          c:'Dejar mi idea'}
+    {i:'🗺️', t:'22 spots de wingfoil y 4 cable parks mapeados en todo el país', h:'#spots',              c:'Ver el mapa',
+              en:'22 wingfoil spots and 4 cable parks mapped across the country',                          ec:'See the map'},
+    {i:'🌊', t:'Mirá el nivel del Río de la Plata hora por hora, con marea del SHN', h:'/costa-san-isidro', c:'Ver la costa en 3D',
+              en:'Check the Río de la Plata water level hour by hour, with SHN tide data',                 ec:'See the 3D coast'},
+    {i:'🏄', t:'Instructores certificados de todo el país, gratis',               h:'#instructores',       c:'Buscar profe',
+              en:'Certified instructors from all over the country, free',                                  ec:'Find an instructor'},
+    {i:'🪂', t:'Comprá y vendé equipo usado entre riders de la comunidad',        h:'#venta-de-wingfoil',  c:'Ver equipos',
+              en:'Buy and sell used gear with riders in the community',                                    ec:'See the gear'},
+    {i:'🧮', t:'Calculá qué tabla y qué ala te corresponden según tu peso',       h:'#calculadora',        c:'Usar calculadora',
+              en:'Work out which board and wing fit your weight',                                          ec:'Use the calculator'},
+    {i:'🎬', t:'Videos ordenados por nivel, de cero hasta foilear',               h:'#videos',             c:'Ver videos',
+              en:'Videos sorted by level, from zero to flying',                                            ec:'Watch videos'},
+    {i:'🦈', t:'La anatomía del foil explicada pieza por pieza',                  h:'#anatomia',           c:'Aprender',
+              en:'The foil\'s anatomy explained piece by piece',                                           ec:'Learn'},
+    {i:'⚖️', t:'Comparador de marcas: nivel, precio y disponibilidad en Argentina', h:'#comparador',       c:'Comparar',
+              en:'Brand comparison: level, price and availability in Argentina',                           ec:'Compare'},
+    {i:'💨', t:'Qué es la sudestada y cuándo hace crecer el río',                 h:'#sudestada',          c:'Entender',
+              en:'What a sudestada is and when it floods the river',                                       ec:'Learn more'},
+    {i:'📷', t:'Cámaras en vivo para ver cómo está el agua ahora',                h:'#camaras',            c:'Mirar',
+              en:'Live cameras to see what the water looks like right now',                                ec:'Watch'},
+    {i:'📚', t:'Glosario de wingfoil, de "pumping" a "drift"',                    h:'#glosario',           c:'Ver glosario',
+              en:'Wingfoil glossary, from "pumping" to "drift"',                                           ec:'See glossary'},
+    {i:'🏆', t:'Los riders que hicieron grande el wingfoil en el mundo',          h:'#riders',             c:'Conocerlos',
+              en:'The riders who made wingfoil huge worldwide',                                            ec:'Meet them'},
+    {i:'❓', t:'Las dudas más comunes antes de arrancar, respondidas',            h:'#faq',                c:'Ver respuestas',
+              en:'The most common questions before you start, answered',                                   ec:'See answers'},
+    {i:'💡', t:'¿Qué le falta a la web? Contanos en 30 segundos',                 h:'#participa',          c:'Dejar mi idea',
+              en:'What is missing from the site? Tell us in 30 seconds',                                   ec:"Leave your idea"}
   ];
 
   // Mezcla al azar (Fisher-Yates) para que el orden cambie en cada visita.
@@ -4177,11 +4191,15 @@ if(calcBtn){
     var tmp = DATOS[i]; DATOS[i] = DATOS[j]; DATOS[j] = tmp;
   }
 
-  var pos = 0, timer = null, pausado = false;
+  var pos = 0, timer = null, pausado = false, actual = null;
+
+  function enIngles(){ return document.documentElement.lang === 'en'; }
 
   function pintar(d){
+    actual = d;
+    var en = enIngles();
     icono.textContent = d.i;
-    texto.innerHTML = d.t + ' <a class="topbar__cta" href="' + d.h + '">' + d.c + ' →</a>';
+    texto.innerHTML = (en ? d.en : d.t) + ' <a class="topbar__cta" href="' + d.h + '">' + (en ? d.ec : d.c) + ' →</a>';
   }
 
   function siguiente(){
@@ -4193,6 +4211,12 @@ if(calcBtn){
       barra.classList.remove('topbar--fade');
     }, 350);
   }
+
+  // Si cambian el idioma mientras ya está rotando, retraducimos el mensaje
+  // actual sin esperar a la próxima rotación ni perder la posición.
+  document.addEventListener('wf:lang', function(){
+    if(actual) pintar(actual);
+  });
 
   // No rotamos mientras el mouse está encima ni con el link enfocado por teclado:
   // sería sacarle el mensaje de las manos a alguien que lo está por clickear.
