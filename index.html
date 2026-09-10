@@ -2414,7 +2414,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <p class="section-sub">Si recién arrancás te van a tirar 50 términos en inglés. Acá tenés los más usados, traducidos y explicados al criollo.</p>
 
     <div class="glosario-search">
-      <input type="text" id="glossSearch" placeholder="Buscar término..." aria-label="Buscar término en glosario"/>
+      <input type="text" id="glossSearch" placeholder="Buscar término..." data-en-placeholder="Search a term..." aria-label="Buscar término en glosario" data-en-aria-label="Search a term in the glossary"/>
     </div>
 
     <div class="glosario-list" id="glosarioGrid"></div>
@@ -4494,55 +4494,60 @@ add3D('.brand-card');
 
 // ============ GLOSARIO ============
 var GLOSSARY = [
-  {n:'Pumpear',tag:'Técnica',d:'Bombear el ala y/o las piernas para generar velocidad y despegar el foil del agua.'},
-  {n:'Touch down',tag:'Maniobra',d:'Cuando la tabla vuelve a tocar el agua después de estar foileando. Suele cortar la velocidad.'},
-  {n:'Trasluchada (Gybe)',tag:'Maniobra',d:'Giro hacia el viento de cola. Cambiás de dirección sin perder el foil. Maniobra clave del intermedio.'},
-  {n:'Virada (Tack)',tag:'Maniobra',d:'Giro contra el viento. Más difícil que la trasluchada, requiere coordinación de pies y ala.'},
-  {n:'Downwind',tag:'Modalidad',d:'Navegar con el viento atrás recorriendo distancia. Suelen hacerse rutas largas en olas o lagos.'},
-  {n:'Upwind',tag:'Maniobra',d:'Volver al punto de origen contra el viento. Es lo primero que hay que dominar para no terminar lejos.'},
-  {n:'Foilear',tag:'Verbo',d:'Estar elevado sobre el agua gracias al foil. El objetivo final del deporte.'},
-  {n:'Ventana de viento',tag:'Concepto',d:'Rango de viento en el que es navegable. Por debajo no levantás, por arriba es peligroso.'},
-  {n:'Ala (Wing)',tag:'Equipo',d:'La vela inflable que sostenés con las manos. Genera la fuerza para avanzar.'},
-  {n:'Mástil (Mast)',tag:'Equipo',d:'Vara vertical que conecta la tabla con el foil. Cuanto más largo, más altura podés volar.'},
-  {n:'Fuselaje',tag:'Equipo',d:'Tubo horizontal que conecta el mástil con las alas del foil. Define el balance del foil.'},
-  {n:'Ala delantera (Front wing)',tag:'Equipo',d:'El ala grande del foil que genera la mayor parte del lift. Más grande = más fácil despegar.'},
-  {n:'Estabilizador (Stab)',tag:'Equipo',d:'El ala chica de atrás del foil. Estabiliza la dirección y altura. Más chico = más maniobrable.'},
-  {n:'Lift',tag:'Concepto',d:'Fuerza vertical que genera el foil al moverse en el agua. Lo que te eleva.'},
-  {n:'Pitch',tag:'Concepto',d:'Inclinación del foil hacia adelante o atrás. Controla la altura de vuelo.'},
-  {n:'Stall',tag:'Concepto',d:'Pérdida de sustentación del foil. Te caés porque el agua deja de generar lift.'},
-  {n:'Rail',tag:'Maniobra',d:'Inclinar la tabla sobre uno de los costados. Permite girar y mantener la presión sobre el foil.'},
-  {n:'Switch',tag:'Maniobra',d:'Cambiar la posición de los pies y manos para navegar en la otra dirección. Avanzado.'},
-  {n:'Strap',tag:'Equipo',d:'Las correas de la tabla donde van los pies. No todas las tablas las traen.'},
-  {n:'Boom',tag:'Equipo',d:'Mango duro de algunas alas en lugar de strut inflable. Sensación más windsurf.'},
-  {n:'Strut',tag:'Equipo',d:'Tubo inflable central del ala que le da rigidez. Lo que agarrás con las manos.'},
-  {n:'Leading edge (LE)',tag:'Equipo',d:'Borde de ataque del ala. Tubo principal inflable que enfrenta al viento.'},
-  {n:'Leash',tag:'Equipo',d:'Cuerda que une el ala a tu muñeca. Si la soltás no se va volando.'},
-  {n:'Drift',tag:'Maniobra',d:'Soltar el ala y dejarla flamear mientras hacés otra cosa (entrar a una ola, recuperar equilibrio).'},
-  {n:'Choppy',tag:'Condición',d:'Agua picada con olas chiquitas y desordenadas. Difícil para principiantes.'},
-  {n:'Flat',tag:'Condición',d:'Agua plana sin olas. Ideal para aprender. El Río de la Plata suele estar así.'},
-  {n:'Onshore',tag:'Condición',d:'Viento que sopla de mar/río hacia la costa. Más seguro para arrancar.'},
-  {n:'Offshore',tag:'Condición',d:'Viento que sopla de la costa hacia adentro. Te puede alejar — peligroso si no tenés experiencia.'},
-  {n:'Cross-shore',tag:'Condición',d:'Viento paralelo a la costa. Condición ideal para wingfoil intermedio/avanzado.'},
-  {n:'Knots (kn)',tag:'Unidad',d:'Nudos. Unidad de velocidad del viento. 1 nudo ≈ 1.85 km/h. Wingfoil arranca a partir de 12-15 kn.'}
+  {n:'Pumpear',tag:'Técnica',d:'Bombear el ala y/o las piernas para generar velocidad y despegar el foil del agua.',tagEn:'Technique',nEn:'Pumping',dEn:'Pumping the wing and/or your legs to generate speed and lift the foil off the water.'},
+  {n:'Touch down',tag:'Maniobra',d:'Cuando la tabla vuelve a tocar el agua después de estar foileando. Suele cortar la velocidad.',tagEn:'Manoeuvre',dEn:'When the board touches the water again after foiling. Usually kills your speed.'},
+  {n:'Trasluchada (Gybe)',nEn:'Gybe',tag:'Maniobra',d:'Giro hacia el viento de cola. Cambiás de dirección sin perder el foil. Maniobra clave del intermedio.',tagEn:'Manoeuvre',dEn:'A turn with the wind behind you. You change direction without dropping off the foil. A key intermediate manoeuvre.'},
+  {n:'Virada (Tack)',nEn:'Tack',tag:'Maniobra',d:'Giro contra el viento. Más difícil que la trasluchada, requiere coordinación de pies y ala.',tagEn:'Manoeuvre',dEn:'A turn into the wind. Harder than the gybe, requires coordinating your feet and the wing.'},
+  {n:'Downwind',tag:'Modalidad',d:'Navegar con el viento atrás recorriendo distancia. Suelen hacerse rutas largas en olas o lagos.',tagEn:'Discipline',dEn:'Riding with the wind at your back covering distance. Usually long routes on waves or lakes.'},
+  {n:'Upwind',tag:'Maniobra',d:'Volver al punto de origen contra el viento. Es lo primero que hay que dominar para no terminar lejos.',tagEn:'Manoeuvre',dEn:'Getting back to your starting point against the wind. The first thing you need to master so you don\'t end up far away.'},
+  {n:'Foilear',tag:'Verbo',d:'Estar elevado sobre el agua gracias al foil. El objetivo final del deporte.',tagEn:'Verb',nEn:'Foiling',dEn:'Being lifted above the water thanks to the foil. The ultimate goal of the sport.'},
+  {n:'Ventana de viento',tag:'Concepto',d:'Rango de viento en el que es navegable. Por debajo no levantás, por arriba es peligroso.',tagEn:'Concept',nEn:'Wind window',dEn:'The wind range in which you can ride. Below it you can\'t get up, above it it\'s dangerous.'},
+  {n:'Ala (Wing)',nEn:'Wing',tag:'Equipo',d:'La vela inflable que sostenés con las manos. Genera la fuerza para avanzar.',tagEn:'Gear',dEn:'The inflatable sail you hold in your hands. Generates the power to move forward.'},
+  {n:'Mástil (Mast)',nEn:'Mast',tag:'Equipo',d:'Vara vertical que conecta la tabla con el foil. Cuanto más largo, más altura podés volar.',tagEn:'Gear',dEn:'The vertical shaft that connects the board to the foil. The longer it is, the higher you can fly.'},
+  {n:'Fuselaje',nEn:'Fuselage',tag:'Equipo',d:'Tubo horizontal que conecta el mástil con las alas del foil. Define el balance del foil.',tagEn:'Gear',dEn:'The horizontal tube that connects the mast to the foil\'s wings. Defines the foil\'s balance.'},
+  {n:'Ala delantera (Front wing)',nEn:'Front wing',tag:'Equipo',d:'El ala grande del foil que genera la mayor parte del lift. Más grande = más fácil despegar.',tagEn:'Gear',dEn:'The foil\'s big wing that generates most of the lift. Bigger = easier to take off.'},
+  {n:'Estabilizador (Stab)',nEn:'Stabiliser (Stab)',tag:'Equipo',d:'El ala chica de atrás del foil. Estabiliza la dirección y altura. Más chico = más maniobrable.',tagEn:'Gear',dEn:'The foil\'s small rear wing. Stabilises direction and height. Smaller = more manoeuvrable.'},
+  {n:'Lift',tag:'Concepto',d:'Fuerza vertical que genera el foil al moverse en el agua. Lo que te eleva.',tagEn:'Concept',dEn:'The vertical force the foil generates as it moves through the water. What lifts you up.'},
+  {n:'Pitch',tag:'Concepto',d:'Inclinación del foil hacia adelante o atrás. Controla la altura de vuelo.',tagEn:'Concept',dEn:'The foil\'s forward or backward tilt. Controls your flying height.'},
+  {n:'Stall',tag:'Concepto',d:'Pérdida de sustentación del foil. Te caés porque el agua deja de generar lift.',tagEn:'Concept',dEn:'The foil losing lift. You fall because the water stops generating lift.'},
+  {n:'Rail',tag:'Maniobra',d:'Inclinar la tabla sobre uno de los costados. Permite girar y mantener la presión sobre el foil.',tagEn:'Manoeuvre',dEn:'Tilting the board onto one of its edges. Lets you turn and keep pressure on the foil.'},
+  {n:'Switch',tag:'Maniobra',d:'Cambiar la posición de los pies y manos para navegar en la otra dirección. Avanzado.',tagEn:'Manoeuvre',dEn:'Swapping your foot and hand position to ride in the other direction. Advanced.'},
+  {n:'Strap',tag:'Equipo',d:'Las correas de la tabla donde van los pies. No todas las tablas las traen.',tagEn:'Gear',dEn:'The footstraps on the board. Not every board comes with them.'},
+  {n:'Boom',tag:'Equipo',d:'Mango duro de algunas alas en lugar de strut inflable. Sensación más windsurf.',tagEn:'Gear',dEn:'A rigid handle on some wings instead of an inflatable strut. More of a windsurf feel.'},
+  {n:'Strut',tag:'Equipo',d:'Tubo inflable central del ala que le da rigidez. Lo que agarrás con las manos.',tagEn:'Gear',dEn:'The wing\'s central inflatable tube that gives it rigidity. What you hold with your hands.'},
+  {n:'Leading edge (LE)',tag:'Equipo',d:'Borde de ataque del ala. Tubo principal inflable que enfrenta al viento.',tagEn:'Gear',dEn:'The wing\'s leading edge. The main inflatable tube that faces into the wind.'},
+  {n:'Leash',tag:'Equipo',d:'Cuerda que une el ala a tu muñeca. Si la soltás no se va volando.',tagEn:'Gear',dEn:'The line that connects the wing to your wrist. If you let go it won\'t fly away.'},
+  {n:'Drift',tag:'Maniobra',d:'Soltar el ala y dejarla flamear mientras hacés otra cosa (entrar a una ola, recuperar equilibrio).',tagEn:'Manoeuvre',dEn:'Letting go of the wing and letting it flag out while you do something else (drop into a wave, regain your balance).'},
+  {n:'Choppy',tag:'Condición',d:'Agua picada con olas chiquitas y desordenadas. Difícil para principiantes.',tagEn:'Condition',dEn:'Choppy water with small, messy waves. Tough for beginners.'},
+  {n:'Flat',tag:'Condición',d:'Agua plana sin olas. Ideal para aprender. El Río de la Plata suele estar así.',tagEn:'Condition',dEn:'Flat water with no waves. Ideal for learning. The Río de la Plata is usually like this.'},
+  {n:'Onshore',tag:'Condición',d:'Viento que sopla de mar/río hacia la costa. Más seguro para arrancar.',tagEn:'Condition',dEn:'Wind blowing from the sea/river toward the shore. Safer for starting out.'},
+  {n:'Offshore',tag:'Condición',d:'Viento que sopla de la costa hacia adentro. Te puede alejar — peligroso si no tenés experiencia.',tagEn:'Condition',dEn:'Wind blowing from the shore out to sea. It can carry you away — dangerous without experience.'},
+  {n:'Cross-shore',tag:'Condición',d:'Viento paralelo a la costa. Condición ideal para wingfoil intermedio/avanzado.',tagEn:'Condition',dEn:'Wind blowing parallel to the shore. Ideal condition for intermediate/advanced wingfoiling.'},
+  {n:'Knots (kn)',tag:'Unidad',d:'Nudos. Unidad de velocidad del viento. 1 nudo ≈ 1.85 km/h. Wingfoil arranca a partir de 12-15 kn.',tagEn:'Unit',dEn:'Knots. Unit of wind speed. 1 knot ≈ 1.85 km/h. Wingfoiling starts around 12-15 kn.'}
 ];
 window.__EWF = window.__EWF || {}; window.__EWF.GLOSSARY = GLOSSARY;
 
 function renderGlossary(filter){
   var grid = document.getElementById('glosarioGrid');
   if(!grid) return;
+  var en = spotsEnIngles();
   var f = (filter || '').toLowerCase().trim();
   var list = GLOSSARY.filter(function(g){
     if(!f) return true;
-    return g.n.toLowerCase().indexOf(f) !== -1 || g.d.toLowerCase().indexOf(f) !== -1 || g.tag.toLowerCase().indexOf(f) !== -1;
+    var n = en && g.nEn ? g.nEn : g.n, d = en && g.dEn ? g.dEn : g.d, tag = en && g.tagEn ? g.tagEn : g.tag;
+    return n.toLowerCase().indexOf(f) !== -1 || d.toLowerCase().indexOf(f) !== -1 || tag.toLowerCase().indexOf(f) !== -1;
   });
   if(list.length === 0){
-    grid.innerHTML = '<div class="gloss-empty">No encontramos ningún término con ese nombre. Probá otra búsqueda.</div>';
+    grid.innerHTML = '<div class="gloss-empty">' +
+      (en ? 'No terms matched that search. Try something else.' : 'No encontramos ningún término con ese nombre. Probá otra búsqueda.') +
+      '</div>';
     return;
   }
   grid.innerHTML = list.map(function(g){
+    var n = en && g.nEn ? g.nEn : g.n, d = en && g.dEn ? g.dEn : g.d, tag = en && g.tagEn ? g.tagEn : g.tag;
     return '<details class="gloss-item">' +
-      '<summary><span class="gloss-item-name">' + g.n + '</span><span class="gloss-item-tag">' + g.tag + '</span></summary>' +
-      '<div class="gloss-item-def">' + g.d + '</div>' +
+      '<summary><span class="gloss-item-name">' + n + '</span><span class="gloss-item-tag">' + tag + '</span></summary>' +
+      '<div class="gloss-item-def">' + d + '</div>' +
     '</details>';
   }).join('');
 }
@@ -4551,6 +4556,7 @@ var glossSearch = document.getElementById('glossSearch');
 if(glossSearch){
   renderGlossary('');
   glossSearch.addEventListener('input', function(){ renderGlossary(this.value); });
+  document.addEventListener('wf:lang', function(){ renderGlossary(glossSearch.value); });
 }
 
 // ============ LITE-YOUTUBE (riders) ============
@@ -4792,23 +4798,23 @@ if('serviceWorker' in navigator){
 
 // ============ MANIOBRAS CATALOG ============
 var MANIOBRAS = [
-  {n:'Foileo',sub:'Take off / Touch up',cat:'basic',catLabel:'Básica',diff:1,img:'https://images.unsplash.com/photo-1666175497562-ccb66e6c373b?w=600&auto=format&fit=crop&q=60',vid:'KyizUfMxboU',d:'La primera vez que la tabla despega del agua y empezás a volar. El logro principal del primer mes.'},
-  {n:'Pumpear',sub:'Pumping',cat:'basic',catLabel:'Básica',diff:1,img:'https://images.unsplash.com/photo-1666175497141-ef62a9c65558?w=600&auto=format&fit=crop&q=60',vid:'8TZgz8xgo_k',d:'Generar velocidad bombeando el ala y/o las piernas. Fundamental para arrancar y mantener el foileo.'},
-  {n:'Upwind',sub:'Vuelta al origen',cat:'basic',catLabel:'Básica',diff:2,img:'https://images.unsplash.com/photo-1730134427096-c167c128e119?w=600&auto=format&fit=crop&q=60',vid:'7M3Cqw9dm9M',d:'Navegar contra el viento para volver al punto de partida. Lo segundo más importante después del foileo.'},
-  {n:'Touch down controlado',sub:'Aterrizaje suave',cat:'basic',catLabel:'Básica',diff:2,img:'https://images.unsplash.com/photo-1615840956750-3262c5fffb62?w=600&auto=format&fit=crop&q=60',vid:'Osn3w7CmItE',d:'Volver a tocar el agua sin perder velocidad ni caerse. Permite recuperar y seguir.'},
-  {n:'Trabuchada',sub:'Gybe / Jibe',cat:'inter',catLabel:'Intermedia',diff:3,img:'https://wingfoilprocenter.com/cdn/shop/files/2P2A6634-3_2000x.jpg?v=1696720560',vid:'0KzKPWPTAIQ',d:'Giro hacia el viento de cola sin tocar el agua. La maniobra clave que separa principiantes de intermedios.'},
-  {n:'Virada',sub:'Tack',cat:'inter',catLabel:'Intermedia',diff:3,img:'https://images.unsplash.com/photo-1666175497804-e28c2d800ab9?w=600&auto=format&fit=crop&q=60',vid:'77s0Es58Eok',d:'Giro contra el viento. Más técnica que la trabuchada porque tenés que cambiar pies y manos en orden.'},
-  {n:'Switch',sub:'Cambio de pies',cat:'inter',catLabel:'Intermedia',diff:3,img:'https://images.unsplash.com/photo-1666175497584-dab60dcf1419?q=80&w=687&auto=format&fit=crop',vid:'UdQ2LDmJlm8',d:'Cambiar la posición de los pies durante el foileo para navegar con la otra pierna adelante.'},
-  {n:'Salto básico',sub:'Jump',cat:'inter',catLabel:'Intermedia',diff:3,img:'https://images.unsplash.com/photo-1666175497378-490ab9cc2ba1?w=600&auto=format&fit=crop&q=60',vid:'12unYNCfvBk',d:'Despegar verticalmente del agua usando el ala como propulsión. La base de todos los trucos aéreos.'},
-  {n:'Surf con ola',sub:'Wave riding',cat:'inter',catLabel:'Intermedia',diff:4,img:'https://images.unsplash.com/photo-1760506067709-e1dd845943d2?w=600&auto=format&fit=crop&q=60',vid:'yYAzwbQy02g',d:'Trabajar una ola con el foil. Bajadas largas, cortes en la pared. Sensación cercana al surf.'},
-  {n:'Downwind',sub:'Recorrido largo',cat:'inter',catLabel:'Intermedia',diff:3,img:'https://images.unsplash.com/photo-1760506067710-c740a40c23ea?w=600&auto=format&fit=crop&q=60',vid:'LZvfhbpEJzQ',d:'Travesía aprovechando el viento de cola. Pueden ser kilómetros de navegación sin perder el foil.'},
-  {n:'360 plano',sub:'Flat 360',cat:'adv',catLabel:'Avanzada',diff:4,img:'https://images.unsplash.com/photo-1502933691298-84fc14542831?w=600&auto=format&fit=crop&q=60',vid:'uyWZEjiBBg8',d:'Giro completo en el aire o sobre el agua manteniendo el foileo. Coordinación de cuerpo, ala y board.'},
-  {n:'Tack flotado',sub:'Floating tack',cat:'adv',catLabel:'Avanzada',diff:4,img:'https://images.unsplash.com/photo-1763653740009-cc47d761ccb3?w=600&auto=format&fit=crop&q=60',vid:'TS5MgfWextE',d:'Virada con momento de pausa elegante en el viento. Maniobra técnica del wingfoil pro.'},
-  {n:'Tail slide',sub:'Cola deslizada',cat:'adv',catLabel:'Avanzada',diff:4,img:'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=600&auto=format&fit=crop&q=60',vid:'CHtFCMwFv98',d:'Deslizar la cola de la tabla mientras girás. Inspirada en skate. Estilo y control.'},
-  {n:'Backflip',sub:'Salto mortal atrás',cat:'pro',catLabel:'Pro',diff:5,img:'https://images.unsplash.com/photo-1594814964600-5d8e56ec16c7?w=600&auto=format&fit=crop&q=60',vid:'LUDRZjpmDuc',d:'Vuelta completa hacia atrás en el aire. Una de las maniobras más espectaculares. Solo para riders avanzados.'},
-  {n:'Frontlip',sub:'Salto mortal adelante',cat:'pro',catLabel:'Pro',diff:5,img:'https://images.unsplash.com/photo-1666175496147-9faf7d295503?w=600&auto=format&fit=crop&q=60',vid:'r37KiOhfFQo',d:'Rotación frontal en el aire. Más difícil que el back porque perdés referencia visual del agua.'},
-  {n:'Twisted jump',sub:'Salto torcido',cat:'pro',catLabel:'Pro',diff:5,img:'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=600&auto=format&fit=crop&q=60',vid:'tQM0D9FFnrE',d:'Salto con rotación lateral del cuerpo. Combinación de fuerza, técnica y timing perfectos.'},
-  {n:'Double backflip',sub:'Doble mortal',cat:'pro',catLabel:'Pro',diff:5,img:'https://images.unsplash.com/photo-1530541930197-ff16ac917b0e?w=600&auto=format&fit=crop&q=60',vid:'mfmLiKBv5Cc',d:'Dos vueltas completas en el aire. Solo los top riders del mundo lo logran de manera consistente.'}
+  {n:'Foileo',sub:'Take off / Touch up',cat:'basic',catLabel:'Básica',diff:1,img:'https://images.unsplash.com/photo-1666175497562-ccb66e6c373b?w=600&auto=format&fit=crop&q=60',vid:'KyizUfMxboU',d:'La primera vez que la tabla despega del agua y empezás a volar. El logro principal del primer mes.',catLabelEn:'Basic',nEn:'First ride on the foil',dEn:'The first time the board lifts off the water and you start flying. The main milestone of month one.'},
+  {n:'Pumpear',sub:'Pumping',cat:'basic',catLabel:'Básica',diff:1,img:'https://images.unsplash.com/photo-1666175497141-ef62a9c65558?w=600&auto=format&fit=crop&q=60',vid:'8TZgz8xgo_k',d:'Generar velocidad bombeando el ala y/o las piernas. Fundamental para arrancar y mantener el foileo.',catLabelEn:'Basic',dEn:'Generating speed by pumping the wing and/or your legs. Essential for getting going and staying up on the foil.'},
+  {n:'Upwind',sub:'Vuelta al origen',cat:'basic',catLabel:'Básica',diff:2,img:'https://images.unsplash.com/photo-1730134427096-c167c128e119?w=600&auto=format&fit=crop&q=60',vid:'7M3Cqw9dm9M',d:'Navegar contra el viento para volver al punto de partida. Lo segundo más importante después del foileo.',catLabelEn:'Basic',subEn:'Return to start',dEn:'Riding against the wind to get back to your starting point. The second most important thing after foiling.'},
+  {n:'Touch down controlado',sub:'Aterrizaje suave',cat:'basic',catLabel:'Básica',diff:2,img:'https://images.unsplash.com/photo-1615840956750-3262c5fffb62?w=600&auto=format&fit=crop&q=60',vid:'Osn3w7CmItE',d:'Volver a tocar el agua sin perder velocidad ni caerse. Permite recuperar y seguir.',catLabelEn:'Basic',nEn:'Controlled touch down',subEn:'Smooth landing',dEn:'Touching the water again without losing speed or falling. Lets you recover and keep going.'},
+  {n:'Trabuchada',sub:'Gybe / Jibe',cat:'inter',catLabel:'Intermedia',diff:3,img:'https://wingfoilprocenter.com/cdn/shop/files/2P2A6634-3_2000x.jpg?v=1696720560',vid:'0KzKPWPTAIQ',d:'Giro hacia el viento de cola sin tocar el agua. La maniobra clave que separa principiantes de intermedios.',catLabelEn:'Intermediate',nEn:'Gybe',dEn:'A turn with the wind behind you without touching the water. The key manoeuvre that separates beginners from intermediates.'},
+  {n:'Virada',sub:'Tack',cat:'inter',catLabel:'Intermedia',diff:3,img:'https://images.unsplash.com/photo-1666175497804-e28c2d800ab9?w=600&auto=format&fit=crop&q=60',vid:'77s0Es58Eok',d:'Giro contra el viento. Más técnica que la trabuchada porque tenés que cambiar pies y manos en orden.',catLabelEn:'Intermediate',nEn:'Tack',dEn:'A turn into the wind. More technical than the gybe because you have to switch your feet and hands in order.'},
+  {n:'Switch',sub:'Cambio de pies',cat:'inter',catLabel:'Intermedia',diff:3,img:'https://images.unsplash.com/photo-1666175497584-dab60dcf1419?q=80&w=687&auto=format&fit=crop',vid:'UdQ2LDmJlm8',d:'Cambiar la posición de los pies durante el foileo para navegar con la otra pierna adelante.',catLabelEn:'Intermediate',subEn:'Foot switch',dEn:'Switching your foot position while foiling to ride with the other leg forward.'},
+  {n:'Salto básico',sub:'Jump',cat:'inter',catLabel:'Intermedia',diff:3,img:'https://images.unsplash.com/photo-1666175497378-490ab9cc2ba1?w=600&auto=format&fit=crop&q=60',vid:'12unYNCfvBk',d:'Despegar verticalmente del agua usando el ala como propulsión. La base de todos los trucos aéreos.',catLabelEn:'Intermediate',nEn:'Basic jump',dEn:'Launching vertically off the water using the wing as propulsion. The base for every aerial trick.'},
+  {n:'Surf con ola',sub:'Wave riding',cat:'inter',catLabel:'Intermedia',diff:4,img:'https://images.unsplash.com/photo-1760506067709-e1dd845943d2?w=600&auto=format&fit=crop&q=60',vid:'yYAzwbQy02g',d:'Trabajar una ola con el foil. Bajadas largas, cortes en la pared. Sensación cercana al surf.',catLabelEn:'Intermediate',nEn:'Wave riding',dEn:'Working a wave with the foil. Long drops, cutbacks on the face. A feel close to surfing.'},
+  {n:'Downwind',sub:'Recorrido largo',cat:'inter',catLabel:'Intermedia',diff:3,img:'https://images.unsplash.com/photo-1760506067710-c740a40c23ea?w=600&auto=format&fit=crop&q=60',vid:'LZvfhbpEJzQ',d:'Travesía aprovechando el viento de cola. Pueden ser kilómetros de navegación sin perder el foil.',catLabelEn:'Intermediate',subEn:'Long distance run',dEn:'A crossing riding the wind at your back. Can mean kilometres of riding without dropping off the foil.'},
+  {n:'360 plano',sub:'Flat 360',cat:'adv',catLabel:'Avanzada',diff:4,img:'https://images.unsplash.com/photo-1502933691298-84fc14542831?w=600&auto=format&fit=crop&q=60',vid:'uyWZEjiBBg8',d:'Giro completo en el aire o sobre el agua manteniendo el foileo. Coordinación de cuerpo, ala y board.',catLabelEn:'Advanced',nEn:'Flat 360',dEn:'A full turn in the air or on the water while staying on the foil. Coordination of body, wing and board.'},
+  {n:'Tack flotado',sub:'Floating tack',cat:'adv',catLabel:'Avanzada',diff:4,img:'https://images.unsplash.com/photo-1763653740009-cc47d761ccb3?w=600&auto=format&fit=crop&q=60',vid:'TS5MgfWextE',d:'Virada con momento de pausa elegante en el viento. Maniobra técnica del wingfoil pro.',catLabelEn:'Advanced',nEn:'Floating tack',dEn:'A tack with an elegant pause in the wind. A technical manoeuvre from pro wingfoiling.'},
+  {n:'Tail slide',sub:'Cola deslizada',cat:'adv',catLabel:'Avanzada',diff:4,img:'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=600&auto=format&fit=crop&q=60',vid:'CHtFCMwFv98',d:'Deslizar la cola de la tabla mientras girás. Inspirada en skate. Estilo y control.',catLabelEn:'Advanced',subEn:'Sliding tail',dEn:'Sliding the tail of the board while you turn. Skate-inspired. Style and control.'},
+  {n:'Backflip',sub:'Salto mortal atrás',cat:'pro',catLabel:'Pro',diff:5,img:'https://images.unsplash.com/photo-1594814964600-5d8e56ec16c7?w=600&auto=format&fit=crop&q=60',vid:'LUDRZjpmDuc',d:'Vuelta completa hacia atrás en el aire. Una de las maniobras más espectaculares. Solo para riders avanzados.',catLabelEn:'Pro',subEn:'Backflip',dEn:'A full backward rotation in the air. One of the most spectacular manoeuvres. Advanced riders only.'},
+  {n:'Frontlip',sub:'Salto mortal adelante',cat:'pro',catLabel:'Pro',diff:5,img:'https://images.unsplash.com/photo-1666175496147-9faf7d295503?w=600&auto=format&fit=crop&q=60',vid:'r37KiOhfFQo',d:'Rotación frontal en el aire. Más difícil que el back porque perdés referencia visual del agua.',catLabelEn:'Pro',subEn:'Frontflip',dEn:'A forward rotation in the air. Harder than the back because you lose visual reference of the water.'},
+  {n:'Twisted jump',sub:'Salto torcido',cat:'pro',catLabel:'Pro',diff:5,img:'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=600&auto=format&fit=crop&q=60',vid:'tQM0D9FFnrE',d:'Salto con rotación lateral del cuerpo. Combinación de fuerza, técnica y timing perfectos.',catLabelEn:'Pro',subEn:'Twisted jump',dEn:'A jump with a sideways rotation of the body. A combination of strength, technique and perfect timing.'},
+  {n:'Double backflip',sub:'Doble mortal',cat:'pro',catLabel:'Pro',diff:5,img:'https://images.unsplash.com/photo-1530541930197-ff16ac917b0e?w=600&auto=format&fit=crop&q=60',vid:'mfmLiKBv5Cc',d:'Dos vueltas completas en el aire. Solo los top riders del mundo lo logran de manera consistente.',catLabelEn:'Pro',subEn:'Double backflip',dEn:'Two full rotations in the air. Only the world\'s top riders land it consistently.'}
 ];
 window.__EWF = window.__EWF || {}; window.__EWF.MANIOBRAS = MANIOBRAS;
 
@@ -4817,6 +4823,7 @@ var manCurrentFilter = 'all';
 function renderManiobras(){
   var grid = document.getElementById('manGrid');
   if(!grid) return;
+  var en = spotsEnIngles();
   var list = MANIOBRAS.filter(function(m){
     return manCurrentFilter === 'all' || m.cat === manCurrentFilter;
   });
@@ -4825,21 +4832,25 @@ function renderManiobras(){
     for(var i = 1; i <= 5; i++){
       dots += '<span class="man-card__diff-dot' + (i <= m.diff ? ' on' : '') + '"></span>';
     }
-    return '<article class="man-card" data-mani-idx="' + MANIOBRAS.indexOf(m) + '" role="button" tabindex="0" aria-label="Ver video: ' + m.n + '">' +
+    var n = en && m.nEn ? m.nEn : m.n;
+    var sub = en && m.subEn ? m.subEn : m.sub;
+    var d = en && m.dEn ? m.dEn : m.d;
+    var catLabel = en && m.catLabelEn ? m.catLabelEn : m.catLabel;
+    return '<article class="man-card" data-mani-idx="' + MANIOBRAS.indexOf(m) + '" role="button" tabindex="0" aria-label="' + (en?'Watch video: ':'Ver video: ') + n + '">' +
       '<div class="man-card__visual">' +
-        '<img class="man-card__img" src="' + m.img + '" alt="' + m.n + '" loading="lazy"/>' +
+        '<img class="man-card__img" src="' + m.img + '" alt="' + n + '" loading="lazy"/>' +
         '<div class="man-card__visual-overlay"></div>' +
-        '<span class="man-card__cat">' + m.catLabel + '</span>' +
+        '<span class="man-card__cat">' + catLabel + '</span>' +
         '<div class="man-card__diff">' + dots + '</div>' +
         (m.vid ? '<div class="man-card__play" aria-hidden="true"></div>' : '') +
       '</div>' +
       '<div class="man-card__body">' +
-        '<div class="man-card__name">' + m.n + '</div>' +
-        '<div class="man-card__sub">' + m.sub + '</div>' +
-        '<p class="man-card__desc">' + m.d + '</p>' +
+        '<div class="man-card__name">' + n + '</div>' +
+        '<div class="man-card__sub">' + sub + '</div>' +
+        '<p class="man-card__desc">' + d + '</p>' +
         '<div class="man-card__meta">' +
-          '<span class="man-card__diff-label">Dificultad</span>' +
-          '<span class="man-card__diff-val">' + m.catLabel + '</span>' +
+          '<span class="man-card__diff-label">' + (en?'Difficulty':'Dificultad') + '</span>' +
+          '<span class="man-card__diff-val">' + catLabel + '</span>' +
         '</div>' +
       '</div>' +
     '</article>';
@@ -4857,6 +4868,7 @@ if(manFiltersEl){
     b.classList.add('active');
     renderManiobras();
   });
+  document.addEventListener('wf:lang', renderManiobras);
 }
 
 // ============ MANIOBRA VIDEO MODAL ============
@@ -4867,26 +4879,31 @@ var maniModalVidWrap = document.getElementById('maniModalVidWrap');
 // Detect which videos are Shorts (vertical) - hardcoded list of Shorts IDs
 var SHORTS_IDS = ['3Ymmdz2yv_0','8TZgz8xgo_k','7M3Cqw9dm9M','Osn3w7CmItE','UdQ2LDmJlm8','r37KiOhfFQo','mfmLiKBv5Cc'];
 
+var maniModalIdx = null;
+
 function openManiModal(idx){
   if(!maniModal || !MANIOBRAS[idx]) return;
+  maniModalIdx = idx;
   var m = MANIOBRAS[idx];
   if(!m.vid) return;
-  
-  document.getElementById('maniModalTitle').textContent = m.n;
-  document.getElementById('maniModalSub').textContent = m.sub;
-  document.getElementById('maniModalCat').textContent = m.catLabel;
-  document.getElementById('maniModalDesc').textContent = m.d;
-  
+  var en = spotsEnIngles();
+  var n = en && m.nEn ? m.nEn : m.n;
+
+  document.getElementById('maniModalTitle').textContent = n;
+  document.getElementById('maniModalSub').textContent = en && m.subEn ? m.subEn : m.sub;
+  document.getElementById('maniModalCat').textContent = en && m.catLabelEn ? m.catLabelEn : m.catLabel;
+  document.getElementById('maniModalDesc').textContent = en && m.dEn ? m.dEn : m.d;
+
   var isShorts = SHORTS_IDS.indexOf(m.vid) !== -1;
   if(isShorts){
     maniModalVidWrap.classList.add('shorts');
   } else {
     maniModalVidWrap.classList.remove('shorts');
   }
-  
+
   // Use youtube-nocookie for privacy + autoplay
   var embedUrl = 'https://www.youtube-nocookie.com/embed/' + m.vid + '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
-  maniModalVidWrap.innerHTML = '<iframe src="' + embedUrl + '" title="Video: ' + m.n + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+  maniModalVidWrap.innerHTML = '<iframe src="' + embedUrl + '" title="Video: ' + n + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
   
   maniModal.classList.add('show');
   document.body.style.overflow = 'hidden';
@@ -4899,6 +4916,19 @@ function closeManiModal(){
   maniModalVidWrap.innerHTML = '';
   document.body.style.overflow = '';
 }
+
+// Si cambian el idioma con el modal de video abierto, retraducimos el
+// texto sin tocar el iframe (recargarlo cortaría la reproducción).
+document.addEventListener('wf:lang', function(){
+  if(maniModalIdx === null || !maniModal || !maniModal.classList.contains('show')) return;
+  var m = MANIOBRAS[maniModalIdx];
+  if(!m) return;
+  var en = spotsEnIngles();
+  document.getElementById('maniModalTitle').textContent = en && m.nEn ? m.nEn : m.n;
+  document.getElementById('maniModalSub').textContent = en && m.subEn ? m.subEn : m.sub;
+  document.getElementById('maniModalCat').textContent = en && m.catLabelEn ? m.catLabelEn : m.catLabel;
+  document.getElementById('maniModalDesc').textContent = en && m.dEn ? m.dEn : m.d;
+});
 
 if(maniModalClose) maniModalClose.addEventListener('click', closeManiModal);
 if(maniModal) maniModal.addEventListener('click', function(e){
