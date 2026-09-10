@@ -920,6 +920,14 @@ textarea{resize:vertical;min-height:90px}
 /* BLOG TEASER */
 .blog-teaser{background:var(--surface)}
 .blog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:24px}
+/* Los artículos del blog son demasiado largos para traducir campo por campo
+   con data-en (cientos de párrafos/listas). En vez de eso, cada cuerpo de
+   artículo se escribe dos veces -- .es-only y .en-only -- y el idioma activo
+   decide cuál se muestra, según el atributo lang que ya pone el toggle ES/EN
+   en <html>. Sin esto no hace falta JS extra: es puro CSS. */
+.en-only{display:none}
+html[lang="en"] .en-only{display:block}
+html[lang="en"] .es-only{display:none}
 .blog-card{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .25s;display:flex;flex-direction:column;cursor:pointer}
 .blog-card:hover{transform:translateY(-4px);border-color:var(--primary);box-shadow:0 12px 32px rgba(0,180,216,.12)}
 .blog-card__cover{aspect-ratio:16/9;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-size:60px;position:relative;overflow:hidden}
@@ -2432,12 +2440,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <article class="blog-card" id="blogCardFoil" style="cursor:pointer" onclick="document.getElementById('articleFoil').showModal()">
         <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800&auto=format&fit=crop&q=60" alt="Persona surfeando con foil en el océano" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
-          <span class="blog-card__cat">Guía completa</span>
-          <h3 class="blog-card__title">Cómo elegir tu primer foil</h3>
-          <p class="blog-card__excerpt">Lo que nadie te cuenta antes de comprar. Diferencias entre alas, mástiles y fuselajes para cada tipo de rider.</p>
+          <span class="blog-card__cat" data-en="Complete guide">Guía completa</span>
+          <h3 class="blog-card__title" data-en="How to choose your first foil">Cómo elegir tu primer foil</h3>
+          <p class="blog-card__excerpt" data-en="What nobody tells you before you buy. Differences between wings, masts and fuselages for every type of rider.">Lo que nadie te cuenta antes de comprar. Diferencias entre alas, mástiles y fuselajes para cada tipo de rider.</p>
           <div class="blog-card__meta">
-            <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--primary)">Leer artículo →</span>
-            <span>· 12 min lectura</span>
+            <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--primary)" data-en="Read article →">Leer artículo →</span>
+            <span data-en="· 12 min read">· 12 min lectura</span>
           </div>
         </div>
       </article>
@@ -2445,14 +2453,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <!-- ARTICLE MODAL -->
       <dialog id="articleFoil" style="max-width:760px;width:94vw;max-height:90vh;overflow-y:auto;border-radius:16px;border:1px solid var(--border);background:var(--surface);color:var(--text);padding:0;box-shadow:0 32px 80px rgba(0,0,0,.5)">
         <div style="position:sticky;top:0;z-index:2;background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between">
-          <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary)">Guía completa · 12 min lectura</span>
-          <button onclick="document.getElementById('articleFoil').close()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:22px;line-height:1;padding:4px 8px">&times;</button>
+          <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary)" data-en="Complete guide · 12 min read">Guía completa · 12 min lectura</span>
+          <button onclick="document.getElementById('articleFoil').close()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:22px;line-height:1;padding:4px 8px" aria-label="Cerrar" data-en-aria-label="Close">&times;</button>
         </div>
         <div style="padding:36px 32px 48px">
           <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=760&auto=format&fit=crop&q=60" alt="Persona surfeando con foil en el océano" style="width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:28px" loading="lazy"/>
-          <h2 style="font-family:'Clash Display',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;line-height:1.15;margin-bottom:12px">Cómo elegir tu primer foil</h2>
-          <p style="color:var(--text-muted);font-size:14px;margin-bottom:36px">Por el equipo de Escuela de Wingfoil · Mayo 2026</p>
+          <h2 style="font-family:'Clash Display',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;line-height:1.15;margin-bottom:12px" data-en="How to choose your first foil">Cómo elegir tu primer foil</h2>
+          <p style="color:var(--text-muted);font-size:14px;margin-bottom:36px" data-en="By the Escuela de Wingfoil team · May 2026">Por el equipo de Escuela de Wingfoil · Mayo 2026</p>
 
+<div class="es-only">
           <p>Antes de gastar USD 1.500 en tu primer equipo, hay algo que nadie te dice claramente: el foil <em>no es una sola cosa</em>. Es un sistema de 5 partes que deben ser compatibles entre sí, y cada decisión afecta cómo vas a progresar. Esta guía te explica cómo elegir cada parte según tu nivel, tu peso y el agua donde vas a navegar.</p>
 
           <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">1. Antes de elegir el foil: elegí el ala correcta</h3>
@@ -2526,12 +2535,88 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </div>
 
           <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">¿Dudas? Consultá a los instructores en la sección <a href="#instructores" onclick="document.getElementById('articleFoil').close()" style="color:var(--primary)">Instructores</a> o en el grupo de WhatsApp de la comunidad.</p>
+          </div>
+          <div class="en-only">
+          <p>Before spending USD 1,500 on your first set-up, there's something nobody tells you clearly: the foil <em>isn't just one thing</em>. It's a 5-part system that all have to be compatible with each other, and every decision affects how you progress. This guide walks you through choosing each part based on your level, your weight and the water you'll be riding.</p>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">1. Before choosing the foil: pick the right wing</h3>
+          <p>The wing determines the wind range you'll be flying in. If you start with a small wing you'll get frustrated because you'll need a lot of wind. The recommendation for beginners on the Río de la Plata (15-20 kn winds):</p>
+          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
+            <li><strong>Weight &lt;70 kg:</strong> 5–6 m² wing</li>
+            <li><strong>Weight 70–90 kg:</strong> 6–7 m² wing</li>
+            <li><strong>Weight &gt;90 kg:</strong> 7–8 m² wing</li>
+          </ul>
+          <p>Recommended brands for beginners: <strong>Duotone Echo, F-One Swing, Naish Matador</strong>. They're stable wings, with good depower and easy to handle without much arm strength.</p>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">2. The foil: front wing size</h3>
+          <p>The <strong>front wing</strong> is the piece that generates lift. The bigger the surface, the more lift at lower speed — ideal for beginners. But careful: more area = more stability and a lower top speed.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0">
+            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
+              <div style="font-size:22px;font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif">1,800–2,500 cm²</div>
+              <div style="font-size:13px;color:var(--text-muted);margin-top:4px">Beginner · Slow take-off · Very stable</div>
+            </div>
+            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
+              <div style="font-size:22px;font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif">1,200–1,800 cm²</div>
+              <div style="font-size:13px;color:var(--text-muted);margin-top:4px">Intermediate · Faster · More manoeuvrable</div>
+            </div>
+          </div>
+          <p>If you're a beginner, look for a wing of at least <strong>1,500 cm²</strong>. Popular beginner wings: Armstrong A-Wing HA 1850, Lift eFoil 150, Duotone Spirit 1850.</p>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">3. The mast: height matters more than you'd think</h3>
+          <p>The mast connects the board to the flight system. Recommended height by level:</p>
+          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
+            <li><strong>Beginner:</strong> 60–70 cm. Less height = easier to control, fewer consequences from falls.</li>
+            <li><strong>Intermediate:</strong> 75–85 cm. Better clearance in waves and choppy water.</li>
+            <li><strong>Advanced:</strong> 90–95 cm. For riding bigger waves.</li>
+          </ul>
+          <p><strong>Carbon</strong> masts are stiffer and transmit the foil's feedback better. Aluminium ones are cheaper but heavier and flex more — fine to start with.</p>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">4. The fuselage: long vs short</h3>
+          <p>The fuselage connects the mast to the wings. Don't overthink this at the start: a <strong>60–75 cm</strong> fuselage is versatile for everything. Short fuselages (40–50 cm) increase agility but reduce stability — not for beginners.</p>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">5. The board: just as important as the foil</h3>
+          <p>Many beginners underestimate this. To learn, you need a <strong>big, high-volume</strong> board:</p>
+          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
+            <li><strong>Weight &lt;70 kg:</strong> minimum 90–100 L</li>
+            <li><strong>Weight 70–90 kg:</strong> minimum 100–120 L</li>
+            <li><strong>Weight &gt;90 kg:</strong> minimum 120–140 L</li>
+          </ul>
+          <p>A big board gives you more stability getting up, more time to build speed and more room for mistakes. As you progress you can go down to 60–70 L.</p>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">6. Part compatibility — the costliest mistake</h3>
+          <p>The connection system between mast and board has three standards:</p>
+          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
+            <li><strong>Tuttle Box:</strong> the most common on budget boards</li>
+            <li><strong>Deep Tuttle:</strong> stiffer, for higher-load foils</li>
+            <li><strong>US Box:</strong> universal, lets you adjust the foil's position</li>
+          </ul>
+          <p><strong>Before buying</strong>: confirm your board's box is compatible with the mast you'll use. Many used kits come with adapters, but it's worth checking.</p>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">7. New or used kit?</h3>
+          <p>To get started, a <strong>used kit in good condition</strong> is the best option. You'll fall a lot at the beginning and the gear will take hits. There's no point breaking in premium carbon on your first sessions.</p>
+          <div style="background:var(--primary-glow);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:20px;margin:20px 0">
+            <strong style="color:var(--primary)">Rough budget (Argentina, 2026)</strong><br>
+            <span style="color:var(--text-muted);font-size:14px;line-height:1.8">Full used kit (board + foil + wing): USD 1,000–1,500<br>Full new kit: USD 2,500–3,500<br>Wetsuit + helmet + vest: ARS 150,000–250,000</span>
+          </div>
+
+          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Summary: checklist before you buy</h3>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">
+            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Wing sized right for my weight and local wind</label>
+            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Front wing ≥1,500 cm² (beginner)</label>
+            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> 60–70 cm mast (first year)</label>
+            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Board with enough volume for my weight</label>
+            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Box compatibility checked</label>
+            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Helmet + vest + wetsuit (mandatory)</label>
+          </div>
+
+          <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">Questions? Ask the instructors in the <a href="#instructores" onclick="document.getElementById('articleFoil').close()" style="color:var(--primary)">Instructors</a> section or in the community WhatsApp group.</p>
+          </div>
           <div class="article-share">
-            <span class="article-share__label">Compartir</span>
+            <span class="article-share__label" data-en="Share">Compartir</span>
             <button class="share-btn share-btn--wa" onclick="shareArticle('wa',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.867-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg><span>WhatsApp</span></button>
             <button class="share-btn share-btn--x" onclick="shareArticle('x',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Twitter / X</span></button>
             <button class="share-btn share-btn--fb" onclick="shareArticle('fb',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg><span>Facebook</span></button>
-            <button class="share-btn share-btn--copy" onclick="shareArticle('copy',this)" type="button"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span>Copiar link</span></button>
+            <button class="share-btn share-btn--copy" onclick="shareArticle('copy',this)" type="button"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-en="Copy link">Copiar link</span></button>
           </div>
         </div>
       </dialog>
@@ -2614,11 +2699,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
           <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">¿Dudas? Consultá a los instructores en la sección <a href="#instructores" onclick="document.getElementById('articleKite').close()" style="color:var(--primary)">Instructores</a>.</p>
           <div class="article-share">
-            <span class="article-share__label">Compartir</span>
+            <span class="article-share__label" data-en="Share">Compartir</span>
             <button class="share-btn share-btn--wa" onclick="shareArticle('wa',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.867-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg><span>WhatsApp</span></button>
             <button class="share-btn share-btn--x" onclick="shareArticle('x',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Twitter / X</span></button>
             <button class="share-btn share-btn--fb" onclick="shareArticle('fb',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg><span>Facebook</span></button>
-            <button class="share-btn share-btn--copy" onclick="shareArticle('copy',this)" type="button"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span>Copiar link</span></button>
+            <button class="share-btn share-btn--copy" onclick="shareArticle('copy',this)" type="button"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-en="Copy link">Copiar link</span></button>
           </div>
         </div>
       </dialog>
@@ -2708,11 +2793,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
           <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">¿Querés aprender a leer el viento en el campo? Consultá a los <a href="#instructores" onclick="document.getElementById('articleViento').close()" style="color:var(--primary)">instructores</a> — muchos hacen clases de meteorología incluidas en el paquete.</p>
           <div class="article-share">
-            <span class="article-share__label">Compartir</span>
+            <span class="article-share__label" data-en="Share">Compartir</span>
             <button class="share-btn share-btn--wa" onclick="shareArticle('wa',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.867-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg><span>WhatsApp</span></button>
             <button class="share-btn share-btn--x" onclick="shareArticle('x',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Twitter / X</span></button>
             <button class="share-btn share-btn--fb" onclick="shareArticle('fb',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg><span>Facebook</span></button>
-            <button class="share-btn share-btn--copy" onclick="shareArticle('copy',this)" type="button"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span>Copiar link</span></button>
+            <button class="share-btn share-btn--copy" onclick="shareArticle('copy',this)" type="button"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-en="Copy link">Copiar link</span></button>
           </div>
         </div>
       </dialog>
@@ -2785,11 +2870,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </table></div>
           <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">¿Querés explorar todos los spots con mapa interactivo? Visitá la sección <a href="#spots" onclick="document.getElementById('articleSpots').close()" style="color:var(--primary)">Spots</a> de la plataforma.</p>
           <div class="article-share">
-            <span class="article-share__label">Compartir</span>
+            <span class="article-share__label" data-en="Share">Compartir</span>
             <button class="share-btn share-btn--wa" onclick="shareArticle('wa',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.867-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg><span>WhatsApp</span></button>
             <button class="share-btn share-btn--x" onclick="shareArticle('x',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Twitter / X</span></button>
             <button class="share-btn share-btn--fb" onclick="shareArticle('fb',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg><span>Facebook</span></button>
-            <button class="share-btn share-btn--copy" onclick="shareArticle('copy',this)" type="button"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span>Copiar link</span></button>
+            <button class="share-btn share-btn--copy" onclick="shareArticle('copy',this)" type="button"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-en="Copy link">Copiar link</span></button>
           </div>
         </div>
       </dialog>
@@ -2857,11 +2942,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </table></div>
           <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">¿Encontraste algo pero no estás seguro? Consultá con los <a href="#instructores" onclick="document.getElementById('articleUsado').close()" style="color:var(--primary)">instructores</a> — muchos hacen revisión de equipos usados antes de comprar. También revisá el <a href="#venta-de-wingfoil" onclick="document.getElementById('articleUsado').close()" style="color:var(--primary)">mercado de equipos</a> de la plataforma.</p>
           <div class="article-share">
-            <span class="article-share__label">Compartir</span>
+            <span class="article-share__label" data-en="Share">Compartir</span>
             <button class="share-btn share-btn--wa" onclick="shareArticle('wa',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.867-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg><span>WhatsApp</span></button>
             <button class="share-btn share-btn--x" onclick="shareArticle('x',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Twitter / X</span></button>
             <button class="share-btn share-btn--fb" onclick="shareArticle('fb',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg><span>Facebook</span></button>
-            <button class="share-btn share-btn--copy" onclick="shareArticle('copy',this)" type="button"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span>Copiar link</span></button>
+            <button class="share-btn share-btn--copy" onclick="shareArticle('copy',this)" type="button"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-en="Copy link">Copiar link</span></button>
           </div>
         </div>
       </dialog>
@@ -2921,11 +3006,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
           <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">¿Querés aprender con seguridad desde el primer día? Encontrá un <a href="#instructores" onclick="document.getElementById('articleSeguridad').close()" style="color:var(--primary)">instructor certificado</a> en tu zona — la mejor inversión en seguridad que podés hacer.</p>
           <div class="article-share">
-            <span class="article-share__label">Compartir</span>
+            <span class="article-share__label" data-en="Share">Compartir</span>
             <button class="share-btn share-btn--wa" onclick="shareArticle('wa',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.867-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg><span>WhatsApp</span></button>
             <button class="share-btn share-btn--x" onclick="shareArticle('x',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Twitter / X</span></button>
             <button class="share-btn share-btn--fb" onclick="shareArticle('fb',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg><span>Facebook</span></button>
-            <button class="share-btn share-btn--copy" onclick="shareArticle('copy',this)" type="button"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span>Copiar link</span></button>
+            <button class="share-btn share-btn--copy" onclick="shareArticle('copy',this)" type="button"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-en="Copy link">Copiar link</span></button>
           </div>
         </div>
       </dialog>
@@ -3144,11 +3229,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
           <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px;margin-top:32px">¿Querés prepararte antes del viaje? Revisá los <a href="#videos" onclick="document.getElementById('articleBrasil2026').close()" style="color:var(--primary)">videos por nivel</a> y practicá con un <a href="#instructores" onclick="document.getElementById('articleBrasil2026').close()" style="color:var(--primary)">instructor certificado</a> antes de tu temporada en Brasil.</p>
           <div class="article-share">
-            <span class="article-share__label">Compartir</span>
+            <span class="article-share__label" data-en="Share">Compartir</span>
             <button class="share-btn share-btn--wa" onclick="shareArticle('wa',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.867-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg><span>WhatsApp</span></button>
             <button class="share-btn share-btn--x" onclick="shareArticle('x',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Twitter / X</span></button>
             <button class="share-btn share-btn--fb" onclick="shareArticle('fb',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg><span>Facebook</span></button>
-            <button class="share-btn share-btn--copy" onclick="shareArticle('copy',this)" type="button"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span>Copiar link</span></button>
+            <button class="share-btn share-btn--copy" onclick="shareArticle('copy',this)" type="button"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-en="Copy link">Copiar link</span></button>
           </div>
         </div>
       </dialog>
