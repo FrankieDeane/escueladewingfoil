@@ -1105,6 +1105,20 @@ html[lang="en"] .es-only{display:none}
 .cameras-region-divider{display:flex;align-items:center;gap:14px;margin:28px 0 18px}
 .cameras-region-divider__line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border) 20%,var(--border) 80%,transparent)}
 .cameras-region-divider__label{font-family:'Clash Display',sans-serif;font-size:13px;font-weight:700;color:var(--text);letter-spacing:.04em;white-space:nowrap;padding:4px 12px;background:var(--surface);border-radius:99px;border:1px solid var(--border)}
+/* Acordeón de cada región de cámaras: arranca abierto (es lo que el
+   visitante vino a ver), pero se puede cerrar, y si lo cierra se lo
+   recordamos para la próxima visita — mismo criterio que #hoyAcc. */
+.cam-acc{margin-top:6px}
+.cam-acc + .cam-acc{margin-top:8px}
+.cam-acc__head{cursor:pointer;list-style:none;transition:opacity .18s}
+.cam-acc__head::-webkit-details-marker{display:none}
+.cam-acc__head:hover{opacity:.85}
+.cam-acc__head:focus-visible{outline:2px solid var(--primary);outline-offset:6px;border-radius:10px}
+.cam-acc__flecha{width:10px;height:10px;border-right:2.5px solid var(--primary);border-bottom:2.5px solid var(--primary);transform:rotate(45deg);transition:transform .22s;flex:0 0 auto}
+.cam-acc[open] .cam-acc__flecha{transform:rotate(-135deg)}
+@media(prefers-reduced-motion:reduce){.cam-acc__flecha{transition:none}}
+.cam-acc:not([open]) .cameras-region-divider{margin-bottom:0}
+.cam-acc .cameras-grid{margin-top:20px}
 
 /* LEAFLET CUSTOMIZATION */
 .mapmodal__map-area{position:relative}
@@ -1969,73 +1983,193 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- ============================================================ CÁMARAS EN VIVO — SAN ISIDRO ============================================================ -->
 <section class="section cameras-section" id="camaras">
   <div class="container">
-    <span class="eyebrow">En vivo · Río de la Plata</span>
-    <h2 class="section-title" data-en="San Isidro live cameras">Cámaras de San Isidro</h2>
-    <p class="section-sub">Mirá las condiciones del río en tiempo real antes de salir a navegar. Timelapse de las últimas 24hs cortesía de Windy.com.</p>
-    
-    <div class="cameras-grid">
-      <article class="cam-card">
-        <div class="cam-card__head">
-          <div class="cam-card__name">📹 Martínez Oeste</div>
-          <span class="cam-card__live">Live</span>
+    <span class="eyebrow" data-en="Live · Río de la Plata and Atlantic coast">En vivo · Río de la Plata y costa atlántica</span>
+    <h2 class="section-title" data-en="Live cameras: San Isidro and Mar del Plata">Cámaras en vivo: San Isidro y Mar del Plata</h2>
+    <p class="section-sub" data-en="Check real-time conditions before heading out. Last-24h timelapse courtesy of Windy.com. Each block below opens by default — close the ones you don't need.">Mirá las condiciones en tiempo real antes de salir a navegar. Timelapse de las últimas 24hs cortesía de Windy.com. Cada bloque de abajo arranca abierto — cerrá el que no te sirva.</p>
+
+    <details class="cam-acc" id="camSanIsidroAcc" open>
+      <summary class="cam-acc__head">
+        <div class="cameras-region-divider">
+          <span class="cameras-region-divider__line"></span>
+          <span class="cameras-region-divider__label" data-en="📹 San Isidro · Río de la Plata">📹 San Isidro · Río de la Plata</span>
+          <span class="cam-acc__flecha" aria-hidden="true"></span>
+          <span class="cameras-region-divider__line"></span>
         </div>
-        <div class="cam-card__player-wrap">
-          <a name="windy-webcam-timelapse-player" data-id="1601563134" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/1601563134" target="_blank">Martínez Oeste › Río de la Plata</a>
+      </summary>
+      <div class="cameras-grid">
+        <article class="cam-card">
+          <div class="cam-card__head">
+            <div class="cam-card__name">📹 Martínez Oeste</div>
+            <span class="cam-card__live">Live</span>
+          </div>
+          <div class="cam-card__player-wrap">
+            <a name="windy-webcam-timelapse-player" data-id="1601563134" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/1601563134" target="_blank">Martínez Oeste › Río de la Plata</a>
+          </div>
+          <div class="cam-card__foot">
+            <span>Río de la Plata · SE</span>
+            <a class="cam-card__link" href="https://windy.com/webcams/1601563134" target="_blank" rel="noopener">Abrir en Windy ↗</a>
+          </div>
+        </article>
+
+        <article class="cam-card">
+          <div class="cam-card__head">
+            <div class="cam-card__name">📹 Martínez Norte</div>
+            <span class="cam-card__live">Live</span>
+          </div>
+          <div class="cam-card__player-wrap">
+            <a name="windy-webcam-timelapse-player" data-id="1745449788" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/1745449788" target="_blank">Martínez › North-west</a>
+          </div>
+          <div class="cam-card__foot">
+            <span>Vista NW</span>
+            <a class="cam-card__link" href="https://windy.com/webcams/1745449788" target="_blank" rel="noopener">Abrir en Windy ↗</a>
+          </div>
+        </article>
+
+        <article class="cam-card">
+          <div class="cam-card__head">
+            <div class="cam-card__name">📹 Olivos Norte</div>
+            <span class="cam-card__live">Live</span>
+          </div>
+          <div class="cam-card__player-wrap">
+            <a name="windy-webcam-timelapse-player" data-id="1577126865" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/1577126865" target="_blank">Vicente López › North: Olivos</a>
+          </div>
+          <div class="cam-card__foot">
+            <span>Vicente López</span>
+            <a class="cam-card__link" href="https://windy.com/webcams/1577126865" target="_blank" rel="noopener">Abrir en Windy ↗</a>
+          </div>
+        </article>
+
+        <article class="cam-card">
+          <div class="cam-card__head">
+            <div class="cam-card__name">📹 Perú Beach</div>
+            <span class="cam-card__live">Live</span>
+          </div>
+          <div class="cam-card__player-wrap">
+            <a name="windy-webcam-timelapse-player" data-id="1735938641" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/1735938641" target="_blank">Perú Beach › Acassuso · Náutica San Isidro</a>
+          </div>
+          <div class="cam-card__foot">
+            <span>Acassuso · Náutica San Isidro</span>
+            <a class="cam-card__link" href="https://windy.com/webcams/1735938641" target="_blank" rel="noopener">Abrir en Windy ↗</a>
+          </div>
+        </article>
+      </div>
+    </details>
+
+    <details class="cam-acc" id="camMarDelPlataAcc" open>
+      <summary class="cam-acc__head">
+        <div class="cameras-region-divider">
+          <span class="cameras-region-divider__line"></span>
+          <span class="cameras-region-divider__label" data-en="📹 Mar del Plata · Atlantic coast">📹 Mar del Plata · costa atlántica</span>
+          <span class="cam-acc__flecha" aria-hidden="true"></span>
+          <span class="cameras-region-divider__line"></span>
         </div>
-        <div class="cam-card__foot">
-          <span>Río de la Plata · SE</span>
-          <a class="cam-card__link" href="https://windy.com/webcams/1601563134" target="_blank" rel="noopener">Abrir en Windy ↗</a>
-        </div>
-      </article>
-      
-      <article class="cam-card">
-        <div class="cam-card__head">
-          <div class="cam-card__name">📹 Martínez Norte</div>
-          <span class="cam-card__live">Live</span>
-        </div>
-        <div class="cam-card__player-wrap">
-          <a name="windy-webcam-timelapse-player" data-id="1745449788" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/1745449788" target="_blank">Martínez › North-west</a>
-        </div>
-        <div class="cam-card__foot">
-          <span>Vista NW</span>
-          <a class="cam-card__link" href="https://windy.com/webcams/1745449788" target="_blank" rel="noopener">Abrir en Windy ↗</a>
-        </div>
-      </article>
-      
-      <article class="cam-card">
-        <div class="cam-card__head">
-          <div class="cam-card__name">📹 Olivos Norte</div>
-          <span class="cam-card__live">Live</span>
-        </div>
-        <div class="cam-card__player-wrap">
-          <a name="windy-webcam-timelapse-player" data-id="1577126865" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/1577126865" target="_blank">Vicente López › North: Olivos</a>
-        </div>
-        <div class="cam-card__foot">
-          <span>Vicente López</span>
-          <a class="cam-card__link" href="https://windy.com/webcams/1577126865" target="_blank" rel="noopener">Abrir en Windy ↗</a>
-        </div>
-      </article>
-      
-      <article class="cam-card">
-        <div class="cam-card__head">
-          <div class="cam-card__name">📹 Perú Beach</div>
-          <span class="cam-card__live">Live</span>
-        </div>
-        <div class="cam-card__player-wrap">
-          <a name="windy-webcam-timelapse-player" data-id="1735938641" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/1735938641" target="_blank">Perú Beach › Acassuso · Náutica San Isidro</a>
-        </div>
-        <div class="cam-card__foot">
-          <span>Acassuso · Náutica San Isidro</span>
-          <a class="cam-card__link" href="https://windy.com/webcams/1735938641" target="_blank" rel="noopener">Abrir en Windy ↗</a>
-        </div>
-      </article>
-    </div>
-    
+      </summary>
+      <div class="cameras-grid">
+        <article class="cam-card">
+          <div class="cam-card__head">
+            <div class="cam-card__name">📹 Norte · Santa Clara del Mar</div>
+            <span class="cam-card__live">Live</span>
+          </div>
+          <div class="cam-card__player-wrap">
+            <a name="windy-webcam-timelapse-player" data-id="1742788359" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/1742788359" target="_blank">Mar del Plata › Norte</a>
+          </div>
+          <div class="cam-card__foot">
+            <span>Mar del Plata · límite norte</span>
+            <a class="cam-card__link" href="https://windy.com/webcams/1742788359" target="_blank" rel="noopener">Abrir en Windy ↗</a>
+          </div>
+        </article>
+
+        <article class="cam-card">
+          <div class="cam-card__head">
+            <div class="cam-card__name">📹 Playa Punta Iglesia</div>
+            <span class="cam-card__live">Live</span>
+          </div>
+          <div class="cam-card__player-wrap">
+            <a name="windy-webcam-timelapse-player" data-id="1595396557" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/1595396557" target="_blank">Mar del Plata › Playa Punta Iglesia</a>
+          </div>
+          <div class="cam-card__foot">
+            <span>Mar del Plata · Punta Iglesia</span>
+            <a class="cam-card__link" href="https://windy.com/webcams/1595396557" target="_blank" rel="noopener">Abrir en Windy ↗</a>
+          </div>
+        </article>
+
+        <article class="cam-card">
+          <div class="cam-card__head">
+            <div class="cam-card__name">📹 Torreón del Monje</div>
+            <span class="cam-card__live">Live</span>
+          </div>
+          <div class="cam-card__player-wrap">
+            <a name="windy-webcam-timelapse-player" data-id="1650988843" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/1650988843" target="_blank">Mar del Plata › Torreón del Monje</a>
+          </div>
+          <div class="cam-card__foot">
+            <span>Mar del Plata · Torreón del Monje</span>
+            <a class="cam-card__link" href="https://windy.com/webcams/1650988843" target="_blank" rel="noopener">Abrir en Windy ↗</a>
+          </div>
+        </article>
+
+        <article class="cam-card">
+          <div class="cam-card__head">
+            <div class="cam-card__name">📹 Playa Grande</div>
+            <span class="cam-card__live">Live</span>
+          </div>
+          <div class="cam-card__player-wrap">
+            <a name="windy-webcam-timelapse-player" data-id="1709767473" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/1709767473" target="_blank">Mar del Plata › Playa Grande</a>
+          </div>
+          <div class="cam-card__foot">
+            <span>Mar del Plata · Playa Grande</span>
+            <a class="cam-card__link" href="https://windy.com/webcams/1709767473" target="_blank" rel="noopener">Abrir en Windy ↗</a>
+          </div>
+        </article>
+
+        <article class="cam-card">
+          <div class="cam-card__head">
+            <div class="cam-card__name">📹 Punta Mogotes</div>
+            <span class="cam-card__live">Live</span>
+          </div>
+          <div class="cam-card__player-wrap">
+            <a name="windy-webcam-timelapse-player" data-id="1710094887" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/1710094887" target="_blank">Mar del Plata › Punta Mogotes</a>
+          </div>
+          <div class="cam-card__foot">
+            <span>Mar del Plata · Punta Mogotes</span>
+            <a class="cam-card__link" href="https://windy.com/webcams/1710094887" target="_blank" rel="noopener">Abrir en Windy ↗</a>
+          </div>
+        </article>
+
+        <article class="cam-card">
+          <div class="cam-card__head">
+            <div class="cam-card__name">📹 Playa Waikiki</div>
+            <span class="cam-card__live">Live</span>
+          </div>
+          <div class="cam-card__player-wrap">
+            <a name="windy-webcam-timelapse-player" data-id="1741569283" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/1741569283" target="_blank">Mar del Plata › Playa Waikiki</a>
+          </div>
+          <div class="cam-card__foot">
+            <span>Mar del Plata · Waikiki</span>
+            <a class="cam-card__link" href="https://windy.com/webcams/1741569283" target="_blank" rel="noopener">Abrir en Windy ↗</a>
+          </div>
+        </article>
+
+        <article class="cam-card">
+          <div class="cam-card__head">
+            <div class="cam-card__name">📹 Playa Serena</div>
+            <span class="cam-card__live">Live</span>
+          </div>
+          <div class="cam-card__player-wrap">
+            <a name="windy-webcam-timelapse-player" data-id="1710094584" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/1710094584" target="_blank">Mar del Plata › Playa Serena</a>
+          </div>
+          <div class="cam-card__foot">
+            <span>Mar del Plata · Playa Serena</span>
+            <a class="cam-card__link" href="https://windy.com/webcams/1710094584" target="_blank" rel="noopener">Abrir en Windy ↗</a>
+          </div>
+        </article>
+      </div>
+    </details>
+
     <!-- Windy webcam player script -->
     <script async type="text/javascript" src="https://webcams.windy.com/webcams/public/embed/v2/script/player.js"></script>
-    
+
     <div class="cameras-note">
-      <strong>📌 Tip:</strong> Cliqueá ▶ sobre cualquier cámara para reproducir el timelapse del día. El viento termal del río suele entrar entre las 14 y 19hs en verano. Si querés ver el live actual o el forecast, usá el botón "Abrir en Windy" de cada card.
+      <strong>📌 Tip:</strong> Cliqueá ▶ sobre cualquier cámara para reproducir el timelapse del día. El viento termal del río suele entrar entre las 14 y 19hs en verano. Si querés ver el live actual o el forecast, usá el botón "Abrir en Windy" de cada card. Los nombres de las cámaras de Mar del Plata son orientativos según su ubicación aproximada — el detalle exacto está siempre en "Abrir en Windy".
     </div>
   </div>
 </section>
@@ -6054,7 +6188,7 @@ document.addEventListener('DOMContentLoaded', function() {
     {id:'anatomia',         t:'Anatomía del Foil', en:'Anatomy of the Foil'},
     {id:'anatomia-ala',     t:'Anatomía del Ala', en:'Anatomy of the Wing'},
     {id:'spots',            t:'Aguas argentinas', en:'Argentine waters'},
-    {id:'camaras',          t:'Cámaras de San Isidro', en:'San Isidro live cameras'},
+    {id:'camaras',          t:'Cámaras de San Isidro y Mar del Plata', en:'San Isidro and Mar del Plata live cameras'},
     {id:'calculadora',      t:'Calculadora de equipo', en:'Gear calculator'},
     {id:'instructores',     t:'Instructores', en:'Instructors'},
     {id:'venta-de-wingfoil',t:'Equipos en venta', en:'Gear for sale'},
@@ -7158,6 +7292,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }catch(e){}
     acc.addEventListener('toggle', function(){
       try{ localStorage.setItem('wf-hoy', acc.open ? 'abierto' : 'cerrado'); }catch(e){}
+    });
+  })();
+
+  // Acordeones de cámaras (San Isidro y Mar del Plata): arrancan abiertos
+  // porque son lo que el visitante vino a ver, pero se pueden cerrar — y si
+  // los cierra, se lo recordamos para la próxima visita.
+  (function(){
+    ['camSanIsidroAcc','camMarDelPlataAcc'].forEach(function(id){
+      var acc = document.getElementById(id);
+      if(!acc) return;
+      try{
+        if(localStorage.getItem('wf-'+id) === 'cerrado') acc.removeAttribute('open');
+      }catch(e){}
+      acc.addEventListener('toggle', function(){
+        try{ localStorage.setItem('wf-'+id, acc.open ? 'abierto' : 'cerrado'); }catch(e){}
+      });
     });
   })();
 
