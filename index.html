@@ -656,8 +656,19 @@ textarea{resize:vertical;min-height:90px}
 .foto-preview__item{position:relative;width:84px;height:84px;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
 .foto-preview__item img{width:100%;height:100%;object-fit:cover}
 .foto-preview__remove{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.7);color:#fff;border:none;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;line-height:1}
+.eq-tabs{display:flex;gap:4px;margin-bottom:28px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.eq-tab{padding:12px 20px;background:none;border:none;border-bottom:2px solid transparent;font-size:14px;font-weight:700;color:var(--text-muted);cursor:pointer;transition:all .15s;font-family:inherit}
+.eq-tab:hover{color:var(--text)}
 .eq-tab.active{color:var(--primary);border-bottom-color:var(--primary)}
 .equipos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;margin-bottom:48px}
+.ml-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:all .25s;display:flex;flex-direction:column}
+.ml-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--primary)}
+.ml-card__img{width:100%;aspect-ratio:1/1;object-fit:contain;background:var(--surface-2);display:block}
+.ml-card__body{padding:16px 18px 18px;display:flex;flex-direction:column;flex:1}
+.ml-card__title{font-size:14px;font-weight:700;margin-bottom:10px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ml-card__precio{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;color:var(--primary);margin-bottom:14px;letter-spacing:-.02em}
+.ml-card__link{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;border-radius:99px;background:var(--primary);color:var(--text-inverse);font-size:12px;font-weight:700;transition:all .15s;margin-top:auto}
+.ml-card__link:hover{background:var(--primary-h)}
 .equipo-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;transition:all .25s;perspective:1000px}
 .equipo-card:hover{transform:translateY(-3px) rotateX(2deg);box-shadow:var(--shadow-md);border-color:var(--primary)}
 .equipo-card__badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:700;background:color-mix(in oklab,var(--accent),transparent 82%);color:var(--accent);margin-bottom:12px;text-transform:uppercase;letter-spacing:.04em}
@@ -2359,6 +2370,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h2 class="section-title" data-en="Gear for Sale">Equipos en Venta</h2>
     <p class="section-sub">Comprá y vendé equipos de wingfoil entre riders de la comunidad.</p>
 
+    <div class="eq-tabs" role="tablist">
+      <button class="eq-tab active" role="tab" aria-selected="true" aria-controls="eqPanelComunidad" data-eqtab="comunidad">🤝 Comunidad</button>
+      <button class="eq-tab" role="tab" aria-selected="false" aria-controls="eqPanelML" data-eqtab="ml">🛒 Mercado Libre</button>
+    </div>
+
     <!-- COMUNIDAD -->
     <div id="eqPanelComunidad">
 
@@ -2429,6 +2445,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
     </div>
     </div><!-- /eqPanelComunidad -->
+
+    <!-- MERCADO LIBRE -->
+    <div id="eqPanelML" hidden>
+      <p class="equipos-disclaimer">⚠️ Estos productos están publicados por otros vendedores en Mercado Libre, no por la Escuela de Wingfoil. El botón te lleva a Mercado Libre para comprar — no tenemos relación comercial con esos vendedores ni garantizamos precio, stock o estado del equipo.</p>
+      <div class="equipos-grid" id="mlGrid"></div>
+    </div>
 
   </div>
 </section>
@@ -5045,6 +5067,30 @@ if(sponsorForm){
 }
 
 // ============ EQUIPO FORM + FOTOS ============
+// Reduce cada foto en un canvas antes de subirla: las fotos de celular
+// (varios MB) rompían el límite de tamaño del envío y nunca llegaban al
+// servidor — por eso no se guardaban ni se veían para nadie.
+function resizeImageFile(file,maxDim,quality){
+  return new Promise(function(resolve,reject){
+    var reader=new FileReader();
+    reader.onload=function(ev){
+      var img=new Image();
+      img.onload=function(){
+        var scale=Math.min(1,maxDim/Math.max(img.width,img.height));
+        var cw=Math.max(1,Math.round(img.width*scale)),ch=Math.max(1,Math.round(img.height*scale));
+        var canvas=document.createElement('canvas');
+        canvas.width=cw;canvas.height=ch;
+        canvas.getContext('2d').drawImage(img,0,0,cw,ch);
+        resolve(canvas.toDataURL('image/jpeg',quality));
+      };
+      img.onerror=reject;
+      img.src=ev.target.result;
+    };
+    reader.onerror=reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 var fotosInput=document.getElementById('eq-fotos');
 var fotoPreview=document.getElementById('fotoPreview');
 var fotosData=[];
@@ -5054,16 +5100,14 @@ if(fotosInput){
     fotosData=[];
     fotoPreview.innerHTML='';
     files.forEach(function(file,i){
-      var r=new FileReader();
-      r.onload=function(ev){
-        fotosData[i]=ev.target.result;
+      resizeImageFile(file,1280,0.82).then(function(dataUrl){
+        fotosData[i]=dataUrl;
         var item=document.createElement('div');
         item.className='foto-preview__item';
-        item.innerHTML='<img src="'+ev.target.result+'" alt=""><button type="button" class="foto-preview__remove">✕</button>';
+        item.innerHTML='<img src="'+dataUrl+'" alt=""><button type="button" class="foto-preview__remove">✕</button>';
         fotoPreview.appendChild(item);
-        item.querySelector('.foto-preview__remove').addEventListener('click',function(){fotosData.splice(i,1);item.remove()});
-      };
-      r.readAsDataURL(file);
+        item.querySelector('.foto-preview__remove').addEventListener('click',function(){fotosData[i]=null;item.remove()});
+      }).catch(function(){});
     });
   });
 }
@@ -5081,11 +5125,12 @@ if(equipoForm){
     var msg=document.getElementById('equipoMsg');
     if(!tipo||!marca||!precio||!ub||!desc||!wa){msg.innerHTML='<div class="form-msg form-msg--err">Completá todos los campos.</div>';return}
     var eqBot=(equipoForm.querySelector('[name="bot-field"]')||{}).value||'';
-    var eqParams=new URLSearchParams({tipo:tipo,marca:marca,precio:precio,ubicacion:ub,descripcion:desc,whatsapp:wa,'bot-field':eqBot});
+    var fotosList=fotosData.filter(Boolean);
+    var eqParams=new URLSearchParams({tipo:tipo,marca:marca,precio:precio,ubicacion:ub,descripcion:desc,whatsapp:wa,'bot-field':eqBot,fotos:JSON.stringify(fotosList)});
     fetch('/api/equipos',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:eqParams.toString()}).catch(function(){});
-    fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(Object.fromEntries(eqParams)).toString()+'&form-name=equipo-form'}).catch(function(){});
+    fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({tipo:tipo,marca:marca,precio:precio,ubicacion:ub,descripcion:desc,whatsapp:wa,'bot-field':eqBot,'form-name':'equipo-form'}).toString()}).catch(function(){});
     var fotosHtml='';
-    if(fotosData.length)fotosHtml='<div class="equipo-card__fotos">'+fotosData.map(function(src){return '<img src="'+src+'" alt="">'}).join('')+'</div>';
+    if(fotosList.length)fotosHtml='<div class="equipo-card__fotos">'+fotosList.map(function(src){return '<img src="'+src+'" alt="">'}).join('')+'</div>';
     var precioNum=parseInt(precio.replace(/[^0-9]/g,''));
     var precioFmt=isNaN(precioNum)?precio:'$ '+precioNum.toLocaleString('es-AR');
     var card=document.createElement('div');
@@ -5801,9 +5846,11 @@ async function loadEquipos(){
     list.forEach(function(d){
       var precioNum=parseInt((d.precio||'').replace(/[^0-9]/g,''));
       var precioFmt=isNaN(precioNum)?escHtml(d.precio):'$ '+precioNum.toLocaleString('es-AR');
+      var fotosHtml='';
+      if(Array.isArray(d.fotos)&&d.fotos.length)fotosHtml='<div class="equipo-card__fotos">'+d.fotos.map(function(id){return '<img src="/api/equipos-foto/'+encodeURIComponent(id)+'" alt="" loading="lazy">'}).join('')+'</div>';
       var card=document.createElement('div');
       card.className='equipo-card';
-      card.innerHTML='<span class="equipo-card__badge">'+escHtml(d.tipo)+'</span>'+
+      card.innerHTML='<span class="equipo-card__badge">'+escHtml(d.tipo)+'</span>'+fotosHtml+
         '<div class="equipo-card__title">'+escHtml(d.marca)+'</div>'+
         '<div class="equipo-card__precio">'+precioFmt+'</div>'+
         '<p class="equipo-card__desc">'+escHtml(d.descripcion)+'</p>'+
@@ -5813,6 +5860,45 @@ async function loadEquipos(){
     });
   }catch(e){}
 }
+
+// ============ LOAD MERCADO LIBRE ============
+function escAttr(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;')}
+var mlLoaded=false;
+async function loadML(){
+  if(mlLoaded)return;
+  mlLoaded=true;
+  var grid=document.getElementById('mlGrid');
+  if(!grid)return;
+  try{
+    var r=await fetch('/ml-data.json');
+    if(!r.ok)return;
+    var data=await r.json();
+    (data.productos||[]).forEach(function(p){
+      var precioFmt=(typeof p.precio==='number')?'$ '+p.precio.toLocaleString('es-AR'):escHtml(p.precio||'');
+      var card=document.createElement('div');
+      card.className='ml-card';
+      card.innerHTML='<img class="ml-card__img" src="'+escAttr(p.imagen)+'" alt="'+escAttr(p.titulo)+'" loading="lazy">'+
+        '<div class="ml-card__body">'+
+        '<div class="ml-card__title">'+escHtml(p.titulo)+'</div>'+
+        '<div class="ml-card__precio">'+precioFmt+'</div>'+
+        '<a class="ml-card__link" href="'+escAttr(p.link)+'" target="_blank" rel="nofollow noopener">Ver en Mercado Libre ↗</a>'+
+        '</div>';
+      grid.appendChild(card);
+    });
+  }catch(e){}
+}
+
+// ============ EQUIPOS TABS ============
+document.querySelectorAll('.eq-tab').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.eq-tab').forEach(function(b){b.classList.remove('active');b.setAttribute('aria-selected','false')});
+    btn.classList.add('active');btn.setAttribute('aria-selected','true');
+    var showId=btn.getAttribute('aria-controls');
+    document.getElementById('eqPanelComunidad').hidden=(showId!=='eqPanelComunidad');
+    document.getElementById('eqPanelML').hidden=(showId!=='eqPanelML');
+    if(showId==='eqPanelML')loadML();
+  });
+});
 
 loadInstructors();
 loadEquipos();

@@ -1,10 +1,13 @@
 import { getStore } from '@netlify/blobs';
 
 const KEY = 'list';
-const MAX_BODY_BYTES = 8 * 1024;   // reject oversized request bodies
+const MAX_BODY_BYTES = 6 * 1024 * 1024; // fotos van en base64 dentro del body
 const MAX_ENTRIES = 1000;          // cap stored list to bound storage growth
 const RL_WINDOW_MS = 60 * 60 * 1000; // rate-limit window: 1 hour
 const RL_MAX = 8;                    // max POSTs per IP per window
+const MAX_FOTOS = 4;
+const MAX_FOTO_B64_LEN = 2_500_000; // ~1.8MB crudos por foto (el cliente ya las reduce antes de subir)
+const FOTO_DATA_URL_RE = /^data:image\/(jpeg|jpg|png|webp);base64,([A-Za-z0-9+/=]+)$/;
 
 // Strip angle brackets + control chars (defense-in-depth vs stored XSS), trim
 // and cap length. Newlines/tabs are preserved for free-text fields.
@@ -49,8 +52,44 @@ async function allowRequest(ip) {
   }
 }
 
+// Parses the `fotos` field (a JSON-stringified array of data: URLs), stores
+// each valid image as its own blob and returns the list of stored ids.
+// Anything malformed or oversized is silently dropped rather than failing
+// the whole submission — fotos are optional.
+async function storeFotos(rawFotos, entryId, fotosStore) {
+  let parsed;
+  try {
+    parsed = JSON.parse(rawFotos || '[]');
+  } catch {
+    return [];
+  }
+  if (!Array.isArray(parsed)) return [];
+
+  const ids = [];
+  for (let i = 0; i < parsed.length && ids.length < MAX_FOTOS; i++) {
+    const dataUrl = String(parsed[i] || '');
+    if (dataUrl.length > MAX_FOTO_B64_LEN) continue;
+    const m = FOTO_DATA_URL_RE.exec(dataUrl);
+    if (!m) continue;
+    const ct = 'image/' + (m[1] === 'jpg' ? 'jpeg' : m[1]);
+    const id = `${entryId}-${ids.length}`;
+    try {
+      await fotosStore.setJSON(id, { b64: m[2], ct });
+      ids.push(id);
+    } catch {
+      // storage hiccup — skip this photo, keep the rest of the listing
+    }
+  }
+  return ids;
+}
+
+async function deleteFotos(ids, fotosStore) {
+  await Promise.all((ids || []).map((id) => fotosStore.delete(id).catch(() => {})));
+}
+
 export default async function(req) {
   const store = getStore({ name: 'equipos', consistency: 'strong' });
+  const fotosStore = getStore({ name: 'equipos-fotos', consistency: 'strong' });
   const cors = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
@@ -98,12 +137,18 @@ export default async function(req) {
       return new Response(JSON.stringify({ error: 'missing required fields' }), { status: 400, headers: cors });
     }
 
+    entry.fotos = await storeFotos(body.get('fotos'), entry.id, fotosStore);
+
     const list = await store.get(KEY, { type: 'json' }).catch(() => []) || [];
     list.push(entry);
-    // Keep only the most recent MAX_ENTRIES to bound storage.
-    if (list.length > MAX_ENTRIES) list.splice(0, list.length - MAX_ENTRIES);
+    // Keep only the most recent MAX_ENTRIES to bound storage, and drop the
+    // photo blobs of whatever falls off so they don't leak forever.
+    if (list.length > MAX_ENTRIES) {
+      const evicted = list.splice(0, list.length - MAX_ENTRIES);
+      await Promise.all(evicted.map((e) => deleteFotos(e.fotos, fotosStore)));
+    }
     await store.setJSON(KEY, list);
-    return new Response(JSON.stringify({ ok: true }), { headers: cors });
+    return new Response(JSON.stringify({ ok: true, fotos: entry.fotos }), { headers: cors });
   }
 
   return new Response('Method not allowed', { status: 405, headers: cors });
