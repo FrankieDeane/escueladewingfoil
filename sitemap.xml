@@ -2,68 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.escueladewingfoil.com.ar/</loc>
-    <lastmod>2026-05-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://www.escueladewingfoil.com.ar/#videos</loc>
-    <lastmod>2026-05-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.escueladewingfoil.com.ar/#spots</loc>
-    <lastmod>2026-05-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.escueladewingfoil.com.ar/#instructores</loc>
-    <lastmod>2026-05-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.escueladewingfoil.com.ar/#equipos</loc>
-    <lastmod>2026-05-18</lastmod>
-    <changefreq>biweekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.escueladewingfoil.com.ar/#que-es</loc>
-    <lastmod>2026-05-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.escueladewingfoil.com.ar/#faq</loc>
-    <lastmod>2026-05-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.escueladewingfoil.com.ar/#comunidad</loc>
-    <lastmod>2026-05-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <lastmod>2026-09-28</lastmod>
   </url>
   <url>
     <loc>https://www.escueladewingfoil.com.ar/costa-san-isidro</loc>
-    <lastmod>2026-09-05</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
+    <lastmod>2026-09-28</lastmod>
   </url>
   <url>
-    <loc>https://www.escueladewingfoil.com.ar/#sudestada</loc>
-    <lastmod>2026-09-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://www.escueladewingfoil.com.ar/blog/</loc>
+    <lastmod>2026-09-28</lastmod>
   </url>
   <url>
-    <loc>https://www.escueladewingfoil.com.ar/#salgo-hoy</loc>
-    <lastmod>2026-09-05</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
+    <loc>https://www.escueladewingfoil.com.ar/blog/como-elegir-tu-primer-foil</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://www.escueladewingfoil.com.ar/blog/wingfoil-vs-kitesurf-vs-windsurf</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://www.escueladewingfoil.com.ar/blog/como-leer-el-viento</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://www.escueladewingfoil.com.ar/blog/mejores-spots-wingfoil-argentina</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://www.escueladewingfoil.com.ar/blog/equipo-wingfoil-usado-que-revisar</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://www.escueladewingfoil.com.ar/blog/es-peligroso-el-wingfoil</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://www.escueladewingfoil.com.ar/blog/spots-wingfoil-kitesurf-brasil</loc>
+    <lastmod>2026-09-28</lastmod>
   </url>
 </urlset>

@@ -20,3 +20,10 @@
     Permissions-Policy = "camera=(), microphone=(), payment=(), usb=(), geolocation=(), interest-cohort=()"
     Cross-Origin-Opener-Policy = "same-origin"
     X-Permitted-Cross-Domain-Policies = "none"
+
+# El reporte de auditoría SEO vive en la raíz del repo (y por lo tanto se
+# publica): que no lo indexe ningún buscador.
+[[headers]]
+  for = "/SEO_AUDIT_REPORT.md"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

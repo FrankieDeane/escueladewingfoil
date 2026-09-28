@@ -19,7 +19,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Escuela de Wingfoil Argentina | Aprendé GRATIS 2026</title>
-  <meta name="description" content="La plataforma educativa #1 de wingfoil en Argentina. Videos por nivel en español, 18+ spots en todo el país, instructores certificados, anatomía del foil interactiva y el nivel real del Río de la Plata por rango de fechas: marea del SHN, sudestada y crecidas de septiembre a marzo. Gratis." />
+  <meta name="description" content="Aprendé wingfoil gratis en Argentina: videos por nivel en español, 18+ spots, instructores certificados y la marea del Río de la Plata en tiempo real." />
   <meta name="keywords" content="wingfoil Argentina, aprender wingfoil gratis, clases wingfoil Buenos Aires, spots wingfoil Argentina, instructores wingfoil certificados, wingfoil Mar del Plata, wingfoil Bariloche, wingfoil Nahuel Huapi, wingfoil San Isidro, wingfoil Chascomús, wingfoil Patagonia, wingfoil vs kitesurf, equipo wingfoil precio Argentina, cómo aprender wingfoil desde cero, temporada wingfoil río de la plata, tabla wingfoil principiante, foil para principiante Argentina, kitesurf Argentina, wingfoil 2026, sudestada Río de la Plata, crecida del Río de la Plata, altura del Río de la Plata hoy, marea Río de la Plata San Isidro, pronóstico de marea SHN, bajante del Río de la Plata, nivel del río San Fernando, mareógrafo Pilote Norden, sudestada septiembre a marzo, viento termal Río de la Plata, cuándo hay sudestada en Buenos Aires" />
   <link rel="canonical" href="https://www.escueladewingfoil.com.ar/" />
   <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
@@ -47,15 +47,29 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "EducationalOrganization",
-    "name": "Escuela de Wingfoil Argentina",
-    "alternateName": "Escuela de Wingfoil",
-    "description": "Plataforma educativa gratuita de wingfoil en Argentina. Videos por nivel, spots, instructores certificados y comunidad activa.",
-    "url": "https://www.escueladewingfoil.com.ar",
-    "logo": "https://www.escueladewingfoil.com.ar/icon-192.png",
-    "areaServed": {"@type": "Country", "name": "Argentina"},
-    "availableLanguage": {"@type": "Language", "name": "Spanish", "alternateName": "es"},
-    "sameAs": ["https://www.instagram.com/clubkitewing/"]
+    "@graph": [
+      {
+        "@type": "EducationalOrganization",
+        "@id": "https://www.escueladewingfoil.com.ar/#organization",
+        "name": "Escuela de Wingfoil Argentina",
+        "alternateName": "Escuela de Wingfoil",
+        "description": "Plataforma educativa gratuita de wingfoil en Argentina. Videos por nivel, spots, instructores certificados y comunidad activa.",
+        "url": "https://www.escueladewingfoil.com.ar/",
+        "logo": {"@type": "ImageObject", "url": "https://www.escueladewingfoil.com.ar/icon-512.png", "width": 512, "height": 512},
+        "areaServed": {"@type": "Country", "name": "Argentina"},
+        "availableLanguage": {"@type": "Language", "name": "Spanish", "alternateName": "es"},
+        "sameAs": ["https://www.instagram.com/clubkitewing/"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://www.escueladewingfoil.com.ar/#website",
+        "name": "Escuela de Wingfoil Argentina",
+        "alternateName": "WingFoil ARG",
+        "url": "https://www.escueladewingfoil.com.ar/",
+        "inLanguage": "es-AR",
+        "publisher": {"@id": "https://www.escueladewingfoil.com.ar/#organization"}
+      }
+    ]
   }
   </script>
   <script type="application/ld+json">
@@ -129,8 +143,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     "description": "Qué es la sudestada, por qué las crecidas del Río de la Plata se concentran entre septiembre y marzo, cómo leer la altura del río antes de salir a navegar y qué pasa con la bajante.",
     "inLanguage": "es-AR",
     "mainEntityOfPage": {"@type":"WebPage","@id":"https://www.escueladewingfoil.com.ar/#sudestada"},
-    "author": {"@type":"Organization","name":"Escuela de Wingfoil Argentina","url":"https://www.escueladewingfoil.com.ar"},
-    "publisher": {"@type":"Organization","name":"Escuela de Wingfoil Argentina","logo":{"@type":"ImageObject","url":"https://www.escueladewingfoil.com.ar/icon-192.png"}},
+    "image": "https://images.unsplash.com/photo-1666175497584-dab60dcf1419?w=1200&h=630&fit=crop&auto=format&q=80",
+    "datePublished": "2026-09-05",
+    "dateModified": "2026-09-05",
+    "author": {"@id":"https://www.escueladewingfoil.com.ar/#organization"},
+    "publisher": {"@id":"https://www.escueladewingfoil.com.ar/#organization"},
     "about": [
       {"@type":"Thing","name":"Sudestada"},
       {"@type":"Thing","name":"Crecida del Río de la Plata"},
@@ -180,15 +197,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"SportsActivityLocation","name":"Puerto Madryn — Golfo Nuevo Wingfoil","description":"Atlántico sur con ballenas y orcas de fondo. Viento S constante 18-35 kn.","sport":"Wingfoil","address":{"@type":"PostalAddress","addressLocality":"Puerto Madryn","addressRegion":"Chubut","addressCountry":"AR"},"geo":{"@type":"GeoCoordinates","latitude":-42.7692,"longitude":-65.0386},"url":"https://www.escueladewingfoil.com.ar/#spots","image":"https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=800&fit=crop&auto=format&q=80"}
   </script>
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"VideoObject","name":"Wing Foil para principiantes — Paso 1: Control del ala","description":"Aprendé a manejar el ala y a navegar sin foil. El primer paso para aprender wingfoil desde cero en Argentina.","thumbnailUrl":"https://i.ytimg.com/vi/EThzuUA7ShQ/maxresdefault.jpg","embedUrl":"https://www.youtube.com/embed/EThzuUA7ShQ","uploadDate":"2023-01-01","duration":"PT10M","inLanguage":"es","url":"https://www.escueladewingfoil.com.ar/#videos"}
-  </script>
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"VideoObject","name":"Aprende Wingfoil — Paso 2: Al agua, rumbos y giros","description":"Rumbos, giros y cómo volver con seguridad. Segunda sesión de tu aprendizaje de wingfoil en Argentina.","thumbnailUrl":"https://i.ytimg.com/vi/cDCOfbP2hvY/maxresdefault.jpg","embedUrl":"https://www.youtube.com/embed/cDCOfbP2hvY","uploadDate":"2023-01-01","duration":"PT12M","inLanguage":"es","url":"https://www.escueladewingfoil.com.ar/#videos"}
-  </script>
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"VideoObject","name":"Wingfoil — Paso 3: Subirse y pararse en la tabla","description":"Técnicas para mantener el equilibrio en la tabla de wingfoil. El momento clave del aprendizaje.","thumbnailUrl":"https://i.ytimg.com/vi/EyNfWdt1JiM/maxresdefault.jpg","embedUrl":"https://www.youtube.com/embed/EyNfWdt1JiM","uploadDate":"2023-01-01","duration":"PT8M","inLanguage":"es","url":"https://www.escueladewingfoil.com.ar/#videos"}
-  </script>
 
   <script type="application/ld+json">
   {
@@ -232,19 +240,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     ]
   }
   </script>
-  <!-- Netlify hidden forms for detection -->
-  <form name="instructor-form" netlify netlify-honeypot="bot-field" hidden>
-    <input name="nombre"/><input name="apellido"/><input name="whatsapp"/><input name="ubicacion"/><input name="bio"/><input name="deportes"/>
-  </form>
-  <form name="equipo-form" netlify netlify-honeypot="bot-field" hidden>
-    <input name="tipo"/><input name="marca"/><input name="precio"/><input name="ubicacion"/><input name="descripcion"/><input name="whatsapp"/>
-  </form>
-  <form name="survey-form" netlify netlify-honeypot="bot-field" hidden>
-    <input name="falta"/><input name="email"/>
-  </form>
-  <form name="sponsor-form" netlify netlify-honeypot="bot-field" hidden>
-    <input name="marca"/><input name="contacto"/><input name="email"/><input name="mensaje"/>
-  </form>
 
   <link rel="manifest" href="/manifest.json"/>
   <meta name="theme-color" content="#00b4d8"/>
@@ -826,11 +821,6 @@ textarea{resize:vertical;min-height:90px}
 /* Nav section background overlay */
 #navBgOverlay{position:fixed;inset:0;z-index:9;pointer-events:none;opacity:0;background-size:cover;background-position:center;transition:opacity .35s ease;will-change:opacity}
 #navBgOverlay::after{content:'';position:absolute;inset:0;background:rgba(2,10,22,.55)}
-/* Article dialog */
-#articleFoil::backdrop{background:rgba(2,10,22,.7);backdrop-filter:blur(4px)}
-#articleFoil h3{color:var(--text)}
-#articleFoil p,#articleFoil li{color:var(--text-muted);line-height:1.75;font-size:15px}
-#articleFoil strong{color:var(--text)}
 .spot-card,.rider-card,.equipo-card,.instructor-card,.about__card,.step-card{transform-style:preserve-3d;will-change:transform}
 .spot-card__img,.rider-card__media{transform:translateZ(0)}
 
@@ -939,8 +929,9 @@ textarea{resize:vertical;min-height:90px}
 .en-only{display:none}
 html[lang="en"] .en-only{display:block}
 html[lang="en"] .es-only{display:none}
-.blog-card{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .25s;display:flex;flex-direction:column;cursor:pointer}
+.blog-card{position:relative;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .25s;display:flex;flex-direction:column;cursor:pointer}
 .blog-card:hover{transform:translateY(-4px);border-color:var(--primary);box-shadow:0 12px 32px rgba(0,180,216,.12)}
+.blog-card__link{position:absolute;inset:0;z-index:2;border-radius:14px}
 .blog-card__cover{aspect-ratio:16/9;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-size:60px;position:relative;overflow:hidden}
 .blog-card__cover::after{content:'';position:absolute;inset:0;background:linear-gradient(160deg,rgba(0,0,0,.1),rgba(0,0,0,.4))}
 .blog-card__cover span{position:relative;z-index:1;filter:drop-shadow(0 2px 8px rgba(0,0,0,.3))}
@@ -1452,15 +1443,26 @@ html{scroll-padding-top:var(--barra-alta)}
   <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
-  <link rel="alternate" hreflang="es" href="https://escueladewingfoil.com.ar/">
-  <link rel="alternate" hreflang="en" id="hreflangEn" href="https://escueladewingfoil.com.ar/?lang=en">
-  <link rel="alternate" hreflang="x-default" href="https://escueladewingfoil.com.ar/">
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5VH677HZ"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
+
+<!-- Netlify hidden forms for detection (en el body: un <form> dentro de <head> lo cierra antes de tiempo) -->
+  <form name="instructor-form" netlify netlify-honeypot="bot-field" hidden>
+    <input name="nombre"/><input name="apellido"/><input name="whatsapp"/><input name="ubicacion"/><input name="bio"/><input name="deportes"/>
+  </form>
+  <form name="equipo-form" netlify netlify-honeypot="bot-field" hidden>
+    <input name="tipo"/><input name="marca"/><input name="precio"/><input name="ubicacion"/><input name="descripcion"/><input name="whatsapp"/>
+  </form>
+  <form name="survey-form" netlify netlify-honeypot="bot-field" hidden>
+    <input name="falta"/><input name="email"/>
+  </form>
+  <form name="sponsor-form" netlify netlify-honeypot="bot-field" hidden>
+    <input name="marca"/><input name="contacto"/><input name="email"/><input name="mensaje"/>
+  </form>
 
 <!-- TOPBAR -->
 <div class="topbar" role="banner" id="topbar">
@@ -1565,7 +1567,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- ============================================================ HERO ============================================================ -->
 <section class="hero" id="inicio">
   <div class="hero__bg" aria-hidden="true">
-    <video class="hero__bg-video" id="heroVideo" autoplay muted loop playsinline preload="auto" poster="https://images.pexels.com/photos/15151070/pexels-photo-15151070.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" aria-hidden="true">
+    <video class="hero__bg-video" id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="https://images.pexels.com/photos/15151070/pexels-photo-15151070.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" aria-hidden="true">
       <source src="https://videos.pexels.com/video-files/34379407/14564404_1440_2560_30fps.mp4" type="video/mp4"/>
     </video>
     <div class="hero__bg-img" id="heroParallax"></div>
@@ -1805,7 +1807,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
       </div>
       <div class="about__media">
-        <img src="https://resizer.glanacion.com/resizer/v2/una-de-sus-grandes-ventajas-es-que-se-trata-de-un-OF5SRW7525D2BKKQUODK4RQHHE.jpeg?auth=710a8274ae1ab929b0d37cb62b2aa3f4016bef7782ac157041dbbe983eb77111&width=780&height=520&quality=70&smart=true" alt="Rider de wingfoil volando sobre agua del Río de la Plata Argentina" loading="lazy"/>
+        <img width="780" height="520" src="https://resizer.glanacion.com/resizer/v2/una-de-sus-grandes-ventajas-es-que-se-trata-de-un-OF5SRW7525D2BKKQUODK4RQHHE.jpeg?auth=710a8274ae1ab929b0d37cb62b2aa3f4016bef7782ac157041dbbe983eb77111&width=780&height=520&quality=70&smart=true" alt="Rider de wingfoil volando sobre agua del Río de la Plata Argentina" loading="lazy"/>
         <div class="about__media-badge"><span>🌊</span><span>Argentina, la nueva meca del wingfoil</span></div>
       </div>
     </div>
@@ -1815,9 +1817,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- IMPACT STRIP -->
 <div class="impact-strip">
   <div class="impact-strip__inner">
-    <div class="impact-strip__img"><img src="https://www.clarin.com/img/2026/01/05/u69gwDqEC_1256x620__2.jpg#1767723957906" alt="Wingfoil Argentina 2026" loading="lazy"/></div>
-    <div class="impact-strip__img"><img src="https://resizer.glanacion.com/resizer/v2/el-windsurf-perdio-la-onda-todo-va-hacia-el-foil-AQSI2OWHD5GHLNZRLS2IDHSYEY.jpeg?auth=2a8e00a13f3548c9c8446c17376138a19bfd9ce0a172517f560ab580a1d3bf9c&width=780&height=519&quality=70&smart=true" alt="Foil Argentina" loading="lazy"/></div>
-    <div class="impact-strip__img"><img src="https://resizer.glanacion.com/resizer/v2/paloma-gutierrez-instructora-argentina-en-la-UZJIX32ZSBAW7KNIJBF2ATBSMA.jpeg?auth=8cd91c9a20fc6ebe72fa73c8496b8b66fb36ccbcf05a103c34e753198e719a64&width=780&height=520&quality=70&smart=true" alt="Instructora argentina de wingfoil" loading="lazy"/></div>
+    <div class="impact-strip__img"><img width="1256" height="620" src="https://www.clarin.com/img/2026/01/05/u69gwDqEC_1256x620__2.jpg#1767723957906" alt="Wingfoil Argentina 2026" loading="lazy"/></div>
+    <div class="impact-strip__img"><img width="780" height="519" src="https://resizer.glanacion.com/resizer/v2/el-windsurf-perdio-la-onda-todo-va-hacia-el-foil-AQSI2OWHD5GHLNZRLS2IDHSYEY.jpeg?auth=2a8e00a13f3548c9c8446c17376138a19bfd9ce0a172517f560ab580a1d3bf9c&width=780&height=519&quality=70&smart=true" alt="Foil Argentina" loading="lazy"/></div>
+    <div class="impact-strip__img"><img width="780" height="520" src="https://resizer.glanacion.com/resizer/v2/paloma-gutierrez-instructora-argentina-en-la-UZJIX32ZSBAW7KNIJBF2ATBSMA.jpeg?auth=8cd91c9a20fc6ebe72fa73c8496b8b66fb36ccbcf05a103c34e753198e719a64&width=780&height=520&quality=70&smart=true" alt="Instructora argentina de wingfoil" loading="lazy"/></div>
   </div>
 </div>
 
@@ -2484,7 +2486,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <article class="rider-card">
         <button class="rider-card__media lite-yt" data-id="hQylyczci90" aria-label="Reproducir video de Balz Müller" data-en-aria-label="Play Balz Müller video">
-          <img src="https://i.ytimg.com/vi/hQylyczci90/hqdefault.jpg" alt="Balz Müller wingfoil video" loading="lazy"/>
+          <img src="https://i.ytimg.com/vi/hQylyczci90/hqdefault.jpg" alt="Balz Müller wingfoil video" width="480" height="360" loading="lazy"/>
           <span class="rider-card__yt-badge">YouTube</span>
           <span class="rider-card__play"></span>
           <span class="rider-card__flag" data-en="🇨🇭 Switzerland">🇨🇭 Suiza</span>
@@ -2498,7 +2500,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <article class="rider-card">
         <button class="rider-card__media lite-yt" data-id="3i0yDs8ZhYQ" aria-label="Reproducir video de Titouan Galea" data-en-aria-label="Play Titouan Galea video">
-          <img src="https://i.ytimg.com/vi/3i0yDs8ZhYQ/hqdefault.jpg" alt="Titouan Galea wingfoil double backflip" loading="lazy"/>
+          <img src="https://i.ytimg.com/vi/3i0yDs8ZhYQ/hqdefault.jpg" alt="Titouan Galea wingfoil double backflip" width="480" height="360" loading="lazy"/>
           <span class="rider-card__yt-badge">YouTube</span>
           <span class="rider-card__play"></span>
           <span class="rider-card__flag" data-en="🇳🇨 New Caledonia">🇳🇨 Nueva Caledonia</span>
@@ -2512,7 +2514,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <article class="rider-card">
         <button class="rider-card__media lite-yt" data-id="paxx5UjaWgk" aria-label="Reproducir video de Kai Lenny" data-en-aria-label="Play Kai Lenny video">
-          <img src="https://i.ytimg.com/vi/paxx5UjaWgk/hqdefault.jpg" alt="Wingfoil action video" loading="lazy"/>
+          <img src="https://i.ytimg.com/vi/paxx5UjaWgk/hqdefault.jpg" alt="Wingfoil action video" width="480" height="360" loading="lazy"/>
           <span class="rider-card__yt-badge">YouTube</span>
           <span class="rider-card__play"></span>
           <span class="rider-card__flag" data-en="🇺🇸 Hawaii">🇺🇸 Hawaii</span>
@@ -2526,7 +2528,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <article class="rider-card">
         <button class="rider-card__media lite-yt" data-id="KD6kw4qIYkw" aria-label="Reproducir video de competencia GWA" data-en-aria-label="Play GWA competition video">
-          <img src="https://i.ytimg.com/vi/KD6kw4qIYkw/hqdefault.jpg" alt="GWA Wingfoil World Tour highlights" loading="lazy"/>
+          <img src="https://i.ytimg.com/vi/KD6kw4qIYkw/hqdefault.jpg" alt="GWA Wingfoil World Tour highlights" width="480" height="360" loading="lazy"/>
           <span class="rider-card__yt-badge">YouTube</span>
           <span class="rider-card__play"></span>
           <span class="rider-card__flag">🌎 GWA</span>
@@ -2540,7 +2542,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <article class="rider-card">
         <button class="rider-card__media lite-yt" data-id="9WyGQSIKedE" aria-label="Reproducir tutorial de wingfoil" data-en-aria-label="Play wingfoil tutorial">
-          <img src="https://i.ytimg.com/vi/9WyGQSIKedE/hqdefault.jpg" alt="How to wing surf tutorial" loading="lazy"/>
+          <img src="https://i.ytimg.com/vi/9WyGQSIKedE/hqdefault.jpg" alt="How to wing surf tutorial" width="480" height="360" loading="lazy"/>
           <span class="rider-card__yt-badge">YouTube</span>
           <span class="rider-card__play"></span>
           <span class="rider-card__flag" data-en="🌍 Tutorial">🌍 Tutorial</span>
@@ -2554,7 +2556,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <article class="rider-card">
         <button class="rider-card__media lite-yt" data-id="EThzuUA7ShQ" aria-label="Reproducir video de comunidad argentina" data-en-aria-label="Play Argentine community video">
-          <img src="https://i.ytimg.com/vi/EThzuUA7ShQ/hqdefault.jpg" alt="Comunidad WingFoil Argentina" loading="lazy"/>
+          <img src="https://i.ytimg.com/vi/EThzuUA7ShQ/hqdefault.jpg" alt="Comunidad WingFoil Argentina" width="480" height="360" loading="lazy"/>
           <span class="rider-card__yt-badge">YouTube</span>
           <span class="rider-card__play"></span>
           <span class="rider-card__flag" data-en="🇦🇷 Argentina">🇦🇷 Argentina</span>
@@ -2590,10 +2592,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <span class="eyebrow">📚 Recursos</span>
     <h2 class="section-title" data-en="Guides and articles">Guías y artículos</h2>
-    <p class="section-sub">Estamos preparando contenido en profundidad para cada etapa de tu aprendizaje. Pronto disponibles.</p>
+    <p class="section-sub" data-en="In-depth guides for every stage of your learning.">Guías en profundidad para cada etapa de tu aprendizaje.</p>
+    <p style="margin-top:8px;font-weight:700"><a href="/blog/" style="color:var(--primary)" data-en="See all guides →">Ver todas las guías →</a></p>
     <div class="blog-grid">
 
-      <article class="blog-card" id="blogCardFoil" style="cursor:pointer" onclick="document.getElementById('articleFoil').showModal()">
+      <article class="blog-card" id="blogCardFoil">
         <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800&auto=format&fit=crop&q=60" alt="Persona surfeando con foil en el océano" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Complete guide">Guía completa</span>
@@ -2604,180 +2607,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <span data-en="· 12 min read">· 12 min lectura</span>
           </div>
         </div>
+        <a class="blog-card__link" href="/blog/como-elegir-tu-primer-foil" aria-label="Cómo elegir tu primer foil"></a>
       </article>
 
-      <!-- ARTICLE MODAL -->
-      <dialog id="articleFoil" style="max-width:760px;width:94vw;max-height:90vh;overflow-y:auto;border-radius:16px;border:1px solid var(--border);background:var(--surface);color:var(--text);padding:0;box-shadow:0 32px 80px rgba(0,0,0,.5)">
-        <div style="position:sticky;top:0;z-index:2;background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between">
-          <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary)" data-en="Complete guide · 12 min read">Guía completa · 12 min lectura</span>
-          <button onclick="document.getElementById('articleFoil').close()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:22px;line-height:1;padding:4px 8px" aria-label="Cerrar" data-en-aria-label="Close">&times;</button>
-        </div>
-        <div style="padding:36px 32px 48px">
-          <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=760&auto=format&fit=crop&q=60" alt="Persona surfeando con foil en el océano" style="width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:28px" loading="lazy"/>
-          <h2 style="font-family:'Clash Display',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;line-height:1.15;margin-bottom:12px" data-en="How to choose your first foil">Cómo elegir tu primer foil</h2>
-          <p style="color:var(--text-muted);font-size:14px;margin-bottom:36px" data-en="By the Escuela de Wingfoil team · May 2026">Por el equipo de Escuela de Wingfoil · Mayo 2026</p>
-
-<div class="es-only">
-          <p>Antes de gastar USD 1.500 en tu primer equipo, hay algo que nadie te dice claramente: el foil <em>no es una sola cosa</em>. Es un sistema de 5 partes que deben ser compatibles entre sí, y cada decisión afecta cómo vas a progresar. Esta guía te explica cómo elegir cada parte según tu nivel, tu peso y el agua donde vas a navegar.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">1. Antes de elegir el foil: elegí el ala correcta</h3>
-          <p>El ala (wing) determina el rango de viento en que vas a volar. Si empezás con un ala chica vas a frustrarte porque necesitás mucho viento. La recomendación para iniciantes en el Río de la Plata (vientos de 15-20 kn):</p>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Peso &lt;70 kg:</strong> ala de 5–6 m²</li>
-            <li><strong>Peso 70–90 kg:</strong> ala de 6–7 m²</li>
-            <li><strong>Peso &gt;90 kg:</strong> ala de 7–8 m²</li>
-          </ul>
-          <p>Marcas recomendadas para iniciantes: <strong>Duotone Echo, F-One Swing, Naish Matador</strong>. Son alas estables, con buen depower y fácil de manejar con poco brazo.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">2. El foil: tamaño del ala delantera</h3>
-          <p>La <strong>ala delantera</strong> (front wing) es la pieza que genera la sustentación. A mayor superficie, más lift con menos velocidad — ideal para principiantes. Pero ojo: más área = más estabilidad y menor velocidad máxima.</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0">
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:22px;font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif">1.800–2.500 cm²</div>
-              <div style="font-size:13px;color:var(--text-muted);margin-top:4px">Principiante · Despega lento · Muy estable</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:22px;font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif">1.200–1.800 cm²</div>
-              <div style="font-size:13px;color:var(--text-muted);margin-top:4px">Intermedio · Más rápido · Más maniobrable</div>
-            </div>
-          </div>
-          <p>Si sos principiante, buscá un ala de <strong>mínimo 1.500 cm²</strong>. Alas populares para iniciantes: Armstrong A-Wing HA 1850, Lift eFoil 150, Duotone Spirit 1850.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">3. El mástil: la altura importa más de lo que creés</h3>
-          <p>El mástil conecta la tabla con el sistema de vuelo. Altura recomendada según nivel:</p>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Principiante:</strong> 60–70 cm. Menos altura = más fácil de controlar, menos consecuencias de las caídas.</li>
-            <li><strong>Intermedio:</strong> 75–85 cm. Mejor clearance en olas y aguas movidas.</li>
-            <li><strong>Avanzado:</strong> 90–95 cm. Para surfear olas de mayor tamaño.</li>
-          </ul>
-          <p>Los mástiles de <strong>carbono</strong> son más rígidos y transmiten mejor el feedback del foil. Los de aluminio son más baratos pero pesan más y flex más — aceptables para empezar.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">4. El fuselaje: largo vs corto</h3>
-          <p>El fuselaje une el mástil con las alas. No te compliques en esto al principio: un fuselaje de <strong>60–75 cm</strong> es versátil para todo. Los fuselajes cortos (40–50 cm) aumentan la agilidad pero reducen estabilidad — no para principiantes.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">5. La tabla: tan importante como el foil</h3>
-          <p>Muchos principiantes subestiman esto. Para aprender, necesitás una tabla <strong>grande y de mucho volumen</strong>:</p>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Peso &lt;70 kg:</strong> mínimo 90–100 L</li>
-            <li><strong>Peso 70–90 kg:</strong> mínimo 100–120 L</li>
-            <li><strong>Peso &gt;90 kg:</strong> mínimo 120–140 L</li>
-          </ul>
-          <p>Una tabla grande da más estabilidad al subirse, más tiempo para generar velocidad y más margen para errores. Al progresar podés bajar a 60–70 L.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">6. Compatibilidad entre partes — el error más costoso</h3>
-          <p>El sistema de conexión entre mástil y tabla tiene tres estándares:</p>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Tuttle Box:</strong> el más común en tablas económicas</li>
-            <li><strong>Deep Tuttle:</strong> más rígido, para foils de mayor carga</li>
-            <li><strong>US Box:</strong> universal, permite ajustar posición del foil</li>
-          </ul>
-          <p><strong>Antes de comprar</strong>: confirmá que el box de tu tabla es compatible con el mástil que vas a usar. Muchos kits usados vienen con adaptadores, pero vale la pena chequearlo.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">7. ¿Kit nuevo o usado?</h3>
-          <p>Para empezar, un kit <strong>usado en buen estado</strong> es la mejor opción. Vas a caer mucho al principio y el equipo va a recibir golpes. No tiene sentido estrenar carbono premium en las primeras sesiones.</p>
-          <div style="background:var(--primary-glow);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:20px;margin:20px 0">
-            <strong style="color:var(--primary)">Presupuesto orientativo (Argentina, 2026)</strong><br>
-            <span style="color:var(--text-muted);font-size:14px;line-height:1.8">Kit usado completo (tabla + foil + ala): USD 1.000–1.500<br>Kit nuevo completo: USD 2.500–3.500<br>Neopreno + casco + chaleco: ARS 150.000–250.000</span>
-          </div>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Resumen: checklist antes de comprar</h3>
-          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">
-            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Ala del tamaño correcto para mi peso y el viento local</label>
-            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Ala delantera ≥1.500 cm² (principiante)</label>
-            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Mástil 60–70 cm (primer año)</label>
-            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Tabla con volumen suficiente para mi peso</label>
-            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Compatibilidad de box verificada</label>
-            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Casco + chaleco + neopreno (obligatorio)</label>
-          </div>
-
-          <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">¿Dudas? Consultá a los instructores en la sección <a href="#instructores" onclick="document.getElementById('articleFoil').close()" style="color:var(--primary)">Instructores</a> o en el grupo de WhatsApp de la comunidad.</p>
-          </div>
-          <div class="en-only">
-          <p>Before spending USD 1,500 on your first set-up, there's something nobody tells you clearly: the foil <em>isn't just one thing</em>. It's a 5-part system that all have to be compatible with each other, and every decision affects how you progress. This guide walks you through choosing each part based on your level, your weight and the water you'll be riding.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">1. Before choosing the foil: pick the right wing</h3>
-          <p>The wing determines the wind range you'll be flying in. If you start with a small wing you'll get frustrated because you'll need a lot of wind. The recommendation for beginners on the Río de la Plata (15-20 kn winds):</p>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Weight &lt;70 kg:</strong> 5–6 m² wing</li>
-            <li><strong>Weight 70–90 kg:</strong> 6–7 m² wing</li>
-            <li><strong>Weight &gt;90 kg:</strong> 7–8 m² wing</li>
-          </ul>
-          <p>Recommended brands for beginners: <strong>Duotone Echo, F-One Swing, Naish Matador</strong>. They're stable wings, with good depower and easy to handle without much arm strength.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">2. The foil: front wing size</h3>
-          <p>The <strong>front wing</strong> is the piece that generates lift. The bigger the surface, the more lift at lower speed — ideal for beginners. But careful: more area = more stability and a lower top speed.</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0">
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:22px;font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif">1,800–2,500 cm²</div>
-              <div style="font-size:13px;color:var(--text-muted);margin-top:4px">Beginner · Slow take-off · Very stable</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:22px;font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif">1,200–1,800 cm²</div>
-              <div style="font-size:13px;color:var(--text-muted);margin-top:4px">Intermediate · Faster · More manoeuvrable</div>
-            </div>
-          </div>
-          <p>If you're a beginner, look for a wing of at least <strong>1,500 cm²</strong>. Popular beginner wings: Armstrong A-Wing HA 1850, Lift eFoil 150, Duotone Spirit 1850.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">3. The mast: height matters more than you'd think</h3>
-          <p>The mast connects the board to the flight system. Recommended height by level:</p>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Beginner:</strong> 60–70 cm. Less height = easier to control, fewer consequences from falls.</li>
-            <li><strong>Intermediate:</strong> 75–85 cm. Better clearance in waves and choppy water.</li>
-            <li><strong>Advanced:</strong> 90–95 cm. For riding bigger waves.</li>
-          </ul>
-          <p><strong>Carbon</strong> masts are stiffer and transmit the foil's feedback better. Aluminium ones are cheaper but heavier and flex more — fine to start with.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">4. The fuselage: long vs short</h3>
-          <p>The fuselage connects the mast to the wings. Don't overthink this at the start: a <strong>60–75 cm</strong> fuselage is versatile for everything. Short fuselages (40–50 cm) increase agility but reduce stability — not for beginners.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">5. The board: just as important as the foil</h3>
-          <p>Many beginners underestimate this. To learn, you need a <strong>big, high-volume</strong> board:</p>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Weight &lt;70 kg:</strong> minimum 90–100 L</li>
-            <li><strong>Weight 70–90 kg:</strong> minimum 100–120 L</li>
-            <li><strong>Weight &gt;90 kg:</strong> minimum 120–140 L</li>
-          </ul>
-          <p>A big board gives you more stability getting up, more time to build speed and more room for mistakes. As you progress you can go down to 60–70 L.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">6. Part compatibility — the costliest mistake</h3>
-          <p>The connection system between mast and board has three standards:</p>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Tuttle Box:</strong> the most common on budget boards</li>
-            <li><strong>Deep Tuttle:</strong> stiffer, for higher-load foils</li>
-            <li><strong>US Box:</strong> universal, lets you adjust the foil's position</li>
-          </ul>
-          <p><strong>Before buying</strong>: confirm your board's box is compatible with the mast you'll use. Many used kits come with adapters, but it's worth checking.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">7. New or used kit?</h3>
-          <p>To get started, a <strong>used kit in good condition</strong> is the best option. You'll fall a lot at the beginning and the gear will take hits. There's no point breaking in premium carbon on your first sessions.</p>
-          <div style="background:var(--primary-glow);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:20px;margin:20px 0">
-            <strong style="color:var(--primary)">Rough budget (Argentina, 2026)</strong><br>
-            <span style="color:var(--text-muted);font-size:14px;line-height:1.8">Full used kit (board + foil + wing): USD 1,000–1,500<br>Full new kit: USD 2,500–3,500<br>Wetsuit + helmet + vest: ARS 150,000–250,000</span>
-          </div>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Summary: checklist before you buy</h3>
-          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">
-            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Wing sized right for my weight and local wind</label>
-            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Front wing ≥1,500 cm² (beginner)</label>
-            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> 60–70 cm mast (first year)</label>
-            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Board with enough volume for my weight</label>
-            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Box compatibility checked</label>
-            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer"><input type="checkbox" style="margin-top:2px;accent-color:var(--primary)"> Helmet + vest + wetsuit (mandatory)</label>
-          </div>
-
-          <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">Questions? Ask the instructors in the <a href="#instructores" onclick="document.getElementById('articleFoil').close()" style="color:var(--primary)">Instructors</a> section or in the community WhatsApp group.</p>
-          </div>
-          <div class="article-share">
-            <span class="article-share__label" data-en="Share">Compartir</span>
-            <button class="share-btn share-btn--wa" onclick="shareArticle('wa',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.867-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg><span>WhatsApp</span></button>
-            <button class="share-btn share-btn--x" onclick="shareArticle('x',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Twitter / X</span></button>
-            <button class="share-btn share-btn--fb" onclick="shareArticle('fb',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg><span>Facebook</span></button>
-            <button class="share-btn share-btn--copy" onclick="shareArticle('copy',this)" type="button"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-en="Copy link">Copiar link</span></button>
-          </div>
-        </div>
-      </dialog>
-
-      <article class="blog-card" id="blogCardKite" style="cursor:pointer" onclick="document.getElementById('articleKite').showModal()">
+      <article class="blog-card" id="blogCardKite">
         <div class="blog-card__cover" style="padding:0;overflow:hidden">
           <img src="https://images.pexels.com/photos/29918279/pexels-photo-29918279.jpeg?auto=compress&cs=tinysrgb&w=800&h=450&dpr=1" alt="Kitesurfer comparativa wingfoil" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/>
         </div>
@@ -2790,136 +2623,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <span data-en="· 8 min read">· 8 min lectura</span>
           </div>
         </div>
+        <a class="blog-card__link" href="/blog/wingfoil-vs-kitesurf-vs-windsurf" aria-label="WingFoil vs Kitesurf vs Windsurf"></a>
       </article>
 
-      <!-- ARTICLE MODAL KITE -->
-      <dialog id="articleKite" style="max-width:760px;width:94vw;max-height:90vh;overflow-y:auto;border-radius:16px;border:1px solid var(--border);background:var(--surface);color:var(--text);padding:0;box-shadow:0 32px 80px rgba(0,0,0,.5)">
-        <div style="position:sticky;top:0;z-index:2;background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between">
-          <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary)" data-en="Comparison · 8 min read">Comparativa · 8 min lectura</span>
-          <button onclick="document.getElementById('articleKite').close()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:22px;line-height:1;padding:4px 8px" aria-label="Cerrar" data-en-aria-label="Close">&times;</button>
-        </div>
-        <div style="padding:36px 32px 48px">
-          <img src="https://images.pexels.com/photos/29918279/pexels-photo-29918279.jpeg?auto=compress&cs=tinysrgb&w=760&h=380&dpr=1" alt="Kitesurfer" style="width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:28px" loading="lazy"/>
-          <h2 style="font-family:'Clash Display',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;line-height:1.15;margin-bottom:12px" data-en="WingFoil vs Kitesurf vs Windsurf">WingFoil vs Kitesurf vs Windsurf</h2>
-          <p style="color:var(--text-muted);font-size:14px;margin-bottom:36px" data-en="By the Escuela de Wingfoil team · May 2026">Por el equipo de Escuela de Wingfoil · Mayo 2026</p>
-
-<div class="es-only">
-          <p>Tres deportes de viento, tres experiencias completamente distintas. Si estás eligiendo por dónde arrancar o ya practicás uno y te preguntás si el pasto es más verde del otro lado, esta guía es para vos. Comparamos WingFoil, Kitesurf y Windsurf en los factores que más importan.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">La curva de aprendizaje</h3>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0">
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
-              <div style="font-size:28px;margin-bottom:8px">🪂</div>
-              <div style="font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif;font-size:16px">WingFoil</div>
-              <div style="font-size:13px;color:var(--text-muted);margin-top:4px">Moderada · 5-15 sesiones para foilear</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
-              <div style="font-size:28px;margin-bottom:8px">🪁</div>
-              <div style="font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif;font-size:16px">Kitesurf</div>
-              <div style="font-size:13px;color:var(--text-muted);margin-top:4px">Pronunciada · 15-25 sesiones para planear</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
-              <div style="font-size:28px;margin-bottom:8px">🏄</div>
-              <div style="font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif;font-size:16px">Windsurf</div>
-              <div style="font-size:13px;color:var(--text-muted);margin-top:4px">Alta · Semanas para maniobras básicas</div>
-            </div>
-          </div>
-          <p>El <strong>WingFoil</strong> es el deporte más nuevo y sorprendentemente accesible. El ala no está conectada a la tabla, así que si la soltás es inofensiva. En agua plana y viento constante, muchos principiantes logran su primer foileo entre la sesión 5 y 10.</p>
-          <p>El <strong>Kitesurf</strong> tiene la curva más larga porque manejar una cometa de 10-12m cuadra de potencia requiere horas de entrenamiento en playa antes de entrar al agua. La recompensa es enorme: velocidades altas, saltos épicos y la sensación de vuelo real.</p>
-          <p>El <strong>Windsurf</strong> es el clásico. La barra y la vela exigen coordinación de todo el cuerpo desde el primer día. Pero una vez que lo dominás, la sensación de control es incomparable.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Equipo y logística</h3>
-          <p>El WingFoil gana en portabilidad: tabla + ala + foil caben en el baúl de un auto. El kite necesita barra, lines y más espacio. El windsurf tiene el equipo más voluminoso y pesado.</p>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>WingFoil nuevo completo:</strong> USD 2.500–3.500</li>
-            <li><strong>Kitesurf nuevo completo:</strong> USD 2.000–3.000</li>
-            <li><strong>Windsurf nuevo completo:</strong> USD 2.000–4.000</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">¿Qué viento necesitás?</h3>
-          <p><strong>WingFoil:</strong> arranca desde 12 kn con un ala grande. Muy versátil para el Río de la Plata donde el viento termal llega a 15-20 kn en verano.</p>
-          <p><strong>Kitesurf:</strong> necesita mínimo 10-12 kn con cometa grande (14-17m). Con viento fuerte (+25 kn) es cuando más brilla.</p>
-          <p><strong>Windsurf:</strong> va desde 8 kn hasta 40 kn según el equipo. El freeride necesita 12-18 kn. El wave windsurf vive en 20-35 kn.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Peligrosidad y seguridad</h3>
-          <p>El kitesurf tiene la reputación (merecida) de ser el más peligroso si no se aprende bien. La cometa puede generar fuerza enorme y arrastrar al rider. Con buen entrenamiento y equipamiento moderno, el riesgo baja significativamente.</p>
-          <p>El WingFoil es más seguro porque el ala no está conectada: si hay problemas, la soltás. El riesgo principal es el foil —la estructura metálica bajo el agua— que puede lastimar en caídas. Usar casco y chaleco salvavidas es obligatorio en los tres.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">¿Cuál elegir?</h3>
-          <div style="background:var(--primary-glow);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:20px;margin:20px 0">
-            <ul style="list-style:none;padding:0;margin:0;display:grid;gap:10px">
-              <li style="color:var(--text);font-size:14px"><strong style="color:var(--primary)">Elegí WingFoil si:</strong> querés aprender rápido, valorás la portabilidad y vivís en zona con viento 12-22 kn.</li>
-              <li style="color:var(--text);font-size:14px"><strong style="color:var(--primary)">Elegí Kitesurf si:</strong> te gustan las alturas, los saltos y los deportes de adrenalina. Tenés tiempo para aprender.</li>
-              <li style="color:var(--text);font-size:14px"><strong style="color:var(--primary)">Elegí Windsurf si:</strong> venís de la vela o querés un deporte con décadas de comunidad y spots establecidos.</li>
-            </ul>
-          </div>
-
-          <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">¿Dudas? Consultá a los instructores en la sección <a href="#instructores" onclick="document.getElementById('articleKite').close()" style="color:var(--primary)">Instructores</a>.</p>
-          </div>
-          <div class="en-only">
-          <p>Three wind sports, three completely different experiences. Whether you're choosing where to start or already practise one and wonder if the grass is greener on the other side, this guide is for you. We compare WingFoil, Kitesurf and Windsurf on the factors that matter most.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">The learning curve</h3>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0">
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
-              <div style="font-size:28px;margin-bottom:8px">🪂</div>
-              <div style="font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif;font-size:16px">WingFoil</div>
-              <div style="font-size:13px;color:var(--text-muted);margin-top:4px">Moderate · 5-15 sessions to foil</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
-              <div style="font-size:28px;margin-bottom:8px">🪁</div>
-              <div style="font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif;font-size:16px">Kitesurf</div>
-              <div style="font-size:13px;color:var(--text-muted);margin-top:4px">Steep · 15-25 sessions to plane</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
-              <div style="font-size:28px;margin-bottom:8px">🏄</div>
-              <div style="font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif;font-size:16px">Windsurf</div>
-              <div style="font-size:13px;color:var(--text-muted);margin-top:4px">High · Weeks for basic manoeuvres</div>
-            </div>
-          </div>
-          <p><strong>WingFoil</strong> is the newest and surprisingly the most accessible sport. The wing isn't connected to the board, so it's harmless if you let go of it. On flat water with steady wind, many beginners get their first ride on the foil between session 5 and 10.</p>
-          <p><strong>Kitesurf</strong> has the longest curve because handling a 10-12m kite full of power takes hours of beach training before you even get in the water. The payoff is huge: high speeds, epic jumps and the feeling of real flight.</p>
-          <p><strong>Windsurf</strong> is the classic. The boom and the sail demand full-body coordination from day one. But once you master it, the feeling of control is unmatched.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Gear and logistics</h3>
-          <p>WingFoil wins on portability: board + wing + foil fit in a car trunk. Kite needs a bar, lines and more space. Windsurf has the bulkiest, heaviest gear.</p>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Full new WingFoil set-up:</strong> USD 2,500–3,500</li>
-            <li><strong>Full new Kitesurf set-up:</strong> USD 2,000–3,000</li>
-            <li><strong>Full new Windsurf set-up:</strong> USD 2,000–4,000</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">How much wind do you need?</h3>
-          <p><strong>WingFoil:</strong> starts from 12 kn with a big wing. Very versatile for the Río de la Plata, where the thermal wind reaches 15-20 kn in summer.</p>
-          <p><strong>Kitesurf:</strong> needs a minimum of 10-12 kn with a big kite (14-17m). It shines most in strong wind (+25 kn).</p>
-          <p><strong>Windsurf:</strong> ranges from 8 kn to 40 kn depending on the gear. Freeride needs 12-18 kn. Wave windsurfing lives in 20-35 kn.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Danger and safety</h3>
-          <p>Kitesurf has the (deserved) reputation of being the most dangerous if you don't learn it properly. The kite can generate enormous force and drag the rider. With good training and modern gear, the risk drops significantly.</p>
-          <p>WingFoil is safer because the wing isn't attached: if there's trouble, you just let go of it. The main risk is the foil — the metal structure under the water — which can hurt you in a fall. Wearing a helmet and impact vest is mandatory in all three.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Which one should you choose?</h3>
-          <div style="background:var(--primary-glow);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:20px;margin:20px 0">
-            <ul style="list-style:none;padding:0;margin:0;display:grid;gap:10px">
-              <li style="color:var(--text);font-size:14px"><strong style="color:var(--primary)">Choose WingFoil if:</strong> you want to learn fast, value portability and live somewhere with 12-22 kn wind.</li>
-              <li style="color:var(--text);font-size:14px"><strong style="color:var(--primary)">Choose Kitesurf if:</strong> you like heights, jumps and adrenaline sports. You have time to learn.</li>
-              <li style="color:var(--text);font-size:14px"><strong style="color:var(--primary)">Choose Windsurf if:</strong> you come from sailing or want a sport with decades of community and established spots.</li>
-            </ul>
-          </div>
-
-          <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">Questions? Ask the instructors in the <a href="#instructores" onclick="document.getElementById('articleKite').close()" style="color:var(--primary)">Instructors</a> section.</p>
-          </div>
-          <div class="article-share">
-            <span class="article-share__label" data-en="Share">Compartir</span>
-            <button class="share-btn share-btn--wa" onclick="shareArticle('wa',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.867-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg><span>WhatsApp</span></button>
-            <button class="share-btn share-btn--x" onclick="shareArticle('x',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Twitter / X</span></button>
-            <button class="share-btn share-btn--fb" onclick="shareArticle('fb',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg><span>Facebook</span></button>
-            <button class="share-btn share-btn--copy" onclick="shareArticle('copy',this)" type="button"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-en="Copy link">Copiar link</span></button>
-          </div>
-        </div>
-      </dialog>
-
-      <article class="blog-card" id="blogCardViento" style="cursor:pointer" onclick="document.getElementById('articleViento').showModal()">
+      <article class="blog-card" id="blogCardViento">
         <div class="blog-card__cover" style="padding:0;overflow:hidden">
           <img src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=800&auto=format&fit=crop&q=60&crop=entropy" alt="Playa costera con viento" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/>
         </div>
@@ -2932,151 +2639,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <span data-en="· 10 min read">· 10 min lectura</span>
           </div>
         </div>
+        <a class="blog-card__link" href="/blog/como-leer-el-viento" aria-label="Cómo leer el viento como un pro"></a>
       </article>
 
-      <!-- ARTICLE MODAL VIENTO -->
-      <dialog id="articleViento" style="max-width:760px;width:94vw;max-height:90vh;overflow-y:auto;border-radius:16px;border:1px solid var(--border);background:var(--surface);color:var(--text);padding:0;box-shadow:0 32px 80px rgba(0,0,0,.5)">
-        <div style="position:sticky;top:0;z-index:2;background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between">
-          <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary)" data-en="Technique · 10 min read">Técnica · 10 min lectura</span>
-          <button onclick="document.getElementById('articleViento').close()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:22px;line-height:1;padding:4px 8px" aria-label="Cerrar" data-en-aria-label="Close">&times;</button>
-        </div>
-        <div style="padding:36px 32px 48px">
-          <img src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=760&auto=format&fit=crop&q=60&crop=entropy" alt="Playa costera con viento" style="width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:28px" loading="lazy"/>
-          <h2 style="font-family:'Clash Display',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;line-height:1.15;margin-bottom:12px" data-en="How to read the wind like a pro">Cómo leer el viento como un pro</h2>
-          <p style="color:var(--text-muted);font-size:14px;margin-bottom:36px" data-en="By the Escuela de Wingfoil team · May 2026">Por el equipo de Escuela de Wingfoil · Mayo 2026</p>
-
-<div class="es-only">
-          <p>El error más común del principiante no es técnico: es salir al agua cuando no debería. Aprender a leer el viento antes de cada sesión es tan importante como saber volar el ala. Esta guía te enseña a interpretar el pronóstico, las apps y las señales del agua para tomar la mejor decisión.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">1. Las mejores apps de viento para Argentina</h3>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0">
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif;font-size:16px;margin-bottom:4px">🌬️ Windguru</div>
-              <div style="font-size:13px;color:var(--text-muted)">El favorito de la comunidad. Modelos GFS y WRF. Excelente para el Río de la Plata.</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif;font-size:16px;margin-bottom:4px">⚡ Windy.com</div>
-              <div style="font-size:13px;color:var(--text-muted)">Mapa animado de vientos. Perfecto para ver frentes y entender el sistema completo.</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif;font-size:16px;margin-bottom:4px">📡 iKitesurf</div>
-              <div style="font-size:13px;color:var(--text-muted)">Estaciones meteorológicas en tiempo real. Confirmación de pronóstico.</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif;font-size:16px;margin-bottom:4px">🇦🇷 SMN</div>
-              <div style="font-size:13px;color:var(--text-muted)">Servicio Meteorológico Nacional. Alertas de viento fuerte. Obligatorio consultarlo.</div>
-            </div>
-          </div>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">2. Los modelos meteorológicos: GFS vs ECMWF</h3>
-          <p><strong>GFS (Global Forecast System)</strong>: el más usado porque es gratuito. Preciso a 3-4 días. A 7 días empieza a divergir de la realidad. Lo ves en Windguru como la primera fila de datos.</p>
-          <p><strong>ECMWF (modelo europeo)</strong>: el más preciso del mundo, disponible de forma gratuita hasta 10 días con 3 horas de resolución. En Windy lo encontrás en el menú de modelos. Cuando GFS y ECMWF coinciden, el pronóstico es confiable.</p>
-          <p><strong>WRF</strong>: modelo de alta resolución para zonas específicas. Windguru lo muestra para varios spots de Argentina. Es el más preciso para vientos locales como el termal del Río de la Plata.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">3. Leer el agua: señales que el pronóstico no te dice</h3>
-          <p>El pronóstico te da el marco, pero el agua te dice la realidad en tiempo real:</p>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Pequeñas olas o rizado uniforme:</strong> viento estable y constante. Buenas condiciones.</li>
-            <li><strong>Agua completamente plana:</strong> viento aún no llegó o hay un bache. Esperá 15 minutos.</li>
-            <li><strong>Agua choppy y desordenada:</strong> viento variable e inconsistente. Difícil para principiantes.</li>
-            <li><strong>Rizado solo en una franja:</strong> hay una línea de viento termal. Navegá en esa zona.</li>
-            <li><strong>Espuma blanca en el agua:</strong> +20 kn. Evalúa tu nivel antes de entrar.</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">4. El viento termal del Río de la Plata</h3>
-          <p>El spot más popular de Argentina tiene su propio patrón de viento que hay que entender bien:</p>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Horario:</strong> el termal entra entre las 13h y las 16h, y suele bajar al atardecer (18-19h).</li>
-            <li><strong>Dirección:</strong> generalmente S/SO en verano. NE en invierno.</li>
-            <li><strong>Fuerza:</strong> 12-22 kn en días normales. Las olas del mar generan "bajos" de viento costeros.</li>
-            <li><strong>Señal de llegada:</strong> el agua empieza a rizarse desde el fondo hacia la orilla. Preparate 20 minutos antes.</li>
-          </ul>
-          <p>La cámara de Martínez Norte que ves en este sitio es perfecta para confirmar si el viento ya llegó sin necesidad de ir hasta el spot.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">5. Señales de peligro que nunca hay que ignorar</h3>
-          <div style="background:rgba(232,90,90,.08);border:1px solid rgba(232,90,90,.3);border-left:4px solid #e85a5a;border-radius:10px;padding:20px;margin:20px 0">
-            <ul style="list-style:none;padding:0;margin:0;display:grid;gap:8px">
-              <li style="font-size:14px;color:var(--text)">🚨 <strong>Viento racheado</strong>: ráfagas que suben y bajan 30%+ en segundos. Muy peligroso para foil.</li>
-              <li style="font-size:14px;color:var(--text)">🚨 <strong>Offshore</strong>: viento que te aleja de la costa. Si algo falla, te lleva al río.</li>
-              <li style="font-size:14px;color:var(--text)">🚨 <strong>Frentes de tormenta</strong>: el viento antes de una tormenta puede ser traicionero. Salí del agua.</li>
-              <li style="font-size:14px;color:var(--text)">🚨 <strong>Baches de viento</strong>: perder el viento en foil es caer al agua. Con poco fondo, peligroso.</li>
-            </ul>
-          </div>
-
-          <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">¿Querés aprender a leer el viento en el campo? Consultá a los <a href="#instructores" onclick="document.getElementById('articleViento').close()" style="color:var(--primary)">instructores</a> — muchos hacen clases de meteorología incluidas en el paquete.</p>
-          </div>
-          <div class="en-only">
-          <p>The most common beginner mistake isn't technical: it's going out on the water when they shouldn't. Learning to read the wind before every session is as important as knowing how to fly the wing. This guide teaches you to interpret the forecast, the apps and the water's own signals to make the best call.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">1. The best wind apps for Argentina</h3>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0">
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif;font-size:16px;margin-bottom:4px">🌬️ Windguru</div>
-              <div style="font-size:13px;color:var(--text-muted)">The community's favourite. GFS and WRF models. Excellent for the Río de la Plata.</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif;font-size:16px;margin-bottom:4px">⚡ Windy.com</div>
-              <div style="font-size:13px;color:var(--text-muted)">Animated wind map. Perfect for watching fronts and understanding the whole system.</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif;font-size:16px;margin-bottom:4px">📡 iKitesurf</div>
-              <div style="font-size:13px;color:var(--text-muted)">Real-time weather stations. Confirms the forecast.</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-weight:800;color:var(--primary);font-family:'Clash Display',sans-serif;font-size:16px;margin-bottom:4px">🇦🇷 SMN</div>
-              <div style="font-size:13px;color:var(--text-muted)">Argentina's national weather service. Strong-wind alerts. A must-check.</div>
-            </div>
-          </div>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">2. Weather models: GFS vs ECMWF</h3>
-          <p><strong>GFS (Global Forecast System)</strong>: the most used because it's free. Accurate 3-4 days out. By day 7 it starts to diverge from reality. You'll see it in Windguru as the first row of data.</p>
-          <p><strong>ECMWF (the European model)</strong>: the most accurate in the world, available for free up to 10 days out at 3-hour resolution. On Windy you'll find it in the model menu. When GFS and ECMWF agree, the forecast is reliable.</p>
-          <p><strong>WRF</strong>: a high-resolution model for specific areas. Windguru shows it for several spots in Argentina. It's the most accurate for local winds like the Río de la Plata's thermal.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">3. Reading the water: signs the forecast won't tell you</h3>
-          <p>The forecast gives you the framework, but the water tells you the real-time truth:</p>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Small waves or a uniform ripple:</strong> steady, consistent wind. Good conditions.</li>
-            <li><strong>Completely flat water:</strong> the wind hasn't arrived yet or there's a lull. Wait 15 minutes.</li>
-            <li><strong>Choppy, messy water:</strong> variable, inconsistent wind. Hard for beginners.</li>
-            <li><strong>Ripple in just one strip:</strong> there's a thermal wind line. Ride in that area.</li>
-            <li><strong>White foam on the water:</strong> +20 kn. Check your level before going in.</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">4. The Río de la Plata's thermal wind</h3>
-          <p>Argentina's most popular spot has its own wind pattern that's worth understanding well:</p>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Timing:</strong> the thermal kicks in between 1pm and 4pm, and usually drops at sunset (6-7pm).</li>
-            <li><strong>Direction:</strong> generally S/SW in summer. NE in winter.</li>
-            <li><strong>Strength:</strong> 12-22 kn on normal days. Ocean swell creates coastal wind "lulls".</li>
-            <li><strong>Arrival sign:</strong> the water starts rippling from the bottom toward the shore. Get ready 20 minutes ahead.</li>
-          </ul>
-          <p>The Martínez Norte camera you can see on this site is perfect for confirming whether the wind has already arrived without having to drive to the spot.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">5. Danger signs you should never ignore</h3>
-          <div style="background:rgba(232,90,90,.08);border:1px solid rgba(232,90,90,.3);border-left:4px solid #e85a5a;border-radius:10px;padding:20px;margin:20px 0">
-            <ul style="list-style:none;padding:0;margin:0;display:grid;gap:8px">
-              <li style="font-size:14px;color:var(--text)">🚨 <strong>Gusty wind</strong>: gusts that swing 30%+ up and down within seconds. Very dangerous for foiling.</li>
-              <li style="font-size:14px;color:var(--text)">🚨 <strong>Offshore</strong>: wind blowing you away from the coast. If something fails, it carries you out into the river.</li>
-              <li style="font-size:14px;color:var(--text)">🚨 <strong>Storm fronts</strong>: the wind before a storm can be treacherous. Get off the water.</li>
-              <li style="font-size:14px;color:var(--text)">🚨 <strong>Wind holes</strong>: losing the wind while foiling means falling into the water. Dangerous with a shallow bottom.</li>
-            </ul>
-          </div>
-
-          <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">Want to learn to read the wind out in the field? Ask the <a href="#instructores" onclick="document.getElementById('articleViento').close()" style="color:var(--primary)">instructors</a> — many include weather lessons in their package.</p>
-          </div>
-          <div class="article-share">
-            <span class="article-share__label" data-en="Share">Compartir</span>
-            <button class="share-btn share-btn--wa" onclick="shareArticle('wa',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.867-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg><span>WhatsApp</span></button>
-            <button class="share-btn share-btn--x" onclick="shareArticle('x',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Twitter / X</span></button>
-            <button class="share-btn share-btn--fb" onclick="shareArticle('fb',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg><span>Facebook</span></button>
-            <button class="share-btn share-btn--copy" onclick="shareArticle('copy',this)" type="button"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-en="Copy link">Copiar link</span></button>
-          </div>
-        </div>
-      </dialog>
-
       <!-- ARTICLE: SPOTS -->
-      <article class="blog-card" id="blogCardSpots" style="cursor:pointer" onclick="document.getElementById('articleSpots').showModal()">
+      <article class="blog-card" id="blogCardSpots">
         <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.unsplash.com/photo-1730134427096-c167c128e119?w=800&auto=format&fit=crop&q=60" alt="Wingfoil en lago patagónico argentina" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Spot guide">Guía de spots</span>
@@ -3087,120 +2654,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <span data-en="· 15 min read">· 15 min lectura</span>
           </div>
         </div>
+        <a class="blog-card__link" href="/blog/mejores-spots-wingfoil-argentina" aria-label="Los mejores spots de wingfoil en Argentina 2026"></a>
       </article>
 
-      <dialog id="articleSpots" style="max-width:760px;width:94vw;max-height:90vh;overflow-y:auto;border-radius:16px;border:1px solid var(--border);background:var(--surface);color:var(--text);padding:0;box-shadow:0 32px 80px rgba(0,0,0,.5)">
-        <div style="position:sticky;top:0;z-index:2;background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between">
-          <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary)" data-en="Spot guide · 15 min read">Guía de spots · 15 min lectura</span>
-          <button onclick="document.getElementById('articleSpots').close()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:22px;line-height:1;padding:4px 8px" aria-label="Cerrar" data-en-aria-label="Close">&times;</button>
-        </div>
-        <div style="padding:36px 32px 48px">
-          <img src="https://images.unsplash.com/photo-1730134427096-c167c128e119?w=760&auto=format&fit=crop&q=60" alt="Wingfoil en lago patagónico argentina" style="width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:28px" loading="lazy"/>
-          <h2 style="font-family:'Clash Display',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;line-height:1.15;margin-bottom:12px" data-en="The best wingfoil spots in Argentina 2026">Los mejores spots de wingfoil en Argentina 2026</h2>
-          <p style="color:var(--text-muted);font-size:14px;margin-bottom:36px" data-en="By the Escuela de Wingfoil team · May 2026">Por el equipo de Escuela de Wingfoil · Mayo 2026</p>
-
-<div class="es-only">
-          <p>Argentina tiene una geografía privilegiada para el wingfoil: el Río de la Plata como laboratorio de principiantes, el Atlántico para los que buscan olas, y los lagos patagónicos para los que quieren condiciones épicas. Esta guía cubre los 22+ spots registrados en la plataforma, organizados por región y nivel.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Región 1: Río de la Plata (Buenos Aires)</h3>
-          <p>El Río de la Plata es el spot de aprendizaje por excelencia. Agua plana, viento termal predecible de tarde (S/SO, 13-19 hs) y comunidad activa todo el año.</p>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>San Isidro (Perú Beach, La Plazita de Martínez, CASI):</strong> El epicentro. Múltiples puntos de acceso, escuelas establecidas, todos los niveles. Viento termal S/SO 12-25 kn de octubre a marzo.</li>
-            <li><strong>Chascomús — Laguna:</strong> Laguna de agua dulce, totalmente plana. Ideal para los primeros foileos. Viento S termal estable de tarde. Nivel principiante a intermedio.</li>
-            <li><strong>Pinamar — La Frontera:</strong> Costa atlántica, viento S/SE constante. Familiar. Nivel principiante con instructor.</li>
-            <li><strong>Mar del Plata — Waikiki:</strong> Costa atlántica con olas. Nivel intermedio a avanzado. Viento S/SE 15-30 kn.</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Región 2: Litoral (Entre Ríos y Corrientes)</h3>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Paraná — Laguna Setúbal:</strong> Espejo de agua entre islas. Viento N/NE ideal para aprender. Nivel principiante.</li>
-            <li><strong>Gualeguaychú — Río Uruguay:</strong> Ideal para downwinds. Viento E/NE. Nivel intermedio.</li>
-            <li><strong>Paso de la Patria (Corrientes):</strong> Confluencia Paraná-Paraguay. El spot más épico del norte, viento N hasta 35 kn. Solo nivel avanzado.</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Región 3: Córdoba</h3>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Embalse Río Tercero:</strong> Lago artificial con comunidad activa. Viento termal S/SO potente. Nivel intermedio.</li>
-            <li><strong>Laguna Mar Chiquita:</strong> La laguna más grande de Argentina, agua salada. Viento N/NE hasta 35 kn. Solo avanzado.</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Región 4: Patagonia — Los mejores del país</h3>
-          <p>Los spots patagónicos son los más técnicos y los más impresionantes. Vientos fuertes, agua fría y paisajes de otro mundo.</p>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Nahuel Huapi — Dina Huapi (Bariloche):</strong> El spot icónico. Cerro Catedral de fondo, viento O hasta 35 kn. Solo nivel avanzado. Mejor época: diciembre a marzo.</li>
-            <li><strong>Lago Lolog — San Martín de los Andes:</strong> Lago andino patagónico, viento termal brutal en verano. Nivel avanzado.</li>
-            <li><strong>Puerto Madryn — Golfo Nuevo:</strong> Atlántico sur con ballenas y orcas. Viento S constante 18-35 kn. Nivel avanzado.</li>
-            <li><strong>Rawson — Playa Unión:</strong> Delfines mientras foileás. Viento S muy constante. Nivel intermedio a avanzado.</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Tabla resumen: elegí tu spot según tu nivel</h3>
-          <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px">
-            <thead><tr style="border-bottom:2px solid var(--border)"><th style="padding:10px 12px;text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em">Nivel</th><th style="padding:10px 12px;text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em">Spot recomendado</th><th style="padding:10px 12px;text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em">Provincia</th></tr></thead>
-            <tbody>
-              <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px;font-weight:700">Principiante</td><td style="padding:10px 12px;color:var(--text-muted)">San Isidro / Chascomús / Paraná Setúbal</td><td style="padding:10px 12px;color:var(--text-muted)">Buenos Aires / Entre Ríos</td></tr>
-              <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px;font-weight:700">Intermedio</td><td style="padding:10px 12px;color:var(--text-muted)">Pinamar / Gualeguaychú / Embalse R.Tercero</td><td style="padding:10px 12px;color:var(--text-muted)">Buenos Aires / Entre Ríos / Córdoba</td></tr>
-              <tr><td style="padding:10px 12px;font-weight:700">Avanzado</td><td style="padding:10px 12px;color:var(--text-muted)">Nahuel Huapi / Mar del Plata / Puerto Madryn</td><td style="padding:10px 12px;color:var(--text-muted)">Río Negro / Buenos Aires / Chubut</td></tr>
-            </tbody>
-          </table></div>
-          <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">¿Querés explorar todos los spots con mapa interactivo? Visitá la sección <a href="#spots" onclick="document.getElementById('articleSpots').close()" style="color:var(--primary)">Spots</a> de la plataforma.</p>
-          </div>
-          <div class="en-only">
-          <p>Argentina has a privileged geography for wingfoil: the Río de la Plata as a beginners' laboratory, the Atlantic for those chasing waves, and the Patagonian lakes for those after epic conditions. This guide covers the 22+ spots registered on the platform, organised by region and level.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Region 1: Río de la Plata (Buenos Aires)</h3>
-          <p>The Río de la Plata is the learning spot par excellence. Flat water, a predictable afternoon thermal wind (S/SW, 1-7pm) and an active community year-round.</p>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>San Isidro (Perú Beach, La Plazita de Martínez, CASI):</strong> The epicentre. Multiple access points, established schools, every level. S/SW thermal wind 12-25 kn from October to March.</li>
-            <li><strong>Chascomús — Laguna:</strong> Freshwater lagoon, completely flat. Ideal for your first rides on the foil. Steady S afternoon thermal. Beginner to intermediate level.</li>
-            <li><strong>Pinamar — La Frontera:</strong> Atlantic coast, steady S/SE wind. Family-friendly. Beginner level with an instructor.</li>
-            <li><strong>Mar del Plata — Waikiki:</strong> Atlantic coast with waves. Intermediate to advanced level. S/SE wind 15-30 kn.</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Region 2: The littoral (Entre Ríos and Corrientes)</h3>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Paraná — Laguna Setúbal:</strong> A sheet of water between islands. N/NE wind, ideal for learning. Beginner level.</li>
-            <li><strong>Gualeguaychú — Río Uruguay:</strong> Great for downwinders. E/NE wind. Intermediate level.</li>
-            <li><strong>Paso de la Patria (Corrientes):</strong> Paraná-Paraguay confluence. The most epic spot in the north, N wind up to 35 kn. Advanced level only.</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Region 3: Córdoba</h3>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Embalse Río Tercero:</strong> Man-made lake with an active community. Strong S/SW thermal wind. Intermediate level.</li>
-            <li><strong>Laguna Mar Chiquita:</strong> The biggest lagoon in Argentina, salt water. N/NE wind up to 35 kn. Advanced only.</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Region 4: Patagonia — the country's best</h3>
-          <p>The Patagonian spots are the most technical and the most impressive. Strong winds, cold water and other-worldly scenery.</p>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Nahuel Huapi — Dina Huapi (Bariloche):</strong> The iconic spot. Cerro Catedral in the background, W wind up to 35 kn. Advanced level only. Best season: December to March.</li>
-            <li><strong>Lago Lolog — San Martín de los Andes:</strong> Andean Patagonian lake, brutal thermal wind in summer. Advanced level.</li>
-            <li><strong>Puerto Madryn — Golfo Nuevo:</strong> Southern Atlantic with whales and orcas. Steady S wind 18-35 kn. Advanced level.</li>
-            <li><strong>Rawson — Playa Unión:</strong> Dolphins while you foil. Very steady S wind. Intermediate to advanced level.</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Summary table: pick your spot by level</h3>
-          <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px">
-            <thead><tr style="border-bottom:2px solid var(--border)"><th style="padding:10px 12px;text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em">Level</th><th style="padding:10px 12px;text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em">Recommended spot</th><th style="padding:10px 12px;text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em">Province</th></tr></thead>
-            <tbody>
-              <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px;font-weight:700">Beginner</td><td style="padding:10px 12px;color:var(--text-muted)">San Isidro / Chascomús / Paraná Setúbal</td><td style="padding:10px 12px;color:var(--text-muted)">Buenos Aires / Entre Ríos</td></tr>
-              <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px;font-weight:700">Intermediate</td><td style="padding:10px 12px;color:var(--text-muted)">Pinamar / Gualeguaychú / Embalse R.Tercero</td><td style="padding:10px 12px;color:var(--text-muted)">Buenos Aires / Entre Ríos / Córdoba</td></tr>
-              <tr><td style="padding:10px 12px;font-weight:700">Advanced</td><td style="padding:10px 12px;color:var(--text-muted)">Nahuel Huapi / Mar del Plata / Puerto Madryn</td><td style="padding:10px 12px;color:var(--text-muted)">Río Negro / Buenos Aires / Chubut</td></tr>
-            </tbody>
-          </table></div>
-          <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">Want to explore every spot with an interactive map? Visit the platform's <a href="#spots" onclick="document.getElementById('articleSpots').close()" style="color:var(--primary)">Spots</a> section.</p>
-          </div>
-          <div class="article-share">
-            <span class="article-share__label" data-en="Share">Compartir</span>
-            <button class="share-btn share-btn--wa" onclick="shareArticle('wa',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.867-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg><span>WhatsApp</span></button>
-            <button class="share-btn share-btn--x" onclick="shareArticle('x',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Twitter / X</span></button>
-            <button class="share-btn share-btn--fb" onclick="shareArticle('fb',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg><span>Facebook</span></button>
-            <button class="share-btn share-btn--copy" onclick="shareArticle('copy',this)" type="button"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-en="Copy link">Copiar link</span></button>
-          </div>
-        </div>
-      </dialog>
-
       <!-- ARTICLE: EQUIPO USADO -->
-      <article class="blog-card" id="blogCardUsado" style="cursor:pointer" onclick="document.getElementById('articleUsado').showModal()">
+      <article class="blog-card" id="blogCardUsado">
         <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.unsplash.com/photo-1666175497562-ccb66e6c373b?w=800&auto=format&fit=crop&q=60" alt="Equipo de wingfoil en la playa" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Smart buying">Compra inteligente</span>
@@ -3211,110 +2669,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <span data-en="· 9 min read">· 9 min lectura</span>
           </div>
         </div>
+        <a class="blog-card__link" href="/blog/equipo-wingfoil-usado-que-revisar" aria-label="Equipo de wingfoil usado: qué revisar antes de comprar"></a>
       </article>
 
-      <dialog id="articleUsado" style="max-width:760px;width:94vw;max-height:90vh;overflow-y:auto;border-radius:16px;border:1px solid var(--border);background:var(--surface);color:var(--text);padding:0;box-shadow:0 32px 80px rgba(0,0,0,.5)">
-        <div style="position:sticky;top:0;z-index:2;background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between">
-          <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary)" data-en="Smart buying · 9 min read">Compra inteligente · 9 min lectura</span>
-          <button onclick="document.getElementById('articleUsado').close()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:22px;line-height:1;padding:4px 8px" aria-label="Cerrar" data-en-aria-label="Close">&times;</button>
-        </div>
-        <div style="padding:36px 32px 48px">
-          <img src="https://images.unsplash.com/photo-1666175497562-ccb66e6c373b?w=760&auto=format&fit=crop&q=60" alt="Equipo de wingfoil en la playa" style="width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:28px" loading="lazy"/>
-          <h2 style="font-family:'Clash Display',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;line-height:1.15;margin-bottom:12px" data-en="Used wingfoil gear in Argentina: what to check before buying">Equipo de wingfoil usado en Argentina: qué revisar antes de comprar</h2>
-          <p style="color:var(--text-muted);font-size:14px;margin-bottom:36px" data-en="By the Escuela de Wingfoil team · May 2026">Por el equipo de Escuela de Wingfoil · Mayo 2026</p>
-
-<div class="es-only">
-          <p>Comprar equipo de wingfoil usado en Argentina puede ahorrarte entre USD 1.000 y USD 1.500 versus comprarlo nuevo. Pero también podés terminar con un ala que no infla, un foil con corrosión oculta o una tabla con roturas internas. Esta guía te enseña qué revisar en cada componente antes de cerrar la compra.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">1. El ala (wing): lo más importante</h3>
-          <p>El ala es el componente que más se deteriora con el uso. Revisá:</p>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Costuras y bladders:</strong> Inflá el ala completamente y dejala 30 minutos. Si pierde presión, tiene pérdida. Revisá las costuras del leading edge y los struts con agua jabonosa.</li>
-            <li><strong>Válvulas:</strong> Apretá la válvula y asegurate que cierre bien. Las válvulas rotas son económicas de reemplazar, pero el vendedor debería haberlo hecho.</li>
-            <li><strong>Tela:</strong> Buscá porosos (la tela se ve traslúcida contra la luz), roturas parcheadas, o decoloración extrema por UV.</li>
-            <li><strong>Handles y strut:</strong> Revisá que los handles no estén descocidos y que el strut central no tenga pliegues permanentes.</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">2. La tabla: buscá agua adentro</h3>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>El test del golpe:</strong> Golpeá suavemente la tabla con los nudillos por toda la superficie. El sonido hueco y seco es normal. El sonido apagado y "muerto" indica delaminación o agua adentro.</li>
-            <li><strong>Caja del foil:</strong> Es el punto más crítico. Mové el mástil instalado: no debe tener ningún juego. Si hay movimiento lateral, la caja está floja — reparación costosa.</li>
-            <li><strong>Rails:</strong> Revisá los bordes de la tabla buscando roturas, especialmente en la zona de la caja del foil. Las roturas pequeñas se reparan, pero si son grandes o la fibra está levantada, negociá el precio.</li>
-            <li><strong>Vent plug:</strong> Algunas tablas tienen venteo. Si está tapado, puede acumular agua. Preguntá si fue guardada correctamente.</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">3. El foil: buscá corrosión</h3>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Tornillos y conexiones:</strong> Revisá que todos los tornillos entren y salgan bien. La corrosión galvánica entre aluminio y acero es el problema más común. Tornillos agarrotados = foil que no se puede armar.</li>
-            <li><strong>Alas delanteras y estabilizador:</strong> Buscá golpes en los bordes de ataque. Un golpe pequeño puede repararse; uno grande en el ala delantera afecta el rendimiento.</li>
-            <li><strong>Mástil:</strong> Revisá que no esté torcido (ponerlo en una superficie plana y ver si apoya uniformemente). Verificá el estado de las ranuras de conexión.</li>
-            <li><strong>Fuselaje:</strong> Revisá las conexiones con el mástil y las alas. Sin juego, sin corrosión.</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Precios de referencia (Argentina, mayo 2026)</h3>
-          <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px">
-            <thead><tr style="border-bottom:2px solid var(--border)"><th style="padding:10px 12px;text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em">Componente</th><th style="padding:10px 12px;text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em">Precio nuevo</th><th style="padding:10px 12px;text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em">Precio usado razonable</th></tr></thead>
-            <tbody>
-              <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px;font-weight:700">Ala 5-7m</td><td style="padding:10px 12px;color:var(--text-muted)">USD 800-1.200</td><td style="padding:10px 12px;color:var(--text-muted)">USD 350-600</td></tr>
-              <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px;font-weight:700">Tabla 90-115L</td><td style="padding:10px 12px;color:var(--text-muted)">USD 700-1.000</td><td style="padding:10px 12px;color:var(--text-muted)">USD 300-500</td></tr>
-              <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px;font-weight:700">Foil completo</td><td style="padding:10px 12px;color:var(--text-muted)">USD 900-1.500</td><td style="padding:10px 12px;color:var(--text-muted)">USD 400-700</td></tr>
-              <tr><td style="padding:10px 12px;font-weight:700">Kit completo</td><td style="padding:10px 12px;color:var(--text-muted)">USD 2.500-3.000</td><td style="padding:10px 12px;color:var(--text-muted)">USD 1.000-1.500</td></tr>
-            </tbody>
-          </table></div>
-          <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">¿Encontraste algo pero no estás seguro? Consultá con los <a href="#instructores" onclick="document.getElementById('articleUsado').close()" style="color:var(--primary)">instructores</a> — muchos hacen revisión de equipos usados antes de comprar. También revisá el <a href="#venta-de-wingfoil" onclick="document.getElementById('articleUsado').close()" style="color:var(--primary)">mercado de equipos</a> de la plataforma.</p>
-          </div>
-          <div class="en-only">
-          <p>Buying used wingfoil gear in Argentina can save you between USD 1,000 and USD 1,500 compared to buying new. But you could also end up with a wing that won't inflate, a foil with hidden corrosion, or a board with internal cracks. This guide teaches you what to check on each component before closing the deal.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">1. The wing: the most important part</h3>
-          <p>The wing is the component that wears out the most with use. Check:</p>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Seams and bladders:</strong> Fully inflate the wing and leave it for 30 minutes. If it loses pressure, it's leaking. Check the leading edge seams and struts with soapy water.</li>
-            <li><strong>Valves:</strong> Press the valve and make sure it closes properly. Broken valves are cheap to replace, but the seller should have done it already.</li>
-            <li><strong>Fabric:</strong> Look for porosity (the fabric looks translucent against light), patched tears, or extreme UV discolouration.</li>
-            <li><strong>Handles and strut:</strong> Check that the handles aren't coming unstitched and that the central strut has no permanent creases.</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">2. The board: check for water inside</h3>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>The knock test:</strong> Gently knock the board with your knuckles across the whole surface. A hollow, dry sound is normal. A dull, "dead" sound points to delamination or water inside.</li>
-            <li><strong>Foil box:</strong> The most critical spot. Move the installed mast: there should be zero play. If there's sideways movement, the box is loose — an expensive repair.</li>
-            <li><strong>Rails:</strong> Check the board's edges for cracks, especially around the foil box. Small cracks can be repaired, but if they're large or the fibre is lifted, negotiate the price.</li>
-            <li><strong>Vent plug:</strong> Some boards have venting. If it's blocked, water can build up. Ask if it was stored properly.</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">3. The foil: check for corrosion</h3>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Screws and connections:</strong> Check that every screw goes in and out smoothly. Galvanic corrosion between aluminium and steel is the most common problem. Seized screws = a foil you can't assemble.</li>
-            <li><strong>Front wing and stabiliser:</strong> Look for dings on the leading edges. A small ding can be repaired; a big one on the front wing hurts performance.</li>
-            <li><strong>Mast:</strong> Check that it isn't bent (lay it on a flat surface and see if it sits evenly). Check the condition of the connection slots.</li>
-            <li><strong>Fuselage:</strong> Check the connections with the mast and the wings. No play, no corrosion.</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Reference prices (Argentina, May 2026)</h3>
-          <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px">
-            <thead><tr style="border-bottom:2px solid var(--border)"><th style="padding:10px 12px;text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em">Component</th><th style="padding:10px 12px;text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em">New price</th><th style="padding:10px 12px;text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em">Fair used price</th></tr></thead>
-            <tbody>
-              <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px;font-weight:700">5-7m wing</td><td style="padding:10px 12px;color:var(--text-muted)">USD 800-1,200</td><td style="padding:10px 12px;color:var(--text-muted)">USD 350-600</td></tr>
-              <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px;font-weight:700">90-115L board</td><td style="padding:10px 12px;color:var(--text-muted)">USD 700-1,000</td><td style="padding:10px 12px;color:var(--text-muted)">USD 300-500</td></tr>
-              <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px;font-weight:700">Full foil</td><td style="padding:10px 12px;color:var(--text-muted)">USD 900-1,500</td><td style="padding:10px 12px;color:var(--text-muted)">USD 400-700</td></tr>
-              <tr><td style="padding:10px 12px;font-weight:700">Full kit</td><td style="padding:10px 12px;color:var(--text-muted)">USD 2,500-3,000</td><td style="padding:10px 12px;color:var(--text-muted)">USD 1,000-1,500</td></tr>
-            </tbody>
-          </table></div>
-          <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">Found something but you're not sure? Check with the <a href="#instructores" onclick="document.getElementById('articleUsado').close()" style="color:var(--primary)">instructors</a> — many will inspect used gear before you buy. Also check the platform's <a href="#venta-de-wingfoil" onclick="document.getElementById('articleUsado').close()" style="color:var(--primary)">gear marketplace</a>.</p>
-          </div>
-          <div class="article-share">
-            <span class="article-share__label" data-en="Share">Compartir</span>
-            <button class="share-btn share-btn--wa" onclick="shareArticle('wa',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.867-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg><span>WhatsApp</span></button>
-            <button class="share-btn share-btn--x" onclick="shareArticle('x',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Twitter / X</span></button>
-            <button class="share-btn share-btn--fb" onclick="shareArticle('fb',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg><span>Facebook</span></button>
-            <button class="share-btn share-btn--copy" onclick="shareArticle('copy',this)" type="button"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-en="Copy link">Copiar link</span></button>
-          </div>
-        </div>
-      </dialog>
-
       <!-- ARTICLE: SEGURIDAD -->
-      <article class="blog-card" id="blogCardSeguridad" style="cursor:pointer" onclick="document.getElementById('articleSeguridad').showModal()">
+      <article class="blog-card" id="blogCardSeguridad">
         <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.unsplash.com/photo-1615840956750-3262c5fffb62?w=800&auto=format&fit=crop&q=60" alt="Deportista con casco y chaleco en wingfoil" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Safety">Seguridad</span>
@@ -3325,94 +2684,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <span data-en="· 10 min read">· 10 min lectura</span>
           </div>
         </div>
+        <a class="blog-card__link" href="/blog/es-peligroso-el-wingfoil" aria-label="¿Es peligroso el wingfoil? Guía completa de seguridad"></a>
       </article>
 
-      <dialog id="articleSeguridad" style="max-width:760px;width:94vw;max-height:90vh;overflow-y:auto;border-radius:16px;border:1px solid var(--border);background:var(--surface);color:var(--text);padding:0;box-shadow:0 32px 80px rgba(0,0,0,.5)">
-        <div style="position:sticky;top:0;z-index:2;background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between">
-          <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary)" data-en="Safety · 10 min read">Seguridad · 10 min lectura</span>
-          <button onclick="document.getElementById('articleSeguridad').close()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:22px;line-height:1;padding:4px 8px" aria-label="Cerrar" data-en-aria-label="Close">&times;</button>
-        </div>
-        <div style="padding:36px 32px 48px">
-          <img src="https://images.unsplash.com/photo-1615840956750-3262c5fffb62?w=760&auto=format&fit=crop&q=60" alt="Deportista con equipo de seguridad en wingfoil" style="width:100%;height:220px;object-fit:cover;border-radius:12px;margin-bottom:28px" loading="lazy"/>
-          <h2 style="font-family:'Clash Display',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;line-height:1.15;margin-bottom:12px" data-en="Is wingfoil dangerous? A complete safety guide">¿Es peligroso el wingfoil? Guía completa de seguridad</h2>
-          <p style="color:var(--text-muted);font-size:14px;margin-bottom:36px" data-en="By the Escuela de Wingfoil team · May 2026">Por el equipo de Escuela de Wingfoil · Mayo 2026</p>
-
-<div class="es-only">
-          <p>Respuesta directa: <strong>el wingfoil tiene riesgos reales, pero son gestionables</strong>. La mayoría de los accidentes ocurren por falta de equipo de seguridad, condiciones inadecuadas para el nivel del rider, o ignorar reglas básicas. Con las precauciones correctas, es un deporte que millones de personas practican sin incidentes.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Equipo de seguridad: lo que no es negociable</h3>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Casco:</strong> Obligatorio. El foil está siempre cerca y puede golpear la cabeza en una caída. Usá casco de wakeboard o surf con protección lateral.</li>
-            <li><strong>Chaleco de impacto:</strong> Protege el torso de golpes con el foil y la tabla. Además da flotabilidad. Los chalecos de kitesurf funcionan perfectamente.</li>
-            <li><strong>Leash del ala:</strong> Sujetá el ala a la muñeca. Un ala suelta con viento puede volar cientos de metros y lastimar a otros riders.</li>
-            <li><strong>Leash de la tabla (con quick release):</strong> Mantiene la tabla cerca en caídas. El quick release es crítico — podés quedar atrapado bajo el foil si no podés soltarlo rápido.</li>
-            <li><strong>Neoprene:</strong> Protege de la temperatura del agua y de cortes. En el Río de la Plata, 3mm de octubre a abril, 5mm en invierno.</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Los 5 riesgos reales del wingfoil</h3>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Golpe con el foil:</strong> El foil tiene bordes y puede cortar. En una caída, la tabla y el foil pueden estar en cualquier posición. Siempre caé lejos del equipo — tirarse de lado, no hacia adelante.</li>
-            <li><strong>Alejamiento de la costa (viento offshore):</strong> El viento offshore te lleva mar adentro. Nunca salgas solo con viento offshore si no tenés experiencia, y siempre avisá a alguien dónde vas a estar.</li>
-            <li><strong>Choques con otros riders:</strong> En spots concurridos, mantené distancia. El foil que sale del agua puede alcanzar a otro rider. Respetá las reglas de prioridad: el rider con el viento de frente tiene prioridad.</li>
-            <li><strong>Viento excesivo:</strong> Salir con más viento del que corresponde a tu nivel. La regla: si dudás, no salgas. El viento siempre puede aumentar, raramente baja.</li>
-            <li><strong>Hipotermia:</strong> En Patagonia y en invierno en el Río de la Plata, el agua fría puede causar hipotermia en minutos. Usá neoprene adecuado y siempre salí con alguien.</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Reglas básicas que salvan vidas</h3>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li>Nunca salgas solo al agua como principiante</li>
-            <li>Avisá siempre a alguien dónde vas a surfear y a qué hora volvés</li>
-            <li>Verificá el pronóstico de viento antes de salir (Windguru, Windy, Ventusky)</li>
-            <li>Conocé el spot antes de entrar: profundidad, obstáculos, corrientes</li>
-            <li>Salí con el equipo de seguridad completo, siempre</li>
-          </ul>
-
-          <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">¿Querés aprender con seguridad desde el primer día? Encontrá un <a href="#instructores" onclick="document.getElementById('articleSeguridad').close()" style="color:var(--primary)">instructor certificado</a> en tu zona — la mejor inversión en seguridad que podés hacer.</p>
-          </div>
-          <div class="en-only">
-          <p>Direct answer: <strong>wingfoil has real risks, but they're manageable</strong>. Most accidents happen because of missing safety gear, conditions unsuited to the rider's level, or ignoring basic rules. With the right precautions, it's a sport millions of people practise without incident.</p>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Safety gear: what's non-negotiable</h3>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Helmet:</strong> Mandatory. The foil is always nearby and can hit your head in a fall. Use a wakeboard or surf helmet with side protection.</li>
-            <li><strong>Impact vest:</strong> Protects your torso from hits with the foil and board. It also adds buoyancy. Kitesurf vests work perfectly.</li>
-            <li><strong>Wing leash:</strong> Attach the wing to your wrist. A loose wing in the wind can fly hundreds of metres and hurt other riders.</li>
-            <li><strong>Board leash (with quick release):</strong> Keeps the board close during falls. The quick release is critical — you could get trapped under the foil if you can't release it fast.</li>
-            <li><strong>Wetsuit:</strong> Protects against water temperature and cuts. On the Río de la Plata, 3mm from October to April, 5mm in winter.</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">The 5 real risks of wingfoil</h3>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li><strong>Getting hit by the foil:</strong> The foil has edges and can cut. In a fall, the board and foil can end up in any position. Always fall away from the gear — sideways, not forward.</li>
-            <li><strong>Drifting from shore (offshore wind):</strong> Offshore wind carries you out to sea. Never go out alone in offshore wind without experience, and always tell someone where you'll be.</li>
-            <li><strong>Collisions with other riders:</strong> In crowded spots, keep your distance. A foil coming out of the water can reach another rider. Follow right-of-way rules: the rider with the wind in front has priority.</li>
-            <li><strong>Too much wind:</strong> Going out in more wind than your level can handle. The rule: if in doubt, don't go out. The wind can always pick up, it rarely drops.</li>
-            <li><strong>Hypothermia:</strong> In Patagonia and during winter on the Río de la Plata, cold water can cause hypothermia within minutes. Use a proper wetsuit and always go out with someone.</li>
-          </ul>
-
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:32px 0 12px">Basic rules that save lives</h3>
-          <ul style="margin:12px 0 12px 20px;line-height:2;color:var(--text-muted)">
-            <li>Never go out on the water alone as a beginner</li>
-            <li>Always tell someone where you'll be riding and when you'll be back</li>
-            <li>Check the wind forecast before heading out (Windguru, Windy, Ventusky)</li>
-            <li>Get to know the spot before entering: depth, obstacles, currents</li>
-            <li>Always go out with your full safety gear</li>
-          </ul>
-
-          <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px">Want to learn safely from day one? Find a <a href="#instructores" onclick="document.getElementById('articleSeguridad').close()" style="color:var(--primary)">certified instructor</a> in your area — the best safety investment you can make.</p>
-          </div>
-          <div class="article-share">
-            <span class="article-share__label" data-en="Share">Compartir</span>
-            <button class="share-btn share-btn--wa" onclick="shareArticle('wa',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.867-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg><span>WhatsApp</span></button>
-            <button class="share-btn share-btn--x" onclick="shareArticle('x',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Twitter / X</span></button>
-            <button class="share-btn share-btn--fb" onclick="shareArticle('fb',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg><span>Facebook</span></button>
-            <button class="share-btn share-btn--copy" onclick="shareArticle('copy',this)" type="button"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-en="Copy link">Copiar link</span></button>
-          </div>
-        </div>
-      </dialog>
-
       <!-- ARTICLE CARD: BRASIL 2026 -->
-      <article class="blog-card" id="blogCardBrasil2026" style="cursor:pointer" onclick="document.getElementById('articleBrasil2026').showModal()">
+      <article class="blog-card" id="blogCardBrasil2026">
         <div class="blog-card__cover" style="padding:0;overflow:hidden">
           <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&auto=format&fit=crop&q=60" alt="Kitesurf en las lagunas turquesas del nordeste de Brasil" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/>
         </div>
@@ -3425,402 +2701,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <span data-en="· 15 min read">· 15 min lectura</span>
           </div>
         </div>
+        <a class="blog-card__link" href="/blog/spots-wingfoil-kitesurf-brasil" aria-label="Los mejores spots de Brasil para wingfoil y kitesurf"></a>
       </article>
-
-      <!-- ARTICLE MODAL: BRASIL 2026 -->
-      <dialog id="articleBrasil2026" style="max-width:760px;width:94vw;max-height:90vh;overflow-y:auto;border-radius:16px;border:1px solid var(--border);background:var(--surface);color:var(--text);padding:0;box-shadow:0 32px 80px rgba(0,0,0,.5)">
-        <div style="position:sticky;top:0;z-index:2;background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between">
-          <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary)" data-en="Destinations · Brazil 2026 · 15 min read">Destinos · Brasil 2026 · 15 min lectura</span>
-          <button onclick="document.getElementById('articleBrasil2026').close()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:22px;line-height:1;padding:4px 8px" aria-label="Cerrar" data-en-aria-label="Close">&times;</button>
-        </div>
-        <div style="padding:36px 32px 48px">
-
-          <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=760&auto=format&fit=crop&q=60" alt="Kitesurf en Brasil — lagunas turquesas del Nordeste" style="width:100%;height:240px;object-fit:cover;border-radius:12px;margin-bottom:28px" loading="lazy"/>
-
-          <h2 style="font-family:'Clash Display',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;line-height:1.15;margin-bottom:12px" data-en="The best spots in Brazil for wingfoil and kitesurf — 2026 season">Los mejores spots de Brasil para wingfoil y kitesurf — Temporada 2026</h2>
-          <p style="color:var(--text-muted);font-size:14px;margin-bottom:36px" data-en="By the Escuela de Wingfoil team · June 2026">Por el equipo de Escuela de Wingfoil · Junio 2026</p>
-
-<div class="es-only">
-          <p>Brasil es, sin lugar a dudas, uno de los destinos más codiciados del mundo para los amantes del wingfoil y el kitesurf. Su costa noreste ofrece viento térmico constante de entre 20 y 35 nudos durante casi todo el año, aguas turquesas poco profundas y una cultura de deportes de viento que crece a ritmo explosivo. Si estás planeando tu viaje para la temporada 2026, esta guía reúne los spots que no podés perderte.</p>
-
-          <!-- SPOT 1 -->
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:22px;font-weight:800;margin:40px 0 12px">1. Jericoacoara — El ícono del kitesurf latinoamericano</h3>
-          <p style="font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--primary);margin-bottom:14px">Ceará · Todos los niveles</p>
-          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=760&auto=format&fit=crop&q=60" alt="Laguna turquesa de Jericoacoara — kitesurf y wingfoil" style="width:100%;height:200px;object-fit:cover;border-radius:10px;margin-bottom:20px" loading="lazy"/>
-          <p>"Jeri", como la llaman los locales, es la meca del kitesurf en Brasil. Ubicada a 300 km de Fortaleza, esta villa sin pavimento rodeada de dunas de arena es un paraíso donde el viento sopla casi todos los días de junio a febrero con fuerza constante del noreste. La laguna de Jijoca ofrece agua plana ideal para wingfoil, mientras que el océano abierto frente al pueblo es perfecto para kitesurf con olas.</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0">
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">Wingfoil</div>
-              <div style="font-size:13px;color:var(--text-muted)">Laguna de Jijoca — agua plana, 30 cm a 1 m de profundidad. Perfecto para altura y freestyle.</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">Kitesurf</div>
-              <div style="font-size:13px;color:var(--text-muted)">Playa principal — olas pequeñas y viento paralelo a la costa. Ideal para freestyle y unhooked.</div>
-            </div>
-          </div>
-          <div style="background:var(--primary-glow);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:16px;margin:16px 0;font-size:14px;color:var(--text-muted)">
-            <strong style="color:var(--text)">Mejor época:</strong> Junio a febrero · Viento: 20–30 kn constantes del NE
-          </div>
-
-          <!-- SPOT 2 -->
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:22px;font-weight:800;margin:40px 0 12px">2. Cumbuco — La puerta de entrada al Nordeste</h3>
-          <p style="font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--primary);margin-bottom:14px">Ceará · Principiante a Intermedio</p>
-          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=760&auto=format&fit=crop&q=60" alt="Playa tropical de Cumbuco — deportes de viento" style="width:100%;height:200px;object-fit:cover;border-radius:10px;margin-bottom:20px" loading="lazy"/>
-          <p>A solo 30 km de Fortaleza, Cumbuco es el spot más accesible del noreste brasileño. Sus lagunas de agua dulce entre médanos son perfectas para los primeros vuelos en wingfoil, mientras que la playa principal concentra kitesurfistas de todos los rincones del mundo. La combinación de infraestructura, vuelos directos y viento garantizado lo convierten en el punto de partida ideal para quienes visitan Brasil por primera vez.</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0">
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">Wingfoil</div>
-              <div style="font-size:13px;color:var(--text-muted)">Lagoa da Cauípe — plana, cálida y segura. Excelente para primeras sesiones de altura.</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">Kitesurf</div>
-              <div style="font-size:13px;color:var(--text-muted)">Playa de Cumbuco — zona de lanzamiento bien marcada, oleaje manejable, viento térmico.</div>
-            </div>
-          </div>
-          <div style="background:var(--primary-glow);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:16px;margin:16px 0;font-size:14px;color:var(--text-muted)">
-            <strong style="color:var(--text)">Mejor época:</strong> Todo el año (julio–diciembre es el pico) · Vuelos directos desde Buenos Aires
-          </div>
-
-          <!-- SPOT 3 -->
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:22px;font-weight:800;margin:40px 0 12px">3. São Miguel do Gostoso — El secreto mejor guardado</h3>
-          <p style="font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:14px">Rio Grande do Norte · Intermedio a Avanzado</p>
-          <img src="https://images.unsplash.com/photo-1530053969600-caed2596d242?w=760&auto=format&fit=crop&q=60" alt="Kitesurf en São Miguel do Gostoso — aguas esmeralda" style="width:100%;height:200px;object-fit:cover;border-radius:10px;margin-bottom:20px" loading="lazy"/>
-          <p>"Gostoso" está cambiando rápido: de pueblo de pescadores tranquilo a referente mundial del kitesurf. El viento es más potente que en Jeri, las olas son más limpias y el agua es de color esmeralda. Para wingfoil, la laguna local ofrece condiciones de cristal. Cada vez más atletas de nivel mundial eligen este spot para entrenar fuera de los picos turísticos — lo que garantiza mucho espacio y pocas multitudes.</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0">
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">Wingfoil</div>
-              <div style="font-size:13px;color:var(--text-muted)">Lagoa de Gostoso — agua completamente plana y viento laminar. El spot soñado para técnica y velocidad.</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">Kitesurf</div>
-              <div style="font-size:13px;color:var(--text-muted)">Playa principal y downwind hacia Touros — uno de los corredores más épicos del Nordeste.</div>
-            </div>
-          </div>
-          <div style="background:var(--primary-glow);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:16px;margin:16px 0;font-size:14px;color:var(--text-muted)">
-            <strong style="color:var(--text)">Mejor época:</strong> Agosto a enero · Viento: picos de 30–35 kn · Ambiente más tranquilo que Jeri
-          </div>
-
-          <!-- SPOT 4 -->
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:22px;font-weight:800;margin:40px 0 12px">4. Barra Grande — La laguna perfecta del Nordeste</h3>
-          <p style="font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:14px">Piauí · Todos los niveles</p>
-          <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=760&auto=format&fit=crop&q=60" alt="Laguna plana de Barra Grande — wingfoil Brasil" style="width:100%;height:200px;object-fit:cover;border-radius:10px;margin-bottom:20px" loading="lazy"/>
-          <p>Barra Grande está en el Delta do Parnaíba, en el estado de Piauí, y guarda uno de los secretos mejor guardados del wingfoil brasileño: la Lagoa do Portinho. Agua completamente plana a 30 cm de profundidad, arena blanca en el fondo y viento térmico constante hacen de este lugar un campo de entrenamiento natural de nivel mundial. Los downwinds costeros entre médanos gigantes son de otro planeta.</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0">
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">Wingfoil</div>
-              <div style="font-size:13px;color:var(--text-muted)">Lagoa do Portinho — la laguna más plana del Nordeste. Record de condiciones para altura y maniobras.</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">Kitesurf</div>
-              <div style="font-size:13px;color:var(--text-muted)">Downwind costero Barra Grande–Parnaíba — médanos, canales y playas desiertas de ensueño.</div>
-            </div>
-          </div>
-          <div style="background:var(--primary-glow);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:16px;margin:16px 0;font-size:14px;color:var(--text-muted)">
-            <strong style="color:var(--text)">Mejor época:</strong> Julio a enero · Delta del Parnaíba — paisaje de otro mundo
-          </div>
-
-          <!-- SPOT 5 -->
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:22px;font-weight:800;margin:40px 0 12px">5. Taíba — El spot de los récords mundiales</h3>
-          <p style="font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:14px">Ceará · Avanzado</p>
-          <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=760&auto=format&fit=crop&q=60" alt="Velocidad extrema en kitesurf — Taíba Brasil" style="width:100%;height:200px;object-fit:cover;border-radius:10px;margin-bottom:20px" loading="lazy"/>
-          <p>Taíba es sinónimo de velocidad. Este pequeño pueblo al norte de Fortaleza tiene una laguna de dimensiones perfectas para intentar récords de velocidad en wingfoil y kitesurf. Las aguas poco profundas, la arena compacta en el fondo y el viento potente del noreste crean condiciones únicas que ningún otro lugar del continente puede replicar.</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0">
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">Wingfoil</div>
-              <div style="font-size:13px;color:var(--text-muted)">Laguna de Taíba — escenario de récords mundiales de velocidad. Solo para nivel avanzado.</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">Kitesurf</div>
-              <div style="font-size:13px;color:var(--text-muted)">Speed runs y freestyle en laguna protegida con fondo de arena. Viento 25–35 kn garantizados.</div>
-            </div>
-          </div>
-          <div style="background:var(--primary-glow);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:16px;margin:16px 0;font-size:14px;color:var(--text-muted)">
-            <strong style="color:var(--text)">Mejor época:</strong> Agosto a noviembre · El viento más potente del año · Solo nivel avanzado
-          </div>
-
-          <!-- SPOT 6 -->
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:22px;font-weight:800;margin:40px 0 12px">6. Lagoa do Paraíso — La postal del Brasil acuático</h3>
-          <p style="font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:14px">Ceará · Todos los niveles</p>
-          <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=760&auto=format&fit=crop&q=60" alt="Lagoa do Paraíso — aguas turquesas y arena blanca" style="width:100%;height:200px;object-fit:cover;border-radius:10px;margin-bottom:20px" loading="lazy"/>
-          <p>A pocos kilómetros de Jericoacoara, la Lagoa do Paraíso es una de las imágenes más icónicas de Brasil: agua de color turquesa, arena blanca y palmeras inclinadas sobre el espejo del agua. Para wingfoil es un escenario de película — el viento llega suave y constante, ideal para aprender o perfeccionar maniobras sin el estrés de las olas ni las multitudes del pueblo.</p>
-          <div style="background:var(--primary-glow);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:16px;margin:18px 0;font-size:14px;color:var(--text-muted)">
-            <strong style="color:var(--text)">Mejor época:</strong> Junio a enero · Ideal para wingfoil, primeras sesiones de altura y fotos épicas
-          </div>
-
-          <!-- SPOT 7 -->
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:22px;font-weight:800;margin:40px 0 12px">7. Fortaleza (Praia do Futuro) — La ciudad del viento</h3>
-          <p style="font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:14px">Ceará · Intermedio</p>
-          <p>Para quienes prefieren no alejarse de la ciudad, Fortaleza es una base perfecta. La Praia do Futuro es una playa urbana con viento constante y oleaje manejable. Desde Fortaleza es fácil acceder en día a spots como Cumbuco, Taíba o incluso hacer una excursión a Jeri. La infraestructura hotelera, gastronómica y de vuelos directos es inmejorable para organizar el viaje.</p>
-          <div style="background:var(--primary-glow);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:16px;margin:18px 0;font-size:14px;color:var(--text-muted)">
-            <strong style="color:var(--text)">Mejor época:</strong> Todo el año · Vuelos directos desde Buenos Aires · Base perfecta para explorar el Nordeste
-          </div>
-
-          <!-- TABLA RESUMEN -->
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:40px 0 14px">Cuadro resumen — Temporada 2026</h3>
-          <div style="overflow-x:auto;margin-bottom:32px">
-            <table style="width:100%;border-collapse:collapse;font-size:13px">
-              <thead>
-                <tr style="background:var(--surface-2);border-bottom:2px solid var(--primary)">
-                  <th style="text-align:left;padding:10px 12px;color:var(--text);font-weight:700">Spot</th>
-                  <th style="text-align:left;padding:10px 12px;color:var(--text);font-weight:700">Estado</th>
-                  <th style="text-align:center;padding:10px 12px;color:var(--text);font-weight:700">Wingfoil</th>
-                  <th style="text-align:center;padding:10px 12px;color:var(--text);font-weight:700">Kitesurf</th>
-                  <th style="text-align:left;padding:10px 12px;color:var(--text);font-weight:700">Mejor mes</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr style="border-bottom:1px solid var(--divider)">
-                  <td style="padding:10px 12px;font-weight:600">Jericoacoara</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Ceará</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Jun–Feb</td>
-                </tr>
-                <tr style="border-bottom:1px solid var(--divider);background:var(--surface-2)">
-                  <td style="padding:10px 12px;font-weight:600">Cumbuco</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Ceará</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Jul–Dic</td>
-                </tr>
-                <tr style="border-bottom:1px solid var(--divider)">
-                  <td style="padding:10px 12px;font-weight:600">S.M. do Gostoso</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">R.G. do Norte</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Ago–Ene</td>
-                </tr>
-                <tr style="border-bottom:1px solid var(--divider);background:var(--surface-2)">
-                  <td style="padding:10px 12px;font-weight:600">Barra Grande</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Piauí</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Jul–Ene</td>
-                </tr>
-                <tr style="border-bottom:1px solid var(--divider)">
-                  <td style="padding:10px 12px;font-weight:600">Taíba</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Ceará</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Ago–Nov</td>
-                </tr>
-                <tr style="border-bottom:1px solid var(--divider);background:var(--surface-2)">
-                  <td style="padding:10px 12px;font-weight:600">Lagoa do Paraíso</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Ceará</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Jun–Ene</td>
-                </tr>
-                <tr>
-                  <td style="padding:10px 12px;font-weight:600">Fortaleza</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Ceará</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Todo el año</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <p>Brasil en 2026 sigue siendo el destino número uno de Latinoamérica para el wingfoil y el kitesurf. Viento constante, aguas cálidas, naturaleza increíble y una comunidad de riders apasionada te esperan. Si estás listo para llevar tu nivel al siguiente escalón, el Nordeste brasileño es el lugar.</p>
-
-          <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px;margin-top:32px">¿Querés prepararte antes del viaje? Revisá los <a href="#videos" onclick="document.getElementById('articleBrasil2026').close()" style="color:var(--primary)">videos por nivel</a> y practicá con un <a href="#instructores" onclick="document.getElementById('articleBrasil2026').close()" style="color:var(--primary)">instructor certificado</a> antes de tu temporada en Brasil.</p>
-          </div>
-          <div class="en-only">
-          <p>Brazil is, without a doubt, one of the world's most coveted destinations for wingfoil and kitesurf lovers. Its northeast coast offers a steady thermal wind of between 20 and 35 knots almost all year round, shallow turquoise waters and a wind-sports culture growing at an explosive pace. If you're planning your trip for the 2026 season, this guide rounds up the spots you can't miss.</p>
-
-          <!-- SPOT 1 -->
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:22px;font-weight:800;margin:40px 0 12px">1. Jericoacoara — The icon of Latin American kitesurfing</h3>
-          <p style="font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--primary);margin-bottom:14px">Ceará · All levels</p>
-          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=760&auto=format&fit=crop&q=60" alt="Laguna turquesa de Jericoacoara — kitesurf y wingfoil" style="width:100%;height:200px;object-fit:cover;border-radius:10px;margin-bottom:20px" loading="lazy"/>
-          <p>"Jeri", as the locals call it, is the mecca of kitesurfing in Brazil. Located 300 km from Fortaleza, this unpaved village surrounded by sand dunes is a paradise where the wind blows almost every day from June to February with steady strength out of the northeast. The Jijoca lagoon offers flat water ideal for wingfoil, while the open ocean in front of the village is perfect for kitesurfing with waves.</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0">
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">Wingfoil</div>
-              <div style="font-size:13px;color:var(--text-muted)">Jijoca lagoon — flat water, 30 cm to 1 m deep. Perfect for height and freestyle.</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">Kitesurf</div>
-              <div style="font-size:13px;color:var(--text-muted)">Main beach — small waves and wind parallel to the shore. Ideal for freestyle and unhooked riding.</div>
-            </div>
-          </div>
-          <div style="background:var(--primary-glow);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:16px;margin:16px 0;font-size:14px;color:var(--text-muted)">
-            <strong style="color:var(--text)">Best season:</strong> June to February · Wind: steady 20–30 kn from the NE
-          </div>
-
-          <!-- SPOT 2 -->
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:22px;font-weight:800;margin:40px 0 12px">2. Cumbuco — The gateway to the Northeast</h3>
-          <p style="font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--primary);margin-bottom:14px">Ceará · Beginner to Intermediate</p>
-          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=760&auto=format&fit=crop&q=60" alt="Playa tropical de Cumbuco — deportes de viento" style="width:100%;height:200px;object-fit:cover;border-radius:10px;margin-bottom:20px" loading="lazy"/>
-          <p>Just 30 km from Fortaleza, Cumbuco is the most accessible spot in the Brazilian northeast. Its freshwater lagoons between dunes are perfect for your first wingfoil flights, while the main beach draws kitesurfers from every corner of the world. The combination of infrastructure, direct flights and guaranteed wind makes it the ideal starting point for first-time visitors to Brazil.</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0">
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">Wingfoil</div>
-              <div style="font-size:13px;color:var(--text-muted)">Lagoa da Cauípe — flat, warm and safe. Excellent for first sessions of altitude flying.</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">Kitesurf</div>
-              <div style="font-size:13px;color:var(--text-muted)">Cumbuco beach — clearly marked launch area, manageable swell, thermal wind.</div>
-            </div>
-          </div>
-          <div style="background:var(--primary-glow);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:16px;margin:16px 0;font-size:14px;color:var(--text-muted)">
-            <strong style="color:var(--text)">Best season:</strong> Year-round (July–December is the peak) · Direct flights from Buenos Aires
-          </div>
-
-          <!-- SPOT 3 -->
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:22px;font-weight:800;margin:40px 0 12px">3. São Miguel do Gostoso — The best-kept secret</h3>
-          <p style="font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:14px">Rio Grande do Norte · Intermediate to Advanced</p>
-          <img src="https://images.unsplash.com/photo-1530053969600-caed2596d242?w=760&auto=format&fit=crop&q=60" alt="Kitesurf en São Miguel do Gostoso — aguas esmeralda" style="width:100%;height:200px;object-fit:cover;border-radius:10px;margin-bottom:20px" loading="lazy"/>
-          <p>"Gostoso" is changing fast: from a quiet fishing village into a world kitesurf reference. The wind is stronger than at Jeri, the waves are cleaner and the water is emerald-coloured. For wingfoil, the local lagoon offers glassy conditions. More and more world-class athletes are choosing this spot to train away from the tourist peaks — which guarantees plenty of room and small crowds.</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0">
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">Wingfoil</div>
-              <div style="font-size:13px;color:var(--text-muted)">Lagoa de Gostoso — completely flat water and laminar wind. The dream spot for technique and speed.</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">Kitesurf</div>
-              <div style="font-size:13px;color:var(--text-muted)">Main beach and downwind toward Touros — one of the most epic runs in the Northeast.</div>
-            </div>
-          </div>
-          <div style="background:var(--primary-glow);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:16px;margin:16px 0;font-size:14px;color:var(--text-muted)">
-            <strong style="color:var(--text)">Best season:</strong> August to January · Wind: gusts of 30–35 kn · Quieter vibe than Jeri
-          </div>
-
-          <!-- SPOT 4 -->
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:22px;font-weight:800;margin:40px 0 12px">4. Barra Grande — The Northeast's perfect lagoon</h3>
-          <p style="font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:14px">Piauí · All levels</p>
-          <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=760&auto=format&fit=crop&q=60" alt="Laguna plana de Barra Grande — wingfoil Brasil" style="width:100%;height:200px;object-fit:cover;border-radius:10px;margin-bottom:20px" loading="lazy"/>
-          <p>Barra Grande sits in the Parnaíba Delta, in the state of Piauí, and holds one of the best-kept secrets of Brazilian wingfoil: the Lagoa do Portinho. Completely flat water just 30 cm deep, white sand on the bottom and steady thermal wind make this place a world-class natural training ground. The coastal downwinds between giant dunes are out of this world.</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0">
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">Wingfoil</div>
-              <div style="font-size:13px;color:var(--text-muted)">Lagoa do Portinho — the flattest lagoon in the Northeast. Record-setting conditions for altitude and manoeuvres.</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">Kitesurf</div>
-              <div style="font-size:13px;color:var(--text-muted)">Barra Grande–Parnaíba coastal downwind — dunes, channels and dreamlike deserted beaches.</div>
-            </div>
-          </div>
-          <div style="background:var(--primary-glow);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:16px;margin:16px 0;font-size:14px;color:var(--text-muted)">
-            <strong style="color:var(--text)">Best season:</strong> July to January · Parnaíba Delta — otherworldly scenery
-          </div>
-
-          <!-- SPOT 5 -->
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:22px;font-weight:800;margin:40px 0 12px">5. Taíba — The world-record spot</h3>
-          <p style="font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:14px">Ceará · Advanced</p>
-          <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=760&auto=format&fit=crop&q=60" alt="Velocidad extrema en kitesurf — Taíba Brasil" style="width:100%;height:200px;object-fit:cover;border-radius:10px;margin-bottom:20px" loading="lazy"/>
-          <p>Taíba is synonymous with speed. This small town north of Fortaleza has a lagoon with the perfect dimensions to attempt speed records in wingfoil and kitesurf. The shallow waters, compact sandy bottom and powerful northeast wind create unique conditions no other place on the continent can replicate.</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0">
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">Wingfoil</div>
-              <div style="font-size:13px;color:var(--text-muted)">Taíba lagoon — the setting for world speed records. Advanced level only.</div>
-            </div>
-            <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px">
-              <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px">Kitesurf</div>
-              <div style="font-size:13px;color:var(--text-muted)">Speed runs and freestyle in a sheltered lagoon with a sandy bottom. Guaranteed 25–35 kn wind.</div>
-            </div>
-          </div>
-          <div style="background:var(--primary-glow);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:16px;margin:16px 0;font-size:14px;color:var(--text-muted)">
-            <strong style="color:var(--text)">Best season:</strong> August to November · The strongest wind of the year · Advanced level only
-          </div>
-
-          <!-- SPOT 6 -->
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:22px;font-weight:800;margin:40px 0 12px">6. Lagoa do Paraíso — Brazil's aquatic postcard</h3>
-          <p style="font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:14px">Ceará · All levels</p>
-          <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=760&auto=format&fit=crop&q=60" alt="Lagoa do Paraíso — aguas turquesas y arena blanca" style="width:100%;height:200px;object-fit:cover;border-radius:10px;margin-bottom:20px" loading="lazy"/>
-          <p>A few kilometres from Jericoacoara, the Lagoa do Paraíso is one of Brazil's most iconic images: turquoise water, white sand and palm trees leaning over the mirror-like surface. For wingfoil it's a movie set — the wind arrives soft and steady, ideal for learning or perfecting manoeuvres without the stress of waves or the village's crowds.</p>
-          <div style="background:var(--primary-glow);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:16px;margin:18px 0;font-size:14px;color:var(--text-muted)">
-            <strong style="color:var(--text)">Best season:</strong> June to January · Ideal for wingfoil, first altitude sessions and epic photos
-          </div>
-
-          <!-- SPOT 7 -->
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:22px;font-weight:800;margin:40px 0 12px">7. Fortaleza (Praia do Futuro) — The city of wind</h3>
-          <p style="font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:14px">Ceará · Intermediate</p>
-          <p>For those who'd rather not stray far from the city, Fortaleza is a perfect base. Praia do Futuro is an urban beach with steady wind and manageable swell. From Fortaleza it's easy to day-trip to spots like Cumbuco, Taíba, or even make an excursion to Jeri. The hotel, food and direct-flight infrastructure is unbeatable for organising the trip.</p>
-          <div style="background:var(--primary-glow);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;padding:16px;margin:18px 0;font-size:14px;color:var(--text-muted)">
-            <strong style="color:var(--text)">Best season:</strong> Year-round · Direct flights from Buenos Aires · A perfect base to explore the Northeast
-          </div>
-
-          <!-- TABLA RESUMEN -->
-          <h3 style="font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;margin:40px 0 14px">Summary table — 2026 season</h3>
-          <div style="overflow-x:auto;margin-bottom:32px">
-            <table style="width:100%;border-collapse:collapse;font-size:13px">
-              <thead>
-                <tr style="background:var(--surface-2);border-bottom:2px solid var(--primary)">
-                  <th style="text-align:left;padding:10px 12px;color:var(--text);font-weight:700">Spot</th>
-                  <th style="text-align:left;padding:10px 12px;color:var(--text);font-weight:700">State</th>
-                  <th style="text-align:center;padding:10px 12px;color:var(--text);font-weight:700">Wingfoil</th>
-                  <th style="text-align:center;padding:10px 12px;color:var(--text);font-weight:700">Kitesurf</th>
-                  <th style="text-align:left;padding:10px 12px;color:var(--text);font-weight:700">Best month</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr style="border-bottom:1px solid var(--divider)">
-                  <td style="padding:10px 12px;font-weight:600">Jericoacoara</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Ceará</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Jun–Feb</td>
-                </tr>
-                <tr style="border-bottom:1px solid var(--divider);background:var(--surface-2)">
-                  <td style="padding:10px 12px;font-weight:600">Cumbuco</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Ceará</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Jul–Dec</td>
-                </tr>
-                <tr style="border-bottom:1px solid var(--divider)">
-                  <td style="padding:10px 12px;font-weight:600">S.M. do Gostoso</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">R.G. do Norte</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Aug–Jan</td>
-                </tr>
-                <tr style="border-bottom:1px solid var(--divider);background:var(--surface-2)">
-                  <td style="padding:10px 12px;font-weight:600">Barra Grande</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Piauí</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Jul–Jan</td>
-                </tr>
-                <tr style="border-bottom:1px solid var(--divider)">
-                  <td style="padding:10px 12px;font-weight:600">Taíba</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Ceará</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Aug–Nov</td>
-                </tr>
-                <tr style="border-bottom:1px solid var(--divider);background:var(--surface-2)">
-                  <td style="padding:10px 12px;font-weight:600">Lagoa do Paraíso</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Ceará</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Jun–Jan</td>
-                </tr>
-                <tr>
-                  <td style="padding:10px 12px;font-weight:600">Fortaleza</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Ceará</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐</td>
-                  <td style="padding:10px 12px;text-align:center">⭐⭐⭐⭐</td>
-                  <td style="padding:10px 12px;color:var(--text-muted)">Year-round</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <p>In 2026, Brazil remains Latin America's number-one destination for wingfoil and kitesurf. Steady wind, warm water, incredible nature and a passionate rider community await. If you're ready to take your level to the next step, the Brazilian Northeast is the place.</p>
-
-          <p style="color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);padding-top:20px;margin-top:32px">Want to prepare before the trip? Check out the <a href="#videos" onclick="document.getElementById('articleBrasil2026').close()" style="color:var(--primary)">videos by level</a> and practise with a <a href="#instructores" onclick="document.getElementById('articleBrasil2026').close()" style="color:var(--primary)">certified instructor</a> before your season in Brazil.</p>
-          </div>
-          <div class="article-share">
-            <span class="article-share__label" data-en="Share">Compartir</span>
-            <button class="share-btn share-btn--wa" onclick="shareArticle('wa',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.867-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg><span>WhatsApp</span></button>
-            <button class="share-btn share-btn--x" onclick="shareArticle('x',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>Twitter / X</span></button>
-            <button class="share-btn share-btn--fb" onclick="shareArticle('fb',this)" type="button"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg><span>Facebook</span></button>
-            <button class="share-btn share-btn--copy" onclick="shareArticle('copy',this)" type="button"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-en="Copy link">Copiar link</span></button>
-          </div>
-        </div>
-      </dialog>
 
     </div>
   </div>
@@ -6148,38 +5030,12 @@ loadEquipos();
 </script>
 
 <script>
-function shareArticle(platform, btn) {
-  var dialog = btn.closest('dialog');
-  var h2 = dialog && dialog.querySelector('h2');
-  var title = (h2 ? h2.textContent.trim() : '') + ' — Escuela de Wingfoil';
-  var base = window.location.origin + window.location.pathname;
-  var url = dialog && dialog.id ? base + '#' + dialog.id : window.location.href;
-  var enc = encodeURIComponent(url);
-  var txtEnc = encodeURIComponent(title);
-  if (platform === 'wa') {
-    window.open('https://api.whatsapp.com/send?text=' + txtEnc + '%20' + enc, '_blank', 'noopener,noreferrer');
-  } else if (platform === 'x') {
-    window.open('https://twitter.com/intent/tweet?url=' + enc + '&text=' + txtEnc, '_blank', 'noopener,noreferrer');
-  } else if (platform === 'fb') {
-    window.open('https://www.facebook.com/sharer/sharer.php?u=' + enc, '_blank', 'noopener,noreferrer');
-  } else if (platform === 'copy') {
-    navigator.clipboard.writeText(url).then(function() {
-      var span = btn.querySelector('span');
-      if (span) { var orig = span.textContent; span.textContent = '✓ Copiado'; setTimeout(function(){ span.textContent = orig; }, 2000); }
-    });
-  }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  var hash = window.location.hash.slice(1);
-  if (!hash) return;
-  var el = document.getElementById(hash);
-  if (el && el.tagName === 'DIALOG') {
-    var blogSection = document.getElementById('blog');
-    if (blogSection) blogSection.scrollIntoView({behavior: 'instant', block: 'start'});
-    el.showModal();
-  }
-});
+// Los artículos del blog se mudaron a /blog/<slug>. Los links viejos que se
+// compartieron como /#articleX siguen funcionando: se redirigen a su página.
+(function(){
+  var destino = {"articleFoil": "/blog/como-elegir-tu-primer-foil", "articleKite": "/blog/wingfoil-vs-kitesurf-vs-windsurf", "articleViento": "/blog/como-leer-el-viento", "articleSpots": "/blog/mejores-spots-wingfoil-argentina", "articleUsado": "/blog/equipo-wingfoil-usado-que-revisar", "articleSeguridad": "/blog/es-peligroso-el-wingfoil", "articleBrasil2026": "/blog/spots-wingfoil-kitesurf-brasil"}[location.hash.slice(1)];
+  if (destino) location.replace(destino);
+})();
 </script>
 
 
@@ -7532,13 +6388,10 @@ document.addEventListener('DOMContentLoaded', function() {
       b.setAttribute('aria-pressed', String(b.dataset.lang === lang));
     });
 
-    // Para compartir el link ya traducido y para que Google vea dos versiones.
+    // Para compartir el link ya traducido (?lang=en). El canonical sigue siendo /.
     var u = new URL(location.href);
     if(en) u.searchParams.set('lang', 'en'); else u.searchParams.delete('lang');
     history.replaceState(null, '', u.pathname + u.search + u.hash);
-
-    var alt = document.getElementById('hreflangEn');
-    if(alt) alt.href = location.origin + location.pathname + '?lang=en';
 
     document.dispatchEvent(new CustomEvent('wf:lang', { detail:{ lang:lang } }));
   }
