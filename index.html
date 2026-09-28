@@ -19,7 +19,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Escuela de Wingfoil Argentina | Aprendé GRATIS 2026</title>
-  <meta name="description" content="La plataforma educativa #1 de wingfoil en Argentina. Videos por nivel en español, 18+ spots en todo el país, instructores certificados, anatomía del foil interactiva y el nivel real del Río de la Plata por rango de fechas: marea del SHN, sudestada y crecidas de septiembre a marzo. Gratis." />
+  <meta name="description" content="Aprendé wingfoil gratis en Argentina: videos por nivel en español, 18+ spots, instructores certificados y la marea del Río de la Plata en tiempo real." />
   <meta name="keywords" content="wingfoil Argentina, aprender wingfoil gratis, clases wingfoil Buenos Aires, spots wingfoil Argentina, instructores wingfoil certificados, wingfoil Mar del Plata, wingfoil Bariloche, wingfoil Nahuel Huapi, wingfoil San Isidro, wingfoil Chascomús, wingfoil Patagonia, wingfoil vs kitesurf, equipo wingfoil precio Argentina, cómo aprender wingfoil desde cero, temporada wingfoil río de la plata, tabla wingfoil principiante, foil para principiante Argentina, kitesurf Argentina, wingfoil 2026, sudestada Río de la Plata, crecida del Río de la Plata, altura del Río de la Plata hoy, marea Río de la Plata San Isidro, pronóstico de marea SHN, bajante del Río de la Plata, nivel del río San Fernando, mareógrafo Pilote Norden, sudestada septiembre a marzo, viento termal Río de la Plata, cuándo hay sudestada en Buenos Aires" />
   <link rel="canonical" href="https://www.escueladewingfoil.com.ar/" />
   <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
@@ -47,15 +47,29 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "EducationalOrganization",
-    "name": "Escuela de Wingfoil Argentina",
-    "alternateName": "Escuela de Wingfoil",
-    "description": "Plataforma educativa gratuita de wingfoil en Argentina. Videos por nivel, spots, instructores certificados y comunidad activa.",
-    "url": "https://www.escueladewingfoil.com.ar",
-    "logo": "https://www.escueladewingfoil.com.ar/icon-192.png",
-    "areaServed": {"@type": "Country", "name": "Argentina"},
-    "availableLanguage": {"@type": "Language", "name": "Spanish", "alternateName": "es"},
-    "sameAs": ["https://www.instagram.com/clubkitewing/"]
+    "@graph": [
+      {
+        "@type": "EducationalOrganization",
+        "@id": "https://www.escueladewingfoil.com.ar/#organization",
+        "name": "Escuela de Wingfoil Argentina",
+        "alternateName": "Escuela de Wingfoil",
+        "description": "Plataforma educativa gratuita de wingfoil en Argentina. Videos por nivel, spots, instructores certificados y comunidad activa.",
+        "url": "https://www.escueladewingfoil.com.ar/",
+        "logo": {"@type": "ImageObject", "url": "https://www.escueladewingfoil.com.ar/icon-512.png", "width": 512, "height": 512},
+        "areaServed": {"@type": "Country", "name": "Argentina"},
+        "availableLanguage": {"@type": "Language", "name": "Spanish", "alternateName": "es"},
+        "sameAs": ["https://www.instagram.com/clubkitewing/"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://www.escueladewingfoil.com.ar/#website",
+        "name": "Escuela de Wingfoil Argentina",
+        "alternateName": "WingFoil ARG",
+        "url": "https://www.escueladewingfoil.com.ar/",
+        "inLanguage": "es-AR",
+        "publisher": {"@id": "https://www.escueladewingfoil.com.ar/#organization"}
+      }
+    ]
   }
   </script>
   <script type="application/ld+json">
@@ -129,8 +143,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     "description": "Qué es la sudestada, por qué las crecidas del Río de la Plata se concentran entre septiembre y marzo, cómo leer la altura del río antes de salir a navegar y qué pasa con la bajante.",
     "inLanguage": "es-AR",
     "mainEntityOfPage": {"@type":"WebPage","@id":"https://www.escueladewingfoil.com.ar/#sudestada"},
-    "author": {"@type":"Organization","name":"Escuela de Wingfoil Argentina","url":"https://www.escueladewingfoil.com.ar"},
-    "publisher": {"@type":"Organization","name":"Escuela de Wingfoil Argentina","logo":{"@type":"ImageObject","url":"https://www.escueladewingfoil.com.ar/icon-192.png"}},
+    "image": "https://images.unsplash.com/photo-1666175497584-dab60dcf1419?w=1200&h=630&fit=crop&auto=format&q=80",
+    "datePublished": "2026-09-05",
+    "dateModified": "2026-09-05",
+    "author": {"@id":"https://www.escueladewingfoil.com.ar/#organization"},
+    "publisher": {"@id":"https://www.escueladewingfoil.com.ar/#organization"},
     "about": [
       {"@type":"Thing","name":"Sudestada"},
       {"@type":"Thing","name":"Crecida del Río de la Plata"},
@@ -180,15 +197,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"SportsActivityLocation","name":"Puerto Madryn — Golfo Nuevo Wingfoil","description":"Atlántico sur con ballenas y orcas de fondo. Viento S constante 18-35 kn.","sport":"Wingfoil","address":{"@type":"PostalAddress","addressLocality":"Puerto Madryn","addressRegion":"Chubut","addressCountry":"AR"},"geo":{"@type":"GeoCoordinates","latitude":-42.7692,"longitude":-65.0386},"url":"https://www.escueladewingfoil.com.ar/#spots","image":"https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=800&fit=crop&auto=format&q=80"}
   </script>
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"VideoObject","name":"Wing Foil para principiantes — Paso 1: Control del ala","description":"Aprendé a manejar el ala y a navegar sin foil. El primer paso para aprender wingfoil desde cero en Argentina.","thumbnailUrl":"https://i.ytimg.com/vi/EThzuUA7ShQ/maxresdefault.jpg","embedUrl":"https://www.youtube.com/embed/EThzuUA7ShQ","uploadDate":"2023-01-01","duration":"PT10M","inLanguage":"es","url":"https://www.escueladewingfoil.com.ar/#videos"}
-  </script>
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"VideoObject","name":"Aprende Wingfoil — Paso 2: Al agua, rumbos y giros","description":"Rumbos, giros y cómo volver con seguridad. Segunda sesión de tu aprendizaje de wingfoil en Argentina.","thumbnailUrl":"https://i.ytimg.com/vi/cDCOfbP2hvY/maxresdefault.jpg","embedUrl":"https://www.youtube.com/embed/cDCOfbP2hvY","uploadDate":"2023-01-01","duration":"PT12M","inLanguage":"es","url":"https://www.escueladewingfoil.com.ar/#videos"}
-  </script>
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"VideoObject","name":"Wingfoil — Paso 3: Subirse y pararse en la tabla","description":"Técnicas para mantener el equilibrio en la tabla de wingfoil. El momento clave del aprendizaje.","thumbnailUrl":"https://i.ytimg.com/vi/EyNfWdt1JiM/maxresdefault.jpg","embedUrl":"https://www.youtube.com/embed/EyNfWdt1JiM","uploadDate":"2023-01-01","duration":"PT8M","inLanguage":"es","url":"https://www.escueladewingfoil.com.ar/#videos"}
-  </script>
 
   <script type="application/ld+json">
   {
@@ -232,19 +240,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     ]
   }
   </script>
-  <!-- Netlify hidden forms for detection -->
-  <form name="instructor-form" netlify netlify-honeypot="bot-field" hidden>
-    <input name="nombre"/><input name="apellido"/><input name="whatsapp"/><input name="ubicacion"/><input name="bio"/><input name="deportes"/>
-  </form>
-  <form name="equipo-form" netlify netlify-honeypot="bot-field" hidden>
-    <input name="tipo"/><input name="marca"/><input name="precio"/><input name="ubicacion"/><input name="descripcion"/><input name="whatsapp"/>
-  </form>
-  <form name="survey-form" netlify netlify-honeypot="bot-field" hidden>
-    <input name="falta"/><input name="email"/>
-  </form>
-  <form name="sponsor-form" netlify netlify-honeypot="bot-field" hidden>
-    <input name="marca"/><input name="contacto"/><input name="email"/><input name="mensaje"/>
-  </form>
 
   <link rel="manifest" href="/manifest.json"/>
   <meta name="theme-color" content="#00b4d8"/>
@@ -1452,15 +1447,26 @@ html{scroll-padding-top:var(--barra-alta)}
   <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
-  <link rel="alternate" hreflang="es" href="https://escueladewingfoil.com.ar/">
-  <link rel="alternate" hreflang="en" id="hreflangEn" href="https://escueladewingfoil.com.ar/?lang=en">
-  <link rel="alternate" hreflang="x-default" href="https://escueladewingfoil.com.ar/">
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5VH677HZ"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
+
+<!-- Netlify hidden forms for detection (en el body: un <form> dentro de <head> lo cierra antes de tiempo) -->
+  <form name="instructor-form" netlify netlify-honeypot="bot-field" hidden>
+    <input name="nombre"/><input name="apellido"/><input name="whatsapp"/><input name="ubicacion"/><input name="bio"/><input name="deportes"/>
+  </form>
+  <form name="equipo-form" netlify netlify-honeypot="bot-field" hidden>
+    <input name="tipo"/><input name="marca"/><input name="precio"/><input name="ubicacion"/><input name="descripcion"/><input name="whatsapp"/>
+  </form>
+  <form name="survey-form" netlify netlify-honeypot="bot-field" hidden>
+    <input name="falta"/><input name="email"/>
+  </form>
+  <form name="sponsor-form" netlify netlify-honeypot="bot-field" hidden>
+    <input name="marca"/><input name="contacto"/><input name="email"/><input name="mensaje"/>
+  </form>
 
 <!-- TOPBAR -->
 <div class="topbar" role="banner" id="topbar">
@@ -1565,7 +1571,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- ============================================================ HERO ============================================================ -->
 <section class="hero" id="inicio">
   <div class="hero__bg" aria-hidden="true">
-    <video class="hero__bg-video" id="heroVideo" autoplay muted loop playsinline preload="auto" poster="https://images.pexels.com/photos/15151070/pexels-photo-15151070.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" aria-hidden="true">
+    <video class="hero__bg-video" id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="https://images.pexels.com/photos/15151070/pexels-photo-15151070.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" aria-hidden="true">
       <source src="https://videos.pexels.com/video-files/34379407/14564404_1440_2560_30fps.mp4" type="video/mp4"/>
     </video>
     <div class="hero__bg-img" id="heroParallax"></div>
@@ -1805,7 +1811,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
       </div>
       <div class="about__media">
-        <img src="https://resizer.glanacion.com/resizer/v2/una-de-sus-grandes-ventajas-es-que-se-trata-de-un-OF5SRW7525D2BKKQUODK4RQHHE.jpeg?auth=710a8274ae1ab929b0d37cb62b2aa3f4016bef7782ac157041dbbe983eb77111&width=780&height=520&quality=70&smart=true" alt="Rider de wingfoil volando sobre agua del Río de la Plata Argentina" loading="lazy"/>
+        <img width="780" height="520" src="https://resizer.glanacion.com/resizer/v2/una-de-sus-grandes-ventajas-es-que-se-trata-de-un-OF5SRW7525D2BKKQUODK4RQHHE.jpeg?auth=710a8274ae1ab929b0d37cb62b2aa3f4016bef7782ac157041dbbe983eb77111&width=780&height=520&quality=70&smart=true" alt="Rider de wingfoil volando sobre agua del Río de la Plata Argentina" loading="lazy"/>
         <div class="about__media-badge"><span>🌊</span><span>Argentina, la nueva meca del wingfoil</span></div>
       </div>
     </div>
@@ -1815,9 +1821,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- IMPACT STRIP -->
 <div class="impact-strip">
   <div class="impact-strip__inner">
-    <div class="impact-strip__img"><img src="https://www.clarin.com/img/2026/01/05/u69gwDqEC_1256x620__2.jpg#1767723957906" alt="Wingfoil Argentina 2026" loading="lazy"/></div>
-    <div class="impact-strip__img"><img src="https://resizer.glanacion.com/resizer/v2/el-windsurf-perdio-la-onda-todo-va-hacia-el-foil-AQSI2OWHD5GHLNZRLS2IDHSYEY.jpeg?auth=2a8e00a13f3548c9c8446c17376138a19bfd9ce0a172517f560ab580a1d3bf9c&width=780&height=519&quality=70&smart=true" alt="Foil Argentina" loading="lazy"/></div>
-    <div class="impact-strip__img"><img src="https://resizer.glanacion.com/resizer/v2/paloma-gutierrez-instructora-argentina-en-la-UZJIX32ZSBAW7KNIJBF2ATBSMA.jpeg?auth=8cd91c9a20fc6ebe72fa73c8496b8b66fb36ccbcf05a103c34e753198e719a64&width=780&height=520&quality=70&smart=true" alt="Instructora argentina de wingfoil" loading="lazy"/></div>
+    <div class="impact-strip__img"><img width="1256" height="620" src="https://www.clarin.com/img/2026/01/05/u69gwDqEC_1256x620__2.jpg#1767723957906" alt="Wingfoil Argentina 2026" loading="lazy"/></div>
+    <div class="impact-strip__img"><img width="780" height="519" src="https://resizer.glanacion.com/resizer/v2/el-windsurf-perdio-la-onda-todo-va-hacia-el-foil-AQSI2OWHD5GHLNZRLS2IDHSYEY.jpeg?auth=2a8e00a13f3548c9c8446c17376138a19bfd9ce0a172517f560ab580a1d3bf9c&width=780&height=519&quality=70&smart=true" alt="Foil Argentina" loading="lazy"/></div>
+    <div class="impact-strip__img"><img width="780" height="520" src="https://resizer.glanacion.com/resizer/v2/paloma-gutierrez-instructora-argentina-en-la-UZJIX32ZSBAW7KNIJBF2ATBSMA.jpeg?auth=8cd91c9a20fc6ebe72fa73c8496b8b66fb36ccbcf05a103c34e753198e719a64&width=780&height=520&quality=70&smart=true" alt="Instructora argentina de wingfoil" loading="lazy"/></div>
   </div>
 </div>
 
@@ -2484,7 +2490,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <article class="rider-card">
         <button class="rider-card__media lite-yt" data-id="hQylyczci90" aria-label="Reproducir video de Balz Müller" data-en-aria-label="Play Balz Müller video">
-          <img src="https://i.ytimg.com/vi/hQylyczci90/hqdefault.jpg" alt="Balz Müller wingfoil video" loading="lazy"/>
+          <img src="https://i.ytimg.com/vi/hQylyczci90/hqdefault.jpg" alt="Balz Müller wingfoil video" width="480" height="360" loading="lazy"/>
           <span class="rider-card__yt-badge">YouTube</span>
           <span class="rider-card__play"></span>
           <span class="rider-card__flag" data-en="🇨🇭 Switzerland">🇨🇭 Suiza</span>
@@ -2498,7 +2504,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <article class="rider-card">
         <button class="rider-card__media lite-yt" data-id="3i0yDs8ZhYQ" aria-label="Reproducir video de Titouan Galea" data-en-aria-label="Play Titouan Galea video">
-          <img src="https://i.ytimg.com/vi/3i0yDs8ZhYQ/hqdefault.jpg" alt="Titouan Galea wingfoil double backflip" loading="lazy"/>
+          <img src="https://i.ytimg.com/vi/3i0yDs8ZhYQ/hqdefault.jpg" alt="Titouan Galea wingfoil double backflip" width="480" height="360" loading="lazy"/>
           <span class="rider-card__yt-badge">YouTube</span>
           <span class="rider-card__play"></span>
           <span class="rider-card__flag" data-en="🇳🇨 New Caledonia">🇳🇨 Nueva Caledonia</span>
@@ -2512,7 +2518,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <article class="rider-card">
         <button class="rider-card__media lite-yt" data-id="paxx5UjaWgk" aria-label="Reproducir video de Kai Lenny" data-en-aria-label="Play Kai Lenny video">
-          <img src="https://i.ytimg.com/vi/paxx5UjaWgk/hqdefault.jpg" alt="Wingfoil action video" loading="lazy"/>
+          <img src="https://i.ytimg.com/vi/paxx5UjaWgk/hqdefault.jpg" alt="Wingfoil action video" width="480" height="360" loading="lazy"/>
           <span class="rider-card__yt-badge">YouTube</span>
           <span class="rider-card__play"></span>
           <span class="rider-card__flag" data-en="🇺🇸 Hawaii">🇺🇸 Hawaii</span>
@@ -2526,7 +2532,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <article class="rider-card">
         <button class="rider-card__media lite-yt" data-id="KD6kw4qIYkw" aria-label="Reproducir video de competencia GWA" data-en-aria-label="Play GWA competition video">
-          <img src="https://i.ytimg.com/vi/KD6kw4qIYkw/hqdefault.jpg" alt="GWA Wingfoil World Tour highlights" loading="lazy"/>
+          <img src="https://i.ytimg.com/vi/KD6kw4qIYkw/hqdefault.jpg" alt="GWA Wingfoil World Tour highlights" width="480" height="360" loading="lazy"/>
           <span class="rider-card__yt-badge">YouTube</span>
           <span class="rider-card__play"></span>
           <span class="rider-card__flag">🌎 GWA</span>
@@ -2540,7 +2546,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <article class="rider-card">
         <button class="rider-card__media lite-yt" data-id="9WyGQSIKedE" aria-label="Reproducir tutorial de wingfoil" data-en-aria-label="Play wingfoil tutorial">
-          <img src="https://i.ytimg.com/vi/9WyGQSIKedE/hqdefault.jpg" alt="How to wing surf tutorial" loading="lazy"/>
+          <img src="https://i.ytimg.com/vi/9WyGQSIKedE/hqdefault.jpg" alt="How to wing surf tutorial" width="480" height="360" loading="lazy"/>
           <span class="rider-card__yt-badge">YouTube</span>
           <span class="rider-card__play"></span>
           <span class="rider-card__flag" data-en="🌍 Tutorial">🌍 Tutorial</span>
@@ -2554,7 +2560,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <article class="rider-card">
         <button class="rider-card__media lite-yt" data-id="EThzuUA7ShQ" aria-label="Reproducir video de comunidad argentina" data-en-aria-label="Play Argentine community video">
-          <img src="https://i.ytimg.com/vi/EThzuUA7ShQ/hqdefault.jpg" alt="Comunidad WingFoil Argentina" loading="lazy"/>
+          <img src="https://i.ytimg.com/vi/EThzuUA7ShQ/hqdefault.jpg" alt="Comunidad WingFoil Argentina" width="480" height="360" loading="lazy"/>
           <span class="rider-card__yt-badge">YouTube</span>
           <span class="rider-card__play"></span>
           <span class="rider-card__flag" data-en="🇦🇷 Argentina">🇦🇷 Argentina</span>
@@ -7532,13 +7538,10 @@ document.addEventListener('DOMContentLoaded', function() {
       b.setAttribute('aria-pressed', String(b.dataset.lang === lang));
     });
 
-    // Para compartir el link ya traducido y para que Google vea dos versiones.
+    // Para compartir el link ya traducido (?lang=en). El canonical sigue siendo /.
     var u = new URL(location.href);
     if(en) u.searchParams.set('lang', 'en'); else u.searchParams.delete('lang');
     history.replaceState(null, '', u.pathname + u.search + u.hash);
-
-    var alt = document.getElementById('hreflangEn');
-    if(alt) alt.href = location.origin + location.pathname + '?lang=en';
 
     document.dispatchEvent(new CustomEvent('wf:lang', { detail:{ lang:lang } }));
   }
