@@ -656,14 +656,6 @@ textarea{resize:vertical;min-height:90px}
 .eq-tab:hover{color:var(--text)}
 .eq-tab.active{color:var(--primary);border-bottom-color:var(--primary)}
 .equipos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;margin-bottom:48px}
-.ml-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:all .25s;display:flex;flex-direction:column}
-.ml-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--primary)}
-.ml-card__img{width:100%;aspect-ratio:1/1;object-fit:contain;background:var(--surface-2);display:block}
-.ml-card__body{padding:16px 18px 18px;display:flex;flex-direction:column;flex:1}
-.ml-card__title{font-size:14px;font-weight:700;margin-bottom:10px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.ml-card__precio{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;color:var(--primary);margin-bottom:14px;letter-spacing:-.02em}
-.ml-card__link{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;border-radius:99px;background:var(--primary);color:var(--text-inverse);font-size:12px;font-weight:700;transition:all .15s;margin-top:auto}
-.ml-card__link:hover{background:var(--primary-h)}
 .equipo-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;transition:all .25s;perspective:1000px}
 .equipo-card:hover{transform:translateY(-3px) rotateX(2deg);box-shadow:var(--shadow-md);border-color:var(--primary)}
 .equipo-card__badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:700;background:color-mix(in oklab,var(--accent),transparent 82%);color:var(--accent);margin-bottom:12px;text-transform:uppercase;letter-spacing:.04em}
@@ -1443,6 +1435,7 @@ html{scroll-padding-top:var(--barra-alta)}
   <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
+<link rel="stylesheet" href="/assets/buscador-equipos.css">
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -2371,15 +2364,65 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <span class="eyebrow">Comunidad</span>
     <h2 class="section-title" data-en="Gear for Sale">Equipos en Venta</h2>
-    <p class="section-sub">Comprá y vendé equipos de wingfoil entre riders de la comunidad.</p>
+    <p class="section-sub">Buscá, filtrá y compará tablas, alas, foils y accesorios de Mercado Libre y de la comunidad. O publicá tu equipo gratis.</p>
 
     <div class="eq-tabs" role="tablist">
-      <button class="eq-tab active" role="tab" aria-selected="true" aria-controls="eqPanelComunidad" data-eqtab="comunidad">🤝 Comunidad</button>
-      <button class="eq-tab" role="tab" aria-selected="false" aria-controls="eqPanelML" data-eqtab="ml">🛒 Mercado Libre</button>
+      <button class="eq-tab active" role="tab" aria-selected="true" aria-controls="eqPanelBuscador" data-eqtab="buscador">🔎 Buscar y comparar</button>
+      <button class="eq-tab" role="tab" aria-selected="false" aria-controls="eqPanelComunidad" data-eqtab="comunidad">🤝 Comunidad · publicar</button>
+    </div>
+
+    <!-- BUSCADOR Y COMPARADOR -->
+    <div id="eqPanelBuscador">
+      <div class="eqs" id="eqsRoot">
+        <div class="eqs__box">
+          <form class="eqs__bar" role="search" aria-label="Buscar equipos de wingfoil">
+            <div class="eqs__q"><label for="eqsQ" class="sr-only">Buscar equipo</label><input id="eqsQ" type="search" data-f="q" placeholder="Ej.: tabla 120 litros, ala Duotone 5m, foil carbono…" autocomplete="off" enterkeyhint="search"></div>
+            <button type="submit" class="eqs__btn eqs__btn--primary">Buscar</button>
+            <button type="button" class="eqs__btn eqs__filters-toggle" data-act="toggle-filters" aria-expanded="false" aria-controls="eqsFilters">⚙️ Filtros</button>
+          </form>
+          <div class="eqs__chips" aria-label="Categorías"></div>
+          <div class="eqs__filters" id="eqsFilters" data-open="false">
+            <div class="eqs__f"><label for="eqsCat">Categoría</label><select id="eqsCat" data-f="categoria"></select></div>
+            <div class="eqs__f"><label for="eqsSub">Tipo de producto</label><select id="eqsSub" data-f="subtipo"></select><span class="eqs__hint" hidden>Sin datos para esta selección</span></div>
+            <div class="eqs__f"><label for="eqsMarca">Marca</label><select id="eqsMarca" data-f="marca"></select><span class="eqs__hint" hidden>Sin datos para esta selección</span></div>
+            <div class="eqs__f"><label for="eqsModelo">Modelo</label><input id="eqsModelo" data-f="modelo" list="eqsModelos" placeholder="Ej.: Sky Free" autocomplete="off"><datalist id="eqsModelos"></datalist></div>
+            <div class="eqs__f"><label for="eqsAnio">Año</label><select id="eqsAnio" data-f="anio"></select><span class="eqs__hint" hidden>Sin datos para esta selección</span></div>
+            <div class="eqs__f"><span class="eqs__lbl" id="eqsPrecioLbl">Precio</span>
+              <div class="eqs__range" role="group" aria-labelledby="eqsPrecioLbl">
+                <select data-f="moneda" aria-label="Moneda" style="flex:0 0 76px"><option value="ARS">ARS</option><option value="USD">USD</option></select>
+                <input type="number" inputmode="numeric" min="0" data-f="pmin" placeholder="Desde" aria-label="Precio desde">
+                <input type="number" inputmode="numeric" min="0" data-f="pmax" placeholder="Hasta" aria-label="Precio hasta">
+              </div></div>
+            <div class="eqs__f"><span class="eqs__lbl" id="eqsTamLbl">Tamaño / volumen</span>
+              <div class="eqs__range" role="group" aria-labelledby="eqsTamLbl">
+                <input type="number" inputmode="decimal" min="0" step="any" data-f="tmin" placeholder="Desde" aria-label="Tamaño desde">
+                <input type="number" inputmode="decimal" min="0" step="any" data-f="tmax" placeholder="Hasta" aria-label="Tamaño hasta">
+              </div><span class="eqs__hint" id="eqsTamHint">Elegí tabla, ala, foil o mástil</span></div>
+            <div class="eqs__f"><label for="eqsEstado">Estado</label><select id="eqsEstado" data-f="estado"></select><span class="eqs__hint" hidden>Sin datos para esta selección</span></div>
+            <div class="eqs__f"><label for="eqsNivel">Nivel recomendado</label><select id="eqsNivel" data-f="nivel"></select><span class="eqs__hint" hidden>Sin datos para esta selección</span></div>
+            <div class="eqs__f"><label for="eqsVend">Vendedor</label><select id="eqsVend" data-f="vendedor"></select><span class="eqs__hint" hidden>Las publicaciones no informan vendedor</span></div>
+            <div class="eqs__f"><label for="eqsDisp">Disponibilidad</label><select id="eqsDisp" data-f="disponibilidad"></select><span class="eqs__hint" hidden>Las publicaciones no informan stock</span></div>
+            <div class="eqs__f"><label for="eqsUbic">Ubicación</label><select id="eqsUbic" data-f="ubicacion"></select><span class="eqs__hint" hidden>Sin datos de ubicación</span></div>
+            <div class="eqs__f"><label for="eqsFuente">Fuente</label><select id="eqsFuente" data-f="fuente"></select><span class="eqs__hint" hidden>Sin datos</span></div>
+            <div class="eqs__checks">
+              <label><input type="checkbox" data-f="cuotas"> Sólo con cuotas</label>
+              <label><input type="checkbox" data-f="ofertas"> Ofertas / precio bajo</label>
+              <label><input type="checkbox" data-f="ocultarAgotados"> Ocultar agotados</label>
+              <button type="button" class="eqs__btn eqs__btn--sm" data-act="clear">Limpiar filtros</button>
+            </div>
+          </div>
+        </div>
+        <div class="eqs__status" aria-live="polite"></div>
+        <div class="eqs__toastslot" aria-live="polite"></div>
+        <div class="eqs__box eqs__results" aria-live="polite"><div class="eqs__loading">Cargando equipos…</div></div>
+        <div class="eqs__box eqs__cmp" id="eqsComparador" hidden></div>
+        <div class="eqs__tray" hidden></div>
+        <p class="equipos-disclaimer" style="margin-bottom:0">⚠️ Los productos de Mercado Libre los publican otros vendedores y los de la comunidad, riders particulares: no tenemos relación comercial con ellos ni garantizamos precio, stock o estado del equipo. Los datos se toman de cada publicación; lo que no informan figura como "No especificado". Verificá siempre en la publicación original antes de comprar.</p>
+      </div>
     </div>
 
     <!-- COMUNIDAD -->
-    <div id="eqPanelComunidad">
+    <div id="eqPanelComunidad" hidden>
 
       <p class="equipos-disclaimer">⚠️ La Escuela de Wingfoil no es responsable de la venta de productos publicados. Las transacciones son entre particulares, bajo exclusiva responsabilidad de las partes.</p>
       <div class="equipos-grid" id="equiposGrid">
@@ -2448,12 +2491,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
     </div>
     </div><!-- /eqPanelComunidad -->
-
-    <!-- MERCADO LIBRE -->
-    <div id="eqPanelML" hidden>
-      <p class="equipos-disclaimer">⚠️ Estos productos están publicados por otros vendedores en Mercado Libre, no por la Escuela de Wingfoil. El botón te lleva a Mercado Libre para comprar — no tenemos relación comercial con esos vendedores ni garantizamos precio, stock o estado del equipo.</p>
-      <div class="equipos-grid" id="mlGrid"></div>
-    </div>
 
   </div>
 </section>
@@ -4918,9 +4955,7 @@ async function loadEquipos(){
   var grid=document.getElementById('equiposGrid');
   if(!grid)return;
   try{
-    var r=await fetch('/api/equipos');
-    if(!r.ok)return;
-    var list=await r.json();
+    var list=await window.EQ_COMUNIDAD;
     list.forEach(function(d){
       var precioNum=parseInt((d.precio||'').replace(/[^0-9]/g,''));
       var precioFmt=isNaN(precioNum)?escHtml(d.precio):'$ '+precioNum.toLocaleString('es-AR');
@@ -4939,33 +4974,6 @@ async function loadEquipos(){
   }catch(e){}
 }
 
-// ============ LOAD MERCADO LIBRE ============
-function escAttr(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;')}
-var mlLoaded=false;
-async function loadML(){
-  if(mlLoaded)return;
-  mlLoaded=true;
-  var grid=document.getElementById('mlGrid');
-  if(!grid)return;
-  try{
-    var r=await fetch('/ml-data.json');
-    if(!r.ok)return;
-    var data=await r.json();
-    (data.productos||[]).forEach(function(p){
-      var precioFmt=(typeof p.precio==='number')?'$ '+p.precio.toLocaleString('es-AR'):escHtml(p.precio||'');
-      var card=document.createElement('div');
-      card.className='ml-card';
-      card.innerHTML='<img class="ml-card__img" src="'+escAttr(p.imagen)+'" alt="'+escAttr(p.titulo)+'" loading="lazy">'+
-        '<div class="ml-card__body">'+
-        '<div class="ml-card__title">'+escHtml(p.titulo)+'</div>'+
-        '<div class="ml-card__precio">'+precioFmt+'</div>'+
-        '<a class="ml-card__link" href="'+escAttr(p.link)+'" target="_blank" rel="nofollow noopener">Ver en Mercado Libre ↗</a>'+
-        '</div>';
-      grid.appendChild(card);
-    });
-  }catch(e){}
-}
-
 // ============ EQUIPOS TABS ============
 document.querySelectorAll('.eq-tab').forEach(function(btn){
   btn.addEventListener('click',function(){
@@ -4973,16 +4981,22 @@ document.querySelectorAll('.eq-tab').forEach(function(btn){
     btn.classList.add('active');btn.setAttribute('aria-selected','true');
     var showId=btn.getAttribute('aria-controls');
     document.getElementById('eqPanelComunidad').hidden=(showId!=='eqPanelComunidad');
-    document.getElementById('eqPanelML').hidden=(showId!=='eqPanelML');
-    if(showId==='eqPanelML')loadML();
+    document.getElementById('eqPanelBuscador').hidden=(showId!=='eqPanelBuscador');
+    if(showId==='eqPanelBuscador'&&window.EQS_LOAD)window.EQS_LOAD();
   });
 });
 
 loadInstructors();
+// Un solo pedido a /api/equipos, compartido con el buscador (assets/buscador-equipos.js).
+window.EQ_COMUNIDAD=fetch('/api/equipos').then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()});
+window.EQ_COMUNIDAD.catch(function(){});
 loadEquipos();
 
 })();
 </script>
+
+<script src="/assets/equipo-normalizer.js" defer></script>
+<script src="/assets/buscador-equipos.js" defer></script>
 
 <!-- Three.js for 3D foil -->
 <script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
