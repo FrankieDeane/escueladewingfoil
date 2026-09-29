@@ -12,7 +12,7 @@ vm.runInContext(readFileSync(new URL('../assets/equipo-normalizer.js', import.me
 const N = ctx.EquipoNormalizer;
 const now = new Date('2026-09-29T12:00:00Z');
 
-const ml = JSON.parse(readFileSync(new URL('../ml-data.json', import.meta.url), 'utf8'));
+const ml = JSON.parse(readFileSync(new URL('./fixtures/ml-data-2026-09-24.json', import.meta.url), 'utf8'));
 const items = N.dedupe(N.fromMercadoLibre(ml, now));
 const byId = Object.fromEntries(items.map((p) => [p.id, p]));
 const get = (id) => byId['ml:' + id];

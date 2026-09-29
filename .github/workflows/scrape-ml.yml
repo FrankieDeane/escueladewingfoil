@@ -1,0 +1,63 @@
+name: Actualizar productos de Mercado Libre
+
+# Scrapea el listado público de mercadolibre.com.ar y actualiza ml-data.json,
+# la fuente del buscador y comparador de equipos (#venta-de-wingfoil).
+# Si ML bloquea o trae muy pocos resultados, el scraper sale con error y NO
+# toca ml-data.json: el sitio sigue mostrando los últimos datos buenos.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 9 * * *'   # todos los días, 06:17 hora Argentina
+
+permissions:
+  contents: write
+
+concurrency:
+  group: scrape-ml
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Instalar Playwright (sólo para el scraper, no es dependencia del sitio)
+        run: |
+          npm install --no-save --no-audit --no-fund playwright@1.56.1
+          npx playwright install --with-deps chromium
+
+      - name: Tests del parser y del normalizador
+        run: npm test
+
+      - name: Scrapear mercadolibre.com.ar
+        run: node scripts/scrape-ml.mjs --out ml-data.json --debug-dir scrape-debug
+
+      - name: Guardar capturas si ML bloqueó o cambió el HTML
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scrape-debug
+          path: scrape-debug/
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Commit y push si cambiaron los datos
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f ml-data.json
+          if git diff --staged --quiet; then
+            echo "Sin cambios en ml-data.json"
+          else
+            git commit -m "🔄 Productos de Mercado Libre $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git push origin HEAD:main
+          fi

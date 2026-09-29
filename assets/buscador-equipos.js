@@ -297,7 +297,7 @@
   function fechaHtml(iso) {
     if (!iso) return na('No disponible');
     var d = diasDesde(iso);
-    return esc(fmtFecha(iso)) + (d != null && d > 30 ? '<span class="eqs__sub" style="color:var(--warn)">Hace ' + d + ' días: puede haber cambiado</span>' : '');
+    return esc(fmtFecha(iso)) + (d != null && d > 3 ? '<span class="eqs__sub" style="color:var(--warn)">Hace ' + d + ' días: puede haber cambiado</span>' : '');
   }
 
   // El contenido va envuelto en un div: en mobile la celda es una grilla
@@ -334,7 +334,7 @@
       if (!ml.ok) parts.push('<span class="is-err">⚠️ No se pudieron cargar los productos de Mercado Libre. Probá de nuevo más tarde.</span>');
       else {
         var d = diasDesde(ml.actualizado);
-        parts.push('<span><b>Mercado Libre:</b> ' + ml.n + ' productos' + (ml.actualizado ? ' · actualizado el ' + esc(fmtFecha(ml.actualizado)) : '') + (d > 30 ? ' <span class="is-old">(hace ' + d + ' días, precios y stock pueden haber cambiado)</span>' : '') + '</span>');
+        parts.push('<span><b>mercadolibre.com.ar:</b> ' + ml.n + ' productos' + (ml.actualizado ? ' · actualizado el ' + esc(fmtFecha(ml.actualizado)) : '') + (d > 3 ? ' <span class="is-old">(hace ' + d + ' días: se actualiza a diario, precios y stock pueden haber cambiado)</span>' : ' · se actualiza a diario') + '</span>');
       }
     }
     if (com) parts.push(com.ok ? '<span><b>Comunidad:</b> ' + com.n + ' avisos de riders</span>' : '<span class="is-err">⚠️ No se pudieron cargar los avisos de la comunidad.</span>');
