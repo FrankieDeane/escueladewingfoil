@@ -435,6 +435,7 @@
         titulo: (tipo ? tipo.split('/')[0].trim() + ' ' : '') + (d.marca || ''),
         categoria: tipo,
         precio: d.precio,
+        moneda: d.moneda,
         descripcion: d.descripcion,
         ubicacion: d.ubicacion,
         vendedor: 'Particular (comunidad)',

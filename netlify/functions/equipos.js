@@ -126,6 +126,9 @@ export default async function(req) {
       tipo: clean(body.get('tipo'), 60),
       marca: clean(body.get('marca'), 80),
       precio: clean(body.get('precio'), 30),
+      // Moneda elegida en el form; los avisos viejos no la tienen y el
+      // parser del front la deduce del texto ("USD 900").
+      moneda: ['ARS', 'USD'].includes(body.get('moneda')) ? body.get('moneda') : 'ARS',
       ubicacion: clean(body.get('ubicacion'), 80),
       descripcion: clean(body.get('descripcion'), 1000),
       whatsapp: cleanPhone(body.get('whatsapp')),

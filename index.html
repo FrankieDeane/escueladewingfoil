@@ -623,6 +623,11 @@ input,textarea,select{font:inherit;color:inherit}
 .form-note{font-size:13px;color:var(--text-muted);margin-bottom:32px;line-height:1.6}
 .form-group{margin-bottom:20px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.precio-input{display:flex;gap:8px}.precio-input select{flex:0 0 auto;width:auto}.precio-input input{flex:1;min-width:0}
+.newsletter-form{display:grid;grid-template-columns:1fr 1.4fr auto;gap:12px;align-items:end}
+.newsletter-form .form-group{margin-bottom:0}
+.newsletter-form .btn{min-height:50px}
+@media(max-width:680px){.newsletter-form{grid-template-columns:1fr}}
 @media(max-width:540px){.form-row{grid-template-columns:1fr}}
 .form-group label{display:block;font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
 .form-required{color:var(--primary)}
@@ -1448,13 +1453,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <input name="nombre"/><input name="apellido"/><input name="whatsapp"/><input name="ubicacion"/><input name="bio"/><input name="deportes"/>
   </form>
   <form name="equipo-form" netlify netlify-honeypot="bot-field" hidden>
-    <input name="tipo"/><input name="marca"/><input name="precio"/><input name="ubicacion"/><input name="descripcion"/><input name="whatsapp"/>
+    <input name="tipo"/><input name="marca"/><input name="precio"/><input name="moneda"/><input name="ubicacion"/><input name="descripcion"/><input name="whatsapp"/>
   </form>
   <form name="survey-form" netlify netlify-honeypot="bot-field" hidden>
     <input name="falta"/><input name="email"/>
   </form>
   <form name="sponsor-form" netlify netlify-honeypot="bot-field" hidden>
     <input name="marca"/><input name="contacto"/><input name="email"/><input name="mensaje"/>
+  </form>
+  <form name="newsletter-form" netlify netlify-honeypot="bot-field" hidden>
+    <input name="nombre"/><input name="email"/>
   </form>
 
 <!-- TOPBAR -->
@@ -2451,7 +2459,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div class="form-group"><label for="eq-marca">Marca <span class="form-required">*</span></label><input type="text" id="eq-marca" name="marca" placeholder="Duotone, Naish, F-One..." required/></div>
         </div>
         <div class="form-row">
-          <div class="form-group"><label for="eq-precio">Precio ARS <span class="form-required">*</span></label><input type="text" id="eq-precio" name="precio" placeholder="850000" required/></div>
+          <div class="form-group"><label for="eq-precio">Precio <span class="form-required">*</span></label><div class="precio-input"><select id="eq-moneda" name="moneda" aria-label="Moneda"><option value="ARS">$ ARS</option><option value="USD">US$ USD</option></select><input type="text" id="eq-precio" name="precio" inputmode="decimal" placeholder="850000" required/></div></div>
           <div class="form-group"><label for="eq-ubicacion">Ubicación <span class="form-required">*</span></label>
             <select id="eq-ubicacion" name="ubicacion" required><option value="">Seleccioná...</option><optgroup label="Buenos Aires"><option>San Isidro</option><option>Mar del Plata</option><option>Pinamar</option></optgroup><optgroup label="Otras"><option>CABA</option><option>Córdoba</option><option>Rosario</option><option>Mendoza</option><option>Bariloche</option><option>Neuquén</option><option>Corrientes</option><option>Entre Ríos</option><option>Chubut</option><option>Otro</option></optgroup></select>
           </div>
@@ -3398,6 +3406,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </form>
       </div>
     </div>
+
+    <!-- NEWSLETTER -->
+    <div class="form-wrap" style="max-width:1100px;margin-top:32px">
+      <div class="form-header"><h3>📬 Suscribite a las novedades</h3><span class="badge--free">✓ Gratis</span></div>
+      <p class="form-note" style="margin-bottom:20px">Spots, clínicas, equipos y guías nuevas. Un mail cada tanto, sin spam.</p>
+      <form id="newsletterForm" class="newsletter-form" name="newsletter-form" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+        <input type="hidden" name="form-name" value="newsletter-form" />
+        <input type="hidden" name="bot-field" />
+        <div class="form-group"><label for="nl-nombre">Nombre <span class="form-optional">(opcional)</span></label><input type="text" id="nl-nombre" name="nombre" placeholder="Tu nombre" autocomplete="given-name"/></div>
+        <div class="form-group"><label for="nl-email">Email <span class="form-required">*</span></label><input type="email" id="nl-email" name="email" placeholder="tu@email.com" autocomplete="email" required/></div>
+        <button type="submit" class="btn btn--primary">Suscribirme →</button>
+      </form>
+      <div id="newsletterMsg" class="form-msg" hidden style="margin-top:14px;margin-bottom:0"></div>
+    </div>
   </div>
 </section>
 
@@ -4104,99 +4126,41 @@ if(coffeeModal&&sponsorModal){
   }
 }
 
-// ============ FOTO UPLOAD INSTRUCTOR ============
-var instrFotoData=null;
-var instrFotoPreview=document.getElementById('instrFotoPreview');
-var instrPhotoFile=document.getElementById('instr-photo-file');
-if(instrPhotoFile){
-  instrPhotoFile.addEventListener('change',function(){
-    var file=this.files[0];if(!file)return;
-    var r=new FileReader();
-    r.onload=function(ev){
-      instrFotoData=ev.target.result;
-      if(instrFotoPreview)instrFotoPreview.innerHTML='<div class="foto-preview__item"><img src="'+ev.target.result+'" alt=""></div>';
-    };
-    r.readAsDataURL(file);
-  });
+// ============ ENVÍO DE FORMULARIOS ============
+// Antes cada form hacía fetch(...).catch(function(){}) y mostraba "¡Gracias!"
+// o "Publicado" sin mirar la respuesta: si el servidor rechazaba el envío,
+// nadie se enteraba y el dato se perdía. Ahora se espera la respuesta y solo
+// se confirma cuando llegó bien.
+function formEsc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function formPost(url,params){
+  return fetch(url,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:params.toString()})
+    .then(function(r){if(!r.ok){var err=new Error('HTTP '+r.status);err.status=r.status;throw err}return r});
+}
+// Copia a Netlify Forms (panel + avisos por mail).
+function netlifyPost(formName,fields){
+  var p=new URLSearchParams(fields);p.set('form-name',formName);
+  return formPost('/',p);
+}
+function formErrText(err){
+  if(err&&err.status===429)return 'Hiciste muchos envíos seguidos. Probá de nuevo en un rato.';
+  if(err&&err.status===413)return 'Las fotos son muy pesadas. Probá con menos fotos.';
+  if(err&&err.status===400)return 'Revisá que todos los campos obligatorios estén completos.';
+  return 'No se pudo enviar. Revisá tu conexión y probá de nuevo.';
+}
+function formTrack(formName){
+  try{window.dataLayer=window.dataLayer||[];window.dataLayer.push({event:'form_submit',form_name:formName})}catch(e){}
+}
+function formBusy(form,busy){
+  var btn=form.querySelector('button[type="submit"]');
+  if(!btn)return;
+  if(busy){btn.dataset.label=btn.textContent;btn.textContent='Enviando…';btn.disabled=true}
+  else{if(btn.dataset.label)btn.textContent=btn.dataset.label;btn.disabled=false}
+}
+function formShowMsg(msg,ok,text){
+  msg.hidden=false;msg.className='form-msg '+(ok?'form-msg--ok':'form-msg--err');msg.textContent=text;
+  if(ok)setTimeout(function(){msg.hidden=true},5000);
 }
 
-// ============ INSTRUCTOR FORM ============
-var instrForm=document.getElementById('instructorForm');
-if(instrForm){
-  instrForm.addEventListener('submit',function(e){
-    e.preventDefault();
-    var nombre=document.getElementById('instr-nombre').value.trim();
-    var apellido=document.getElementById('instr-apellido').value.trim();
-    var wa=document.getElementById('instr-whatsapp').value.trim();
-    var ub=document.getElementById('instr-ubicacion').value;
-    var bio=document.getElementById('instr-bio').value.trim();
-    var wf=document.getElementById('chk-wingfoil').checked;
-    var ks=document.getElementById('chk-kitesurf').checked;
-    var msg=document.getElementById('instrFormMsg');
-    if(!nombre||!apellido||!wa||!ub){msg.hidden=false;msg.className='form-msg form-msg--err';msg.textContent='Completá los campos obligatorios.';return}
-    var deportes=[wf?'wingfoil':'',ks?'kitesurf':''].filter(Boolean).join(',');
-    var instrBot=(instrForm.querySelector('[name="bot-field"]')||{}).value||'';
-    var instrParams=new URLSearchParams({nombre:nombre,apellido:apellido,whatsapp:wa,ubicacion:ub,bio:bio,deportes:deportes,'bot-field':instrBot});
-    fetch('/api/instructors',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:instrParams.toString()}).catch(function(){});
-    fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(Object.fromEntries(instrParams)).toString()+'&form-name=instructor-form'}).catch(function(){});
-    var avatar=instrFotoData?'<img class="instructor-card__photo" src="'+instrFotoData+'" alt="">':'<div class="instructor-card__photo">🏄</div>';
-    var sports='';
-    if(wf)sports+='<span class="sport-tag">🏄 Wingfoil</span>';
-    if(ks)sports+='<span class="sport-tag">🪁 Kitesurf</span>';
-    var card=document.createElement('div');
-    card.className='instructor-card';
-    card.innerHTML=avatar+
-      '<div class="instructor-card__name">'+nombre+' '+apellido+'</div>'+
-      '<div class="instructor-card__loc">📍 '+ub+'</div>'+
-      (sports?'<div class="instructor-card__sports">'+sports+'</div>':'')+
-      (bio?'<p class="instructor-card__bio">'+bio+'</p>':'')+
-      '<a class="instructor-card__wa" href="https://wa.me/'+wa.replace(/[^0-9]/g,'')+'" target="_blank" rel="noopener">WhatsApp</a>';
-    document.getElementById('instructorsGrid').appendChild(card);
-    msg.hidden=false;msg.className='form-msg form-msg--ok';msg.textContent='✓ Perfil publicado.';
-    instrForm.reset();instrFotoData=null;if(instrFotoPreview)instrFotoPreview.innerHTML='';
-    setTimeout(function(){msg.hidden=true},4000);
-  });
-}
-
-// ============ SURVEY FORM ============
-var surveyForm=document.getElementById('surveyForm');
-if(surveyForm){
-  surveyForm.addEventListener('submit',function(e){
-    e.preventDefault();
-    var falta=document.getElementById('survey-falta').value.trim();
-    var email=document.getElementById('survey-email').value.trim();
-    var msg=document.getElementById('surveyMsg');
-    if(!falta){msg.hidden=false;msg.className='form-msg form-msg--err';msg.textContent='Contanos tu idea antes de enviar.';return}
-    var surveyBot=(surveyForm.querySelector('[name="bot-field"]')||{}).value||'';
-    var surveyParams=new URLSearchParams({falta:falta,email:email,'bot-field':surveyBot,'form-name':'survey-form'});
-    fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:surveyParams.toString()}).catch(function(){});
-    msg.hidden=false;msg.className='form-msg form-msg--ok';msg.textContent='✓ ¡Gracias por tu sugerencia!';
-    surveyForm.reset();
-    setTimeout(function(){msg.hidden=true},4000);
-  });
-}
-
-// ============ SPONSOR FORM ============
-var sponsorForm=document.getElementById('sponsorForm');
-if(sponsorForm){
-  sponsorForm.addEventListener('submit',function(e){
-    e.preventDefault();
-    var marca=document.getElementById('sponsor-marca').value.trim();
-    var contacto=document.getElementById('sponsor-contacto').value.trim();
-    var email=document.getElementById('sponsor-email').value.trim();
-    var mensaje=document.getElementById('sponsor-mensaje').value.trim();
-    var msg=document.getElementById('sponsorMsg');
-    if(!marca||!contacto||!email||!mensaje){msg.hidden=false;msg.className='form-msg form-msg--err';msg.textContent='Completá todos los campos.';return}
-    var sponsorBot=(sponsorForm.querySelector('[name="bot-field"]')||{}).value||'';
-    var sponsorParams=new URLSearchParams({marca:marca,contacto:contacto,email:email,mensaje:mensaje,'bot-field':sponsorBot,'form-name':'sponsor-form'});
-    fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:sponsorParams.toString()}).catch(function(){});
-    msg.hidden=false;msg.className='form-msg form-msg--ok';msg.textContent='✓ ¡Gracias! Te vamos a contactar a la brevedad.';
-    sponsorForm.reset();
-    setTimeout(function(){msg.hidden=true},4000);
-  });
-}
-
-// ============ EQUIPO FORM + FOTOS ============
 // Reduce cada foto en un canvas antes de subirla: las fotos de celular
 // (varios MB) rompían el límite de tamaño del envío y nunca llegaban al
 // servidor — por eso no se guardaban ni se veían para nadie.
@@ -4221,16 +4185,147 @@ function resizeImageFile(file,maxDim,quality){
   });
 }
 
+// ============ FOTO UPLOAD INSTRUCTOR ============
+// Antes la foto solo se mostraba en pantalla y nunca se subía: al recargar
+// volvía el 🏄. Ahora se reduce (máx 480px) y viaja con el perfil.
+var instrFotoData=null;
+var instrFotoPending=null;
+var instrFotoPreview=document.getElementById('instrFotoPreview');
+var instrPhotoFile=document.getElementById('instr-photo-file');
+if(instrPhotoFile){
+  instrPhotoFile.addEventListener('change',function(){
+    var file=this.files[0];if(!file)return;
+    instrFotoData=null;
+    instrFotoPending=resizeImageFile(file,480,0.82).then(function(dataUrl){
+      instrFotoData=dataUrl;
+      if(instrFotoPreview)instrFotoPreview.innerHTML='<div class="foto-preview__item"><img src="'+dataUrl+'" alt=""></div>';
+    }).catch(function(){});
+  });
+}
+
+// ============ INSTRUCTOR FORM ============
+var instrForm=document.getElementById('instructorForm');
+if(instrForm){
+  instrForm.addEventListener('submit',function(e){
+    e.preventDefault();
+    var nombre=document.getElementById('instr-nombre').value.trim();
+    var apellido=document.getElementById('instr-apellido').value.trim();
+    var wa=document.getElementById('instr-whatsapp').value.trim();
+    var ub=document.getElementById('instr-ubicacion').value;
+    var bio=document.getElementById('instr-bio').value.trim();
+    var wf=document.getElementById('chk-wingfoil').checked;
+    var ks=document.getElementById('chk-kitesurf').checked;
+    var msg=document.getElementById('instrFormMsg');
+    if(!nombre||!apellido||!wa||!ub){formShowMsg(msg,false,'Completá los campos obligatorios.');return}
+    var deportes=[wf?'wingfoil':'',ks?'kitesurf':''].filter(Boolean).join(',');
+    var instrBot=(instrForm.querySelector('[name="bot-field"]')||{}).value||'';
+    var fields={nombre:nombre,apellido:apellido,whatsapp:wa,ubicacion:ub,bio:bio,deportes:deportes,'bot-field':instrBot};
+    formBusy(instrForm,true);
+    Promise.resolve(instrFotoPending).then(function(){
+      var apiParams=new URLSearchParams(fields);
+      if(instrFotoData)apiParams.set('foto',instrFotoData);
+      return formPost('/api/instructors',apiParams);
+    }).then(function(r){return r.json().catch(function(){return {}})}).then(function(res){
+      netlifyPost('instructor-form',fields).catch(function(){});
+      formTrack('instructor-form');
+      var avatar=res.foto?'<img class="instructor-card__photo" src="/api/instructors-foto/'+encodeURIComponent(res.foto)+'" alt="">':'<div class="instructor-card__photo">🏄</div>';
+      var sports='';
+      if(wf)sports+='<span class="sport-tag">🏄 Wingfoil</span>';
+      if(ks)sports+='<span class="sport-tag">🪁 Kitesurf</span>';
+      var card=document.createElement('div');
+      card.className='instructor-card';
+      card.innerHTML=avatar+
+        '<div class="instructor-card__name">'+formEsc(nombre)+' '+formEsc(apellido)+'</div>'+
+        '<div class="instructor-card__loc">📍 '+formEsc(ub)+'</div>'+
+        (sports?'<div class="instructor-card__sports">'+sports+'</div>':'')+
+        (bio?'<p class="instructor-card__bio">'+formEsc(bio)+'</p>':'')+
+        '<a class="instructor-card__wa" href="https://wa.me/'+wa.replace(/[^0-9]/g,'')+'" target="_blank" rel="noopener">WhatsApp</a>';
+      document.getElementById('instructorsGrid').appendChild(card);
+      formShowMsg(msg,true,'✓ Perfil publicado.');
+      instrForm.reset();instrFotoData=null;instrFotoPending=null;if(instrFotoPreview)instrFotoPreview.innerHTML='';
+    }).catch(function(err){
+      formShowMsg(msg,false,formErrText(err));
+    }).then(function(){formBusy(instrForm,false)});
+  });
+}
+
+// ============ SURVEY FORM ============
+var surveyForm=document.getElementById('surveyForm');
+if(surveyForm){
+  surveyForm.addEventListener('submit',function(e){
+    e.preventDefault();
+    var falta=document.getElementById('survey-falta').value.trim();
+    var email=document.getElementById('survey-email').value.trim();
+    var msg=document.getElementById('surveyMsg');
+    if(!falta){formShowMsg(msg,false,'Contanos tu idea antes de enviar.');return}
+    var surveyBot=(surveyForm.querySelector('[name="bot-field"]')||{}).value||'';
+    formBusy(surveyForm,true);
+    netlifyPost('survey-form',{falta:falta,email:email,'bot-field':surveyBot}).then(function(){
+      formTrack('survey-form');
+      formShowMsg(msg,true,'✓ ¡Gracias por tu sugerencia!');
+      surveyForm.reset();
+    }).catch(function(err){
+      formShowMsg(msg,false,formErrText(err));
+    }).then(function(){formBusy(surveyForm,false)});
+  });
+}
+
+// ============ SPONSOR FORM ============
+var sponsorForm=document.getElementById('sponsorForm');
+if(sponsorForm){
+  sponsorForm.addEventListener('submit',function(e){
+    e.preventDefault();
+    var marca=document.getElementById('sponsor-marca').value.trim();
+    var contacto=document.getElementById('sponsor-contacto').value.trim();
+    var email=document.getElementById('sponsor-email').value.trim();
+    var mensaje=document.getElementById('sponsor-mensaje').value.trim();
+    var msg=document.getElementById('sponsorMsg');
+    if(!marca||!contacto||!email||!mensaje){formShowMsg(msg,false,'Completá todos los campos.');return}
+    var sponsorBot=(sponsorForm.querySelector('[name="bot-field"]')||{}).value||'';
+    formBusy(sponsorForm,true);
+    netlifyPost('sponsor-form',{marca:marca,contacto:contacto,email:email,mensaje:mensaje,'bot-field':sponsorBot}).then(function(){
+      formTrack('sponsor-form');
+      formShowMsg(msg,true,'✓ ¡Gracias! Te vamos a contactar a la brevedad.');
+      sponsorForm.reset();
+    }).catch(function(err){
+      formShowMsg(msg,false,formErrText(err));
+    }).then(function(){formBusy(sponsorForm,false)});
+  });
+}
+
+// ============ NEWSLETTER FORM ============
+var newsletterForm=document.getElementById('newsletterForm');
+if(newsletterForm){
+  newsletterForm.addEventListener('submit',function(e){
+    e.preventDefault();
+    var nombre=document.getElementById('nl-nombre').value.trim();
+    var email=document.getElementById('nl-email').value.trim();
+    var msg=document.getElementById('newsletterMsg');
+    if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){formShowMsg(msg,false,'Ingresá un email válido.');return}
+    var nlBot=(newsletterForm.querySelector('[name="bot-field"]')||{}).value||'';
+    formBusy(newsletterForm,true);
+    netlifyPost('newsletter-form',{nombre:nombre,email:email,'bot-field':nlBot}).then(function(){
+      formTrack('newsletter-form');
+      formShowMsg(msg,true,'✓ ¡Listo! Ya estás suscripto.');
+      newsletterForm.reset();
+    }).catch(function(err){
+      formShowMsg(msg,false,formErrText(err));
+    }).then(function(){formBusy(newsletterForm,false)});
+  });
+}
+
+// ============ EQUIPO FORM + FOTOS ============
 var fotosInput=document.getElementById('eq-fotos');
 var fotoPreview=document.getElementById('fotoPreview');
 var fotosData=[];
+var fotosPending=[];
 if(fotosInput){
   fotosInput.addEventListener('change',function(){
     var files=Array.from(this.files).slice(0,4);
     fotosData=[];
     fotoPreview.innerHTML='';
-    files.forEach(function(file,i){
-      resizeImageFile(file,1280,0.82).then(function(dataUrl){
+    fotosPending=files.map(function(file,i){
+      return resizeImageFile(file,1280,0.82).then(function(dataUrl){
         fotosData[i]=dataUrl;
         var item=document.createElement('div');
         item.className='foto-preview__item';
@@ -4249,32 +4344,44 @@ if(equipoForm){
     var tipo=document.getElementById('eq-tipo').value;
     var marca=document.getElementById('eq-marca').value.trim();
     var precio=document.getElementById('eq-precio').value.trim();
+    var monedaEl=document.getElementById('eq-moneda');
+    var moneda=monedaEl?monedaEl.value:'ARS';
     var ub=document.getElementById('eq-ubicacion').value;
     var desc=document.getElementById('eq-desc').value.trim();
     var wa=document.getElementById('eq-wa').value.trim();
     var msg=document.getElementById('equipoMsg');
-    if(!tipo||!marca||!precio||!ub||!desc||!wa){msg.innerHTML='<div class="form-msg form-msg--err">Completá todos los campos.</div>';return}
+    function showEqMsg(ok,text){msg.innerHTML='<div class="form-msg '+(ok?'form-msg--ok':'form-msg--err')+'">'+formEsc(text)+'</div>';if(ok)setTimeout(function(){msg.innerHTML=''},5000)}
+    if(!tipo||!marca||!precio||!ub||!desc||!wa){showEqMsg(false,'Completá todos los campos.');return}
+    if(!/[0-9]/.test(precio)){showEqMsg(false,'Poné el precio en números (ej: 850000).');return}
     var eqBot=(equipoForm.querySelector('[name="bot-field"]')||{}).value||'';
-    var fotosList=fotosData.filter(Boolean);
-    var eqParams=new URLSearchParams({tipo:tipo,marca:marca,precio:precio,ubicacion:ub,descripcion:desc,whatsapp:wa,'bot-field':eqBot,fotos:JSON.stringify(fotosList)});
-    fetch('/api/equipos',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:eqParams.toString()}).catch(function(){});
-    fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({tipo:tipo,marca:marca,precio:precio,ubicacion:ub,descripcion:desc,whatsapp:wa,'bot-field':eqBot,'form-name':'equipo-form'}).toString()}).catch(function(){});
-    var fotosHtml='';
-    if(fotosList.length)fotosHtml='<div class="equipo-card__fotos">'+fotosList.map(function(src){return '<img src="'+src+'" alt="">'}).join('')+'</div>';
-    var precioNum=parseInt(precio.replace(/[^0-9]/g,''));
-    var precioFmt=isNaN(precioNum)?precio:'$ '+precioNum.toLocaleString('es-AR');
-    var card=document.createElement('div');
-    card.className='equipo-card';
-    card.innerHTML='<span class="equipo-card__badge">'+tipo+'</span>'+fotosHtml+
-      '<div class="equipo-card__title">'+marca+'</div>'+
-      '<div class="equipo-card__precio">'+precioFmt+'</div>'+
-      '<p class="equipo-card__desc">'+desc+'</p>'+
-      '<div class="equipo-card__meta">📍 '+ub+'</div>'+
-      '<a class="equipo-card__wa" href="https://wa.me/'+wa.replace(/[^0-9]/g,'')+'" target="_blank" rel="noopener">Contactar</a>';
-    document.getElementById('equiposGrid').appendChild(card);
-    msg.innerHTML='<div class="form-msg form-msg--ok">✓ Equipo publicado.</div>';
-    equipoForm.reset();fotosData=[];if(fotoPreview)fotoPreview.innerHTML='';
-    setTimeout(function(){msg.innerHTML=''},4000);
+    var fields={tipo:tipo,marca:marca,precio:precio,moneda:moneda,ubicacion:ub,descripcion:desc,whatsapp:wa,'bot-field':eqBot};
+    formBusy(equipoForm,true);
+    // Espera a que terminen de reducirse las fotos: antes, si se enviaba
+    // rápido, las fotos todavía no estaban listas y se perdían.
+    Promise.all(fotosPending).then(function(){
+      var eqParams=new URLSearchParams(fields);
+      eqParams.set('fotos',JSON.stringify(fotosData.filter(Boolean)));
+      return formPost('/api/equipos',eqParams);
+    }).then(function(r){return r.json().catch(function(){return {}})}).then(function(res){
+      netlifyPost('equipo-form',fields).catch(function(){});
+      formTrack('equipo-form');
+      var fotosIds=Array.isArray(res.fotos)?res.fotos:[];
+      var fotosHtml='';
+      if(fotosIds.length)fotosHtml='<div class="equipo-card__fotos">'+fotosIds.map(function(id){return '<img src="/api/equipos-foto/'+encodeURIComponent(id)+'" alt="">'}).join('')+'</div>';
+      var card=document.createElement('div');
+      card.className='equipo-card';
+      card.innerHTML='<span class="equipo-card__badge">'+formEsc(tipo)+'</span>'+fotosHtml+
+        '<div class="equipo-card__title">'+formEsc(marca)+'</div>'+
+        '<div class="equipo-card__precio">'+formEsc(window.formatPrecioEquipo?window.formatPrecioEquipo(precio,moneda):precio)+'</div>'+
+        '<p class="equipo-card__desc">'+formEsc(desc)+'</p>'+
+        '<div class="equipo-card__meta">📍 '+formEsc(ub)+'</div>'+
+        '<a class="equipo-card__wa" href="https://wa.me/'+wa.replace(/[^0-9]/g,'')+'" target="_blank" rel="noopener">Contactar</a>';
+      document.getElementById('equiposGrid').appendChild(card);
+      showEqMsg(true,'✓ Equipo publicado.');
+      equipoForm.reset();fotosData=[];fotosPending=[];if(fotoPreview)fotoPreview.innerHTML='';
+    }).catch(function(err){
+      showEqMsg(false,formErrText(err));
+    }).then(function(){formBusy(equipoForm,false)});
   });
 }
 
@@ -4925,6 +5032,20 @@ function formatPrecio(precio, moneda) {
 // ============ HTML ESCAPE ============
 function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
+// ============ PRECIO EQUIPOS COMUNIDAD ============
+// Antes se tomaban solo los dígitos y se les ponía "$": "USD 800" salía
+// "$ 800" y "1.500,50" salía "$ 150.050". Ahora se usa el mismo parser del
+// buscador (entiende USD, miles con punto y decimales con coma) y la moneda
+// que elige quien publica.
+window.formatPrecioEquipo=function(raw,moneda){
+  var N=window.EquipoNormalizer;
+  var p=N?N.parsePrecio(raw,moneda):null;
+  if(!p)return String(raw||'Consultar');
+  var sym=p.moneda==='USD'?'US$ ':p.moneda==='EUR'?'€ ':'$ ';
+  var dec=p.valor%1?2:0;
+  return sym+p.valor.toLocaleString('es-AR',{minimumFractionDigits:dec,maximumFractionDigits:dec});
+};
+
 // ============ LOAD INSTRUCTORS ============
 async function loadInstructors(){
   var grid=document.getElementById('instructorsGrid');
@@ -4941,7 +5062,8 @@ async function loadInstructors(){
       });
       var card=document.createElement('div');
       card.className='instructor-card';
-      card.innerHTML='<div class="instructor-card__photo">🏄</div>'+
+      var avatar=d.foto?'<img class="instructor-card__photo" src="/api/instructors-foto/'+encodeURIComponent(d.foto)+'" alt="Foto de '+escHtml(d.nombre)+'" loading="lazy">':'<div class="instructor-card__photo">🏄</div>';
+      card.innerHTML=avatar+
         '<div class="instructor-card__name">'+escHtml(d.nombre)+' '+escHtml(d.apellido)+'</div>'+
         '<div class="instructor-card__loc">📍 '+escHtml(d.ubicacion)+'</div>'+
         (sports?'<div class="instructor-card__sports">'+sports+'</div>':'')+
@@ -4972,8 +5094,7 @@ async function loadEquipos(){
   try{
     var list=await window.EQ_COMUNIDAD;
     list.forEach(function(d){
-      var precioNum=parseInt((d.precio||'').replace(/[^0-9]/g,''));
-      var precioFmt=isNaN(precioNum)?escHtml(d.precio):'$ '+precioNum.toLocaleString('es-AR');
+      var precioFmt=escHtml(window.formatPrecioEquipo(d.precio,d.moneda));
       var fotosHtml='';
       if(Array.isArray(d.fotos)&&d.fotos.length)fotosHtml='<div class="equipo-card__fotos">'+d.fotos.map(function(id){return '<img src="/api/equipos-foto/'+encodeURIComponent(id)+'" alt="" loading="lazy">'}).join('')+'</div>';
       var card=document.createElement('div');
@@ -5005,7 +5126,10 @@ loadInstructors();
 // Un solo pedido a /api/equipos, compartido con el buscador (assets/buscador-equipos.js).
 window.EQ_COMUNIDAD=fetch('/api/equipos').then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()});
 window.EQ_COMUNIDAD.catch(function(){});
-loadEquipos();
+// El parser de precios (assets/equipo-normalizer.js) carga con defer: se
+// dibuja cuando ya está disponible.
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadEquipos);
+else loadEquipos();
 
 })();
 </script>
