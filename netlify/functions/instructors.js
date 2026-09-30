@@ -1,7 +1,9 @@
 import { getStore } from '@netlify/blobs';
 
 const KEY = 'list';
-const MAX_BODY_BYTES = 8 * 1024;   // reject oversized request bodies
+const MAX_BODY_BYTES = 512 * 1024; // la foto va en base64 dentro del body
+const MAX_FOTO_B64_LEN = 400_000;   // ~300KB crudos (el cliente la reduce a 480px)
+const FOTO_DATA_URL_RE = /^data:image\/(jpeg|jpg|png|webp);base64,([A-Za-z0-9+/=]+)$/;
 const MAX_ENTRIES = 1000;          // cap stored list to bound storage growth
 const RL_WINDOW_MS = 60 * 60 * 1000; // rate-limit window: 1 hour
 const RL_MAX = 8;                    // max POSTs per IP per window
@@ -59,8 +61,25 @@ async function allowRequest(ip) {
   }
 }
 
+// Guarda la foto de perfil (opcional) como blob aparte y devuelve su id, o
+// null si no vino o no es válida: una foto mala no frena el perfil.
+async function storeFoto(rawFoto, entryId, fotosStore) {
+  const dataUrl = String(rawFoto || '');
+  if (!dataUrl || dataUrl.length > MAX_FOTO_B64_LEN) return null;
+  const m = FOTO_DATA_URL_RE.exec(dataUrl);
+  if (!m) return null;
+  const id = String(entryId);
+  try {
+    await fotosStore.setJSON(id, { b64: m[2], ct: 'image/' + (m[1] === 'jpg' ? 'jpeg' : m[1]) });
+    return id;
+  } catch {
+    return null;
+  }
+}
+
 export default async function(req) {
   const store = getStore({ name: 'instructors', consistency: 'strong' });
+  const fotosStore = getStore({ name: 'instructors-fotos', consistency: 'strong' });
   const cors = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
@@ -108,12 +127,19 @@ export default async function(req) {
       return new Response(JSON.stringify({ error: 'missing required fields' }), { status: 400, headers: cors });
     }
 
+    const foto = await storeFoto(body.get('foto'), entry.id, fotosStore);
+    if (foto) entry.foto = foto;
+
     const list = await store.get(KEY, { type: 'json' }).catch(() => []) || [];
     list.push(entry);
-    // Keep only the most recent MAX_ENTRIES to bound storage.
-    if (list.length > MAX_ENTRIES) list.splice(0, list.length - MAX_ENTRIES);
+    // Keep only the most recent MAX_ENTRIES to bound storage, and drop the
+    // photos of whatever falls off.
+    if (list.length > MAX_ENTRIES) {
+      const evicted = list.splice(0, list.length - MAX_ENTRIES);
+      await Promise.all(evicted.filter((e) => e.foto).map((e) => fotosStore.delete(e.foto).catch(() => {})));
+    }
     await store.setJSON(KEY, list);
-    return new Response(JSON.stringify({ ok: true }), { headers: cors });
+    return new Response(JSON.stringify({ ok: true, foto: entry.foto || null }), { headers: cors });
   }
 
   return new Response('Method not allowed', { status: 405, headers: cors });
