@@ -37,8 +37,12 @@ export async function getMlToken(tipo = 'auto') {
   return { token: t.access_token, tipo: 'app' };
 }
 
-export async function mlGet(path, token) {
+export async function mlGet(path, token, intento = 0) {
   const res = await fetch(API + path, { headers: { authorization: `Bearer ${token}`, accept: 'application/json' }, signal: AbortSignal.timeout(8000) });
+  if (res.status === 429 && intento < 2) {
+    await new Promise((r) => setTimeout(r, 800 * (intento + 1)));
+    return mlGet(path, token, intento + 1);
+  }
   const text = await res.text();
   let body = null;
   try { body = JSON.parse(text); } catch { /* no JSON */ }

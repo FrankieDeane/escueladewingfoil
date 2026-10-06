@@ -11,19 +11,17 @@
 
 import { mlGet } from './ml-api.mjs';
 
-// Una búsqueda por listado de ml-links.json (mismo nombre) + foils.
-export const BUSQUEDAS = [
-  { nombre: 'Tablas', q: 'tabla wingfoil' },
-  { nombre: 'Wings', q: 'wing wingfoil' },
-  { nombre: 'Equipos', q: 'equipo wingfoil' },
-  { nombre: 'Tiendas', q: 'wingfoil' },
-  { nombre: 'Foils', q: 'foil wingfoil' },
-];
-const POR_BUSQUEDA = 50;
-const EN_PARALELO = 10;
+// Búsquedas en el catálogo de ML. Solo quedan los productos de rubros de
+// deportes de agua (kite, windsurf, SUP, fundas…) que nombran wing o foil: el
+// catálogo mezcla mucho ("foil" de uñas, libros, juguetes "Wing").
+export const BUSQUEDAS = ['wingfoil', 'wing wingfoil', 'tabla foil', 'kite wing', 'wingsurf', 'foil surf']
+  .map((q) => ({ nombre: q, q }));
+const PAGINAS_API = 2; // de 50 productos
+const EN_PARALELO = 5;
 const CON_OPINIONES = 15; // los primeros de cada búsqueda
-const DEPORTE = '(kite|vela|surf|sup|tabla|m[aá]stil|fuselaje|hidroala|inflable|wake)';
-const RELEVANTE = new RegExp(`wing ?foil|wing ?surf|hidro ?foil|\\b(wing|foil)\\b.*\\b${DEPORTE}|\\b${DEPORTE}\\b.*\\b(wing|foil)\\b`, 'i');
+const RUBRO = /^MLA-(KITES|KITESURF_\w+|WINDSURFING_\w+|SUP_\w+|SURF\w*|WATER_SPORTS\w*|WETSUITS?|\w*HARNESS\w*|\w*FOIL\w*)$/;
+const NOMBRA = /wing|foil/i;
+const relevante = (p) => p && p.id && NOMBRA.test(p.name || '') && (!p.domain_id || RUBRO.test(p.domain_id));
 
 async function enPool(lista, n, fn) {
   const out = new Array(lista.length);
@@ -54,9 +52,13 @@ async function opiniones(token, itemId) {
 
 // apodos: { [seller_id]: nickname } (cache compartida entre corridas)
 export async function relevarBusqueda(b, token, apodos) {
-  const r = await mlGet(`/products/search?status=active&site_id=MLA&q=${encodeURIComponent(b.q)}&limit=${POR_BUSQUEDA}`, token);
-  if (!r.ok) throw new Error(`Búsqueda de catálogo: HTTP ${r.status}`);
-  const candidatos = (r.body.results || []).filter((p) => p && p.id && RELEVANTE.test(p.name || ''));
+  const candidatos = [];
+  for (let pag = 0; pag < PAGINAS_API; pag++) {
+    const r = await mlGet(`/products/search?status=active&site_id=MLA&q=${encodeURIComponent(b.q)}&limit=50&offset=${pag * 50}`, token);
+    if (!r.ok) { if (pag === 0) throw new Error(`Búsqueda de catálogo: HTTP ${r.status}`); break; }
+    candidatos.push(...(r.body.results || []).filter(relevante));
+    if ((r.body.results || []).length < 50) break;
+  }
 
   const filas = await enPool(candidatos, EN_PARALELO, async (c, idx) => {
     const [pr, it] = await Promise.all([mlGet(`/products/${c.id}`, token), mlGet(`/products/${c.id}/items?limit=100`, token)]);

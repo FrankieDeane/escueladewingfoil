@@ -32,7 +32,7 @@ const LISTADOS = (linksFile.listados || [])
   .map((l) => ({ ...l, url: l.url.split(/[?#]/)[0].replace(/\/+$/, '') }));
 // Con la app de ML (MELI_CLIENT_ID/SECRET) se releva por la API, una búsqueda
 // de catálogo por tarea. Si no, páginas de los listados vía ML_FETCH_URL.
-const API_V = 2; // subir si cambia qué se releva, para no reusar lo de antes
+const API_V = 3; // subir si cambia qué se releva, para no reusar lo de antes
 const conApi = () => !!(process.env.MELI_CLIENT_ID && process.env.MELI_CLIENT_SECRET);
 const tareas = () => (conApi() ? BUSQUEDAS.length : LISTADOS.length * PAGINAS);
 const servicio = () => conApi() || !!process.env.ML_FETCH_URL;
