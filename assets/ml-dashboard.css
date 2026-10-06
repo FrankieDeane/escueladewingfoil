@@ -94,3 +94,4 @@
   .mld__tag{margin-left:34px}
   .mld__caros b{margin-left:auto}
 }
+.mld.is-empty > :not(.mld__head):not(.mld__aviso):not(.equipos-disclaimer){display:none}

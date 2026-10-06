@@ -46,3 +46,22 @@ assert.equal(esBloqueo('<html data-assets-prefix="https://http2.mlstatic.com/fro
 assert.equal(esBloqueo(html, 'https://www.mercadolibre.com.ar/x'), false);
 assert.equal(mlId('https://www.mercadolibre.com.ar/x/up/MLAU4193586697'), 'MLAU4193586697');
 console.log('ml-page-parse: OK');
+
+// Listado
+import { parseListado } from './ml-page-parse.mjs';
+const card = (t, href, precio, extra = '') => `<li class="ui-search-layout__item"><div class="poly-card"><div class="poly-card__portada"><img class="poly-component__picture" src="https://http2.mlstatic.com/${t}.webp"></div>
+${extra}<h3 class="poly-component__title-wrapper"><a href="${href}?tracking=1#pos" class="poly-component__title">${t}</a></h3>
+<span class="poly-component__seller">Por KITESHOP</span><div class="poly-component__reviews"><span class="poly-reviews__rating">4.8</span><span class="poly-reviews__total">(23)</span></div>
+<div class="poly-component__price"><s class="andes-money-amount andes-money-amount--previous"><span class="andes-money-amount__fraction">2.000.000</span></s>
+<div class="poly-price__current"><span class="andes-money-amount"><span class="andes-money-amount__fraction">${precio}</span></span></div>
+<span class="poly-price__installments">en 6 cuotas de $ <span class="andes-money-amount__fraction">300.000</span></span></div></div></li>`;
+const lista = parseListado('<ol>' + card('Tabla Wingfoil Duotone Sky Free 120l', 'https://articulo.mercadolibre.com.ar/MLA-111111111-tabla-_JM', '1.800.000', '<span class="poly-component__highlight">MÁS VENDIDO</span>')
+  + card('Wing Cabrinha Mantis 5m', 'https://www.mercadolibre.com.ar/wing/p/MLA22222222', '950.000') + '</ol>', 48);
+assert.equal(lista.length, 2);
+assert.deepEqual(
+  { id: lista[0].id, url: lista[0].url, titulo: lista[0].titulo, precio: lista[0].precio, orig: lista[0].precioOriginal, vend: lista[0].vendedor, puesto: lista[0].mlPuesto, mv: lista[0].masVendido, est: lista[0].opiniones.estrellas, cant: lista[0].opiniones.cantidad },
+  { id: 'MLA111111111', url: 'https://articulo.mercadolibre.com.ar/MLA-111111111-tabla-_JM', titulo: 'Tabla Wingfoil Duotone Sky Free 120l', precio: 1800000, orig: 2000000, vend: 'KITESHOP', puesto: 49, mv: true, est: 4.8, cant: 23 });
+assert.equal(lista[1].mlPuesto, 50);
+assert.equal(lista[1].precio, 950000);
+assert.equal(lista[1].masVendido, false);
+console.log('ml-page-parse listado: OK');
