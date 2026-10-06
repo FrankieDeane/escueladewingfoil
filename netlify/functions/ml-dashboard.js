@@ -19,6 +19,8 @@
 import { getStore } from '@netlify/blobs';
 import linksFile from '../../ml-links.json';
 import { parseListado, esBloqueo } from '../../scripts/ml-page-parse.mjs';
+import { getMlToken } from '../../scripts/ml-api.mjs';
+import { BUSQUEDAS, relevarBusqueda } from '../../scripts/ml-api-relevar.mjs';
 
 const COOLDOWN_MS = 3 * 60 * 60 * 1000;
 const FETCH_TIMEOUT_MS = 9500;
@@ -28,7 +30,11 @@ const PAGINAS = Math.max(1, Math.min(5, linksFile.paginas || 1));
 const LISTADOS = (linksFile.listados || [])
   .filter((l) => l && /^https:\/\/listado\.mercadolibre\.com\.ar\//.test(l.url))
   .map((l) => ({ ...l, url: l.url.split(/[?#]/)[0].replace(/\/+$/, '') }));
-const TAREAS = LISTADOS.length * PAGINAS;
+// Con la app de ML (MELI_CLIENT_ID/SECRET) se releva por la API, una búsqueda
+// de catálogo por tarea. Si no, páginas de los listados vía ML_FETCH_URL.
+const conApi = () => !!(process.env.MELI_CLIENT_ID && process.env.MELI_CLIENT_SECRET);
+const tareas = () => (conApi() ? BUSQUEDAS.length : LISTADOS.length * PAGINAS);
+const servicio = () => conApi() || !!process.env.ML_FETCH_URL;
 
 const hoy = () => new Date().toLocaleDateString('en-CA', { timeZone: 'America/Argentina/Buenos_Aires' });
 const store = () => getStore({ name: 'ml-dashboard', consistency: 'strong' });
@@ -36,7 +42,30 @@ const store = () => getStore({ name: 'ml-dashboard', consistency: 'strong' });
 // Página p del listado: ML pagina con _Desde_49, _Desde_97…
 const urlPagina = (l, p) => (p === 0 ? l.url : `${l.url}_Desde_${p * POR_PAGINA + 1}_NoIndex_True`);
 
+async function relevarApi(i) {
+  const b = BUSQUEDAS[i];
+  const s = store();
+  const key = `pag:${hoy()}:${i}`;
+  const prev = await s.get(key, { type: 'json' }).catch(() => null);
+  if (prev && prev.ok && prev.fuente === 'api' && Date.now() - prev.ts < COOLDOWN_MS) return { i, ok: true, productos: prev.productos.length, cache: true };
+  const base = { i, listado: b.nombre, fuente: 'api', ts: Date.now() };
+  let out;
+  try {
+    const tok = await getMlToken('auto');
+    const apodos = (await s.get('apodos', { type: 'json' }).catch(() => null)) || {};
+    const antes = Object.keys(apodos).length;
+    const productos = await relevarBusqueda(b, tok.token, apodos);
+    if (Object.keys(apodos).length !== antes) await s.setJSON('apodos', apodos).catch(() => {});
+    out = productos.length ? { ...base, ok: true, productos } : { ...base, ok: false, error: 'La búsqueda no trajo productos' };
+  } catch (e) {
+    out = { ...base, ok: false, error: String(e.message || e).slice(0, 200) };
+  }
+  if (out.ok || !prev || !prev.ok) await s.setJSON(key, out);
+  return { i, ok: out.ok, productos: out.productos ? out.productos.length : 0, error: out.error };
+}
+
 async function relevar(i) {
+  if (conApi()) return relevarApi(i);
   const listado = LISTADOS[Math.floor(i / PAGINAS)];
   const pagina = i % PAGINAS;
   const s = store();
@@ -73,7 +102,7 @@ async function cerrar() {
   const fecha = hoy();
   const { blobs } = await s.list({ prefix: `pag:${fecha}:` });
   const pags = (await Promise.all(blobs.map((b) => s.get(b.key, { type: 'json' }).catch(() => null))))
-    .filter((p) => p && p.ok);
+    .filter((p) => p && p.ok && (p.fuente === 'api') === conApi());
   if (!pags.length) return { ok: false, motivo: 'sin-datos' };
   const porId = new Map();
   for (const p of pags.flatMap((x) => x.productos)) {
@@ -107,11 +136,24 @@ const json = (body, status = 200, extra = {}) =>
   Response.json(body, { status, headers: { 'cache-control': 'no-store', ...extra } });
 
 export default async (req) => {
+  const probar = new URL(req.url).searchParams.get('probar');
+  if (req.method === 'GET' && probar != null && conApi()) {
+    // Prueba de una búsqueda por la API, sin guardar nada.
+    const b = BUSQUEDAS[Number(probar)] || BUSQUEDAS[0];
+    const t0 = Date.now();
+    try {
+      const tok = await getMlToken('auto');
+      const prods = await relevarBusqueda(b, tok.token, {});
+      return json({ busqueda: b, token: tok.tipo, ms: Date.now() - t0, total: prods.length, productos: prods.slice(0, 12) });
+    } catch (e) {
+      return json({ busqueda: b, ms: Date.now() - t0, error: String(e.message || e) }, 500);
+    }
+  }
   if (req.method === 'GET') {
     return json({
-      servicio: !!process.env.ML_FETCH_URL,
-      links: TAREAS,
-      listados: LISTADOS.map((l) => l.nombre),
+      servicio: servicio(),
+      links: tareas(),
+      listados: conApi() ? BUSQUEDAS.map((b) => b.nombre) : LISTADOS.map((l) => l.nombre),
       relevamientos: await leer(),
     }, 200, { 'cache-control': 'public, max-age=120' });
   }
@@ -119,10 +161,10 @@ export default async (req) => {
 
   let body = {};
   try { body = await req.json(); } catch { /* body vacío */ }
-  if (!process.env.ML_FETCH_URL) return json({ ok: false, motivo: 'sin-servicio' }, 503);
+  if (!servicio()) return json({ ok: false, motivo: 'sin-servicio' }, 503);
   if (body.cerrar) return json(await cerrar());
   const i = Number(body.i);
-  if (!Number.isInteger(i) || i < 0 || i >= TAREAS) return json({ ok: false, motivo: 'link-invalido' }, 400);
+  if (!Number.isInteger(i) || i < 0 || i >= tareas()) return json({ ok: false, motivo: 'link-invalido' }, 400);
   return json(await relevar(i));
 };
 
