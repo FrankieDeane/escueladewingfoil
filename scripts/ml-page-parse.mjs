@@ -114,6 +114,37 @@ export function parseProducto(html, url) {
   const condicion = /itemCondition[^"]*"\s*:\s*"[^"]*Used/i.test(html) || /\bUsado\b\s*\|/.test(html) ? 'usado'
     : /NewCondition/i.test(String(offers.itemCondition || '')) || /\bNuevo\b\s*\|/.test(html) ? 'nuevo' : null;
 
+  // Opiniones de compradores: promedio de estrellas, cantidad y comentarios.
+  const agg = ld.aggregateRating || {};
+  let estrellas = parseFloat(agg.ratingValue);
+  let cantidad = parseInt(agg.reviewCount ?? agg.ratingCount, 10);
+  if (!Number.isFinite(estrellas)) {
+    const m = /ui-review-capability__rating__average[^>]*>\s*([\d.,]+)\s*</.exec(html);
+    estrellas = m ? parseFloat(m[1].replace(',', '.')) : NaN;
+  }
+  if (!Number.isFinite(cantidad)) {
+    const m = /(\d+(?:\.\d+)?)\s*calificaciones/i.exec(html) || /\((\d+)\)\s*<\/span>\s*<\/a>/.exec(html);
+    cantidad = m ? parseInt(m[1].replace('.', ''), 10) : NaN;
+  }
+  let comentarios = (Array.isArray(ld.review) ? ld.review : ld.review ? [ld.review] : [])
+    .map((r) => ({ texto: decode(r.reviewBody || r.description || ''), estrellas: parseFloat(r.reviewRating?.ratingValue) || null }))
+    .filter((c) => c.texto.length > 3);
+  if (!comentarios.length) {
+    const re = /ui-review-capability-comments__comment__content[^>]*>([\s\S]*?)<\/p>/g;
+    let m;
+    while ((m = re.exec(html)) && comentarios.length < 10) {
+      const texto = decode(m[1].replace(/<[^>]+>/g, ' '));
+      if (texto.length > 3) comentarios.push({ texto, estrellas: null });
+    }
+  }
+  comentarios = comentarios
+    .sort((a, b) => b.texto.length - a.texto.length) // los más completos primero
+    .slice(0, 3)
+    .map((c) => ({ ...c, texto: c.texto.length > 280 ? c.texto.slice(0, 277) + '…' : c.texto }));
+  const opiniones = Number.isFinite(estrellas) || comentarios.length
+    ? { estrellas: Number.isFinite(estrellas) ? Math.round(estrellas * 10) / 10 : null, cantidad: Number.isFinite(cantidad) ? cantidad : null, comentarios }
+    : null;
+
   const marca = ld.brand ? decode(typeof ld.brand === 'string' ? ld.brand : ld.brand.name || '') || null : null;
   const imagen = (Array.isArray(ld.image) ? ld.image[0] : ld.image) || meta(html, 'og:image') || null;
 
@@ -134,5 +165,6 @@ export function parseProducto(html, url) {
     mlRanking,
     masVendido,
     condicion,
+    opiniones,
   };
 }

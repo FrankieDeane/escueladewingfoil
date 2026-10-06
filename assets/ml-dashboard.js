@@ -301,6 +301,7 @@
     });
 
     renderTendencias(rels);
+    renderOpiniones(prods);
     renderCaros(rels);
     renderLista(prods);
   }
@@ -360,6 +361,25 @@
     html += oferta && oferta.precio < -0.05 ? kpi('Mayor baja de precio', link(oferta.p), delta(oferta.precio, '%', true) + ' · ' + plata(oferta.p.precio))
       : kpi('Mayor baja de precio', '—', '<span class="mld__d">Ningún precio bajó</span>');
     $('#mldKpis').innerHTML = html;
+  }
+
+  // Opiniones de compradores
+  function estrellas(n) {
+    var llenas = Math.round(n);
+    return '<span class="mld__stars" aria-label="' + n + ' de 5 estrellas">' + '★★★★★'.slice(0, llenas) + '<i>' + '★★★★★'.slice(llenas) + '</i></span>';
+  }
+  function renderOpiniones(prods) {
+    var con = prods.filter(function (p) { return p.opiniones && (p.opiniones.estrellas != null || (p.opiniones.comentarios || []).length); })
+      .sort(function (a, b) { return (b.opiniones.cantidad || 0) - (a.opiniones.cantidad || 0) || (b.opiniones.estrellas || 0) - (a.opiniones.estrellas || 0); })
+      .slice(0, 6);
+    $('#mldOps').innerHTML = con.length ? con.map(function (p) {
+      var o = p.opiniones;
+      return '<div class="mld__op">' +
+        '<a class="mld__op-t" href="' + esc(p.url) + '" target="_blank" rel="noopener nofollow">' + esc(corto(p.titulo, 70)) + '</a>' +
+        (o.estrellas != null ? '<div class="mld__op-r">' + estrellas(o.estrellas) + ' <b>' + o.estrellas.toLocaleString('es-AR') + '</b>' + (o.cantidad ? ' · ' + o.cantidad + ' opiniones' : '') + '</div>' : '') +
+        (o.comentarios || []).slice(0, 2).map(function (c) { return '<blockquote>“' + esc(c.texto) + '”</blockquote>'; }).join('') +
+        '</div>';
+    }).join('') : '<p class="mld__vacio">Todavía no hay opiniones relevadas: aparecen con el próximo relevamiento.</p>';
   }
 
   // Más caros (o más baratos) en la fecha elegida
@@ -431,9 +451,10 @@
         '<td data-l="Precio oficial ML">' + oficial + '</td>' +
         '<td data-l="Vendedor">' + vend + '</td>' +
         '<td data-l="Vendidos">' + (p.vendidos != null ? '+' + p.vendidos.toLocaleString('es-AR') : '<span class="mld__nd">—</span>') + '</td>' +
+        '<td data-l="Opiniones">' + (p.opiniones && p.opiniones.estrellas != null ? '★ ' + p.opiniones.estrellas.toLocaleString('es-AR') + (p.opiniones.cantidad ? ' <small>(' + p.opiniones.cantidad + ')</small>' : '') : '<span class="mld__nd">—</span>') + '</td>' +
         '<td><a class="mld__ver" href="' + esc(p.url) + '" target="_blank" rel="noopener nofollow">Ver en ML ↗</a></td>' +
         '</tr>';
-    }).join('') : '<tr><td colspan="9" class="mld__vacio">No hay productos con estos filtros</td></tr>';
+    }).join('') : '<tr><td colspan="10" class="mld__vacio">No hay productos con estos filtros</td></tr>';
   }
 
   function renderEstado() {

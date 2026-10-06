@@ -31,6 +31,15 @@
 .mld__d{font-weight:700;color:var(--text-muted)}
 .mld__d.is-up{color:var(--ok)}
 .mld__d.is-down{color:#e76f51}
+.mld__ops{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:-6px}
+.mld__op{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.mld__op-t{font-weight:700;font-size:14.5px;line-height:1.35}
+.mld__op-t:hover{color:var(--primary)}
+.mld__op-r{font-size:13px;color:var(--text-muted)}
+.mld__op-r b{color:var(--text)}
+.mld__stars{color:#e9a23b;letter-spacing:1px}
+.mld__stars i{font-style:normal;color:var(--divider)}
+.mld__op blockquote{font-size:13.5px;line-height:1.5;color:var(--text);border-left:3px solid var(--primary-glow);padding-left:10px;margin:0}
 .mld__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
 .mld__card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:clamp(14px,2.5vw,24px);min-width:0}
 .mld__card h4{font-size:15px;font-family:inherit;letter-spacing:0}
