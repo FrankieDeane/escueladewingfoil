@@ -1,5 +1,845 @@
 {
-  "token": null,
-  "calls": [],
-  "muestras": {}
+  "token": {
+    "status": 200,
+    "scope": "offline_access read urn:global:admin:info:/read-only urn:global:admin:info:/read-write urn:global:admin:oauth:/read-only urn:global:admin:oauth:/read-write urn:global:admin:users:/read-only urn:global:admin:users:/read-write urn:ml:mktp:metrics:/read-only write",
+    "error": null
+  },
+  "calls": [
+    {
+      "tipo": "item",
+      "path": "/items/MLA2572823874",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403}\n"
+    },
+    {
+      "tipo": "product",
+      "path": "/products/MLA46874476",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU4193586697",
+      "status": 403,
+      "error": "{\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU4193586697",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU4193586697",
+      "status": 403,
+      "error": "{\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403,\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\"}\n"
+    },
+    {
+      "tipo": "product",
+      "path": "/products/MLA47031091",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU4098165060",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU4098165060",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU4098165060",
+      "status": 403,
+      "error": "{\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403,\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU4193986815",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403,\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU4193986815",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU4193986815",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU4213593412",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\",\"status\":403}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU4213593412",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU4213593412",
+      "status": 403,
+      "error": "{\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU4213521634",
+      "status": 403,
+      "error": "{\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU4213521634",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU4213521634",
+      "status": 403,
+      "error": "{\"status\":403,\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU4194131091",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403,\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU4194131091",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU4194131091",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403,\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU3824828490",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU3824828490",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU3824828490",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU3814809295",
+      "status": 403,
+      "error": "{\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU3814809295",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU3814809295",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU3773531516",
+      "status": 403,
+      "error": "{\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU3773531516",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU3773531516",
+      "status": 403,
+      "error": "{\"status\":403,\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU3465575209",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU3465575209",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU3465575209",
+      "status": 403,
+      "error": "{\"status\":403,\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU5205850307",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU5205850307",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU5205850307",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"status\":403,\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU3807454687",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU3807454687",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU3807454687",
+      "status": 403,
+      "error": "{\"status\":403,\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU331575122",
+      "status": 403,
+      "error": "{\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU331575122",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU331575122",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"status\":403,\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU313408350",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU313408350",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU313408350",
+      "status": 403,
+      "error": "{\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU3408784165",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU3408784165",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU3408784165",
+      "status": 403,
+      "error": "{\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU3645423649",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403,\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU3645423649",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU3645423649",
+      "status": 403,
+      "error": "{\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU3002570220",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU3002570220",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU3002570220",
+      "status": 403,
+      "error": "{\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU3645474727",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403,\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU3645474727",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU3645474727",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU245191241",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\",\"status\":403,\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU245191241",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU245191241",
+      "status": 403,
+      "error": "{\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU3653260110",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403,\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU3653260110",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU3653260110",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU3662530911",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\",\"status\":403}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU3662530911",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU3662530911",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\",\"status\":403,\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU4083023221",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403,\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU4083023221",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU4083023221",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU244101994",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU244101994",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU244101994",
+      "status": 403,
+      "error": "{\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU4098129158",
+      "status": 403,
+      "error": "{\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU4098129158",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU4098129158",
+      "status": 403,
+      "error": "{\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403,\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU4082532007",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403,\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU4082532007",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU4082532007",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU4098091940",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"status\":403,\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU4098091940",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU4098091940",
+      "status": 403,
+      "error": "{\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\",\"status\":403}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU5206106189",
+      "status": 403,
+      "error": "{\"status\":403,\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU5206106189",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU5206106189",
+      "status": 403,
+      "error": "{\"status\":403,\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU280987323",
+      "status": 403,
+      "error": "{\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403,\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU280987323",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU280987323",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403,\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU3727557347",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"status\":403,\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU3727557347",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU3727557347",
+      "status": 403,
+      "error": "{\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU4158625132",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU4158625132",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU4158625132",
+      "status": 403,
+      "error": "{\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403,\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU4158608560",
+      "status": 403,
+      "error": "{\"status\":403,\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU4158608560",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU4158608560",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU4682339483",
+      "status": 403,
+      "error": "{\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403,\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU4682339483",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU4682339483",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU3506142525",
+      "status": 403,
+      "error": "{\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU3506142525",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU3506142525",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU3465503167",
+      "status": 403,
+      "error": "{\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403,\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU3465503167",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU3465503167",
+      "status": 403,
+      "error": "{\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU5242999522",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403,\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU5242999522",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU5242999522",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU152265103",
+      "status": 403,
+      "error": "{\"status\":403,\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU152265103",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU152265103",
+      "status": 403,
+      "error": "{\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403,\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU3779176405",
+      "status": 403,
+      "error": "{\"status\":403,\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU3779176405",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU3779176405",
+      "status": 403,
+      "error": "{\"status\":403,\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU3890357475",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\",\"status\":403}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU3890357475",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU3890357475",
+      "status": 403,
+      "error": "{\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403,\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU2873027971",
+      "status": 403,
+      "error": "{\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU2873027971",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU2873027971",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU256520711",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403,\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU256520711",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU256520711",
+      "status": 403,
+      "error": "{\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\",\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU3860471875",
+      "status": 403,
+      "error": "{\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU3860471875",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU3860471875",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\",\"status\":403}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU3870986610",
+      "status": 403,
+      "error": "{\"status\":403,\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU3870986610",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU3870986610",
+      "status": 403,
+      "error": "{\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"status\":403}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU3953268586",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\",\"status\":403}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU3953268586",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU3953268586",
+      "status": 403,
+      "error": "{\"blocked_by\":\"PolicyAgent\",\"status\":403,\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU4026611099",
+      "status": 403,
+      "error": "{\"message\":\"At least one policy returned UNAUTHORIZED.\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"blocked_by\":\"PolicyAgent\",\"status\":403}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU4026611099",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU4026611099",
+      "status": 403,
+      "error": "{\"status\":403,\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\"}\n"
+    },
+    {
+      "tipo": "user-product",
+      "path": "/user-products/MLAU4010251934",
+      "status": 403,
+      "error": "{\"status\":403,\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\",\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\"}\n"
+    },
+    {
+      "tipo": "items-by-up",
+      "path": "/items?user_product_id=MLAU4010251934",
+      "status": 404,
+      "error": "{\"error\": \"resource not found\", \"message\":\"Si quieres conocer los recursos de la API que se encuentran disponibles visita el Sitio de Desarrolladores de MercadoLibre (http://developers.mercadolibre.com)\"}"
+    },
+    {
+      "tipo": "search-by-up",
+      "path": "/sites/MLA/search?user_product_id=MLAU4010251934",
+      "status": 403,
+      "error": "{\"code\":\"PA_UNAUTHORIZED_RESULT_FROM_POLICIES\",\"message\":\"At least one policy returned UNAUTHORIZED.\",\"blocked_by\":\"PolicyAgent\",\"status\":403}\n"
+    }
+  ],
+  "muestras": {},
+  "resumen": {
+    "item 403": 1,
+    "product 403": 2,
+    "user-product 403": 45,
+    "items-by-up 404": 45,
+    "search-by-up 403": 45
+  }
 }
