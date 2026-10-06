@@ -168,3 +168,61 @@ export function parseProducto(html, url) {
     opiniones,
   };
 }
+
+// ── Listados (listado.mercadolibre.com.ar/...) ─────────────────────────
+// Cada tarjeta del listado → producto con su puesto (orden en que ML lo
+// muestra). Varios patrones por campo porque ML alterna entre el diseño
+// "poly-card" y el viejo "ui-search-result".
+function textoDe(chunk, clase) {
+  const m = new RegExp(`class="[^"]*\\b${clase}\\b[^"]*"[^>]*>([\\s\\S]*?)</(?:span|div|a|p|h[23])>`).exec(chunk);
+  return m ? decode(m[1].replace(/<[^>]+>/g, ' ')) : '';
+}
+function precioEn(chunk) {
+  const m = /andes-money-amount__fraction[^>]*>([\d.]+)</.exec(chunk);
+  return m ? pesos(m[1]) : null;
+}
+
+export function parseListado(html, desde = 0) {
+  let chunks = html.split(/<li[^>]+class="[^"]*ui-search-layout__item[^"]*"/).slice(1);
+  if (!chunks.length) chunks = html.split(/<div[^>]+class="[^"]*poly-card[ "][^"]*"/).slice(1);
+  const out = [];
+  chunks.forEach((c) => {
+    const a = /<a[^>]*class="[^"]*(?:poly-component__title|ui-search-link|ui-search-item__group__element)[^"]*"[^>]*>/.exec(c)
+      || /<h[23][^>]*class="[^"]*(?:poly-component__title|ui-search-item__title)[^"]*"[^>]*>\s*<a[^>]*>/.exec(c);
+    const href = a && (/href="([^"]+)"/.exec(a[0]) || [])[1];
+    const titulo = textoDe(c, 'poly-component__title') || textoDe(c, 'ui-search-item__title');
+    if (!href || !titulo) return;
+    const url = decode(href).split(/[?#]/)[0];
+    // Precio actual: sin el tachado ni las cuotas.
+    const sinPrevio = c.replace(/<s[^>]*andes-money-amount--previous[\s\S]*?<\/s>/g, '');
+    const actual = /poly-price__current[\s\S]*?andes-money-amount__fraction[^>]*>([\d.]+)</.exec(sinPrevio)
+      || /ui-search-price__second-line[\s\S]*?andes-money-amount__fraction[^>]*>([\d.]+)</.exec(sinPrevio);
+    const precio = actual ? pesos(actual[1]) : precioEn(sinPrevio);
+    if (precio == null) return;
+    const prev = /andes-money-amount--previous[\s\S]*?andes-money-amount__fraction[^>]*>([\d.]+)</.exec(c);
+    const precioOriginal = prev ? pesos(prev[1]) : null;
+    const img = /<img[^>]+(?:data-src|src)="(https:[^"]+)"/.exec(c);
+    const vendTxt = textoDe(c, 'poly-component__seller') || textoDe(c, 'ui-search-official-store-label');
+    const vendedor = vendTxt ? vendTxt.replace(/^(vendido\s+)?por\s+/i, '').replace(/^tienda oficial\s+/i, '').trim().slice(0, 80) || null : null;
+    const rating = /poly-reviews__rating[^>]*>\s*([\d.,]+)\s*</.exec(c);
+    const total = /poly-reviews__total[^>]*>\s*\(?\s*([\d.]+)\s*\)?\s*</.exec(c);
+    const destacado = textoDe(c, 'poly-component__highlight') || null;
+    out.push({
+      id: mlId(url),
+      url,
+      titulo,
+      imagen: img ? img[1] : null,
+      precio,
+      precioOriginal: precioOriginal && precioOriginal > precio ? precioOriginal : null,
+      vendedor,
+      tiendaOficial: /tienda oficial|official-store/i.test(c),
+      vendidos: vendidos(c),
+      mlPuesto: desde + out.length + 1,
+      masVendido: /M[ÁA]S VENDIDO/i.test(destacado || ''),
+      destacado,
+      envioGratis: /env[ií]o gratis/i.test(c),
+      opiniones: rating ? { estrellas: parseFloat(rating[1].replace(',', '.')), cantidad: total ? parseInt(total[1].replace('.', ''), 10) : null, comentarios: [] } : null,
+    });
+  });
+  return out;
+}

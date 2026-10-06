@@ -1,6 +1,6 @@
 /* ml-dashboard.js — dashboard de equipos de wingfoil en Mercado Libre
  * (sección #venta-de-wingfoil). Lee /api/ml-dashboard: una lista de
- * relevamientos (fecha + productos de los links de ml-links.json) y arma
+ * relevamientos (fecha + productos de los listados de ml-links.json) y arma
  * rankings por marca y categoría, la evolución del puesto, precios por
  * categoría y la lista filtrable de productos.
  *
@@ -489,7 +489,7 @@
   function relevar() {
     var btn = $('#mldRelevar');
     if (!state.data.servicio) {
-      aviso('El relevamiento automático todavía no está conectado: se muestran los datos del ' + fechaLarga(state.data.rels[state.data.rels.length - 1].fecha) + '.', 'warn');
+      aviso('El relevamiento automático todavía no está conectado: los gráficos se completan con el primer relevamiento.', 'warn');
       return;
     }
     btn.disabled = true;
@@ -507,7 +507,7 @@
       .then(function () { return post({ cerrar: 1 }); })
       .then(function () { return cargar(true); })
       .then(function () {
-        aviso(buenos ? 'Listo: se relevaron ' + buenos + ' de ' + total + ' productos.' : 'Mercado Libre no devolvió datos esta vez. Se muestran los últimos datos buenos.', buenos ? 'ok' : 'warn');
+        aviso(buenos ? 'Listo: se relevaron ' + buenos + ' de ' + total + ' páginas de los listados.' : 'Mercado Libre no devolvió datos esta vez. Se muestran los últimos datos buenos.', buenos ? 'ok' : 'warn');
       }, function () { aviso('No se pudo completar el relevamiento. Probá de nuevo en un rato.', 'warn'); })
       .then(function () { btn.disabled = false; });
   }
@@ -519,6 +519,13 @@
       .then(function (raw) {
         state.data = preparar(raw);
         root.classList.remove('is-loading');
+        var vacio = !state.data.rels.length;
+        root.classList.toggle('is-empty', vacio);
+        if (vacio) {
+          $('#mldEstado').innerHTML = 'Todavía no hay relevamientos de los listados de Mercado Libre.';
+          aviso(state.data.servicio ? 'Tocá "Relevar ahora" para traer los datos de hoy.' : 'El relevamiento automático todavía no está conectado: los gráficos se completan con el primer relevamiento.', 'warn');
+          return;
+        }
         renderEstado(); renderChips(); render();
       });
   }
