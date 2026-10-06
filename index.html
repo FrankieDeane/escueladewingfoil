@@ -6881,6 +6881,8 @@ else loadEquipos();
 <script>
 // /venta-de-wingfoil (sin #) abre la home directo en la sección de equipos.
 if(/^\/venta-de-wingfoil\/?$/.test(location.pathname)){window.addEventListener('load',function(){var el=document.getElementById('venta-de-wingfoil');if(el)el.scrollIntoView();});}
+// Vuelta del login de Mercado Libre (?code=TG-…): se canjea en /api/ml-auth y se limpia la URL.
+(function(){var c=new URLSearchParams(location.search).get('code');if(!c||!/^TG-/.test(c))return;history.replaceState(null,'',location.pathname);fetch('/api/ml-auth',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({code:c})}).then(function(r){return r.json()}).then(function(j){alert(j.ok?'Mercado Libre quedó conectado.':'No se pudo conectar Mercado Libre ('+(j.mensaje||j.error||j.motivo)+').')}).catch(function(){alert('No se pudo conectar Mercado Libre.')});})();
 </script>
 </body>
 </html>
