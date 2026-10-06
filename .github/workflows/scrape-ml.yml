@@ -3,7 +3,7 @@ name: Relevar productos de Mercado Libre
 # Dispara el relevamiento diario del dashboard de equipos (#venta-de-wingfoil):
 # llama a /api/ml-dashboard link por link y después junta el resultado en el
 # historial. El pedido a Mercado Libre lo hace la función de Netlify a través
-# del servicio de scraping configurado en ML_FETCH_URL; si no está
+# de la API de Mercado Libre (o del servicio de scraping de ML_FETCH_URL); si no está
 # configurado, la función responde 503 y este workflow termina sin cambios.
 
 on:
@@ -20,12 +20,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      API: https://www.escueladewingfoil.com.ar/api/ml-dashboard
+      API: https://escueladewingfoil.com.ar/api/ml-dashboard
     steps:
       - name: Relevar cada link
         run: |
-          total=$(curl -sf "$API?t=$(date +%s)" | jq -r '.links')
-          servicio=$(curl -sf "$API?t=$(date +%s)" | jq -r '.servicio')
+          total=$(curl -sfL "$API?t=$(date +%s)" | jq -r '.links')
+          servicio=$(curl -sfL "$API?t=$(date +%s)" | jq -r '.servicio')
           if [ "$servicio" != "true" ]; then echo "Relevamiento automático sin configurar (ML_FETCH_URL)"; exit 0; fi
           echo "Links: $total"
           seq 0 $((total - 1)) | xargs -P 4 -I{} sh -c \
