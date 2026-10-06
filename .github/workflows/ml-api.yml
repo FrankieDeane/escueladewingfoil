@@ -7,6 +7,14 @@ name: Completar productos con la API de Mercado Libre
 
 on:
   workflow_dispatch:
+    inputs:
+      code:
+        description: 'Código de autorización del usuario (opcional, vence en minutos)'
+        required: false
+      redirect_uri:
+        description: 'Redirect URI registrada en la app de ML'
+        required: false
+        default: 'https://www.escueladewingfoil.com.ar/'
   push:
     branches: [claude/project-thread-i6mz81]
     paths: [scripts/ml-api-enrich.mjs, .github/workflows/ml-api.yml]
@@ -27,6 +35,8 @@ jobs:
         env:
           ML_APP_ID: ${{ secrets.ML_APP_ID || '893498422026922' }}
           ML_SECRET: ${{ secrets.ML_SECRET }}
+          ML_CODE: ${{ inputs.code }}
+          ML_REDIRECT_URI: ${{ inputs.redirect_uri }}
         run: node scripts/ml-api-enrich.mjs
       - name: Guardar resultado y diagnóstico
         if: always()
