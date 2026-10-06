@@ -213,6 +213,25 @@
     torta('mldPieCats', pc, 'Sin datos');
     $('#mldPieCatsSub').textContent = pc.usarVentas ? 'Unidades vendidas que informa Mercado Libre' : 'Productos de cada categoría en el ranking';
 
+    // Top vendedores (barras): ventas informadas o cantidad de productos
+    var pv = participacion(prods.filter(function (p) { return p.vendedor; }), 'vendedor', 0);
+    pv.items = pv.items.slice(0, 10);
+    $('#mldVendVacio').hidden = !!pv.items.length;
+    $('#mldVend').parentNode.hidden = !pv.items.length;
+    $('#mldVendSub').textContent = pv.usarVentas ? 'Unidades vendidas que informa Mercado Libre, top 10' : 'Productos de cada vendedor en el ranking, top 10';
+    if (pv.items.length) {
+      $('#mldVend').parentNode.style.height = Math.max(160, pv.items.length * 34 + 40) + 'px';
+      dibujar('mldVend', {
+        type: 'bar',
+        data: { labels: pv.items.map(function (x) { return x.nombre; }), datasets: [{ data: pv.items.map(function (x) { return x.valor; }), backgroundColor: COLORES[0], borderRadius: 4 }] },
+        options: {
+          indexAxis: 'y', maintainAspectRatio: false,
+          scales: { x: { beginAtZero: true, ticks: { precision: 0 } } },
+          plugins: { legend: { display: false }, tooltip: { callbacks: { label: function (c) { return ' ' + c.raw + (pv.usarVentas ? ' vendidos' : ' productos'); } } } },
+        },
+      });
+    } else if (charts.mldVend) { charts.mldVend.destroy(); delete charts.mldVend; }
+
     // Evolución del puesto: top productos del último relevamiento
     var top = prods.slice(0, TOP_SERIES);
     lineaPuesto('mldEvoProd', fechas, top.map(function (p) {
