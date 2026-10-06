@@ -43,6 +43,28 @@ export default async (req) => {
     return json({ ok: true, usuario: t.user_id });
   }
 
+  // ?probar=1 → los endpoints por producto/publicación que usa el dashboard de
+  // Gama, con token y sin token (algunos recursos son públicos).
+  if (req.method === 'GET' && url.searchParams.get('probar')) {
+    const tok = await getMlToken('auto');
+    const out = { token: tok.tipo };
+    for (const path of [
+      '/items?ids=MLA2572823874,MLA100194922439,MLA102497944934&attributes=id,title,price,seller_id,catalog_product_id,sold_quantity',
+      '/items/MLA2572823874',
+      '/products/MLA46874476',
+      '/products/MLA46874476/items?limit=5',
+      '/sites/MLA/search?q=wingfoil&limit=2',
+      '/products/search?status=active&site_id=MLA&q=tabla%20wingfoil&limit=5',
+      '/users/198206295',
+    ]) {
+      const a = await mlGet(path, tok.token);
+      const b = await fetch('https://api.mercadolibre.com' + path, { headers: { accept: 'application/json' }, signal: AbortSignal.timeout(8000) })
+        .then(async (r) => ({ status: r.status, text: await r.text() })).catch((e) => ({ status: 0, text: String(e) }));
+      out[path] = { conToken: `${a.status} ${a.text.slice(0, 220)}`, sinToken: `${b.status} ${b.text.slice(0, 220)}` };
+    }
+    return json(out);
+  }
+
   // ?explorar=1 → categorías de ML para cada búsqueda, más vendidos de cada
   // categoría (highlights) y detalle de algunos de esos productos.
   if (req.method === 'GET' && url.searchParams.get('explorar')) {
