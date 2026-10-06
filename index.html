@@ -1440,7 +1440,7 @@ html{scroll-padding-top:var(--barra-alta)}
   <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
-<link rel="stylesheet" href="/assets/buscador-equipos.css">
+<link rel="stylesheet" href="/assets/ml-dashboard.css">
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -2372,60 +2372,79 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <span class="eyebrow">Comunidad</span>
     <h2 class="section-title" data-en="Gear for Sale">Equipos en Venta</h2>
-    <p class="section-sub">Buscá, filtrá y compará tablas, alas, foils y accesorios de Mercado Libre y de la comunidad. O publicá tu equipo gratis.</p>
+    <p class="section-sub">Qué se vende más y a qué precio en Mercado Libre: tablas, wings, foils, neoprenes y accesorios. O publicá tu equipo gratis en la comunidad.</p>
 
     <div class="eq-tabs" role="tablist">
-      <button class="eq-tab active" role="tab" aria-selected="true" aria-controls="eqPanelBuscador" data-eqtab="buscador">🔎 Buscar y comparar</button>
+      <button class="eq-tab active" role="tab" aria-selected="true" aria-controls="eqPanelBuscador" data-eqtab="buscador">📊 Mercado Libre</button>
       <button class="eq-tab" role="tab" aria-selected="false" aria-controls="eqPanelComunidad" data-eqtab="comunidad">🤝 Comunidad · publicar</button>
     </div>
 
-    <!-- BUSCADOR Y COMPARADOR -->
+    <!-- DASHBOARD MERCADO LIBRE (assets/ml-dashboard.js) -->
     <div id="eqPanelBuscador">
-      <div class="eqs" id="eqsRoot">
-        <div class="eqs__box">
-          <form class="eqs__bar" role="search" aria-label="Buscar equipos de wingfoil">
-            <div class="eqs__q"><label for="eqsQ" class="sr-only">Buscar equipo</label><input id="eqsQ" type="search" data-f="q" placeholder="Ej.: tabla 120 litros, ala Duotone 5m, foil carbono…" autocomplete="off" enterkeyhint="search"></div>
-            <button type="submit" class="eqs__btn eqs__btn--primary">Buscar</button>
-            <button type="button" class="eqs__btn eqs__filters-toggle" data-act="toggle-filters" aria-expanded="false" aria-controls="eqsFilters">⚙️ Filtros</button>
-          </form>
-          <div class="eqs__chips" aria-label="Categorías"></div>
-          <div class="eqs__filters" id="eqsFilters" data-open="false">
-            <div class="eqs__f"><label for="eqsCat">Categoría</label><select id="eqsCat" data-f="categoria"></select></div>
-            <div class="eqs__f"><label for="eqsSub">Tipo de producto</label><select id="eqsSub" data-f="subtipo"></select><span class="eqs__hint" hidden>Sin datos para esta selección</span></div>
-            <div class="eqs__f"><label for="eqsMarca">Marca</label><select id="eqsMarca" data-f="marca"></select><span class="eqs__hint" hidden>Sin datos para esta selección</span></div>
-            <div class="eqs__f"><label for="eqsModelo">Modelo</label><input id="eqsModelo" data-f="modelo" list="eqsModelos" placeholder="Ej.: Sky Free" autocomplete="off"><datalist id="eqsModelos"></datalist></div>
-            <div class="eqs__f"><label for="eqsAnio">Año</label><select id="eqsAnio" data-f="anio"></select><span class="eqs__hint" hidden>Sin datos para esta selección</span></div>
-            <div class="eqs__f"><span class="eqs__lbl" id="eqsPrecioLbl">Precio</span>
-              <div class="eqs__range" role="group" aria-labelledby="eqsPrecioLbl">
-                <select data-f="moneda" aria-label="Moneda" style="flex:0 0 76px"><option value="ARS">ARS</option><option value="USD">USD</option></select>
-                <input type="number" inputmode="numeric" min="0" data-f="pmin" placeholder="Desde" aria-label="Precio desde">
-                <input type="number" inputmode="numeric" min="0" data-f="pmax" placeholder="Hasta" aria-label="Precio hasta">
-              </div></div>
-            <div class="eqs__f"><span class="eqs__lbl" id="eqsTamLbl">Tamaño / volumen</span>
-              <div class="eqs__range" role="group" aria-labelledby="eqsTamLbl">
-                <input type="number" inputmode="decimal" min="0" step="any" data-f="tmin" placeholder="Desde" aria-label="Tamaño desde">
-                <input type="number" inputmode="decimal" min="0" step="any" data-f="tmax" placeholder="Hasta" aria-label="Tamaño hasta">
-              </div><span class="eqs__hint" id="eqsTamHint">Elegí tabla, ala, foil o mástil</span></div>
-            <div class="eqs__f"><label for="eqsEstado">Estado</label><select id="eqsEstado" data-f="estado"></select><span class="eqs__hint" hidden>Sin datos para esta selección</span></div>
-            <div class="eqs__f"><label for="eqsNivel">Nivel recomendado</label><select id="eqsNivel" data-f="nivel"></select><span class="eqs__hint" hidden>Sin datos para esta selección</span></div>
-            <div class="eqs__f"><label for="eqsVend">Vendedor</label><select id="eqsVend" data-f="vendedor"></select><span class="eqs__hint" hidden>Las publicaciones no informan vendedor</span></div>
-            <div class="eqs__f"><label for="eqsDisp">Disponibilidad</label><select id="eqsDisp" data-f="disponibilidad"></select><span class="eqs__hint" hidden>Las publicaciones no informan stock</span></div>
-            <div class="eqs__f"><label for="eqsUbic">Ubicación</label><select id="eqsUbic" data-f="ubicacion"></select><span class="eqs__hint" hidden>Sin datos de ubicación</span></div>
-            <div class="eqs__f"><label for="eqsFuente">Fuente</label><select id="eqsFuente" data-f="fuente"></select><span class="eqs__hint" hidden>Sin datos</span></div>
-            <div class="eqs__checks">
-              <label><input type="checkbox" data-f="cuotas"> Sólo con cuotas</label>
-              <label><input type="checkbox" data-f="ofertas"> Ofertas / precio bajo</label>
-              <label><input type="checkbox" data-f="ocultarAgotados"> Ocultar agotados</label>
-              <button type="button" class="eqs__btn eqs__btn--sm" data-act="clear">Limpiar filtros</button>
-            </div>
-          </div>
+      <div class="mld is-loading" id="mlDash">
+        <div class="mld__head">
+          <p class="mld__estado" id="mldEstado" aria-live="polite">Cargando datos de Mercado Libre…</p>
+          <button type="button" class="mld__btn" id="mldRelevar">↻ Relevar ahora</button>
         </div>
-        <div class="eqs__status" aria-live="polite"></div>
-        <div class="eqs__toastslot" aria-live="polite"></div>
-        <div class="eqs__box eqs__results" aria-live="polite"><div class="eqs__loading">Cargando equipos…</div></div>
-        <div class="eqs__box eqs__cmp" id="eqsComparador" hidden></div>
-        <div class="eqs__tray" hidden></div>
-        <p class="equipos-disclaimer" style="margin-bottom:0">⚠️ Los productos de Mercado Libre los publican otros vendedores y los de la comunidad, riders particulares: no tenemos relación comercial con ellos ni garantizamos precio, stock o estado del equipo. Los datos se toman de cada publicación; lo que no informan figura como "No especificado". Verificá siempre en la publicación original antes de comprar.</p>
+        <p class="mld__aviso" id="mldAviso" aria-live="polite" hidden></p>
+        <div class="mld__chips" id="mldChips" role="group" aria-label="Categoría"></div>
+
+        <h3 class="mld__h">Tendencias</h3>
+        <p class="mld__sub" id="mldTendSub"></p>
+        <div class="mld__kpis" id="mldKpis"></div>
+
+        <h3 class="mld__h">Más vendidos</h3>
+        <div class="mld__grid">
+          <div class="mld__card"><h4>Por marca</h4><p class="mld__sub" id="mldPieMarcasSub"></p><div class="mld__chart"><canvas id="mldPieMarcas" aria-label="Más vendidos por marca" role="img"></canvas></div></div>
+          <div class="mld__card"><h4>Por categoría</h4><p class="mld__sub" id="mldPieCatsSub"></p><div class="mld__chart"><canvas id="mldPieCats" aria-label="Más vendidos por categoría" role="img"></canvas></div></div>
+        </div>
+        <div class="mld__card"><h4>Top vendedores</h4><p class="mld__sub" id="mldVendSub"></p><div class="mld__chart mld__chart--vend"><canvas id="mldVend" aria-label="Top vendedores" role="img"></canvas></div><p class="mld__vacio" id="mldVendVacio" hidden>Mercado Libre todavía no informó vendedores de estos productos: aparecen con el próximo relevamiento.</p></div>
+
+        <h3 class="mld__h">Evolución en el ranking</h3>
+        <div class="mld__grid">
+          <div class="mld__card"><h4>Puesto de los productos top</h4><p class="mld__sub">1º arriba. Tocá un producto en la leyenda para ocultarlo.</p><div class="mld__chart"><canvas id="mldEvoProd" aria-label="Evolución del puesto por producto" role="img"></canvas></div><p class="mld__evo-hint" hidden>Por ahora hay un solo relevamiento: la línea se arma con cada relevamiento nuevo.</p></div>
+          <div class="mld__card"><h4>Top marcas</h4><p class="mld__sub">Mejor puesto de cada marca en cada fecha.</p><div class="mld__chart"><canvas id="mldEvoMarcas" aria-label="Evolución de las marcas top" role="img"></canvas></div><p class="mld__evo-hint" hidden>Por ahora hay un solo relevamiento: la línea se arma con cada relevamiento nuevo.</p></div>
+        </div>
+
+        <h3 class="mld__h">Precios</h3>
+        <div class="mld__grid">
+          <div class="mld__card"><h4>Precios por categoría</h4><p class="mld__sub">Más barato, promedio y más caro del último relevamiento.</p><div class="mld__chart"><canvas id="mldPrecios" aria-label="Precios por categoría" role="img"></canvas></div></div>
+          <div class="mld__card"><h4>Precio promedio en el tiempo</h4><p class="mld__sub">Por categoría, en cada relevamiento.</p><div class="mld__chart"><canvas id="mldPreciosEvo" aria-label="Evolución del precio promedio por categoría" role="img"></canvas></div></div>
+        </div>
+        <div class="mld__card">
+          <div class="mld__bar">
+            <h4>Los más caros por fecha</h4>
+            <label class="sr-only" for="mldFechaCaros">Fecha</label>
+            <select id="mldFechaCaros" data-f="fechaCaros"></select>
+            <button type="button" class="mld__btn mld__btn--sm" id="mldOrdenCaros">↓ De caro a barato</button>
+          </div>
+          <ol class="mld__caros" id="mldCaros"></ol>
+        </div>
+
+        <h3 class="mld__h">Lo que dicen los compradores</h3>
+        <p class="mld__sub">Opiniones de Mercado Libre de los productos con más calificaciones.</p>
+        <div class="mld__ops" id="mldOps"></div>
+
+        <h3 class="mld__h">Todos los productos</h3>
+        <div class="mld__card">
+          <div class="mld__bar">
+            <label class="sr-only" for="mldQ">Buscar</label>
+            <input id="mldQ" type="search" data-f="q" placeholder="Buscar: tabla 120, Duotone, casco…" autocomplete="off">
+            <label class="sr-only" for="mldMarca">Marca</label><select id="mldMarca" data-f="marca"></select>
+            <label class="sr-only" for="mldVendedor">Vendedor</label><select id="mldVendedor" data-f="vendedor"></select>
+            <label class="sr-only" for="mldOrden">Ordenar</label>
+            <select id="mldOrden" data-f="orden"><option value="puesto">Ranking</option><option value="barato">Precio: de barato a caro</option><option value="caro">Precio: de caro a barato</option></select>
+            <span class="mld__count" id="mldCount"></span>
+          </div>
+          <div class="mld__tablewrap">
+            <table class="mld__table">
+              <thead><tr><th>Puesto</th><th>Producto</th><th>Categoría</th><th>Marca</th><th>Precio del link</th><th>Precio oficial ML</th><th>Vendedor</th><th>Vendidos</th><th>Opiniones</th><th></th></tr></thead>
+              <tbody id="mldTabla"></tbody>
+            </table>
+          </div>
+          <button type="button" class="mld__btn mld__btn--sm mld__mas" id="mldMas" hidden></button>
+        </div>
+        <p class="equipos-disclaimer" style="margin-bottom:0">⚠️ Los productos los publican vendedores de Mercado Libre: no tenemos relación comercial con ellos ni garantizamos precio, stock o estado del equipo. El ranking ordena los productos relevados por las ventas que informa Mercado Libre. Verificá siempre en la publicación original antes de comprar.</p>
       </div>
     </div>
 
@@ -5213,7 +5232,7 @@ document.querySelectorAll('.eq-tab').forEach(function(btn){
 });
 
 loadInstructors();
-// Un solo pedido a /api/equipos, compartido con el buscador (assets/buscador-equipos.js).
+// Avisos de la comunidad (/api/equipos).
 window.EQ_COMUNIDAD=fetch('/api/equipos').then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()});
 window.EQ_COMUNIDAD.catch(function(){});
 // El parser de precios (assets/equipo-normalizer.js) carga con defer: se
@@ -5225,7 +5244,7 @@ else loadEquipos();
 </script>
 
 <script src="/assets/equipo-normalizer.js" defer></script>
-<script src="/assets/buscador-equipos.js" defer></script>
+<script src="/assets/ml-dashboard.js" defer></script>
 
 <!-- Three.js for 3D foil -->
 <script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
