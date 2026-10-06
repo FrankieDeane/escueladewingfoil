@@ -6878,5 +6878,9 @@ else loadEquipos();
 })();
 </script>
 
+<script>
+// /venta-de-wingfoil (sin #) abre la home directo en la sección de equipos.
+if(/^\/venta-de-wingfoil\/?$/.test(location.pathname)){window.addEventListener('load',function(){var el=document.getElementById('venta-de-wingfoil');if(el)el.scrollIntoView();});}
+</script>
 </body>
 </html>

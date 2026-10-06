@@ -27,3 +27,11 @@
   for = "/SEO_AUDIT_REPORT.md"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
+
+# Dirección propia para la sección de equipos / dashboard de Mercado Libre
+# (sirve como link fijo y como Redirect URI de la app de Mercado Libre).
+# Muestra la home y el script del final de index.html baja a la sección.
+[[redirects]]
+  from = "/venta-de-wingfoil"
+  to = "/index.html"
+  status = 200
