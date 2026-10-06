@@ -43,6 +43,35 @@ export default async (req) => {
     return json({ ok: true, usuario: t.user_id });
   }
 
+  // ?explorar=1 → categorías de ML para cada búsqueda, más vendidos de cada
+  // categoría (highlights) y detalle de algunos de esos productos.
+  if (req.method === 'GET' && url.searchParams.get('explorar')) {
+    const tok = await getMlToken('auto');
+    const out = { token: tok.tipo, categorias: {}, highlights: {}, detalle: {} };
+    const cats = new Set();
+    for (const q of ['wingfoil tabla', 'wing wingfoil', 'foil hidroala', 'neoprene surf', 'tabla foil', 'arnes wing']) {
+      const r = await mlGet(`/sites/MLA/domain_discovery/search?q=${encodeURIComponent(q)}&limit=4`, tok.token);
+      out.categorias[q] = r.ok ? r.body.map((c) => `${c.category_id} ${c.category_name} (${c.domain_name})`) : r.status;
+      if (r.ok) r.body.forEach((c) => cats.add(c.category_id));
+    }
+    const ids = [];
+    for (const c of [...cats].slice(0, 8)) {
+      const r = await mlGet(`/highlights/MLA/category/${c}`, tok.token);
+      out.highlights[c] = r.ok ? (r.body.content || []).slice(0, 5).map((x) => `${x.type} ${x.id} #${x.position}`) : `${r.status} ${r.text.slice(0, 120)}`;
+      if (r.ok) (r.body.content || []).slice(0, 2).forEach((x) => ids.push(x));
+    }
+    for (const x of ids.slice(0, 4)) {
+      const path = x.type === 'PRODUCT' ? `/products/${x.id}` : `/items/${x.id}`;
+      const r = await mlGet(path, tok.token);
+      out.detalle[path] = r.ok ? JSON.stringify(r.body).slice(0, 400) : `${r.status} ${r.text.slice(0, 120)}`;
+      if (x.type === 'PRODUCT') {
+        const r2 = await mlGet(`/products/${x.id}/items`, tok.token);
+        out.detalle[`${path}/items`] = r2.ok ? JSON.stringify(r2.body).slice(0, 400) : `${r2.status} ${r2.text.slice(0, 120)}`;
+      }
+    }
+    return json(out);
+  }
+
   if (req.method === 'GET' && url.searchParams.get('diag')) {
     const out = {};
     for (const tipo of ['usuario', 'app']) {
