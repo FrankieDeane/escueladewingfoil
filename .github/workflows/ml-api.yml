@@ -1,0 +1,40 @@
+name: Completar productos con la API de Mercado Libre
+
+# Consulta la API oficial de ML para sumar vendedor, ubicación, condición,
+# estado, stock y cuotas a los productos de ml-data.json. Guarda el resultado
+# en ml-api-data.json (y el diagnóstico de cada llamada) en la misma rama.
+# Requiere el secreto ML_SECRET en Settings → Secrets and variables → Actions.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/project-thread-i6mz81]
+    paths: [scripts/ml-api-enrich.mjs, .github/workflows/ml-api.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  enrich:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Consultar la API
+        env:
+          ML_APP_ID: ${{ secrets.ML_APP_ID || '893498422026922' }}
+          ML_SECRET: ${{ secrets.ML_SECRET }}
+        run: node scripts/ml-api-enrich.mjs
+      - name: Guardar resultado y diagnóstico
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          for f in ml-api-data.json ml-api-diag.json; do [ -f "$f" ] && git add -f "$f"; done
+          if git diff --staged --quiet; then echo "Sin cambios"; else
+            git commit -m "Datos de la API de Mercado Libre $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi
