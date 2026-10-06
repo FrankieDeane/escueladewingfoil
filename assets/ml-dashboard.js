@@ -300,8 +300,66 @@
       },
     });
 
+    renderTendencias(rels);
     renderCaros(rels);
     renderLista(prods);
+  }
+
+  // Tendencias: último relevamiento contra el anterior
+  function promedio(a) { return a.length ? a.reduce(function (s, v) { return s + v; }, 0) / a.length : null; }
+  function pct(a, b) { return a && b ? (a - b) / b * 100 : null; }
+  function delta(v, unidad, invertir) {
+    if (v == null || !isFinite(v) || Math.abs(v) < 0.05) return '<span class="mld__d">= sin cambios</span>';
+    var sube = v > 0, bueno = invertir ? !sube : sube;
+    var txt = unidad === '%' ? Math.abs(v).toLocaleString('es-AR', { maximumFractionDigits: 1 }) + '%' : Math.abs(Math.round(v)) + ' ' + unidad;
+    return '<span class="mld__d ' + (bueno ? 'is-up' : 'is-down') + '">' + (sube ? '▲ ' : '▼ ') + txt + '</span>';
+  }
+  function kpi(titulo, valor, detalle) {
+    return '<div class="mld__kpi"><span class="mld__kpi-t">' + titulo + '</span><b class="mld__kpi-v">' + valor + '</b><span class="mld__kpi-s">' + detalle + '</span></div>';
+  }
+  function renderTendencias(rels) {
+    var act = rels[rels.length - 1], ant = rels.length > 1 ? rels[rels.length - 2] : null;
+    var precioAct = promedio(act.productos.map(function (p) { return p.precio; }));
+    $('#mldTendSub').textContent = ant
+      ? 'Comparado con el relevamiento del ' + fechaLarga(ant.fecha) + '.'
+      : 'Las comparaciones aparecen desde el segundo relevamiento.';
+    if (!act.productos.length) { $('#mldKpis').innerHTML = '<p class="mld__vacio">Sin productos en esta categoría</p>'; return; }
+    var html = kpi('Precio promedio', plata(precioAct),
+      ant ? delta(pct(precioAct, promedio(ant.productos.map(function (p) { return p.precio; }))), '%', true) : act.productos.length + ' productos');
+    if (!ant) { $('#mldKpis').innerHTML = html; return; }
+
+    var prev = {};
+    ant.productos.forEach(function (p) { prev[p.clave] = p; });
+    var cambios = act.productos.filter(function (p) { return prev[p.clave]; }).map(function (p) {
+      var q = prev[p.clave];
+      return { p: p, puestos: q.puesto - p.puesto, precio: pct(p.precio, q.precio) };
+    });
+    var porPuesto = cambios.slice().sort(function (a, b) { return b.puestos - a.puestos; });
+    var sube = porPuesto[0], baja = porPuesto[porPuesto.length - 1];
+    var porPrecio = cambios.filter(function (c) { return c.precio != null; }).sort(function (a, b) { return a.precio - b.precio; });
+    var oferta = porPrecio[0];
+
+    // Marca en alza: la que más mejoró su mejor puesto
+    var mejor = function (prods) {
+      var m = {};
+      prods.forEach(function (p) { if (p.marcaN !== 'Sin marca' && (m[p.marcaN] == null || p.puesto < m[p.marcaN])) m[p.marcaN] = p.puesto; });
+      return m;
+    };
+    var mA = mejor(act.productos), mB = mejor(ant.productos);
+    var marcaUp = Object.keys(mA).filter(function (k) { return mB[k] != null; })
+      .map(function (k) { return { n: k, d: mB[k] - mA[k], puesto: mA[k] }; })
+      .sort(function (a, b) { return b.d - a.d || a.puesto - b.puesto; })[0];
+
+    var link = function (p) { return '<a href="' + esc(p.url) + '" target="_blank" rel="noopener nofollow">' + esc(corto(p.titulo, 48)) + '</a>'; };
+    html += sube && sube.puestos > 0 ? kpi('Más subió en el ranking', link(sube.p), delta(sube.puestos, sube.puestos === 1 ? 'puesto' : 'puestos') + ' · hoy ' + sube.p.puesto + 'º')
+      : kpi('Más subió en el ranking', '—', '<span class="mld__d">Nadie subió</span>');
+    html += baja && baja.puestos < 0 ? kpi('Más bajó en el ranking', link(baja.p), delta(baja.puestos, baja.puestos === -1 ? 'puesto' : 'puestos') + ' · hoy ' + baja.p.puesto + 'º')
+      : kpi('Más bajó en el ranking', '—', '<span class="mld__d">Nadie bajó</span>');
+    html += marcaUp && marcaUp.d > 0 ? kpi('Marca en alza', esc(marcaUp.n), delta(marcaUp.d, marcaUp.d === 1 ? 'puesto' : 'puestos') + ' · mejor puesto ' + marcaUp.puesto + 'º')
+      : kpi('Marca en alza', '—', '<span class="mld__d">Sin cambios en las marcas</span>');
+    html += oferta && oferta.precio < -0.05 ? kpi('Mayor baja de precio', link(oferta.p), delta(oferta.precio, '%', true) + ' · ' + plata(oferta.p.precio))
+      : kpi('Mayor baja de precio', '—', '<span class="mld__d">Ningún precio bajó</span>');
+    $('#mldKpis').innerHTML = html;
   }
 
   // Más caros (o más baratos) en la fecha elegida

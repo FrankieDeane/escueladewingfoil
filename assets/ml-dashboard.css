@@ -22,6 +22,15 @@
 .mld__chip[disabled]{opacity:.4;cursor:default}
 .mld__chip small{opacity:.75;font-weight:500;margin-left:3px}
 .mld__h{font-size:clamp(18px,2.2vw,22px);margin-top:14px}
+.mld__kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:-6px}
+.mld__kpi{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.mld__kpi-t{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--text-muted)}
+.mld__kpi-v{font-size:17px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.mld__kpi-v a:hover{color:var(--primary)}
+.mld__kpi-s{font-size:12.5px;color:var(--text-muted)}
+.mld__d{font-weight:700;color:var(--text-muted)}
+.mld__d.is-up{color:var(--ok)}
+.mld__d.is-down{color:#e76f51}
 .mld__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
 .mld__card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:clamp(14px,2.5vw,24px);min-width:0}
 .mld__card h4{font-size:15px;font-family:inherit;letter-spacing:0}
