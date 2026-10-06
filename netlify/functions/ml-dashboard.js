@@ -32,6 +32,7 @@ const LISTADOS = (linksFile.listados || [])
   .map((l) => ({ ...l, url: l.url.split(/[?#]/)[0].replace(/\/+$/, '') }));
 // Con la app de ML (MELI_CLIENT_ID/SECRET) se releva por la API, una búsqueda
 // de catálogo por tarea. Si no, páginas de los listados vía ML_FETCH_URL.
+const API_V = 2; // subir si cambia qué se releva, para no reusar lo de antes
 const conApi = () => !!(process.env.MELI_CLIENT_ID && process.env.MELI_CLIENT_SECRET);
 const tareas = () => (conApi() ? BUSQUEDAS.length : LISTADOS.length * PAGINAS);
 const servicio = () => conApi() || !!process.env.ML_FETCH_URL;
@@ -47,8 +48,8 @@ async function relevarApi(i) {
   const s = store();
   const key = `pag:${hoy()}:${i}`;
   const prev = await s.get(key, { type: 'json' }).catch(() => null);
-  if (prev && prev.ok && prev.fuente === 'api' && Date.now() - prev.ts < COOLDOWN_MS) return { i, ok: true, productos: prev.productos.length, cache: true };
-  const base = { i, listado: b.nombre, fuente: 'api', ts: Date.now() };
+  if (prev && prev.ok && prev.fuente === 'api' && prev.v === API_V && Date.now() - prev.ts < COOLDOWN_MS) return { i, ok: true, productos: prev.productos.length, cache: true };
+  const base = { i, listado: b.nombre, fuente: 'api', v: API_V, ts: Date.now() };
   let out;
   try {
     const tok = await getMlToken('auto');

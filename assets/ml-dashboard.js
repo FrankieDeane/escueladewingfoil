@@ -507,7 +507,7 @@
       .then(function () { return post({ cerrar: 1 }); })
       .then(function () { return cargar(true); })
       .then(function () {
-        aviso(buenos ? 'Listo: se relevaron ' + buenos + ' de ' + total + ' páginas de los listados.' : 'Mercado Libre no devolvió datos esta vez. Se muestran los últimos datos buenos.', buenos ? 'ok' : 'warn');
+        aviso(buenos ? 'Listo: se relevaron ' + buenos + ' de ' + total + ' búsquedas de Mercado Libre.' : 'Mercado Libre no devolvió datos esta vez. Se muestran los últimos datos buenos.', buenos ? 'ok' : 'warn');
       }, function () { aviso('No se pudo completar el relevamiento. Probá de nuevo en un rato.', 'warn'); })
       .then(function () { btn.disabled = false; });
   }

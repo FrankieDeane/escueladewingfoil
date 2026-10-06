@@ -22,7 +22,8 @@ export const BUSQUEDAS = [
 const POR_BUSQUEDA = 50;
 const EN_PARALELO = 10;
 const CON_OPINIONES = 15; // los primeros de cada búsqueda
-const RELEVANTE = /wing|foil/i;
+const DEPORTE = '(kite|vela|surf|sup|tabla|m[aá]stil|fuselaje|hidroala|inflable|wake)';
+const RELEVANTE = new RegExp(`wing ?foil|wing ?surf|hidro ?foil|\\b(wing|foil)\\b.*\\b${DEPORTE}|\\b${DEPORTE}\\b.*\\b(wing|foil)\\b`, 'i');
 
 async function enPool(lista, n, fn) {
   const out = new Array(lista.length);
