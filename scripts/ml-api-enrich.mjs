@@ -31,10 +31,15 @@ async function getToken() {
   const res = await fetch(`${API}/oauth/token`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' },
-    body: new URLSearchParams({ grant_type: 'client_credentials', client_id: id, client_secret: secret }),
+    // Con ML_CODE (código que devuelve el login del usuario) se pide un token
+    // de usuario; si no, un App Token. ML rechaza con 403 las lecturas de
+    // publicaciones ajenas hechas con App Token.
+    body: new URLSearchParams(process.env.ML_CODE
+      ? { grant_type: 'authorization_code', client_id: id, client_secret: secret, code: process.env.ML_CODE, redirect_uri: process.env.ML_REDIRECT_URI || '' }
+      : { grant_type: 'client_credentials', client_id: id, client_secret: secret }),
   });
   const body = await res.json().catch(() => ({}));
-  diag.token = { status: res.status, scope: body.scope || null, error: res.ok ? null : body };
+  diag.token = { tipo: process.env.ML_CODE ? 'usuario' : 'app', status: res.status, scope: body.scope || null, error: res.ok ? null : body };
   if (!res.ok) throw new Error(`Token ${res.status}`);
   return body.access_token;
 }
