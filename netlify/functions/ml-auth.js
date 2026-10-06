@@ -43,6 +43,22 @@ export default async (req) => {
     return json({ ok: true, usuario: t.user_id });
   }
 
+  // ?catalogo=a|b|c → cuántos productos de catálogo de wingfoil trae cada búsqueda
+  if (req.method === 'GET' && url.searchParams.get('catalogo')) {
+    const tok = await getMlToken('auto');
+    const out = {};
+    for (const q of url.searchParams.get('catalogo').split('|').slice(0, 10)) {
+      const nombres = [];
+      for (const off of [0, 50]) {
+        const r = await mlGet(`/products/search?status=active&site_id=MLA&q=${encodeURIComponent(q)}&limit=50&offset=${off}`, tok.token);
+        if (!r.ok) { nombres.push(`HTTP ${r.status}`); break; }
+        (r.body.results || []).forEach((p) => { if (/wing|foil/i.test(p.name || '')) nombres.push(`${p.id} ${p.domain_id} ${p.name}`); });
+      }
+      out[q] = nombres;
+    }
+    return json(out);
+  }
+
   // ?probar=1 → los endpoints por producto/publicación que usa el dashboard de
   // Gama, con token y sin token (algunos recursos son públicos).
   if (req.method === 'GET' && url.searchParams.get('probar')) {
