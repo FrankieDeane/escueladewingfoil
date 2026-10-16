@@ -26,7 +26,15 @@ html[data-theme="dark"] .logo{color:var(--paper)}
 .nav{gap:22px;font-size:15px;font-weight:500}
 .nav a{color:var(--text)}
 .nav a:hover,.nav a[aria-current="page"]{color:var(--text);text-decoration:underline;text-decoration-color:var(--signal);text-decoration-thickness:2px;text-underline-offset:8px}
-@media(max-width:900px){.nav{display:none}.lang{margin-left:auto}}
+/* Celular: el menú pasa a una fila deslizable debajo del logo (antes desaparecía) */
+@media(max-width:900px){
+  .bar__in{flex-wrap:wrap;row-gap:8px;padding-bottom:0}
+  .lang{margin-left:auto}
+  .nav{display:flex!important;order:3;width:calc(100% + 2*clamp(16px,4vw,40px));margin:0 calc(-1*clamp(16px,4vw,40px));padding:4px clamp(16px,4vw,40px) 12px;gap:20px;font-size:14px;overflow-x:auto;white-space:nowrap;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .nav::-webkit-scrollbar{display:none}
+  .nav a{flex-shrink:0}
+  .logo span{font-size:16px}
+}
 .lang{border-color:var(--border)}
 .lang button{color:var(--text-muted);font-family:'DM Mono',monospace}
 .lang button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
@@ -80,3 +88,9 @@ html[data-theme="dark"] .share-btn--copy{border-color:var(--paper);color:var(--p
 .wf-cab__in > div:first-child span{color:#FF5A2C!important}
 .crumbs{position:relative;z-index:2}
 html,body{overflow-x:clip}
+
+/* Celular: tablas y grillas de los artículos sin desbordar */
+.post img,.post svg,.post iframe,.post video{max-width:100%;height:auto}
+@media(max-width:520px){.post table{display:block;max-width:100%;overflow-x:auto}.post div[style*="1fr 1fr 1fr"]{grid-template-columns:1fr!important}}
+@media(max-width:380px){.post div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important}}
+.post,.post p,.post li,.post h1,.post h2,.post h3{overflow-wrap:break-word}
