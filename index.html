@@ -1648,6 +1648,77 @@ html[data-page="herramientas"] [data-pg]:not([data-pg~="herramientas"]){display:
 @media(max-width:760px){.footer__inner{grid-template-columns:1fr;grid-template-areas:"nav" "marca" "links"}.footer__links{grid-template-columns:1fr 1fr}}
 @media(max-width:480px){.footer__links{grid-template-columns:1fr}}
 @media(max-width:600px){.header__actions{gap:6px}.header__inner{padding-inline:16px}}
+
+/* ===== Portada 2: video, frase con fotos y cinco páginas con foto ===== */
+.nx-hv{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;color:#F7F4EC;overflow:hidden;background:#0B1A22;isolation:isolate}
+.nx-hv__media{position:absolute;inset:0;z-index:-1}
+.nx-hv__media img,.nx-hv__media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.nx-hv__video{opacity:0;transition:opacity .8s}
+.nx-hv__video.is-on{opacity:1}
+.nx-hv__media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,26,34,.35) 0%,rgba(11,26,34,0) 30%,rgba(11,26,34,.15) 55%,rgba(11,26,34,.82) 100%)}
+.nx-hv__in{width:min(1360px,100%);margin-inline:auto;padding:clamp(140px,18vh,220px) clamp(20px,4vw,40px) clamp(28px,5vh,56px)}
+.nx-hv__eye{display:inline-block;margin-bottom:18px;opacity:.9}
+.nx-hv__t{margin:0;font-size:clamp(56px,min(12.5vw,17vh),200px);line-height:.86;letter-spacing:-.05em;font-weight:800;text-wrap:balance}
+.nx-hv__pie{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:clamp(24px,4vh,44px)}
+.nx-btn--glass{border-color:rgba(247,244,236,.7);color:#F7F4EC;background:rgba(11,26,34,.25);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.nx-btn--glass:hover{background:#F7F4EC;color:#0B1A22;border-color:#F7F4EC}
+.nx-hv__pausa{position:absolute;right:clamp(14px,2vw,24px);top:clamp(124px,15vh,140px);width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#F7F4EC;background:rgba(11,26,34,.4);border:1px solid rgba(247,244,236,.35);cursor:pointer}
+.nx-hv__pausa.is-paused svg{display:none}
+.nx-hv__pausa.is-paused::before{content:"";border-left:11px solid currentColor;border-block:7px solid transparent;margin-left:3px}
+
+/* Viento ahora: tarjeta de vidrio sobre el video */
+.nx-viento{display:flex;flex-direction:column;gap:8px;width:min(360px,100%);padding:18px 20px;border-radius:22px;background:rgba(11,26,34,.5);border:1px solid rgba(247,244,236,.22);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:#F7F4EC;text-decoration:none;transition:background .2s,transform .2s}
+.nx-viento:hover{background:rgba(11,26,34,.68);transform:translateY(-2px)}
+.nx-viento[hidden]{display:none}
+.nx-viento__eye{display:flex;align-items:center;gap:8px;color:#FF5A2C}
+.nx-viento__dot{width:8px;height:8px;border-radius:50%;background:#FF5A2C;animation:nxLatido 1.6s ease-in-out infinite}
+@keyframes nxLatido{50%{opacity:.25}}
+.nx-viento__t{font-family:'Bricolage Grotesque',sans-serif;font-size:21px;line-height:1.15;letter-spacing:-.02em}
+.nx-viento__lista{display:flex;flex-direction:column;gap:4px}
+.nx-viento__fila{display:flex;align-items:center;gap:10px;font-size:14px;padding:6px 0;border-top:1px solid rgba(247,244,236,.14)}
+.nx-viento__fila b{flex:1;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nx-viento__kn{font-family:'DM Mono',monospace;font-size:13px;white-space:nowrap}
+.nx-viento__fl{display:inline-block;width:14px;height:14px;flex:none}
+.nx-viento__ok{width:8px;height:8px;border-radius:50%;flex:none;background:#7ED9A1}
+.nx-viento__ok--no{background:rgba(247,244,236,.35)}
+.nx-viento__mas{opacity:.75}
+
+/* Frase con fotos adentro del texto */
+.nx-frase{padding:clamp(72px,10vw,140px) 0 clamp(40px,6vw,72px)}
+.nx-frase__t{margin:0;font-size:clamp(44px,8.6vw,138px);line-height:1;letter-spacing:-.05em;font-weight:800;color:var(--ink);display:flex;flex-wrap:wrap;align-items:center;gap:.08em .22em}
+.nx-frase__img{display:inline-block;height:.78em;width:1.7em;border-radius:999px;overflow:hidden;background:var(--mist);vertical-align:middle}
+.nx-frase__img--l{width:2.6em}
+.nx-frase__img img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* Cinco páginas con foto */
+.nx-sec--top0{padding-top:0}
+.nx-fotos{display:grid;grid-template-columns:repeat(6,1fr);gap:clamp(12px,1.4vw,20px)}
+.nx-foto{position:relative;grid-column:span 2;aspect-ratio:4/5;border-radius:28px 28px 28px 6px;overflow:hidden;background:var(--mist);color:#F7F4EC;text-decoration:none;isolation:isolate}
+.nx-foto--xl{grid-column:span 3;aspect-ratio:16/11;border-radius:120px 28px 28px 28px}
+.nx-foto--xl+.nx-foto--xl{border-radius:28px 120px 28px 28px}
+.nx-foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.2,1);z-index:-2}
+.nx-foto::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(11,26,34,0) 40%,rgba(11,26,34,.78))}
+.nx-foto:hover img{transform:scale(1.05)}
+.nx-foto__txt{position:absolute;left:0;right:0;bottom:0;padding:clamp(18px,2.4vw,30px);display:flex;flex-direction:column;gap:6px}
+.nx-foto__t{font-size:clamp(26px,2.8vw,44px);line-height:1;letter-spacing:-.03em}
+.nx-foto:hover .nx-foto__t{color:#FF5A2C}
+
+@media(max-width:860px){
+  .nx-fotos{grid-template-columns:1fr 1fr}
+  .nx-foto,.nx-foto--xl{grid-column:span 1;aspect-ratio:3/4}
+  .nx-foto--xl{grid-column:span 2;aspect-ratio:4/3}
+  .nx-foto:last-child{grid-column:span 2;aspect-ratio:16/9}
+  .nx-foto--xl{border-radius:72px 24px 24px 24px}
+  .nx-foto--xl+.nx-foto--xl{border-radius:24px 72px 24px 24px}
+  .nx-foto__t{font-size:24px}
+}
+@media(max-width:600px){
+  .nx-hv__pie{flex-direction:column;align-items:stretch}
+  .nx-hv__pie .nx-row{flex-direction:column}
+  .nx-hv__pie .nx-btn{width:100%}
+  .nx-viento{width:100%}
+}
+@media(prefers-reduced-motion:reduce){.nx-viento__dot{animation:none}.nx-foto img{transition:none}}
 </style>
 
   <!-- Leaflet -->
@@ -1691,7 +1762,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <header class="header" id="header">
   <div class="header__inner">
     <a href="/" class="logo" aria-label="Escuela de Wingfoil">
-      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M3 15 C 10 3, 24 3, 31 15 C 24 10, 10 10, 3 15 Z" fill="var(--signal)"/><path d="M3 24 C 9 20, 13 28, 19 24 C 24 21, 27 26, 31 23" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+      <svg width="34" height="34" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M18 16 C14 10 7 8 2 10 C7 11 12 13 15 17 Z" fill="currentColor" opacity=".9"/><path d="M18 16 C22 10 29 8 34 10 C29 11 24 13 21 17 Z" fill="currentColor" opacity=".75"/><path d="M15 17 C16 19 18 20 20 19 L21 17 C20 18 18 18.5 16 17.5 Z" fill="currentColor"/><circle cx="21.5" cy="16" r="2" fill="currentColor"/></svg>
       <span>
         <span class="logo__text">Escuela de Wingfoil</span>
         <span class="logo__text-mobile">WingFoil ARG</span>
@@ -1760,125 +1831,80 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div id="navBgOverlay" aria-hidden="true"></div>
 
 <!-- ============================================================ HERO ============================================================ -->
-<section class="nx-hero" id="inicio" data-pg="inicio">
-  <div class="nx-wrap nx-hero__grid">
-    <div class="nx-hero__txt">
-      <span class="nx-m" data-en="Open wingfoil guide · Argentina">Guía abierta de wingfoil · Argentina</span>
-      <h1 class="nx-d nx-hero__t" data-en="Learn wingfoil and &lt;span&gt;fly&lt;/span&gt; over the water.">Aprendé wingfoil y <span>volá</span> sobre el agua.</h1>
-      <p class="nx-lead" data-en="Videos by level, spots, instructors and gear. All in one place, in Spanish and free.">Videos por nivel, spots, instructores y equipos. Todo en un solo lugar, en español y gratis.</p>
+<!-- Portada: video de fondo a pantalla completa, título grande y el viento de
+     hoy. El detalle vive en cada página; acá solo se elige a dónde ir. -->
+<section class="nx-hv" id="inicio" data-pg="inicio">
+  <div class="nx-hv__media" aria-hidden="true">
+    <img class="nx-hv__poster" src="/assets/video/portada.jpg" alt="" fetchpriority="high"
+         onerror="this.onerror=null;this.src='https://images.pexels.com/videos/34363472/pexels-photo-34363472.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1920'"/>
+    <video class="nx-hv__video" id="heroVideo" muted playsinline loop preload="none" disablepictureinpicture></video>
+  </div>
+  <div class="nx-hv__in">
+    <span class="nx-m nx-hv__eye" data-en="Free wingfoil school · Argentina">Escuela de wingfoil gratis · Argentina</span>
+    <h1 class="nx-d nx-hv__t" data-en="Fly&lt;br&gt;over the water.">Volá<br>sobre el agua.</h1>
+    <div class="nx-hv__pie">
       <div class="nx-row">
-        <a class="nx-btn nx-btn--ink" href="/aprender" data-en="Start now">Empezar ahora</a>
-        <a class="nx-btn nx-btn--line" href="/spots" data-en="See spots">Ver spots</a>
+        <a class="nx-btn nx-btn--signal" href="/aprender" data-en="Start learning">Empezar a aprender</a>
+        <a class="nx-btn nx-btn--glass" href="/spots" data-en="Where to ride today">Dónde volar hoy</a>
       </div>
-      <ol class="nx-pasos">
-        <li><span class="nx-m">01</span><a href="/instructores" data-en="Lesson with an instructor">Clase con instructor</a></li>
-        <li><span class="nx-m">02</span><a href="/herramientas#calculadora" data-en="Your gear">Tu equipo</a></li>
-        <li><span class="nx-m">03</span><a href="/aprender#videos" data-en="Guided practice">Práctica guiada</a></li>
-      </ol>
+      <a class="nx-viento" id="vientoHome" href="/spots#salgo-hoy" hidden>
+        <span class="nx-m nx-viento__eye"><i class="nx-viento__dot"></i><span data-en="Wind now">Viento ahora</span></span>
+        <strong class="nx-viento__t" id="vientoTit"></strong>
+        <span class="nx-viento__lista" id="vientoLista"></span>
+        <span class="nx-m nx-viento__mas" data-en="See all spots →">Ver todos los spots →</span>
+      </a>
     </div>
-    <figure class="nx-hero__fig">
-<svg class="nx-anat" viewBox="0 0 560 540" width="100%" role="img" aria-label="Esquema de un equipo de wingfoil con sus partes: ala, tabla, mástil, front wing, fuselaje y estabilizador">
-      <circle cx="280" cy="200" r="160" fill="none" stroke="currentColor" stroke-opacity=".28" stroke-dasharray="2 7"/>
-      <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M110 150 C 210 60, 350 60, 450 150 C 350 118, 210 118, 110 150 Z" class="a-p"/>
-        <path d="M280 88 L 280 150"/>
-        <path d="M255 150 L 305 150"/>
-        <path d="M100 330 Q 280 296 460 330 L 448 354 Q 280 382 112 354 Z" class="a-p"/>
-        <path d="M262 366 L 276 366 L 280 462 L 258 462 Z" class="a-p"/>
-        <rect x="150" y="460" width="270" height="14" rx="7" class="a-p"/>
-        <path d="M30 482 C 80 448, 130 448, 170 456 C 210 448, 260 448, 310 482 C 260 470, 210 474, 170 478 C 130 474, 80 470, 30 482 Z" class="a-s"/>
-        <path d="M376 470 C 396 462, 430 462, 470 478 C 440 478, 410 478, 376 478 Z" class="a-p"/>
-      </g>
-      <g stroke="currentColor" stroke-width="1" fill="none">
-        <path d="M130 130 L 60 92"/><path d="M450 340 L 510 304"/><path d="M279 412 L 330 412"/><path d="M70 474 L 60 512"/><path d="M230 474 L 240 512"/><path d="M440 474 L 450 512"/>
-      </g>
-      <g class="a-s"><circle cx="130" cy="130" r="4"/><circle cx="450" cy="340" r="4"/><circle cx="279" cy="412" r="4"/><circle cx="70" cy="474" r="4"/><circle cx="230" cy="474" r="4"/><circle cx="440" cy="474" r="4"/></g>
-      <g fill="currentColor" style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em">
-        <text x="10" y="84">01 ALA</text><text x="470" y="296">02 TABLA</text><text x="336" y="416">03 MÁSTIL</text><text x="10" y="528">04 FRONT WING</text><text x="210" y="528">05 FUSELAJE</text><text x="396" y="528">06 ESTABILIZADOR</text>
-      </g>
-    </svg>
-      <figcaption class="nx-m" data-en="Anatomy of a setup · diagram">Anatomía de un equipo · esquema</figcaption>
-    </figure>
+  </div>
+  <button class="nx-hv__pausa" id="heroPausa" type="button" aria-label="Pausar video" data-en-aria-label="Pause video" hidden>
+    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="2" y="1" width="3.5" height="12" rx="1" fill="currentColor"/><rect x="8.5" y="1" width="3.5" height="12" rx="1" fill="currentColor"/></svg>
+  </button>
+</section>
+
+<!-- Frase grande con fotos metidas en el texto -->
+<section class="nx-frase" data-pg="inicio" aria-label="Escuela de Wingfoil">
+  <div class="nx-wrap">
+    <p class="nx-d nx-frase__t">
+      <span data-en="From the shore">De la orilla</span>
+      <span class="nx-frase__img"><img src="https://images.pexels.com/photos/6299950/pexels-photo-6299950.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=600" alt="" loading="lazy"/></span>
+      <span data-en="to your first">al primer</span>
+      <span class="nx-frase__img nx-frase__img--l"><img src="https://images.pexels.com/photos/23190954/pexels-photo-23190954.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900" alt="" loading="lazy"/></span>
+      <span data-en="flight, free.">vuelo, gratis.</span>
+    </p>
+  </div>
+</section>
+
+<!-- Las cinco páginas, con foto -->
+<section class="nx-sec nx-sec--top0" data-pg="inicio">
+  <div class="nx-wrap">
+    <div class="nx-fotos">
+      <a class="nx-foto nx-foto--xl" href="/aprender">
+        <img src="https://images.pexels.com/photos/23190954/pexels-photo-23190954.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1400" alt="Rider de wingfoil volando sobre el foil" loading="lazy"/>
+        <span class="nx-foto__txt"><span class="nx-m">01 · <span data-en="Learn">Aprender</span></span><span class="nx-d nx-foto__t" data-en="Videos by level">Videos por nivel</span></span>
+      </a>
+      <a class="nx-foto nx-foto--xl" href="/spots">
+        <img src="https://images.pexels.com/photos/32217989/pexels-photo-32217989.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1400" alt="Dique Potrerillos, en Mendoza" loading="lazy"/>
+        <span class="nx-foto__txt"><span class="nx-m">02 · Spots</span><span class="nx-d nx-foto__t" data-en="Map, cameras and wind">Mapa, cámaras y viento</span></span>
+      </a>
+      <a class="nx-foto" href="/instructores">
+        <img src="https://images.pexels.com/photos/6299934/pexels-photo-6299934.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900" alt="Instructor enseñando en la playa" loading="lazy"/>
+        <span class="nx-foto__txt"><span class="nx-m">03 · <span data-en="Instructors">Instructores</span></span><span class="nx-d nx-foto__t" data-en="Your first lesson">Tu primera clase</span></span>
+      </a>
+      <a class="nx-foto" href="/equipos">
+        <img src="https://www.kiteworldshop.com/img/cms/blog/ala-wing-foil-duotone-unit-jpg.jpg" alt="Ala de wingfoil" loading="lazy"/>
+        <span class="nx-foto__txt"><span class="nx-m">04 · <span data-en="Gear">Equipos</span></span><span class="nx-d nx-foto__t" data-en="Prices, updated daily">Precios al día</span></span>
+      </a>
+      <a class="nx-foto" href="/herramientas">
+        <img src="https://images.pexels.com/videos/34379407/pexels-photo-34379407.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900" alt="Wingfoil en mar abierto" loading="lazy"/>
+        <span class="nx-foto__txt"><span class="nx-m">05 · <span data-en="Tools">Herramientas</span></span><span class="nx-d nx-foto__t" data-en="Which gear fits you">Qué equipo te sirve</span></span>
+      </a>
+    </div>
   </div>
 </section>
 
 <div class="nx-cinta" data-pg="inicio" aria-hidden="true"><div class="nx-cinta__in">
-  <span>Principiante</span><i>●</i><span>Intermedio</span><i>●</i><span>Avanzado</span><i>●</i><span>Spots</span><i>●</i><span>Instructores</span><i>●</i><span>Equipos</span><i>●</i><span>Sudestada</span><i>●</i><span>Cámaras en vivo</span><i>●</i>
-  <span>Principiante</span><i>●</i><span>Intermedio</span><i>●</i><span>Avanzado</span><i>●</i><span>Spots</span><i>●</i><span>Instructores</span><i>●</i><span>Equipos</span><i>●</i><span>Sudestada</span><i>●</i><span>Cámaras en vivo</span><i>●</i>
+  <span>San Isidro</span><i>●</i><span>Mar del Plata</span><i>●</i><span>Bariloche</span><i>●</i><span>Pinamar</span><i>●</i><span>Chascomús</span><i>●</i><span>Potrerillos</span><i>●</i>
+  <span>San Isidro</span><i>●</i><span>Mar del Plata</span><i>●</i><span>Bariloche</span><i>●</i><span>Pinamar</span><i>●</i><span>Chascomús</span><i>●</i><span>Potrerillos</span><i>●</i>
 </div></div>
-
-<section class="nx-sec" data-pg="inicio">
-  <div class="nx-wrap">
-    <div class="nx-head">
-      <h2 class="nx-d nx-h2" data-en="Your path, level by level.">Tu camino, nivel por nivel.</h2>
-      <a class="nx-btn nx-btn--line" href="/aprender#videos" data-en="See all videos">Ver todos los videos</a>
-    </div>
-    <div class="nx-niveles">
-      <a class="nx-card nx-nivel" href="/aprender#nivel-1"><span class="nx-d nx-nivel__n">01</span><h3 class="nx-d" data-en="Beginner">Principiante</h3><p data-en="Wing handling on land, first runs on the water and your first short flight.">Manejo del ala en tierra, primeras bajadas al agua y tu primer vuelo corto.</p><span class="nx-m" data-en="See videos →">Ver videos →</span></a>
-      <a class="nx-card nx-nivel nx-nivel--mar" href="/aprender#nivel-2"><span class="nx-d nx-nivel__n">02</span><h3 class="nx-d" data-en="Intermediate">Intermedio</h3><p data-en="Take off consistently, hold your height and start turning without falling.">Despegar seguido, mantener la altura y empezar a girar sin caerte.</p><span class="nx-m" data-en="See videos →">Ver videos →</span></a>
-      <a class="nx-card nx-nivel nx-nivel--tinta" href="/aprender#nivel-3"><span class="nx-d nx-nivel__n">03</span><h3 class="nx-d" data-en="Advanced">Avanzado</h3><p data-en="Tacks, transitions, waves and downwind. Fine technique to fly further.">Viradas, transiciones, olas y downwind. Técnica fina para volar más lejos.</p><span class="nx-m" data-en="See videos →">Ver videos →</span></a>
-    </div>
-  </div>
-</section>
-
-<section class="nx-sec nx-sec--arena" data-pg="inicio">
-  <div class="nx-wrap nx-split">
-    <div class="nx-stack">
-      <span class="nx-m nx-c-mar" data-en="On the water today">Hoy en el agua</span>
-      <h2 class="nx-d nx-h2" data-en="Check before you go.">Mirá antes de salir.</h2>
-      <p class="nx-lead" data-en="Live cameras, the wind forecast for each spot and the state of the Río de la Plata.">Cámaras en vivo, el pronóstico de viento de cada spot y el estado del Río de la Plata.</p>
-      <a class="nx-btn nx-btn--ink" href="/spots" data-en="See spots and cameras">Ver spots y cámaras</a>
-    </div>
-    <div class="nx-tiles">
-      <a class="nx-card nx-tile nx-tile--bruma" href="/spots#camaras"><span class="nx-pill nx-pill--signal" data-en="Live">En vivo</span><span class="nx-d nx-tile__t" data-en="Cameras: San Isidro and Mar del Plata">Cámaras: San Isidro y Mar del Plata</span></a>
-      <a class="nx-card nx-tile nx-tile--bruma" href="/spots#salgo-hoy"><span class="nx-pill" data-en="Forecast">Pronóstico</span><span class="nx-d nx-tile__t" data-en="Can I ride today? Spot by spot">¿Salgo hoy? Spot por spot</span></a>
-      <a class="nx-card nx-tile nx-tile--tinta" href="/spots#sudestada"><span class="nx-m nx-c-signal" data-en="Sudestada · Río de la Plata">Sudestada · Río de la Plata</span><span class="nx-d nx-tile__t" data-en="Floods, low tides and live tide">Crecidas, bajantes y marea en vivo</span></a>
-    </div>
-  </div>
-</section>
-
-<section class="nx-sec" data-pg="inicio">
-  <div class="nx-wrap">
-    <div class="nx-head">
-      <h2 class="nx-d nx-h2" data-en="Instructors who get you flying.">Instructores que te ponen a volar.</h2>
-      <a class="nx-btn nx-btn--line" href="/instructores" data-en="See directory">Ver directorio</a>
-    </div>
-    <div class="nx-grid3">
-      <a class="nx-card nx-box" href="/instructores"><span class="nx-m nx-c-mar" data-en="Directory">Directorio</span><span class="nx-d nx-box__t" data-en="Choose by spot and level and write to them directly.">Elegí por spot y nivel, y escribile directo.</span><span class="nx-m" data-en="See instructors →">Ver instructores →</span></a>
-      <a class="nx-card nx-box" href="/herramientas#calculadora"><span class="nx-m nx-c-mar" data-en="Before your lesson">Antes de tu clase</span><span class="nx-d nx-box__t" data-en="Find out what gear size fits you.">Sabé qué tamaño de equipo te sirve.</span><span class="nx-m" data-en="Calculate →">Calcular →</span></a>
-      <a class="nx-card nx-box nx-box--signal" href="/instructores"><span class="nx-m" data-en="Do you teach?">¿Das clases?</span><span class="nx-d nx-box__t" data-en="Add your profile, free.">Sumá tu perfil, gratis.</span><span class="nx-m" data-en="Publish profile →">Publicar perfil →</span></a>
-    </div>
-  </div>
-</section>
-
-<section class="nx-sec nx-sec--arena" data-pg="inicio">
-  <div class="nx-wrap">
-    <div class="nx-head">
-      <h2 class="nx-d nx-h2" data-en="Gear prices, updated every day.">Precios de equipos, al día.</h2>
-      <a class="nx-btn nx-btn--line" href="/equipos" data-en="See all gear">Ver todos los equipos</a>
-    </div>
-    <div class="nx-grid3">
-      <a class="nx-card nx-box nx-box--papel" href="/equipos"><span class="nx-m nx-c-mar">Mercado Libre</span><span class="nx-d nx-box__t" data-en="Wings, boards and foils: prices and sellers.">Alas, tablas y foils: precios y vendedores.</span><span class="nx-m" data-en="See prices →">Ver precios →</span></a>
-      <a class="nx-card nx-box nx-box--papel" href="/equipos"><span class="nx-m nx-c-mar">Hard Wind</span><span class="nx-d nx-box__t" data-en="The store's catalogue, with stock and price changes.">El catálogo de la tienda, con stock y cambios de precio.</span><span class="nx-m" data-en="See store →">Ver tienda →</span></a>
-      <a class="nx-card nx-box nx-box--papel" href="/herramientas#comparador"><span class="nx-m nx-c-mar" data-en="Comparison">Comparador</span><span class="nx-d nx-box__t" data-en="Brands side by side before you buy.">Marcas lado a lado antes de comprar.</span><span class="nx-m" data-en="Compare →">Comparar →</span></a>
-    </div>
-  </div>
-</section>
-
-<section class="nx-sec" data-pg="inicio">
-  <div class="nx-wrap">
-    <div class="nx-calc">
-      <div class="nx-stack">
-        <span class="nx-m nx-c-signal" data-en="Gear calculator">Calculadora de equipo</span>
-        <h2 class="nx-d nx-h2" data-en="What gear do I need?">¿Qué equipo necesito?</h2>
-        <p class="nx-lead" data-en="Tell us your weight, your level and your spot's wind. We'll put together a recommendation.">Contanos tu peso, tu nivel y el viento de tu spot. Te armamos una recomendación.</p>
-      </div>
-      <a class="nx-btn nx-btn--signal" href="/herramientas#calculadora" data-en="Calculate my gear">Calcular mi equipo</a>
-    </div>
-  </div>
-</section>
-
-
 
 <!-- ============================================================ ¿SALGO HOY? ============================================================ -->
 <section class="nx-intro" data-pg="spots" id="pagina-spots">
@@ -2034,66 +2060,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </section>
 
-<!-- ============================================================ TESTIMONIOS ============================================================ -->
-<section class="section testimonials" id="testimonios" data-pg="inicio">
-  <div class="container">
-    <span class="eyebrow" data-en="💬 Community">💬 Comunidad</span>
-    <h2 class="section-title" data-en="People already flying">La gente que ya está volando</h2>
-    <p class="section-sub">Testimonios reales de riders argentinos que arrancaron con la Escuela de Wingfoil.</p>
-    <div class="testi-grid">
-
-      <article class="testi-card">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">Arranqué de cero hace 4 meses sin experiencia previa en deportes de viento. Los videos de nivel principiante me ayudaron a entender qué hacer antes de cada clase. Hoy ya estoy foileando.</p>
-        <div class="testi-author">
-          <div class="testi-avatar">MR</div>
-          <div>
-            <div class="testi-name">Martín R.</div>
-            <div class="testi-meta">Buenos Aires · 38 años</div>
-          </div>
-        </div>
-      </article>
-
-      <article class="testi-card">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">La calculadora de equipo me salvó de comprar mal. Justo cuando estaba por gastar de más, vi que necesitaba una tabla más grande para mi peso. Encontré una usada en la sección de equipos a buen precio.</p>
-        <div class="testi-author">
-          <div class="testi-avatar">CL</div>
-          <div>
-            <div class="testi-name">Carolina L.</div>
-            <div class="testi-meta">Bariloche · Intermedia</div>
-          </div>
-        </div>
-      </article>
-
-      <article class="testi-card">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">Lo mejor es el mapa de spots. Como vivo en Mar del Plata pero viajo seguido, ya tengo identificados los lugares para foilear cuando voy de visita a otras provincias. Información clara y útil.</p>
-        <div class="testi-author">
-          <div class="testi-avatar">DF</div>
-          <div>
-            <div class="testi-name">Diego F.</div>
-            <div class="testi-meta">Mar del Plata · 5 años de experiencia</div>
-          </div>
-        </div>
-      </article>
-
-      <article class="testi-card">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">Soy instructor y me sumé a la plataforma para conectar con alumnos nuevos. Es un gran aporte para visibilizar a los profes certificados de Argentina. Recomendado para colegas.</p>
-        <div class="testi-author">
-          <div class="testi-avatar">JP</div>
-          <div>
-            <div class="testi-name">Juan Pablo M.</div>
-            <div class="testi-meta">Instructor · Río Negro</div>
-          </div>
-        </div>
-      </article>
-
-    </div>
-  </div>
-</section>
-
 <!-- ============================================================ ABOUT ============================================================ -->
 <section class="section" id="que-es" data-pg="aprender">
   <div class="container">
@@ -2118,15 +2084,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </div>
 </section>
-
-<!-- IMPACT STRIP -->
-<div class="impact-strip" data-pg="inicio">
-  <div class="impact-strip__inner">
-    <div class="impact-strip__img"><img width="1256" height="620" src="https://www.clarin.com/img/2026/01/05/u69gwDqEC_1256x620__2.jpg#1767723957906" alt="Wingfoil Argentina 2026" loading="lazy"/></div>
-    <div class="impact-strip__img"><img width="780" height="519" src="https://resizer.glanacion.com/resizer/v2/el-windsurf-perdio-la-onda-todo-va-hacia-el-foil-AQSI2OWHD5GHLNZRLS2IDHSYEY.jpeg?auth=2a8e00a13f3548c9c8446c17376138a19bfd9ce0a172517f560ab580a1d3bf9c&width=780&height=519&quality=70&smart=true" alt="Foil Argentina" loading="lazy"/></div>
-    <div class="impact-strip__img"><img width="780" height="520" src="https://resizer.glanacion.com/resizer/v2/paloma-gutierrez-instructora-argentina-en-la-UZJIX32ZSBAW7KNIJBF2ATBSMA.jpeg?auth=8cd91c9a20fc6ebe72fa73c8496b8b66fb36ccbcf05a103c34e753198e719a64&width=780&height=520&quality=70&smart=true" alt="Instructora argentina de wingfoil" loading="lazy"/></div>
-  </div>
-</div>
 
 <!-- ============================================================ VIDEOS ============================================================ -->
 <section class="section" id="videos" data-pg="aprender">
@@ -3919,7 +3876,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="footer__inner">
       <div>
         <a href="/" class="logo" aria-label="Escuela de Wingfoil">
-          <svg width="32" height="32" viewBox="0 0 36 36" fill="none"><path d="M18 16 C14 10 7 8 2 10 C7 11 12 13 15 17 Z" fill="currentColor" opacity=".9"/><path d="M18 16 C22 10 29 8 34 10 C29 11 24 13 21 17 Z" fill="currentColor" opacity=".75"/><circle cx="21.5" cy="16" r="2" fill="currentColor"/></svg>
+          <svg width="32" height="32" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M18 16 C14 10 7 8 2 10 C7 11 12 13 15 17 Z" fill="currentColor" opacity=".9"/><path d="M18 16 C22 10 29 8 34 10 C29 11 24 13 21 17 Z" fill="currentColor" opacity=".75"/><path d="M15 17 C16 19 18 20 20 19 L21 17 C20 18 18 18.5 16 17.5 Z" fill="currentColor"/><circle cx="21.5" cy="16" r="2" fill="currentColor"/></svg>
           <span class="logo__text">Escuela de Wingfoil</span>
         </a>
         <p class="footer__desc" data-en="The most complete free wingfoil learning platform in Argentina. Made by riders, for riders.">La plataforma educativa gratuita de wingfoil más completa de Argentina. Creada por riders, para riders.</p>
@@ -3948,7 +3905,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <li><a href="#instructores">Instructores</a></li>
             <li><a href="#spots">Spots Argentina</a></li>
             <li><a href="#venta-de-wingfoil">Equipos en venta</a></li>
-            <li><a href="#testimonios">Testimonios</a></li>
             <li><a href="#marcas">Marcas</a></li>
             <li><a href="#participa">Encuesta y Sponsors</a></li>
           </ul>
@@ -7141,6 +7097,7 @@ else loadEquipos();
     // Bramador contesta con esto mismo, sin volver a pedirlo.
     window.__EWF = window.__EWF || {};
     window.__EWF.HOY = {si:si, no:no, actualizado:new Date()};
+    try{ window.dispatchEvent(new Event('ewf:hoy')); }catch(e){}
 
     var resumen = document.getElementById('hoyResumen');
     if(si.length){
@@ -7435,6 +7392,69 @@ if(/^\/venta-de-wingfoil\/?$/.test(location.pathname)){window.addEventListener('
   }
   arranque(true);
   window.addEventListener('load', function(){ var el = destino(location.hash); if(el) bajarA(el); });
+})();
+</script>
+
+<script>
+// ===== PORTADA: video de fondo y viento ahora =====
+(function(){
+  // Video: horizontal en compu, vertical en celular. No se carga si la persona
+  // pidió menos movimiento o ahorro de datos: queda la foto fija.
+  var v = document.getElementById('heroVideo');
+  var btn = document.getElementById('heroPausa');
+  var poster = document.querySelector('.nx-hv__poster');
+  var vertical = window.matchMedia && matchMedia('(max-aspect-ratio: 4/5)').matches;
+  if(vertical && poster){
+    poster.src = '/assets/video/portada-movil.jpg';
+  }
+  var quieto = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var ahorro = navigator.connection && (navigator.connection.saveData || /2g/.test(navigator.connection.effectiveType || ''));
+  if(v && !quieto && !ahorro){
+    var src = vertical
+      ? ['/assets/video/portada-movil.mp4']
+      : ['/assets/video/portada.mp4'];
+    var i = 0;
+    v.addEventListener('error', function(){ if(++i < src.length){ v.src = src[i]; v.play().catch(function(){}); } }, true);
+    v.addEventListener('playing', function(){ v.classList.add('is-on'); if(btn) btn.hidden = false; });
+    var arrancar = function(){ v.src = src[0]; v.play().catch(function(){}); };
+    if(document.readyState === 'complete') arrancar(); else window.addEventListener('load', arrancar);
+    if(btn) btn.addEventListener('click', function(){
+      if(v.paused){ v.play(); btn.classList.remove('is-paused'); btn.setAttribute('aria-label', 'Pausar video'); }
+      else{ v.pause(); btn.classList.add('is-paused'); btn.setAttribute('aria-label', 'Reproducir video'); }
+    });
+    // Fuera de la portada el video no tiene por qué seguir corriendo.
+    new MutationObserver(function(){
+      if(document.documentElement.getAttribute('data-page') !== 'inicio') v.pause();
+      else if(!btn.classList.contains('is-paused') && v.src) v.play().catch(function(){});
+    }).observe(document.documentElement, { attributes:true, attributeFilter:['data-page'] });
+  }
+
+  // Viento ahora: usa el mismo pronóstico que arma "¿Salgo hoy?" en Spots.
+  var caja = document.getElementById('vientoHome');
+  if(!caja) return;
+  function flecha(deg){
+    // La dirección meteorológica dice de dónde VIENE el viento: la flecha apunta hacia donde va.
+    return '<svg class="nx-viento__fl" viewBox="0 0 14 14" style="transform:rotate(' + ((deg + 180) % 360) + 'deg)" aria-hidden="true"><path d="M7 1 L11 9 L7 7 L3 9 Z" fill="currentColor"/></svg>';
+  }
+  function esc(t){ return String(t).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function pintar(){
+    var h = (window.__EWF || {}).HOY;
+    if(!h) return;
+    var total = h.si.length + h.no.length;
+    var en = document.documentElement.lang === 'en';
+    document.getElementById('vientoTit').textContent = h.si.length
+      ? (en ? 'You can ride in ' + h.si.length + ' of ' + total + ' spots' : 'Se puede navegar en ' + h.si.length + ' de ' + total + ' spots')
+      : (en ? 'No wind window in the next 12 h' : 'Sin ventana de viento en las próximas 12 h');
+    var filas = h.si.slice(0, 3).concat(h.no.slice(0, Math.max(0, 3 - h.si.length)));
+    document.getElementById('vientoLista').innerHTML = filas.map(function(r){
+      var d = r.ok ? r.ventana : r.ahora;
+      return '<span class="nx-viento__fila"><i class="nx-viento__ok' + (r.ok ? '' : ' nx-viento__ok--no') + '"></i><b>' + esc(r.spot.n) + '</b>' +
+             flecha(d.dir) + '<span class="nx-viento__kn">' + d.kn + ' kn</span></span>';
+    }).join('');
+    caja.hidden = false;
+  }
+  window.addEventListener('ewf:hoy', pintar);
+  pintar();
 })();
 </script>
 </body>
