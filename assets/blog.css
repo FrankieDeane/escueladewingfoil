@@ -69,3 +69,14 @@ html[data-theme="dark"] .share-btn--copy{border-color:var(--paper);color:var(--p
 /* Pie */
 .foot{background:var(--ink);color:rgba(247,244,236,.7);border-top:0;padding:36px 16px}
 .foot a{color:var(--paper)}
+
+/* Cabecera del artículo: título sobre la foto, de lado a lado */
+.wf-cab{position:relative;isolation:isolate;overflow:hidden;width:100vw;margin:0 calc(50% - 50vw) 40px;min-height:clamp(420px,62vh,640px);display:flex;align-items:flex-end;background:#0B1A22;color:#F7F4EC}
+.wf-cab__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.wf-cab::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(11,26,34,.15) 0%,rgba(11,26,34,.35) 45%,rgba(11,26,34,.88) 100%)}
+.wf-cab__in{width:min(780px,100%);margin:0 auto;padding:0 clamp(16px,4vw,24px) clamp(32px,5vw,56px)}
+.wf-cab__in h1{color:#F7F4EC!important;font-size:clamp(36px,6vw,64px)!important}
+.wf-cab__in p{color:rgba(247,244,236,.85)!important;margin-bottom:0!important}
+.wf-cab__in > div:first-child span{color:#FF5A2C!important}
+.crumbs{position:relative;z-index:2}
+html,body{overflow-x:clip}

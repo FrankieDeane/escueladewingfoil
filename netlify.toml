@@ -58,6 +58,11 @@
   status = 200
 
 [[redirects]]
+  from = "/articulos"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
   from = "/venta-de-wingfoil"
   to = "/index.html"
   status = 200

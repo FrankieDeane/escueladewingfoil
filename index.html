@@ -261,7 +261,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   // Cada sección del sitio vive en una de 6 páginas (/aprender, /spots…). Se
   // decide antes de pintar para que no se vea la home un instante.
   (function(){
-    var P={'':'inicio',aprender:'aprender',spots:'spots',instructores:'instructores',equipos:'equipos','venta-de-wingfoil':'equipos',herramientas:'herramientas'};
+    var P={'':'inicio',aprender:'aprender',spots:'spots',instructores:'instructores',equipos:'equipos','venta-de-wingfoil':'equipos',herramientas:'herramientas',articulos:'articulos'};
     var r=location.pathname.replace(/^\/+|\/+$/g,'').replace(/(^|\/)index\.html$/,'');
     document.documentElement.setAttribute('data-page',P[r]||'inicio');
     try{if(localStorage.getItem('wf-tema')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}
@@ -1485,7 +1485,8 @@ html[data-page="aprender"] [data-pg]:not([data-pg~="aprender"]),
 html[data-page="spots"] [data-pg]:not([data-pg~="spots"]),
 html[data-page="instructores"] [data-pg]:not([data-pg~="instructores"]),
 html[data-page="equipos"] [data-pg]:not([data-pg~="equipos"]),
-html[data-page="herramientas"] [data-pg]:not([data-pg~="herramientas"]){display:none!important}
+html[data-page="herramientas"] [data-pg]:not([data-pg~="herramientas"]),
+html[data-page="articulos"] [data-pg]:not([data-pg~="articulos"]){display:none!important}
 
 /* ── Piezas base ── */
 .nx-wrap{width:min(1360px,100%);margin-inline:auto;padding-inline:clamp(20px,4vw,40px)}
@@ -1523,12 +1524,14 @@ html[data-page="herramientas"] [data-pg]:not([data-pg~="herramientas"]){display:
 .nav-rail__arrow{display:none!important}
 .header__inner{width:min(1360px,100%);padding-inline:clamp(20px,4vw,40px)}
 .nav-rail{margin-inline:24px}
-.nav-desktop{justify-content:center;padding-right:0;-webkit-mask-image:none!important;mask-image:none!important}
+.nav-desktop{justify-content:safe center;padding-right:0;-webkit-mask-image:none!important;mask-image:none!important}
 .logo__text,.logo__text-mobile{text-transform:none;font-size:20px}
 .header__actions{gap:10px}
 .lang{background:var(--surface-2);border-color:var(--border)}
 .lang button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
-@media(max-width:1100px){.nx-hide-m{display:none!important}}
+@media(max-width:1360px){.nx-hide-m{display:none!important}}
+@media(max-width:1280px){.nav-desktop{gap:20px}.nav-desktop a{font-size:15px}.nav-rail{margin-inline:16px}}
+@media(max-width:1120px){.nav-desktop{gap:14px}.nav-desktop a{font-size:14px!important}}
 .nav-drawer{background:var(--bg)}
 .nav-drawer a{font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--ink);border-bottom:1px solid var(--divider)}
 .nav-drawer a[aria-current="page"]{color:var(--signal)}
@@ -1814,6 +1817,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <a href="/instructores" data-nav="instructores" data-en="Instructors">Instructores</a>
       <a href="/equipos" data-nav="equipos" data-en="Gear">Equipos</a>
       <a href="/herramientas" data-nav="herramientas" data-en="Tools">Herramientas</a>
+      <a href="/articulos" data-nav="articulos" data-en="Articles">Artículos</a>
       </nav>
       <button class="nav-rail__arrow nav-rail__arrow--next" id="navNext" type="button" tabindex="-1" aria-label="Ver más opciones del menú" data-en-aria-label="Show more menu items">›</button>
     </div>
@@ -1852,6 +1856,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <a href="/instructores" data-nav="instructores"><span data-en="Instructors">Instructores</span><span class="arrow">›</span></a>
   <a href="/equipos" data-nav="equipos"><span data-en="Gear">Equipos</span><span class="arrow">›</span></a>
   <a href="/herramientas" data-nav="herramientas"><span data-en="Tools">Herramientas</span><span class="arrow">›</span></a>
+  <a href="/articulos" data-nav="articulos"><span data-en="Articles">Artículos</span><span class="arrow">›</span></a>
   <div class="nav-drawer__footer">
     <button class="nav-drawer__theme" id="drawerTheme">
       <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -2064,7 +2069,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <span class="nx-m" data-en="Learn · Free videos and guides">Aprender · Videos y guías gratis</span>
     <h1 class="nx-d nx-intro__t" data-en="From the shore to your first flight.">De la orilla al primer vuelo.</h1>
     <p class="nx-lead" data-en="Three levels, one clear progression. Pick where you are and continue from there.">Tres niveles, una progresión clara. Elegí dónde estás y seguí desde ahí.</p>
-    <nav class="nx-chips" aria-label="En esta página"><a class="nx-chip" href="#nivel-1" data-en="01 Beginner">01 Principiante</a><a class="nx-chip" href="#nivel-2" data-en="02 Intermediate">02 Intermedio</a><a class="nx-chip" href="#nivel-3" data-en="03 Advanced">03 Avanzado</a><a class="nx-chip" href="#anatomia" data-en="Anatomy">Anatomía</a><a class="nx-chip" href="#maniobras" data-en="Manoeuvres">Maniobras</a><a class="nx-chip" href="#glosario" data-en="Glossary">Glosario</a><a class="nx-chip" href="#blog" data-en="Guides">Guías</a><a class="nx-chip" href="#faq" data-en="FAQ">Preguntas</a></nav>
+    <nav class="nx-chips" aria-label="En esta página"><a class="nx-chip" href="#nivel-1" data-en="01 Beginner">01 Principiante</a><a class="nx-chip" href="#nivel-2" data-en="02 Intermediate">02 Intermedio</a><a class="nx-chip" href="#nivel-3" data-en="03 Advanced">03 Avanzado</a><a class="nx-chip" href="#anatomia" data-en="Anatomy">Anatomía</a><a class="nx-chip" href="#maniobras" data-en="Manoeuvres">Maniobras</a><a class="nx-chip" href="#glosario" data-en="Glossary">Glosario</a><a class="nx-chip" href="/articulos" data-en="Articles">Artículos</a><a class="nx-chip" href="#faq" data-en="FAQ">Preguntas</a></nav>
     </div>
     <figure class="nx-intro__fig"><img src="/assets/img/wf-14447119-800.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
   </div>
@@ -3033,10 +3038,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ BLOG TEASER ============================================================ -->
-<section class="section blog-teaser" id="blog" data-pg="aprender">
+<section class="nx-intro nx-intro--foto" data-pg="articulos" id="pagina-articulos">
+  <img class="nx-intro__bg" src="/assets/img/wf-video-aereo.jpg" alt="" loading="lazy"/>
+  <div class="nx-wrap nx-intro__grid">
+    <div class="nx-stack">
+    <span class="nx-m" data-en="Articles · 27 free guides">Artículos · 27 guías gratis</span>
+    <h1 class="nx-d nx-intro__t" data-en="Read before you go out.">Leé antes de salir.</h1>
+    <p class="nx-lead" data-en="Technique, wind, gear, safety and spots. Written for riders in Argentina.">Técnica, viento, equipo, seguridad y spots. Escritos para riders de Argentina.</p>
+    </div>
+    <figure class="nx-intro__fig"><img src="/assets/img/wf-video-vuelo.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
+  </div>
+</section>
+<section class="section blog-teaser" id="blog" data-pg="articulos">
   <div class="container">
     <span class="eyebrow">📚 Recursos</span>
-    <h2 class="section-title" data-en="Guides and articles">Guías y artículos</h2>
+    <h2 class="section-title" data-en="All the articles">Todos los artículos</h2>
     <p class="section-sub" data-en="In-depth guides for every stage of your learning.">Guías en profundidad para cada etapa de tu aprendizaje.</p>
     <p style="margin-top:8px;font-weight:700"><a href="/blog/" style="color:var(--primary)" data-en="See all guides →">Ver todas las guías →</a></p>
     <div class="blog-grid">
@@ -3974,7 +3990,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="footer__desc" data-en="The most complete free wingfoil learning platform in Argentina. Made by riders, for riders.">La plataforma educativa gratuita de wingfoil más completa de Argentina. Creada por riders, para riders.</p>
       </div>
       <nav class="nx-foot-nav" aria-label="Páginas">
-        <a href="/aprender" data-en="Learn">Aprender</a><a href="/spots">Spots</a><a href="/instructores" data-en="Instructors">Instructores</a><a href="/equipos" data-en="Gear">Equipos</a><a href="/herramientas" data-en="Tools">Herramientas</a>
+        <a href="/aprender" data-en="Learn">Aprender</a><a href="/spots">Spots</a><a href="/instructores" data-en="Instructors">Instructores</a><a href="/equipos" data-en="Gear">Equipos</a><a href="/herramientas" data-en="Tools">Herramientas</a><a href="/articulos" data-en="Articles">Artículos</a>
       </nav>
       <div class="footer__links">
         <div class="footer__col">
@@ -3988,7 +4004,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <li><a href="#faq">Preguntas frecuentes</a></li>
             <li><a href="#comparador">Comparador de marcas</a></li>
             <li><a href="#riders">Riders & Legends</a></li>
-            <li><a href="#blog">Guías y artículos</a></li>
+            <li><a href="/articulos">Artículos</a></li>
           </ul>
         </div>
         <div class="footer__col">
@@ -7302,7 +7318,7 @@ if(/^\/venta-de-wingfoil\/?$/.test(location.pathname)){window.addEventListener('
 (function(){
   var en = function(){ return document.documentElement.lang === 'en'; };
   var grupos = [
-    { sel: '#blog .blog-grid' }, { sel: '#manGrid' }, { sel: '.riders-grid' }, { sel: '#glosarioGrid' }
+    { sel: '#manGrid' }, { sel: '.riders-grid' }, { sel: '#glosarioGrid' }
   ];
   grupos.forEach(function(g){
     var box = document.querySelector(g.sel);
@@ -7361,6 +7377,7 @@ if(/^\/venta-de-wingfoil\/?$/.test(location.pathname)){window.addEventListener('
     spots:        { url:'/spots',        t:'Spots de wingfoil en Argentina, cámaras y sudestada | Escuela de Wingfoil', d:'Dónde navegar wingfoil en Argentina: mapa de spots, pronóstico por spot, cámaras en vivo y estado del Río de la Plata.' },
     instructores: { url:'/instructores', t:'Instructores de wingfoil en Argentina | Escuela de Wingfoil', d:'Directorio de instructores de wingfoil en Argentina. Elegí por spot y nivel, y escribiles directo.' },
     equipos:      { url:'/equipos',      t:'Equipos de wingfoil: precios en Mercado Libre y Hard Wind | Escuela de Wingfoil', d:'Precios de alas, tablas y foils de wingfoil en Argentina, relevados todos los días en Mercado Libre y Hard Wind.' },
+    articulos:    { url:'/articulos',    t:'Artículos de wingfoil: guías, técnica, equipo y spots | Escuela de Wingfoil', d:'27 artículos de wingfoil en español: cómo empezar, técnica, viento, equipo, seguridad y los mejores spots de Argentina y Brasil.' },
     herramientas: { url:'/herramientas', t:'Calculadora de equipo y comparador de marcas de wingfoil | Escuela de Wingfoil', d:'Calculá qué tamaño de ala, tabla y foil te sirve y compará marcas de wingfoil lado a lado.' }
   };
   var desc = document.querySelector('meta[name="description"]');
