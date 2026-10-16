@@ -2,24 +2,21 @@ name: Prueba Hard Wind (temporal)
 on:
   push:
     branches: [claude/project-thread-x8qspj]
-    paths: [.github/workflows/hardwind-probe.yml, scripts/hardwind_scraper.py]
+    paths: [.github/workflows/hardwind-probe.yml, scripts/hardwind-parse.mjs]
 jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: { python-version: '3.12' }
       - run: |
-          curl -sL -A 'Mozilla/5.0' 'https://hardwind.com/wing/' -o p.html
-          python3 - <<'PY'
-          import re
-          h=open('p.html',encoding='utf-8').read()
-          j=h.find('class="js-item-product'); b=h[j:h.find('class="js-item-product',j+10)]
-          b=re.sub(r'data-variants="[^"]*"','data-variants="…"',b)
-          print(b[:6000])
-          PY
-          for n in 5 8 30; do curl -s -o /dev/null -w "page $n -> %{http_code} %{size_download}\n" -A 'Mozilla/5.0' "https://hardwind.com/wing/page/$n/"; done
-          curl -sL -A 'Mozilla/5.0' 'https://hardwind.com/wing/page/30/' | grep -c 'class="js-item-product' || true
-      - run: pip install playwright && python -m playwright install --with-deps chromium
-      - run: python scripts/hardwind_scraper.py wing foil && head -20 prices.csv && wc -l prices.csv
+          for u in wing/ foil/page/4/ usado/ neoprenes/ accesorios1/ straps-y-botas/; do
+            curl -sL -A 'Mozilla/5.0' "https://hardwind.com/$u" -o "p.html"
+            node -e "
+              import('./scripts/hardwind-parse.mjs').then(({parseCategoria}) => {
+                const ps = parseCategoria(require('fs').readFileSync('p.html','utf8'));
+                const c = (k) => ps.filter(p => p[k] != null && p[k] !== false).length;
+                console.log('$u', ps.length, 'cat', c('categoria'), 'precio', c('precio'), 'url', c('url'), 'img', c('imagen'), 'transf', c('precioTransferencia'), 'disp', c('disponible'), 'consultar', c('consultar'), 'anterior', c('precioAnterior'));
+                console.log(JSON.stringify(ps.slice(0, 2)));
+              });"
+            sleep 3
+          done

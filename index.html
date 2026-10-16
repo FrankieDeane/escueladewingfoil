@@ -2372,10 +2372,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <span class="eyebrow">Comunidad</span>
     <h2 class="section-title" data-en="Gear for Sale">Equipos en Venta</h2>
-    <p class="section-sub">Qué se vende más y a qué precio en Mercado Libre: tablas, wings, foils, neoprenes y accesorios. O publicá tu equipo gratis en la comunidad.</p>
+    <p class="section-sub">Qué se vende más y a qué precio en Mercado Libre y en la tienda Hard Wind: tablas, wings, foils, neoprenes y accesorios. O publicá tu equipo gratis en la comunidad.</p>
 
     <div class="eq-tabs" role="tablist">
       <button class="eq-tab active" role="tab" aria-selected="true" aria-controls="eqPanelBuscador" data-eqtab="buscador">📊 Mercado Libre</button>
+      <button class="eq-tab" role="tab" aria-selected="false" aria-controls="eqPanelHardwind" data-eqtab="hardwind">🏄 Hard Wind</button>
       <button class="eq-tab" role="tab" aria-selected="false" aria-controls="eqPanelComunidad" data-eqtab="comunidad">🤝 Comunidad · publicar</button>
     </div>
 
@@ -2445,6 +2446,40 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <button type="button" class="mld__btn mld__btn--sm mld__mas" id="mldMas" hidden></button>
         </div>
         <p class="equipos-disclaimer" style="margin-bottom:0">⚠️ Los productos los publican vendedores de Mercado Libre: no tenemos relación comercial con ellos ni garantizamos precio, stock o estado del equipo. El ranking sigue el orden en que Mercado Libre muestra los productos en sus listados de wingfoil. Verificá siempre en la publicación original antes de comprar.</p>
+      </div>
+    </div>
+
+    <!-- PRECIOS HARD WIND (assets/hardwind.js) -->
+    <div id="eqPanelHardwind" hidden>
+      <div class="mld is-loading" id="hwDash">
+        <div class="mld__head">
+          <p class="mld__estado" id="hwEstado" aria-live="polite">Cargando precios de Hard Wind…</p>
+          <button type="button" class="mld__btn" id="hwRelevar">🔄 Relevar</button>
+        </div>
+        <p class="mld__aviso" id="hwAviso" hidden aria-live="polite"></p>
+        <div class="mld__kpis" id="hwKpis"></div>
+        <div class="mld__grid">
+          <div class="mld__card"><h4>Precio promedio por categoría</h4><p class="mld__sub">Precio de lista de los productos con precio publicado, y rango de mínimo a máximo.</p><ul class="hw__bars" id="hwCats"></ul></div>
+          <div class="mld__card"><h4>Cambios de precio</h4><p class="mld__sub">Productos que subieron o bajaron desde el relevamiento anterior.</p><ol class="mld__caros" id="hwCambios"></ol></div>
+        </div>
+        <div class="mld__card">
+          <div class="mld__bar">
+            <h4>Todos los productos</h4>
+            <label class="sr-only" for="hwBuscar">Buscar</label><input type="search" id="hwBuscar" placeholder="Buscar producto o marca…">
+            <label class="sr-only" for="hwCat">Categoría</label><select id="hwCat"></select>
+            <label class="sr-only" for="hwOrden">Ordenar</label><select id="hwOrden"><option value="precio-desc">Más caro primero</option><option value="precio-asc">Más barato primero</option><option value="nombre">Nombre</option></select>
+            <label class="hw__check"><input type="checkbox" id="hwStock"> Solo con stock</label>
+            <span class="mld__count" id="hwCount"></span>
+          </div>
+          <div class="mld__tablewrap">
+            <table class="mld__table hw__table">
+              <thead><tr><th>Producto</th><th>Categoría</th><th>Precio</th><th>Transferencia</th><th>Stock</th><th></th></tr></thead>
+              <tbody id="hwTabla"></tbody>
+            </table>
+          </div>
+          <button type="button" class="mld__btn mld__btn--sm mld__mas" id="hwMas" hidden></button>
+        </div>
+        <p class="equipos-disclaimer" style="margin-bottom:0">⚠️ Precios publicados en <a href="https://hardwind.com" target="_blank" rel="noopener nofollow">hardwind.com</a> el día del relevamiento. No tenemos relación comercial con la tienda: verificá precio y stock en su web antes de comprar.</p>
       </div>
     </div>
 
@@ -5228,6 +5263,8 @@ document.querySelectorAll('.eq-tab').forEach(function(btn){
     document.getElementById('eqPanelComunidad').hidden=(showId!=='eqPanelComunidad');
     document.getElementById('eqPanelBuscador').hidden=(showId!=='eqPanelBuscador');
     if(showId==='eqPanelBuscador'&&window.EQS_LOAD)window.EQS_LOAD();
+    document.getElementById('eqPanelHardwind').hidden=(showId!=='eqPanelHardwind');
+    if(showId==='eqPanelHardwind'&&window.HW_LOAD)window.HW_LOAD();
   });
 });
 
@@ -5245,6 +5282,7 @@ else loadEquipos();
 
 <script src="/assets/equipo-normalizer.js" defer></script>
 <script src="/assets/ml-dashboard.js" defer></script>
+<script src="/assets/hardwind.js" defer></script>
 
 <!-- Three.js for 3D foil -->
 <script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
