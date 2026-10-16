@@ -1,6 +1,6 @@
 name: Bajar fotos de wingfoil
 
-# Baja fotos de Pexels (licencia libre) por número, las achica para web
+# Baja fotos de Unsplash (licencia libre) por número, las achica para web
 # (1600 px y 800 px, JPG calidad 72) y las guarda en assets/img/ en la misma
 # rama. Corre solo cuando cambia este archivo.
 
@@ -18,12 +18,7 @@ jobs:
     timeout-minutes: 15
     env:
       IDS: >-
-        33834659 14447157 14740926 23355184 14447119 19532133 40076942 15151070
-        17901682 18388700 39731095 19532131 18388624 13910811 14447118 13910810
-        33834673 38999274 33834675 13910812 13910772 14740931 19169575 19532132
-        18546149 33834676 19169514 18388625 19169526 33834674 13910809 14476472
-        33008695 13910773 18388623 23190954 15151064 38774856 13910771 15151231
-        14586362 26077474 15164622 18647645 14740928 39731092 18707350
+        1730134427101-ec7982a3d773 1740688244435-047d479f8113 1666175497565-1c366074f2b2 1666175497932-8c88bbad53b1 1740688245004-d4e836b7eb58 1666175497562-ccb66e6c373b 1652732255684-d92200fffa0f 1666175497584-dab60dcf1419 1666175496646-6b5ad13b902f 1730134427096-c167c128e119 1740688244924-4deca73383dc 1666175497804-e28c2d800ab9 1666175496147-9faf7d295503
       UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36
     steps:
       - uses: actions/checkout@v4
@@ -32,7 +27,7 @@ jobs:
         run: |
           mkdir -p assets/img
           for id in $IDS; do
-            curl -sfL -A "$UA" -o /tmp/$id.jpg "https://images.pexels.com/photos/$id/pexels-photo-$id.jpeg?auto=compress&cs=tinysrgb&w=2000" || { echo "falló $id"; continue; }
+            curl -sfL -A "$UA" -o /tmp/$id.jpg "https://images.unsplash.com/photo-$id?w=2000&q=85&fm=jpg" || { echo "falló $id"; continue; }
             python3 - "$id" <<'PY'
           import sys
           from PIL import Image, ImageOps
@@ -50,6 +45,6 @@ jobs:
           git config user.email "41898599+github-actions[bot]@users.noreply.github.com"
           git add assets/img
           git diff --cached --quiet && exit 0
-          git commit -m "Fotos de wingfoil (Pexels, licencia libre) achicadas para web"
+          git commit -m "Fotos de wingfoil (Unsplash, licencia libre) achicadas para web"
           git pull --rebase
           git push
