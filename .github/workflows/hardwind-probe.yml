@@ -2,26 +2,24 @@ name: Prueba Hard Wind (temporal)
 on:
   push:
     branches: [claude/project-thread-x8qspj]
-    paths: [.github/workflows/hardwind-probe.yml]
+    paths: [.github/workflows/hardwind-probe.yml, scripts/hardwind_scraper.py]
 jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
       - run: |
-          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
-          curl -sL -A "$UA" 'https://hardwind.com/wing/?page=1' -o p.html
-          wc -c p.html
-          echo "=== google items"; grep -o 'findGoogleItemByProductId' p.html | head -2
+          curl -sL -A 'Mozilla/5.0' 'https://hardwind.com/wing/' -o p.html
           python3 - <<'PY'
           import re
           h=open('p.html',encoding='utf-8').read()
-          lds=[m.start() for m in re.finditer('application/ld\\+json',h)]
-          print("=== ld 2"); print(h[lds[1]:lds[1]+2500])
-          j=h.find('class="js-item-product'); print("=== item div", j); print(h[j-100:j+4000])
-          print("=== next", re.findall(r'(?:mpage|page)[=/]\d+[^"\']{0,40}', h)[:10])
-          print("=== js-load-more", h[h.find('js-load-more'):h.find('js-load-more')+400])
-          import subprocess
-          for u in ['https://hardwind.com/wing/page/3/','https://hardwind.com/wing/?mpage=3']:
-              o=subprocess.run(['curl','-sL','-A','Mozilla/5.0',u],capture_output=True,text=True).stdout
-              print('===',u,len(o),re.findall(r'"item_name":"([^"]{0,40})',o)[:3])
+          j=h.find('class="js-item-product'); b=h[j:h.find('class="js-item-product',j+10)]
+          b=re.sub(r'data-variants="[^"]*"','data-variants="…"',b)
+          print(b[:6000])
           PY
+          for n in 5 8 30; do curl -s -o /dev/null -w "page $n -> %{http_code} %{size_download}\n" -A 'Mozilla/5.0' "https://hardwind.com/wing/page/$n/"; done
+          curl -sL -A 'Mozilla/5.0' 'https://hardwind.com/wing/page/30/' | grep -c 'class="js-item-product' || true
+      - run: pip install playwright && python -m playwright install --with-deps chromium
+      - run: python scripts/hardwind_scraper.py wing foil && head -20 prices.csv && wc -l prices.csv
