@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es-AR" data-theme="dark">
+<html lang="es-AR" data-theme="light" data-page="inicio">
 <head>
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -251,46 +251,59 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <link rel="icon" href="/favicon.ico" sizes="32x32 16x16"/>
   <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32"/>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
-  <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
-  <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
   <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
   <link rel="dns-prefetch" href="https://i.ytimg.com" />
-  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700,800&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400..700&display=swap" rel="stylesheet" />
+  <script>
+  // Cada sección del sitio vive en una de 6 páginas (/aprender, /spots…). Se
+  // decide antes de pintar para que no se vea la home un instante.
+  (function(){
+    var P={'':'inicio',aprender:'aprender',spots:'spots',instructores:'instructores',equipos:'equipos','venta-de-wingfoil':'equipos',herramientas:'herramientas'};
+    var r=location.pathname.replace(/^\/+|\/+$/g,'').replace(/(^|\/)index\.html$/,'');
+    document.documentElement.setAttribute('data-page',P[r]||'inicio');
+    try{if(localStorage.getItem('wf-tema')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}
+  })();
+  </script>
 
   <style>
 /* ============================================================
    DESIGN TOKENS
 ============================================================ */
 :root,[data-theme='light']{
-  --bg:#f0f8ff;--surface:#ffffff;--surface-2:#e4f2fb;--surface-3:#d5e9f7;
-  --border:#b8d8ed;--divider:#cce4f2;
-  --text:#0a1f2e;--text-muted:#3d6a85;--text-faint:#7eaec5;--text-inverse:#f0f8ff;
-  --primary:#0077a8;--primary-h:#005f87;--primary-glow:#c8e6f4;
-  --accent:#00b4d8;--accent-warm:#e9c46a;
-  --hero-grad:linear-gradient(160deg,#020c18 0%,#041828 50%,#071f35 100%);
-  --shadow-sm:0 1px 3px rgba(0,30,60,0.08);
-  --shadow-md:0 4px 16px rgba(0,30,60,0.10);
-  --shadow-lg:0 12px 40px rgba(0,30,60,0.14);
+  --bg:#F7F4EC;--surface:#FBF9F4;--surface-2:#EEE9DF;--surface-3:#E4DED1;
+  --border:#D6D0C3;--divider:#E2DCCF;
+  --text:#0B1A22;--text-muted:#46565E;--text-faint:#7D878C;--text-inverse:#F7F4EC;
+  --primary:#0F5C6B;--primary-h:#0B4450;--primary-glow:#DCE8E3;
+  --accent:#FF5A2C;--accent-warm:#E8893A;
+  --ink:#0B1A22;--paper:#F7F4EC;--sand:#EEE9DF;--mist:#DCE8E3;--sea:#0F5C6B;--signal:#FF5A2C;
+  --hero-grad:linear-gradient(180deg,#F7F4EC,#F7F4EC);
+  --shadow-sm:0 1px 2px rgba(11,26,34,.06);
+  --shadow-md:0 6px 20px rgba(11,26,34,.08);
+  --shadow-lg:0 16px 40px rgba(11,26,34,.12);
 }
 [data-theme='dark']{
-  --bg:#040e1a;--surface:#081525;--surface-2:#0b1c30;--surface-3:#0f2340;
-  --border:#1a3558;--divider:#142840;
-  --text:#ddeef8;--text-muted:#6da4be;--text-faint:#2f5571;--text-inverse:#040e1a;
-  --primary:#00b4d8;--primary-h:#00d0f5;--primary-glow:#0a2d40;
-  --accent:#00cfed;--accent-warm:#e9c46a;
-  --hero-grad:linear-gradient(160deg,#020c18 0%,#041828 50%,#071f35 100%);
-  --shadow-sm:0 1px 3px rgba(0,0,0,0.25);
-  --shadow-md:0 4px 16px rgba(0,0,0,0.35);
-  --shadow-lg:0 12px 40px rgba(0,0,0,0.45);
+  --bg:#0B1A22;--surface:#10232D;--surface-2:#142B37;--surface-3:#1A3542;
+  --border:#244452;--divider:#1C3A47;
+  --text:#F2EEE4;--text-muted:#A9B8BC;--text-faint:#6F858C;--text-inverse:#0B1A22;
+  --primary:#7FC4CF;--primary-h:#A6D9E0;--primary-glow:#16343F;
+  --accent:#FF6B40;--accent-warm:#F0A060;
+  --ink:#F2EEE4;--paper:#0B1A22;--sand:#142B37;--mist:#16343F;--sea:#0F5C6B;--signal:#FF6B40;
+  --hero-grad:linear-gradient(180deg,#0B1A22,#0B1A22);
+  --shadow-sm:0 1px 3px rgba(0,0,0,.25);
+  --shadow-md:0 6px 20px rgba(0,0,0,.35);
+  --shadow-lg:0 16px 40px rgba(0,0,0,.45);
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:none;text-size-adjust:none;-webkit-font-smoothing:antialiased;scroll-behavior:smooth;scroll-padding-top:80px}
-body{min-height:100dvh;font-family:'Satoshi',system-ui,-apple-system,sans-serif;font-size:16px;color:var(--text);background:var(--bg);line-height:1.65;transition:background .2s,color .2s;overflow-x:hidden}
+body{min-height:100dvh;font-family:'DM Sans',system-ui,-apple-system,sans-serif;font-size:16px;color:var(--text);background:var(--bg);line-height:1.65;transition:background .2s,color .2s;overflow-x:hidden}
 body.nav-open{overflow:hidden}
 img,video,svg{display:block;max-width:100%;height:auto}
 ul[role='list']{list-style:none}
-h1,h2,h3,h4,h5,h6{font-family:'Clash Display','Inter',sans-serif;font-weight:700;line-height:1.1;letter-spacing:-.02em}
+h1,h2,h3,h4,h5,h6{font-family:'Bricolage Grotesque','Inter',sans-serif;font-weight:700;line-height:1.1;letter-spacing:-.02em}
 p{max-width:72ch}
 a{color:inherit;text-decoration:none;transition:color .15s}
 button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
@@ -325,7 +338,7 @@ input,textarea,select{font:inherit;color:inherit}
 /* HEADER */
 .header{position:fixed;top:0;left:0;right:0;z-index:100;background:color-mix(in oklab,var(--bg),transparent 8%);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--divider);transition:all .2s;padding-top:env(safe-area-inset-top)}
 .header__inner{display:flex;align-items:center;justify-content:space-between;gap:12px;height:70px;width:min(1200px,100%);padding-inline:clamp(16px,3vw,48px);margin-inline:auto;overflow:hidden}
-.logo{display:flex;align-items:center;gap:10px;color:var(--primary);font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;flex-shrink:0;text-transform:uppercase;letter-spacing:-.02em}
+.logo{display:flex;align-items:center;gap:10px;color:var(--primary);font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:700;flex-shrink:0;text-transform:uppercase;letter-spacing:-.02em}
 .logo__text{color:var(--text)}
 .logo__text-mobile{display:none}
 @media(max-width:520px){.logo__text{display:none}.logo__text-mobile{display:block;font-size:14px}}
@@ -391,7 +404,7 @@ input,textarea,select{font:inherit;color:inherit}
 
 .hero__content{position:relative;z-index:2;width:100%;padding-block:clamp(40px,8vh,80px)}
 .hero__eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#00cfed;margin-bottom:24px;padding:6px 14px;background:rgba(0,180,216,.12);border:1px solid rgba(0,180,216,.3);border-radius:99px;backdrop-filter:blur(8px)}
-.hero__title{font-family:'Clash Display',sans-serif;font-size:clamp(48px,11vw,128px);font-weight:800;color:#fff;line-height:.95;margin-bottom:24px;letter-spacing:-.04em;max-width:14ch}
+.hero__title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(48px,11vw,128px);font-weight:800;color:#fff;line-height:.95;margin-bottom:24px;letter-spacing:-.04em;max-width:14ch}
 .hero__title em{font-style:normal;color:#00cfed;display:block}
 .hero__sub{font-size:clamp(15px,1.5vw,19px);color:rgba(255,255,255,0.7);max-width:48ch;margin-bottom:40px;line-height:1.6}
 .hero__ctas{display:flex;flex-wrap:wrap;gap:14px}
@@ -400,7 +413,7 @@ input,textarea,select{font:inherit;color:inherit}
 .hero__stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:64px;border-top:1px solid rgba(255,255,255,.12);padding-top:32px;max-width:680px}
 .hero__stat{padding-right:16px;border-right:1px solid rgba(255,255,255,.12)}
 .hero__stat:last-child{border-right:none}
-.hero__stat-num{font-family:'Clash Display',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:800;color:#00cfed;line-height:1;margin-bottom:6px;letter-spacing:-.02em}
+.hero__stat-num{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:800;color:#00cfed;line-height:1;margin-bottom:6px;letter-spacing:-.02em}
 .hero__stat-label{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.08em;text-transform:uppercase;line-height:1.3}
 @media(max-width:600px){.hero__stats{grid-template-columns:repeat(2,1fr);gap:20px;margin-top:40px}.hero__stat{border-right:none;padding-right:0;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.08)}.hero__stat:nth-child(3),.hero__stat:nth-child(4){padding-bottom:0;border-bottom:none}}
 
@@ -440,7 +453,7 @@ input,textarea,select{font:inherit;color:inherit}
 .video-tab{display:flex;align-items:center;gap:14px;padding:18px 26px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s;text-align:left;flex:1;min-width:200px}
 .video-tab:hover{border-color:var(--primary);background:var(--primary-glow)}
 .video-tab.active{border-color:var(--primary);background:var(--primary-glow);box-shadow:0 4px 16px color-mix(in oklab,var(--primary),transparent 80%)}
-.video-tab__num{width:36px;height:36px;border-radius:50%;background:var(--primary);color:var(--text-inverse);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0;font-family:'Clash Display',sans-serif}
+.video-tab__num{width:36px;height:36px;border-radius:50%;background:var(--primary);color:var(--text-inverse);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0;font-family:'Bricolage Grotesque',sans-serif}
 .video-tab__label{font-size:14px;font-weight:700;color:var(--text);line-height:1.3}
 .video-tab__label small{display:block;font-weight:400;color:var(--text-muted);font-size:12px;margin-top:2px}
 
@@ -485,7 +498,7 @@ input,textarea,select{font:inherit;color:inherit}
 .anatomy__visual img{width:100%;border-radius:8px;background:transparent;aspect-ratio:16/10;object-fit:cover}
 .foil-dot{position:absolute;transform:translate(-50%,-50%);width:32px;height:32px;cursor:pointer;z-index:10;background:none;border:none;padding:0}
 .foil-dot__ring{position:absolute;inset:0;border-radius:50%;background:rgba(0,180,216,.4);border:2px solid var(--primary);animation:dot-ping 2s cubic-bezier(.16,1,.3,1) infinite}
-.foil-dot__core{position:absolute;inset:8px;border-radius:50%;background:var(--primary);box-shadow:0 0 12px rgba(0,180,216,.6);transition:all .2s;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:800;font-family:'Clash Display',sans-serif}
+.foil-dot__core{position:absolute;inset:8px;border-radius:50%;background:var(--primary);box-shadow:0 0 12px rgba(0,180,216,.6);transition:all .2s;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:800;font-family:'Bricolage Grotesque',sans-serif}
 .foil-dot:hover .foil-dot__core,.foil-dot.active .foil-dot__core{background:#fff;color:var(--primary);transform:scale(1.15)}
 @keyframes dot-ping{0%{transform:scale(1);opacity:1}70%{transform:scale(1.8);opacity:0}100%{transform:scale(1);opacity:0}}
 
@@ -496,14 +509,14 @@ input,textarea,select{font:inherit;color:inherit}
 .foil-part.active{border-color:var(--primary);background:var(--primary-glow);box-shadow:0 4px 16px color-mix(in oklab,var(--primary),transparent 80%)}
 .foil-part.active::before{background:var(--primary);width:4px}
 .foil-part__header{display:flex;align-items:center;gap:12px;margin-bottom:6px}
-.foil-part__num{width:28px;height:28px;border-radius:50%;background:var(--surface-3);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--text-muted);font-family:'Clash Display',sans-serif}
+.foil-part__num{width:28px;height:28px;border-radius:50%;background:var(--surface-3);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--text-muted);font-family:'Bricolage Grotesque',sans-serif}
 .foil-part.active .foil-part__num{background:var(--primary);border-color:var(--primary);color:#fff}
 .foil-part__name{font-size:15px;font-weight:700;color:var(--text)}
 .foil-part__desc{font-size:13px;color:var(--text-muted);line-height:1.6;max-width:none}
 
 .anatomy__stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:48px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:32px}
 .foil-stat{text-align:center}
-.foil-stat__val{font-family:'Clash Display',sans-serif;font-size:clamp(28px,3vw,40px);font-weight:800;color:var(--primary);line-height:1;margin-bottom:8px;letter-spacing:-.02em}
+.foil-stat__val{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(28px,3vw,40px);font-weight:800;color:var(--primary);line-height:1;margin-bottom:8px;letter-spacing:-.02em}
 .foil-stat__label{font-size:11px;color:var(--text-muted);letter-spacing:.04em;line-height:1.4}
 @media(max-width:860px){.anatomy__body{grid-template-columns:1fr}.anatomy__stats{grid-template-columns:repeat(2,1fr)}}
 
@@ -594,7 +607,7 @@ input,textarea,select{font:inherit;color:inherit}
 .calc-result__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
 @media(max-width:560px){.calc-result__grid{grid-template-columns:1fr}}
 .calc-result__item{text-align:center}
-.calc-result__val{font-family:'Clash Display',sans-serif;font-size:28px;font-weight:800;color:var(--primary);line-height:1;letter-spacing:-.02em}
+.calc-result__val{font-family:'Bricolage Grotesque',sans-serif;font-size:28px;font-weight:800;color:var(--primary);line-height:1;letter-spacing:-.02em}
 .calc-result__name{font-size:11px;color:var(--text-muted);margin-top:6px;text-transform:uppercase;letter-spacing:.06em}
 .calc-result__note{font-size:12px;color:var(--text-muted);font-style:italic;text-align:center;line-height:1.6;border-top:1px solid color-mix(in oklab,var(--primary),transparent 70%);padding-top:14px}
 
@@ -665,7 +678,7 @@ textarea{resize:vertical;min-height:90px}
 .equipo-card:hover{transform:translateY(-3px) rotateX(2deg);box-shadow:var(--shadow-md);border-color:var(--primary)}
 .equipo-card__badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:700;background:color-mix(in oklab,var(--accent),transparent 82%);color:var(--accent);margin-bottom:12px;text-transform:uppercase;letter-spacing:.04em}
 .equipo-card__title{font-size:17px;font-weight:700;margin-bottom:8px}
-.equipo-card__precio{font-family:'Clash Display',sans-serif;font-size:24px;font-weight:800;color:var(--primary);margin-bottom:12px;letter-spacing:-.02em}
+.equipo-card__precio{font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:800;color:var(--primary);margin-bottom:12px;letter-spacing:-.02em}
 .equipo-card__desc{font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:14px;max-width:none}
 .equipo-card__meta{font-size:12px;color:var(--text-faint);margin-bottom:14px;font-weight:500}
 .equipo-card__fotos{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
@@ -690,9 +703,9 @@ textarea{resize:vertical;min-height:90px}
 .amz-badge--foil{background:color-mix(in oklab,#8b5cf6,transparent 82%);color:#7c3aed}
 .amz-badge--prot{background:color-mix(in oklab,#ef4444,transparent 82%);color:#b91c1c}
 .amz-badge--acc{background:color-mix(in oklab,#f59e0b,transparent 82%);color:#b45309}
-.amz-card__title{font-size:14px;font-weight:800;color:var(--text);font-family:'Clash Display',sans-serif;line-height:1.3}
+.amz-card__title{font-size:14px;font-weight:800;color:var(--text);font-family:'Bricolage Grotesque',sans-serif;line-height:1.3}
 .amz-card__why{font-size:13px;color:var(--text-muted);line-height:1.6;flex:1;margin:0}
-.amz-card__price{font-size:15px;font-weight:700;color:var(--text);font-family:'Clash Display',sans-serif}
+.amz-card__price{font-size:15px;font-weight:700;color:var(--text);font-family:'Bricolage Grotesque',sans-serif}
 .amz-card__link{display:inline-flex;align-items:center;justify-content:center;margin-top:4px;padding:9px 14px;background:#ff9900;color:#000;font-size:13px;font-weight:700;border-radius:8px;text-decoration:none;transition:all .15s}
 .amz-card__link:hover{background:#e68a00;transform:translateY(-1px)}
 
@@ -776,7 +789,7 @@ textarea{resize:vertical;min-height:90px}
 .rider-card__play::after{content:'';display:block;width:0;height:0;border-left:22px solid #fff;border-top:13px solid transparent;border-bottom:13px solid transparent;margin-left:6px}
 .rider-card__media:hover .rider-card__play{transform:translate(-50%,-50%) scale(1.1);background:rgba(255,0,0,1);box-shadow:0 10px 30px rgba(255,0,0,.5)}
 .rider-card__media::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,.5) 100%);pointer-events:none;z-index:1}
-.rider-card__yt-badge{position:absolute;bottom:10px;left:10px;background:rgba(0,0,0,.85);color:#fff;font-size:10px;font-weight:700;padding:5px 10px;border-radius:4px;display:flex;align-items:center;gap:5px;z-index:2;font-family:'Satoshi',sans-serif;letter-spacing:.04em}
+.rider-card__yt-badge{position:absolute;bottom:10px;left:10px;background:rgba(0,0,0,.85);color:#fff;font-size:10px;font-weight:700;padding:5px 10px;border-radius:4px;display:flex;align-items:center;gap:5px;z-index:2;font-family:'DM Sans',sans-serif;letter-spacing:.04em}
 .rider-card__yt-badge::before{content:'▶';color:#ff0000;font-size:9px}
 .rider-card__media.playing .rider-card__play,.rider-card__media.playing img,.rider-card__media.playing::after,.rider-card__media.playing .rider-card__yt-badge,.rider-card__media.playing .rider-card__flag{display:none}
 .rider-card__flag{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px;letter-spacing:.05em}
@@ -833,16 +846,16 @@ textarea{resize:vertical;min-height:90px}
 .qs-step::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--primary),var(--accent));transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
 .qs-step:hover{transform:translateY(-4px);border-color:var(--primary);box-shadow:0 12px 32px rgba(0,180,216,.15)}
 .qs-step:hover::before{transform:scaleX(1)}
-.qs-step__num{font-family:'Clash Display',sans-serif;font-size:48px;font-weight:900;line-height:1;color:var(--primary);opacity:.25;letter-spacing:-.04em}
+.qs-step__num{font-family:'Bricolage Grotesque',sans-serif;font-size:48px;font-weight:900;line-height:1;color:var(--primary);opacity:.25;letter-spacing:-.04em}
 .qs-step__icon{font-size:32px;line-height:1;margin-bottom:-4px}
-.qs-step__title{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:800;color:var(--text);line-height:1.2;letter-spacing:-.01em}
+.qs-step__title{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;color:var(--text);line-height:1.2;letter-spacing:-.01em}
 .qs-step__desc{font-size:13px;color:var(--text-muted);line-height:1.6;flex-grow:1}
 .qs-step__cta{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);display:inline-flex;align-items:center;gap:6px;margin-top:auto}
 .qs-step__cta::after{content:'→';transition:transform .2s}
 .qs-step:hover .qs-step__cta::after{transform:translateX(4px)}
 @media(max-width:780px){.quickstart-grid{grid-template-columns:1fr;gap:14px}.qs-step{padding:22px 20px}.qs-step__num{font-size:36px}}
 
-.modal__badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:rgba(0,180,216,.15);border:1px solid rgba(0,180,216,.3);border-radius:99px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary);margin-bottom:14px;font-family:'Satoshi',sans-serif}
+.modal__badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:rgba(0,180,216,.15);border:1px solid rgba(0,180,216,.3);border-radius:99px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary);margin-bottom:14px;font-family:'DM Sans',sans-serif}
 .modal__title em{font-style:normal;color:var(--primary)}
 .modal__benefits{list-style:none;padding:0;margin:18px 0 22px;text-align:left;display:grid;gap:8px}
 .modal__benefits li{font-size:13px;color:var(--text);line-height:1.5;padding:8px 12px;background:rgba(0,180,216,.06);border-radius:8px;border-left:2px solid var(--primary)}
@@ -856,12 +869,12 @@ textarea{resize:vertical;min-height:90px}
 .glosario-list{display:grid;gap:8px;max-width:760px;margin:0 auto}
 .gloss-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:all .2s}
 .gloss-item[open]{background:var(--surface-2);border-color:var(--primary);box-shadow:var(--shadow-sm)}
-.gloss-item summary{list-style:none;cursor:pointer;position:relative;padding:14px 50px 14px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:'Clash Display',sans-serif}
+.gloss-item summary{list-style:none;cursor:pointer;position:relative;padding:14px 50px 14px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:'Bricolage Grotesque',sans-serif}
 .gloss-item summary::-webkit-details-marker{display:none}
 .gloss-item summary::after{content:'+';position:absolute;right:14px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--primary-glow);color:var(--primary);font-size:16px;font-weight:700;transition:all .2s}
 .gloss-item[open] summary::after{content:'–';background:var(--primary);color:var(--text-inverse)}
 .gloss-item-name{font-size:15px;font-weight:800;color:var(--text);letter-spacing:-.01em}
-.gloss-item-tag{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;background:var(--primary-glow);color:var(--primary);border-radius:99px;font-family:'Satoshi',sans-serif}
+.gloss-item-tag{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;background:var(--primary-glow);color:var(--primary);border-radius:99px;font-family:'DM Sans',sans-serif}
 .gloss-item-def{padding:0 50px 16px 18px;font-size:13px;color:var(--text-muted);line-height:1.6;max-width:none;animation:glossOpen .25s ease}
 @keyframes glossOpen{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 .gloss-empty{text-align:center;padding:32px 20px;color:var(--text-muted);font-size:14px;background:var(--surface);border:1px dashed var(--border);border-radius:10px}
@@ -870,7 +883,7 @@ textarea{resize:vertical;min-height:90px}
 .faq-list{display:grid;gap:10px;max-width:800px;margin:28px auto 0}
 .faq-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color .2s,box-shadow .2s}
 .faq-item[open]{border-color:var(--primary);box-shadow:0 4px 20px rgba(0,180,216,.1)}
-.faq-item summary{list-style:none;cursor:pointer;padding:18px 52px 18px 20px;font-size:15px;font-weight:700;color:var(--text);font-family:'Clash Display',sans-serif;position:relative;line-height:1.4}
+.faq-item summary{list-style:none;cursor:pointer;padding:18px 52px 18px 20px;font-size:15px;font-weight:700;color:var(--text);font-family:'Bricolage Grotesque',sans-serif;position:relative;line-height:1.4}
 .faq-item summary::-webkit-details-marker{display:none}
 .faq-item summary::after{content:'+';position:absolute;right:16px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--primary-glow);color:var(--primary);font-size:17px;font-weight:700;transition:all .2s;line-height:1}
 .faq-item[open] summary::after{content:'–';background:var(--primary);color:#fff}
@@ -880,13 +893,13 @@ textarea{resize:vertical;min-height:90px}
 .comp-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:28px;border-radius:14px;border:1px solid var(--border)}
 .comp-table{width:100%;border-collapse:collapse;min-width:680px;font-size:13px}
 .comp-table th,.comp-table td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--border);vertical-align:middle}
-.comp-table thead th{background:var(--surface-2);font-family:'Clash Display',sans-serif;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);white-space:nowrap}
+.comp-table thead th{background:var(--surface-2);font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);white-space:nowrap}
 .comp-table thead th:first-child{border-radius:14px 0 0 0}
 .comp-table thead th:last-child{border-radius:0 14px 0 0}
 .comp-table tbody tr{background:var(--surface);transition:background .15s}
 .comp-table tbody tr:hover{background:var(--surface-2)}
 .comp-table tbody tr:last-child td{border-bottom:none}
-.comp-brand-name{font-weight:800;font-family:'Clash Display',sans-serif;color:var(--text);font-size:14px}
+.comp-brand-name{font-weight:800;font-family:'Bricolage Grotesque',sans-serif;color:var(--text);font-size:14px}
 .comp-brand-country{font-size:11px;color:var(--text-muted);margin-top:2px}
 .comp-level{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px}
 .comp-level--beg{background:color-mix(in oklab,#22c55e,transparent 82%);color:#16a34a}
@@ -906,7 +919,7 @@ textarea{resize:vertical;min-height:90px}
 .testi-quote{font-size:14px;color:var(--text);line-height:1.7;font-style:italic;flex-grow:1}
 .testi-stars{display:flex;gap:2px;color:#ffd93d;font-size:14px}
 .testi-author{display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid var(--border)}
-.testi-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-family:'Clash Display',sans-serif;font-size:16px;flex-shrink:0;letter-spacing:-.02em}
+.testi-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-family:'Bricolage Grotesque',sans-serif;font-size:16px;flex-shrink:0;letter-spacing:-.02em}
 .testi-name{font-size:13px;font-weight:700;color:var(--text);line-height:1.2}
 .testi-meta{font-size:11px;color:var(--text-muted);margin-top:2px;line-height:1.3}
 
@@ -934,7 +947,7 @@ html[lang="en"] .es-only{display:none}
 .blog-card__cover span{position:relative;z-index:1;filter:drop-shadow(0 2px 8px rgba(0,0,0,.3))}
 .blog-card__body{padding:22px;display:flex;flex-direction:column;gap:10px;flex-grow:1}
 .blog-card__cat{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary)}
-.blog-card__title{font-family:'Clash Display',sans-serif;font-size:18px;font-weight:800;color:var(--text);line-height:1.25;letter-spacing:-.01em}
+.blog-card__title{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800;color:var(--text);line-height:1.25;letter-spacing:-.01em}
 .blog-card__excerpt{font-size:13px;color:var(--text-muted);line-height:1.55;flex-grow:1}
 .blog-card__meta{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--text-muted);padding-top:10px;border-top:1px solid var(--border)}
 .blog-card__soon{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-warm);background:rgba(233,196,106,.15);padding:3px 8px;border-radius:99px;border:1px solid rgba(233,196,106,.3)}
@@ -950,7 +963,7 @@ html[lang="en"] .es-only{display:none}
 .spots-cta-btn:hover{transform:translateY(-3px);border-color:var(--primary);box-shadow:0 16px 40px rgba(0,180,216,.2)}
 .spots-cta-icon{font-size:38px;line-height:1;flex-shrink:0}
 .spots-cta-text{flex-grow:1;display:flex;flex-direction:column;gap:4px}
-.spots-cta-title{font-family:'Clash Display',sans-serif;font-size:18px;font-weight:800;color:var(--text);letter-spacing:-.01em}
+.spots-cta-title{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800;color:var(--text);letter-spacing:-.01em}
 .spots-cta-sub{font-size:13px;color:var(--text-muted)}
 .spots-cta-arrow{font-size:24px;color:var(--primary);transition:transform .2s;flex-shrink:0}
 .spots-cta-btn:hover .spots-cta-arrow{transform:translateX(4px)}
@@ -960,7 +973,7 @@ html[lang="en"] .es-only{display:none}
 .mapmodal.open{display:block}
 .mapmodal__inner{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;padding:0}
 .mapmodal__header{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:14px 22px;background:rgba(2,12,24,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
-.mapmodal__title{font-family:'Clash Display',sans-serif;font-size:18px;font-weight:800;color:#fff;display:flex;align-items:center;gap:10px}
+.mapmodal__title{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800;color:#fff;display:flex;align-items:center;gap:10px}
 .mapmodal__title-icon{font-size:22px}
 .mapmodal__close{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .mapmodal__close:hover{background:rgba(232,90,90,.85);border-color:rgba(232,90,90,.5);transform:scale(1.05)}
@@ -971,7 +984,7 @@ html[lang="en"] .es-only{display:none}
 .mapmodal__filters{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
 .mapmodal__filter{padding:7px 14px;background:var(--surface-2);border:1px solid var(--border);border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.04em;cursor:pointer;color:var(--text);transition:all .15s;font-family:inherit}
 .mapmodal__filter.active{background:var(--primary);color:var(--text-inverse);border-color:var(--primary)}
-.mapmodal__sidebar-title{font-family:'Clash Display',sans-serif;font-size:14px;font-weight:800;color:var(--text);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.mapmodal__sidebar-title{font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:800;color:var(--text);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .mapmodal__list{display:flex;flex-direction:column;gap:6px}
 .mapmodal__list-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all .15s;font-size:13px;color:var(--text)}
 .mapmodal__list-item:hover{border-color:var(--primary);background:var(--surface);transform:translateX(2px)}
@@ -986,7 +999,7 @@ html[lang="en"] .es-only{display:none}
 .mapmodal__legend-dot{width:10px;height:10px;border-radius:50%}
 .mapmodal__detail{position:absolute;bottom:14px;left:14px;right:14px;background:rgba(2,12,24,.95);backdrop-filter:blur(16px);border:1px solid rgba(0,180,216,.4);border-radius:12px;padding:14px 18px;color:#fff;display:none;animation:detailPop .2s ease}
 .mapmodal__detail.show{display:block}
-.mapmodal__detail-name{font-family:'Clash Display',sans-serif;font-size:16px;font-weight:800;margin-bottom:4px}
+.mapmodal__detail-name{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800;margin-bottom:4px}
 .mapmodal__detail-prov{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#00cfed;font-weight:700}
 .mapmodal__detail-desc{font-size:12px;color:rgba(255,255,255,.7);line-height:1.5;margin-top:8px}
 .mapmodal__detail-wind{font-size:11px;color:#ffd93d;font-weight:600;margin-top:6px}
@@ -1006,7 +1019,7 @@ html[lang="en"] .es-only{display:none}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
 
 /* MOBILE BREADCRUMB */
-.mbreadcrumb{display:none;position:fixed;top:60px;left:0;right:0;z-index:50;background:rgba(2,12,24,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:8px 16px;font-size:11px;color:var(--text-muted);letter-spacing:.04em;text-transform:uppercase;font-weight:700;font-family:'Satoshi',sans-serif;transition:transform .25s,opacity .25s;transform:translateY(-100%);opacity:0;pointer-events:none}
+.mbreadcrumb{display:none;position:fixed;top:60px;left:0;right:0;z-index:50;background:rgba(2,12,24,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:8px 16px;font-size:11px;color:var(--text-muted);letter-spacing:.04em;text-transform:uppercase;font-weight:700;font-family:'DM Sans',sans-serif;transition:transform .25s,opacity .25s;transform:translateY(-100%);opacity:0;pointer-events:none}
 .mbreadcrumb.show{transform:translateY(0);opacity:1}
 .mbreadcrumb__icon{margin-right:6px}
 .mbreadcrumb__current{color:var(--primary);font-weight:800}
@@ -1042,9 +1055,9 @@ html[lang="en"] .es-only{display:none}
 .man-card__diff{position:absolute;top:10px;right:10px;display:flex;gap:2px;z-index:2}
 .man-card__diff-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.2)}
 .man-card__diff-dot.on{background:#ffd93d;box-shadow:0 0 6px rgba(255,217,61,.6)}
-.man-card__cat{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);color:#fff;font-size:9px;font-weight:800;padding:4px 10px;border-radius:99px;text-transform:uppercase;letter-spacing:.08em;z-index:2;font-family:'Satoshi',sans-serif}
+.man-card__cat{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);color:#fff;font-size:9px;font-weight:800;padding:4px 10px;border-radius:99px;text-transform:uppercase;letter-spacing:.08em;z-index:2;font-family:'DM Sans',sans-serif}
 .man-card__body{padding:18px 20px;display:flex;flex-direction:column;gap:8px;flex-grow:1}
-.man-card__name{font-family:'Clash Display',sans-serif;font-size:18px;font-weight:800;color:var(--text);letter-spacing:-.01em;line-height:1.15}
+.man-card__name{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800;color:var(--text);letter-spacing:-.01em;line-height:1.15}
 .man-card__sub{font-size:11px;color:var(--text-muted);font-style:italic}
 .man-card__desc{font-size:13px;color:var(--text-muted);line-height:1.5;flex-grow:1}
 .man-card__meta{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--border);margin-top:auto}
@@ -1067,7 +1080,7 @@ html[lang="en"] .es-only{display:none}
 .mani-modal__header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;color:#fff}
 .mani-modal__head-info{flex:1;min-width:0}
 .mani-modal__cat-tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#00cfed;background:rgba(0,180,216,.15);padding:5px 12px;border-radius:99px;margin-bottom:8px;border:1px solid rgba(0,180,216,.3)}
-.mani-modal__title{font-family:'Clash Display',sans-serif;font-size:clamp(22px,3.5vw,32px);font-weight:900;letter-spacing:-.02em;line-height:1.1;margin:0}
+.mani-modal__title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(22px,3.5vw,32px);font-weight:900;letter-spacing:-.02em;line-height:1.1;margin:0}
 .mani-modal__sub{font-size:13px;color:rgba(255,255,255,.55);font-weight:500;margin-top:4px;letter-spacing:.04em}
 .mani-modal__close{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:inherit}
 .mani-modal__close:hover{background:rgba(232,90,90,.85);border-color:rgba(232,90,90,.85);transform:scale(1.05)}
@@ -1088,13 +1101,13 @@ html[lang="en"] .es-only{display:none}
 .cam-card{background:var(--surface);border-radius:14px;overflow:hidden;border:1px solid var(--border);box-shadow:0 6px 22px rgba(0,0,0,.18);transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column;min-height:340px}
 .cam-card:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(0,180,216,.18)}
 .cam-card__head{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,rgba(0,180,216,.08),rgba(247,127,0,.05))}
-.cam-card__name{display:flex;align-items:center;gap:8px;font-family:'Clash Display',sans-serif;font-weight:700;font-size:15px;color:var(--text);letter-spacing:-.01em}
+.cam-card__name{display:flex;align-items:center;gap:8px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:15px;color:var(--text);letter-spacing:-.01em}
 .cam-card__live{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;background:#e63946;color:#fff;font-size:9px;font-weight:800;border-radius:99px;text-transform:uppercase;letter-spacing:.08em}
 .cam-card__live::before{content:'';width:6px;height:6px;background:#fff;border-radius:50%;animation:liveBlink 1.4s infinite}
 @keyframes liveBlink{0%,100%{opacity:1}50%{opacity:.4}}
 .cam-card__player-wrap{position:relative;width:100%;background:#000;min-height:240px}
 .cam-card__player-wrap iframe{width:100% !important;display:block;border:0 !important;min-height:240px}
-.cam-card__player-wrap > a[name="windy-webcam-timelapse-player"]{display:block;padding:80px 20px;text-align:center;color:#7da0bd;font-size:13px;text-decoration:none;background:linear-gradient(135deg,#0b1c30,#1a3558);font-family:'Satoshi',sans-serif}
+.cam-card__player-wrap > a[name="windy-webcam-timelapse-player"]{display:block;padding:80px 20px;text-align:center;color:#7da0bd;font-size:13px;text-decoration:none;background:linear-gradient(135deg,#0b1c30,#1a3558);font-family:'DM Sans',sans-serif}
 .cam-card__player-wrap > a[name="windy-webcam-timelapse-player"]:hover{color:#00cfed}
 .cam-card__foot{padding:10px 18px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--text-muted)}
 .cam-card__link{color:var(--primary);text-decoration:none;font-weight:700;font-size:11px;letter-spacing:.04em;text-transform:uppercase;display:inline-flex;align-items:center;gap:4px}
@@ -1103,7 +1116,7 @@ html[lang="en"] .es-only{display:none}
 .cameras-note strong{color:var(--text)}
 .cameras-region-divider{display:flex;align-items:center;gap:14px;margin:28px 0 18px}
 .cameras-region-divider__line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border) 20%,var(--border) 80%,transparent)}
-.cameras-region-divider__label{font-family:'Clash Display',sans-serif;font-size:13px;font-weight:700;color:var(--text);letter-spacing:.04em;white-space:nowrap;padding:4px 12px;background:var(--surface);border-radius:99px;border:1px solid var(--border)}
+.cameras-region-divider__label{font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;color:var(--text);letter-spacing:.04em;white-space:nowrap;padding:4px 12px;background:var(--surface);border-radius:99px;border:1px solid var(--border)}
 /* Acordeón de cada región de cámaras: arranca abierto (es lo que el
    visitante vino a ver), pero se puede cerrar, y si lo cierra se lo
    recordamos para la próxima visita — mismo criterio que #hoyAcc. */
@@ -1134,7 +1147,7 @@ html[lang="en"] .es-only{display:none}
 .wf-pin__inner{transform:rotate(45deg);font-size:18px}
 .wf-pin.active{transform:rotate(-45deg) scale(1.25);box-shadow:0 8px 22px rgba(0,180,216,.9)}
 .leaflet-popup-content-wrapper{background:rgba(11,28,48,.96);color:#fff;border-radius:10px;border:1px solid rgba(0,180,216,.3)}
-.leaflet-popup-content{margin:10px 14px;font-family:'Satoshi',sans-serif}
+.leaflet-popup-content{margin:10px 14px;font-family:'DM Sans',sans-serif}
 .leaflet-popup-tip{background:rgba(11,28,48,.96)}
 .leaflet-popup-content-wrapper b{color:#00cfed;font-size:13px}
 .leaflet-popup-content-wrapper small{color:rgba(255,255,255,.65);font-size:11px;display:block;margin-top:2px}
@@ -1155,7 +1168,7 @@ html[lang="en"] .es-only{display:none}
 .spot-expanded__type-badge{position:absolute;top:16px;left:16px;background:rgba(0,180,216,.95);color:#fff;font-size:10px;font-weight:800;padding:6px 14px;border-radius:99px;text-transform:uppercase;letter-spacing:.1em}
 .spot-expanded__type-badge.cable{background:rgba(233,196,106,.95);color:#000}
 .spot-expanded__hero-title{color:#fff;width:100%}
-.spot-expanded__name{font-family:'Clash Display',sans-serif;font-size:clamp(28px,5vw,42px);font-weight:900;letter-spacing:-.02em;line-height:1.1;margin:0}
+.spot-expanded__name{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(28px,5vw,42px);font-weight:900;letter-spacing:-.02em;line-height:1.1;margin:0}
 .spot-expanded__prov{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#00cfed;font-weight:800;margin-top:8px;display:block}
 .spot-expanded__content{display:grid;gap:18px}
 .spot-expanded__desc{font-size:16px;line-height:1.65;color:rgba(255,255,255,.92);background:rgba(255,255,255,.04);padding:20px 24px;border-radius:12px;border-left:3px solid var(--primary)}
@@ -1167,7 +1180,7 @@ html[lang="en"] .es-only{display:none}
 .spot-expanded__tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
 .spot-expanded__tag{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;background:rgba(0,180,216,.18);color:#00cfed;border-radius:99px;border:1px solid rgba(0,180,216,.35)}
 .spot-expanded__coming{margin-top:8px;background:linear-gradient(135deg,rgba(0,180,216,.1),rgba(247,127,0,.1));border:1px dashed rgba(255,255,255,.2);border-radius:12px;padding:18px 22px}
-.spot-expanded__section-title{font-family:'Clash Display',sans-serif;font-size:18px;font-weight:800;color:#fff;margin:28px 0 12px;letter-spacing:-.01em}
+.spot-expanded__section-title{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800;color:#fff;margin:28px 0 12px;letter-spacing:-.01em}
 .spot-expanded__section-text{font-size:14px;line-height:1.75;color:rgba(255,255,255,.8);background:rgba(255,255,255,.04);border-radius:10px;padding:16px 18px;border-left:3px solid var(--primary)}
 .spot-expanded__school{display:flex;gap:12px;margin-bottom:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden}
 .spot-expanded__school img{width:88px;height:88px;object-fit:cover;flex-shrink:0}
@@ -1190,7 +1203,7 @@ html[lang="en"] .es-only{display:none}
 }
 
 /* HEADER POLISH */
-.topbar{position:fixed;top:0;left:0;right:0;z-index:101;background:linear-gradient(90deg,var(--primary) 0%,var(--accent) 100%);color:var(--text-inverse);padding:6px 16px;text-align:center;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-family:'Satoshi',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;padding-top:calc(6px + env(safe-area-inset-top))}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:101;background:linear-gradient(90deg,var(--primary) 0%,var(--accent) 100%);color:var(--text-inverse);padding:6px 16px;text-align:center;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;padding-top:calc(6px + env(safe-area-inset-top))}
 .topbar__icon{font-size:13px}
 .topbar__text{display:inline-flex;gap:6px;align-items:center}
 .topbar__cta{color:var(--text-inverse);text-decoration:underline;font-weight:800;text-underline-offset:2px}
@@ -1208,7 +1221,7 @@ html[lang="en"] .es-only{display:none}
 .logo:hover svg{transform:rotate(-8deg) scale(1.05)}
 .logo__text,.logo__text-mobile{transition:color .15s}
 .logo:hover .logo__text,.logo:hover .logo__text-mobile{color:var(--primary)}
-.logo__sub{display:block;font-size:9px;font-weight:600;letter-spacing:.18em;color:var(--text-muted);text-transform:uppercase;line-height:1;margin-top:2px;font-family:'Satoshi',sans-serif}
+.logo__sub{display:block;font-size:9px;font-weight:600;letter-spacing:.18em;color:var(--text-muted);text-transform:uppercase;line-height:1;margin-top:2px;font-family:'DM Sans',sans-serif}
 @media(max-width:520px){.logo__sub{display:none}}
 
 /* HEADER scroll state */
@@ -1254,7 +1267,7 @@ html[lang="en"] .es-only{display:none}
 .bram-panel[data-open="1"]{display:flex}
 .bram-head{display:flex;align-items:center;gap:11px;padding:14px 16px;border-bottom:1px solid var(--divider);background:linear-gradient(145deg,color-mix(in oklab,var(--primary),transparent 88%),transparent)}
 .bram-cara{font-size:30px;line-height:1;transition:transform .25s}
-.bram-head b{font-family:'Clash Display',sans-serif;font-size:15px;display:block}
+.bram-head b{font-family:'Bricolage Grotesque',sans-serif;font-size:15px;display:block}
 .bram-head small{font-size:11.5px;color:var(--text-muted)}
 .bram-x{margin-left:2px;background:none;border:none;color:var(--text-muted);font-size:21px;cursor:pointer;line-height:1;padding:2px 6px}
 .bram-x:hover{color:var(--text)}
@@ -1309,7 +1322,7 @@ html[lang="en"] .es-only{display:none}
 .hoy__flecha{margin-left:6px;align-self:center;width:11px;height:11px;border-right:2.5px solid #7fd8ee;border-bottom:2.5px solid #7fd8ee;transform:rotate(45deg);transition:transform .22s;flex:0 0 auto}
 .hoy__acc[open] .hoy__flecha{transform:rotate(-135deg)}
 @media(prefers-reduced-motion:reduce){.hoy__flecha{transition:none}}
-.hoy__head h2{font-family:'Clash Display',sans-serif;font-size:clamp(28px,3.6vw,44px);line-height:1.03;margin:0;color:#f0f8ff}
+.hoy__head h2{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(28px,3.6vw,44px);line-height:1.03;margin:0;color:#f0f8ff}
 .hoy .eyebrow{color:#7fd8ee}
 .hoy__resumen{font-size:14.5px;color:#a9cfe2;margin:8px 0 0;max-width:56ch}
 .hoy__resumen b{color:#fff}
@@ -1345,7 +1358,7 @@ html[lang="en"] .es-only{display:none}
 .hoy__est:hover{background:rgba(233,196,106,.14);border-color:rgba(233,196,106,.5)}
 .hoy__est[aria-expanded="true"]{background:rgba(233,196,106,.14);border-color:rgba(233,196,106,.55)}
 .hoy__est b{color:#f2d999;font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:3px}
-.hoy__est-val{font-size:19px;color:#fff;font-weight:700;font-family:'Clash Display',sans-serif;display:block}
+.hoy__est-val{font-size:19px;color:#fff;font-weight:700;font-family:'Bricolage Grotesque',sans-serif;display:block}
 .hoy__est-det{font-size:12.5px;color:#c9b48a;display:block;margin-top:2px}
 .hoy__est-fuente{font-size:11px;color:#9c8a6f;display:block;margin-top:8px;line-height:1.5}
 .hoy__est-ver{font-size:11.5px;color:#f2d999;font-weight:700;margin-top:9px;display:inline-block}
@@ -1353,7 +1366,7 @@ html[lang="en"] .es-only{display:none}
 .hoy__est[aria-expanded="true"] .hoy__est-ver::after{content:' ▴'}
 .hoy__graficos{display:none;margin:0 0 20px;padding:18px;border-radius:13px;background:rgba(6,18,32,.66);border:1px solid rgba(255,255,255,.13)}
 .hoy__graficos[data-abierto="1"]{display:block}
-.hoy__graficos h3{font-family:'Clash Display',sans-serif;font-size:16px;color:#f0f8ff;margin:0 0 3px}
+.hoy__graficos h3{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;color:#f0f8ff;margin:0 0 3px}
 .hoy__graficos .hoy__est-fuente{margin:0 0 16px}
 .hoy__g{margin:0 0 20px}
 .hoy__g:last-child{margin-bottom:0}
@@ -1363,7 +1376,7 @@ html[lang="en"] .es-only{display:none}
 .hoy__mareas{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:9px}
 .hoy__mareas li{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.11);border-radius:10px;padding:9px 12px}
 .hoy__mareas .m-tipo{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:#7fd8ee;font-weight:700}
-.hoy__mareas .m-hora{font-size:17px;color:#fff;font-weight:700;font-family:'Clash Display',sans-serif}
+.hoy__mareas .m-hora{font-size:17px;color:#fff;font-weight:700;font-family:'Bricolage Grotesque',sans-serif}
 .hoy__mareas .m-alt{font-size:12px;color:#a9cfe2}
 .hoy__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:13px}
 .hoy__card{background:rgba(6,18,32,.62);border:1px solid rgba(255,255,255,.14);border-left:3px solid #34d399;border-radius:13px;padding:15px 17px;backdrop-filter:blur(3px)}
@@ -1403,7 +1416,7 @@ html{scroll-padding-top:var(--barra-alta)}
 /* --- Sudestada y crecidas del Río de la Plata --- */
 .sud__grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));margin:26px 0}
 .sud__card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px 21px}
-.sud__card h3{font-family:'Clash Display',sans-serif;font-size:17px;font-weight:700;margin:0 0 8px}
+.sud__card h3{font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:700;margin:0 0 8px}
 .sud__card p{margin:0;font-size:14.5px;color:var(--text-muted);line-height:1.62}
 .sud__card p+p{margin-top:9px}
 .sud__card b{color:var(--text);font-weight:600}
@@ -1436,26 +1449,6 @@ html{scroll-padding-top:var(--barra-alta)}
 .sud__lista b{color:var(--text)}
 @media(max-width:640px){.sud__mes span{min-width:0;font-size:11px;padding:8px 2px}}
 
-/* ── Hub "¿Qué buscás hoy?" ── */
-.hub{padding-block:clamp(32px,4vw,56px)}
-.hub .section-title{margin-bottom:24px}
-.hub-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:200px;gap:14px}
-.hub-card{position:relative;display:block;border-radius:18px;overflow:hidden;color:#fff;text-decoration:none;background:linear-gradient(135deg,var(--primary),var(--accent));isolation:isolate;box-shadow:0 6px 24px rgba(0,0,0,.18)}
-.hub-card--big{grid-column:span 2;grid-row:span 2}
-.hub-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .5s ease}
-.hub-card::after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(4,14,26,.05) 25%,rgba(4,14,26,.85) 100%)}
-.hub-card__body{position:absolute;left:18px;right:44px;bottom:16px;display:flex;flex-direction:column;gap:4px}
-.hub-card__ico{font-size:22px;line-height:1}
-.hub-card__t{font-family:'Clash Display',sans-serif;font-weight:700;font-size:21px;letter-spacing:-.01em;line-height:1.15}
-.hub-card--big .hub-card__t{font-size:clamp(28px,3vw,40px)}
-.hub-card__s{font-size:13px;opacity:.88;line-height:1.35}
-.hub-card__go{position:absolute;right:14px;bottom:14px;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.18);backdrop-filter:blur(6px);font-weight:700;transition:background .2s,transform .2s}
-.hub-card:hover img,.hub-card:focus-visible img{transform:scale(1.06)}
-.hub-card:hover .hub-card__go,.hub-card:focus-visible .hub-card__go{background:var(--accent);transform:translateX(3px)}
-.hub-card:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
-@media(max-width:900px){.hub-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:140px;gap:10px}.hub-card--big{grid-row:span 1}.hub-card:last-child{grid-column:span 2}.hub-card__t{font-size:17px}.hub-card__s{display:none}.hub-card--big .hub-card__s{display:block}.hub-card__body{left:14px;bottom:12px}}
-@media(prefers-reduced-motion:reduce){.hub-card img,.hub-card__go{transition:none}}
-
 /* ── Secciones largas: muestran unas pocas y el resto con "Ver más" ── */
 .plegado.blog-grid > :nth-child(n+5),.plegado.riders-grid > :nth-child(n+5),.plegado.man-grid > :nth-child(n+7),.plegado.glosario-list > :nth-child(n+9){display:none}
 @media(max-width:700px){.plegado.blog-grid > :nth-child(n+4),.plegado.riders-grid > :nth-child(n+3),.plegado.man-grid > :nth-child(n+4),.plegado.glosario-list > :nth-child(n+7){display:none}}
@@ -1468,6 +1461,193 @@ html{scroll-padding-top:var(--barra-alta)}
   .testi-grid::-webkit-scrollbar,.steps-grid::-webkit-scrollbar{display:none}
   .testi-grid > *,.steps-grid > *{scroll-snap-align:start}
 }
+
+/* ============================================================
+   REDISEÑO 2026 · "Aire, agua y una señal"
+   Papel, arena y bruma; tinta para el texto; naranja solo para actuar.
+   Bricolage Grotesque (títulos) · DM Sans (texto) · DM Mono (etiquetas)
+============================================================ */
+body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;font-size:17px;line-height:1.6;background:var(--bg)}
+h1,h2,h3,h4,h5,h6{font-family:'Bricolage Grotesque','DM Sans',sans-serif;letter-spacing:-.03em}
+.section-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(36px,5.2vw,64px);line-height:1;letter-spacing:-.035em}
+.section-sub{font-size:18px;line-height:1.55;color:var(--text-muted)}
+.eyebrow{font-family:'DM Mono',ui-monospace,monospace;font-weight:500;letter-spacing:.08em;font-size:12px;color:var(--sea)}
+.eyebrow::before{display:none}
+:focus-visible{outline:2px solid var(--signal)}
+::selection{background:var(--signal);color:#0B1A22}
+
+/* Sin fondos de foto por sección ni miga de pan: el diseño nuevo respira */
+#navBgOverlay,.mbreadcrumb{display:none!important}
+
+/* ── Páginas: cada sección vive en una sola ── */
+html[data-page="inicio"] [data-pg]:not([data-pg~="inicio"]),
+html[data-page="aprender"] [data-pg]:not([data-pg~="aprender"]),
+html[data-page="spots"] [data-pg]:not([data-pg~="spots"]),
+html[data-page="instructores"] [data-pg]:not([data-pg~="instructores"]),
+html[data-page="equipos"] [data-pg]:not([data-pg~="equipos"]),
+html[data-page="herramientas"] [data-pg]:not([data-pg~="herramientas"]){display:none!important}
+
+/* ── Piezas base ── */
+.nx-wrap{width:min(1360px,100%);margin-inline:auto;padding-inline:clamp(20px,4vw,40px)}
+.nx-d{font-family:'Bricolage Grotesque','DM Sans',sans-serif;letter-spacing:-.03em;font-weight:700}
+.nx-m{font-family:'DM Mono',ui-monospace,monospace;text-transform:uppercase;letter-spacing:.08em;font-size:12px;font-weight:500}
+.nx-c-mar{color:var(--sea)}[data-theme='dark'] .nx-c-mar{color:var(--primary)}
+.nx-c-signal{color:var(--signal)}
+.nx-stack{display:flex;flex-direction:column;gap:20px;align-items:flex-start}
+.nx-row{display:flex;flex-wrap:wrap;gap:12px}
+.nx-lead{margin:0;font-size:clamp(17px,1.6vw,20px);line-height:1.5;max-width:560px;color:var(--text)}
+.nx-h2{margin:0;font-size:clamp(36px,5vw,64px);line-height:1}
+.nx-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 26px;border-radius:999px;font-weight:700;font-size:16px;border:1.5px solid var(--ink);color:var(--ink);background:transparent;transition:background .18s,color .18s,border-color .18s;white-space:nowrap}
+.nx-btn--sm{min-height:44px;padding:0 20px;font-size:15px}
+.nx-btn--ink{background:var(--ink);color:var(--paper)}
+.nx-btn--ink:hover{background:var(--signal);border-color:var(--signal);color:#0B1A22}
+.nx-btn--line:hover{background:var(--ink);color:var(--paper)}
+.nx-btn--signal{background:var(--signal);border-color:var(--signal);color:#0B1A22}
+.nx-btn--signal:hover{background:var(--paper);border-color:var(--paper);color:#0B1A22}
+.nx-pill{display:inline-flex;align-self:flex-start;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.08em;font-size:12px;font-weight:500;padding:6px 10px;border-radius:999px;background:var(--ink);color:var(--paper)}
+.nx-pill--signal{background:var(--signal);color:#0B1A22}
+.nx-card{transition:transform .2s ease}
+.nx-card:hover{transform:translateY(-4px)}
+@media(prefers-reduced-motion:reduce){.nx-card,.nx-card:hover{transition:none;transform:none}}
+
+/* ── Header: logo, 5 páginas, botón ── */
+.header{background:color-mix(in oklab,var(--bg),transparent 6%);border-bottom:1px solid var(--divider)}
+.logo{color:var(--ink)!important}
+.logo__text,.logo__text-mobile{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.logo__sub{display:none}
+.nav-desktop{gap:28px}
+.nav-desktop a{font-size:16px;font-weight:500;color:var(--ink);background:none!important;padding:6px 0!important;border-radius:0}
+.nav-desktop a::after{display:none!important}
+.nav-desktop a:hover{text-decoration:underline;text-underline-offset:6px}
+.nav-desktop a[aria-current="page"]{text-decoration:underline;text-decoration-color:var(--signal);text-decoration-thickness:3px;text-underline-offset:8px}
+.nav-rail__arrow{display:none!important}
+.header__inner{width:min(1360px,100%);padding-inline:clamp(20px,4vw,40px)}
+.nav-rail{margin-inline:24px}
+.nav-desktop{justify-content:center;padding-right:0;-webkit-mask-image:none!important;mask-image:none!important}
+.logo__text,.logo__text-mobile{text-transform:none;font-size:20px}
+.header__actions{gap:10px}
+.lang{background:var(--surface-2);border-color:var(--border)}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+@media(max-width:1100px){.nx-hide-m{display:none!important}}
+.nav-drawer{background:var(--bg)}
+.nav-drawer a{font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--ink);border-bottom:1px solid var(--divider)}
+.nav-drawer a[aria-current="page"]{color:var(--signal)}
+.burger span{background:var(--ink)}
+
+/* Cinta de arriba: tinta con letra mono */
+.topbar{background:var(--ink);color:var(--paper);font-family:'DM Mono',monospace;font-weight:500;letter-spacing:.08em}
+.topbar__cta{color:var(--signal)}
+
+/* ── Portada ── */
+.nx-hero{padding:clamp(120px,14vw,170px) 0 clamp(48px,6vw,80px)}
+.nx-hero__grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,5vw,72px);align-items:center}
+.nx-hero__txt{display:flex;flex-direction:column;gap:26px}
+.nx-hero__t{margin:0;font-size:clamp(52px,8.4vw,124px);line-height:.92;font-weight:700;letter-spacing:-.04em}
+.nx-hero__t span{color:var(--signal)}
+.nx-pasos{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--divider);margin-top:6px}
+.nx-pasos li{display:flex;flex-direction:column;gap:6px;padding:16px 16px 0 0;border-right:1px solid var(--divider);padding-left:16px}
+.nx-pasos li:first-child{padding-left:0}
+.nx-pasos li:last-child{border-right:0}
+.nx-pasos .nx-m{color:var(--signal)}
+.nx-pasos a{font-weight:700;font-size:16px;line-height:1.3}
+.nx-pasos a:hover{text-decoration:underline;text-underline-offset:4px}
+.nx-hero__fig{margin:0;background:var(--mist);border-radius:32px;padding:clamp(16px,2.5vw,32px);display:flex;flex-direction:column;gap:10px;color:var(--ink)}
+.nx-hero__fig figcaption{opacity:.7}
+.nx-anat{width:100%;height:auto;color:var(--ink)}
+.nx-anat .a-p{fill:var(--paper)}
+.nx-anat .a-s{fill:var(--signal)}
+@media(max-width:900px){.nx-hero__grid{grid-template-columns:1fr}.nx-hero__fig{order:2}}
+@media(max-width:520px){.nx-pasos{grid-template-columns:1fr}.nx-pasos li{border-right:0;border-bottom:1px solid var(--divider);padding:12px 0;flex-direction:row;align-items:baseline;gap:14px}.nx-pasos li:last-child{border-bottom:0}}
+
+/* Cinta de palabras */
+.nx-cinta{background:var(--ink);color:var(--paper);overflow:hidden;padding:18px 0;border-block:1px solid var(--ink)}
+.nx-cinta__in{display:flex;gap:28px;width:max-content;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;font-size:14px;animation:nxCinta 40s linear infinite}
+.nx-cinta i{color:var(--signal);font-style:normal}
+@keyframes nxCinta{to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.nx-cinta__in{animation:none}}
+
+/* Secciones de la home */
+.nx-sec{padding:clamp(64px,8vw,104px) 0}
+.nx-sec--arena{background:var(--sand)}
+.nx-head{display:flex;flex-wrap:wrap;gap:20px 32px;justify-content:space-between;align-items:flex-end;margin-bottom:clamp(28px,4vw,48px)}
+.nx-head .nx-h2{max-width:760px}
+.nx-niveles{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.nx-nivel{display:flex;flex-direction:column;gap:14px;padding:32px;border-radius:28px;background:var(--sand);color:var(--ink);min-height:340px}
+.nx-nivel h3{margin:0;font-size:32px}
+.nx-nivel p{margin:0;font-size:17px;line-height:1.5}
+.nx-nivel .nx-m{margin-top:auto}
+.nx-nivel__n{font-size:96px;line-height:.85;font-weight:800}
+.nx-nivel--mar{background:var(--sea);color:#F7F4EC}
+.nx-nivel--tinta{background:#0B1A22;color:#F7F4EC}
+.nx-nivel--tinta .nx-nivel__n{color:var(--signal)}
+[data-theme='dark'] .nx-nivel--tinta{background:#05101A;border:1px solid var(--border)}
+.nx-split{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(32px,5vw,64px);align-items:center}
+.nx-tiles{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.nx-tile{display:flex;flex-direction:column;justify-content:space-between;gap:28px;min-height:200px;padding:22px;border-radius:24px}
+.nx-tile__t{font-size:24px;line-height:1.1}
+.nx-tile--bruma{background:var(--mist);color:var(--ink)}
+.nx-tile--tinta{grid-column:1/-1;background:#0B1A22;color:#F7F4EC;min-height:140px}
+.nx-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.nx-box{display:flex;flex-direction:column;gap:18px;min-height:220px;padding:28px;border-radius:24px;background:var(--sand);color:var(--ink)}
+.nx-box__t{font-size:26px;line-height:1.1}
+.nx-box .nx-m:last-child{margin-top:auto}
+.nx-box--papel{background:var(--paper)}
+.nx-box--signal{background:var(--signal);color:#0B1A22}
+.nx-calc{background:#0B1A22;color:#F7F4EC;border-radius:40px;padding:clamp(32px,5vw,64px);display:flex;flex-wrap:wrap;gap:28px;align-items:flex-end;justify-content:space-between}
+.nx-calc .nx-lead{color:#F7F4EC;opacity:.85}
+[data-theme='dark'] .nx-calc{background:#05101A;border:1px solid var(--border)}
+@media(max-width:900px){.nx-niveles,.nx-grid3{grid-template-columns:1fr}.nx-nivel{min-height:0}.nx-nivel__n{font-size:64px}.nx-split{grid-template-columns:1fr}}
+@media(max-width:520px){.nx-tiles{grid-template-columns:1fr}.nx-tile{min-height:150px}}
+
+/* Intro de cada página */
+.nx-intro{padding:clamp(130px,14vw,170px) 0 clamp(24px,3vw,40px)}
+.nx-intro__t{margin:0;font-size:clamp(48px,8vw,112px);line-height:.92;letter-spacing:-.04em;max-width:1000px}
+.nx-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.nx-chip{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:999px;border:1.5px solid var(--ink);font-weight:700;font-size:14px;color:var(--ink);transition:background .18s,color .18s}
+.nx-chip:hover,.nx-chip:focus-visible{background:var(--ink);color:var(--paper)}
+
+/* ── Las secciones existentes, con el lenguaje nuevo ── */
+.section{padding-block:clamp(56px,7vw,96px)}
+.section,.quickstart{background:transparent}
+[data-pg] + [data-pg]{border-top:1px solid var(--divider)}
+.quickstart,.hero{background:var(--bg)!important}
+#testimonios,#anatomia,#calculadora,#maniobras,#glosario,#marcas,#comparador{background:var(--sand)}
+.btn{border-radius:999px;font-weight:700;letter-spacing:0;text-transform:none;font-size:15px;min-height:48px}
+.btn--primary{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.btn--primary:hover{background:var(--signal);border-color:var(--signal);color:#0B1A22;box-shadow:none}
+.btn--white,.btn--outline,.btn--ghost{background:transparent;border:1.5px solid var(--ink);color:var(--ink)}
+.btn--white:hover,.btn--outline:hover,.btn--ghost:hover{background:var(--ink);color:var(--paper)}
+.testi-card,.blog-card,.rider-card,.video-card,.spot-card,.brand-card,.qs-step,.equipo-card,.man-card,.faq-item,.calc-section,.about__card,.step-card{border-radius:24px;box-shadow:none}
+.video-tab{border-radius:999px}
+.video-tab.active{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.video-tab.active small{color:var(--paper);opacity:.75}
+.qs-step::before{background:var(--signal)}
+.testi-avatar{background:var(--sea)}
+.blog-card__cover{background:var(--mist)}
+
+/* Pie: tinta, links grandes y la palabra WINGFOIL */
+.footer{background:#0B1A22;color:#F7F4EC;border-top:0;overflow:hidden}
+.footer .logo,.footer .logo__text{color:#F7F4EC!important}
+.footer__desc,.footer__col a,.footer__bottom p{color:rgba(247,244,236,.75)}
+.footer__col h4{font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.08em;font-size:12px;color:#FF5A2C}
+.footer__col a:hover{color:#F7F4EC}
+.nx-foot-nav{display:flex;flex-wrap:wrap;gap:8px 28px;margin:8px 0 36px;font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(22px,2.4vw,30px);font-weight:700;letter-spacing:-.02em}
+.nx-foot-nav a{color:#F7F4EC}
+.nx-foot-nav a:hover{color:#FF5A2C}
+.nx-wordmark{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(84px,21vw,320px);line-height:.78;letter-spacing:-.05em;color:#16303C;white-space:nowrap;text-align:center;margin:24px 0 -0.06em;user-select:none}
+.footer__bottom{border-top:1px solid #16303C;background:#0B1A22}
+.footer__bottom p,.footer__bottom strong{color:rgba(247,244,236,.6)!important}
+.footer__inner{grid-template-columns:minmax(220px,1fr) 2fr;grid-template-areas:"nav nav" "marca links";gap:40px 64px}
+.footer__inner>div:first-child{grid-area:marca}
+.nx-foot-nav{grid-area:nav;margin:0;padding-bottom:28px;border-bottom:1px solid #16303C}
+.footer__links{grid-area:links;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
+.footer__coffee{background:#FF5A2C;color:#0B1A22;padding:12px 20px;font-family:'DM Sans',sans-serif;white-space:nowrap;box-shadow:none}
+.footer__coffee:hover{color:#0B1A22;background:#F7F4EC}
+.footer__ig-btn{color:#F7F4EC;border-color:#16303C}
+.container,.footer__bottom-inner{width:min(1360px,100%)}
+@media(max-width:760px){.footer__inner{grid-template-columns:1fr;grid-template-areas:"nav" "marca" "links"}.footer__links{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.footer__links{grid-template-columns:1fr}}
+@media(max-width:600px){.header__actions{gap:6px}.header__inner{padding-inline:16px}}
 </style>
 
   <!-- Leaflet -->
@@ -1510,13 +1690,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- ============================================================ HEADER ============================================================ -->
 <header class="header" id="header">
   <div class="header__inner">
-    <a href="#inicio" class="logo" aria-label="Escuela de Wingfoil">
-      <svg width="34" height="34" viewBox="0 0 36 36" fill="none" aria-hidden="true">
-        <path d="M18 16 C14 10 7 8 2 10 C7 11 12 13 15 17 Z" fill="currentColor" opacity=".9"/>
-        <path d="M18 16 C22 10 29 8 34 10 C29 11 24 13 21 17 Z" fill="currentColor" opacity=".75"/>
-        <path d="M15 17 C16 19 18 20 20 19 L21 17 C20 18 18 18.5 16 17.5 Z" fill="currentColor"/>
-        <circle cx="21.5" cy="16" r="2" fill="currentColor"/>
-      </svg>
+    <a href="/" class="logo" aria-label="Escuela de Wingfoil">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M3 15 C 10 3, 24 3, 31 15 C 24 10, 10 10, 3 15 Z" fill="var(--signal)"/><path d="M3 24 C 9 20, 13 28, 19 24 C 24 21, 27 26, 31 23" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
       <span>
         <span class="logo__text">Escuela de Wingfoil</span>
         <span class="logo__text-mobile">WingFoil ARG</span>
@@ -1526,23 +1701,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="nav-rail" id="navRail">
       <button class="nav-rail__arrow nav-rail__arrow--prev" id="navPrev" type="button" tabindex="-1" aria-label="Ver opciones anteriores del menú" data-en-aria-label="Show previous menu items">‹</button>
       <nav class="nav-desktop" id="navDesktop" aria-label="Navegación principal" data-en-aria-label="Main navigation">
-      <a href="#inicio" data-en="Home">Inicio</a>
-      <a href="#empezar" data-en="Start">Empezar</a>
-      <a href="#videos" data-en="Videos">Videos</a>
-      <a href="#anatomia" data-en="Anatomy">Anatomía</a>
-      <a href="#instructores" data-en="Instructors">Instructores</a>
-      <a href="#spots" data-en="Map">Mapa</a>
-      <a href="#sudestada" data-en="Sudestada">Sudestada</a>
-      <a href="#venta-de-wingfoil" data-en="Gear">Equipos</a>
-      <a href="#riders" data-en="Riders">Riders</a>
-      <a href="#faq" data-en="FAQ">FAQ</a>
-      <a href="#comparador" data-en="Compare">Comparador</a>
-      <a href="#camaras" data-en="📡 Cameras">📡 Cámaras</a>
+      <a href="/aprender" data-nav="aprender" data-en="Learn">Aprender</a>
+      <a href="/spots" data-nav="spots" data-en="Spots">Spots</a>
+      <a href="/instructores" data-nav="instructores" data-en="Instructors">Instructores</a>
+      <a href="/equipos" data-nav="equipos" data-en="Gear">Equipos</a>
+      <a href="/herramientas" data-nav="herramientas" data-en="Tools">Herramientas</a>
       </nav>
       <button class="nav-rail__arrow nav-rail__arrow--next" id="navNext" type="button" tabindex="-1" aria-label="Ver más opciones del menú" data-en-aria-label="Show more menu items">›</button>
     </div>
     <div class="header__actions">
-      <a href="https://www.instagram.com/clubkitewing/" target="_blank" rel="noopener" class="btn-icon" aria-label="Instagram">
+      <a href="/aprender" class="nx-btn nx-btn--ink nx-btn--sm nx-hide-m" data-en="Start free">Empezar gratis</a>
+      <a href="https://www.instagram.com/clubkitewing/" target="_blank" rel="noopener" class="btn-icon nx-hide-m" aria-label="Instagram">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></svg>
       </a>
       <div class="lang" id="langToggle" role="group" aria-label="Idioma del sitio / Site language">
@@ -1569,20 +1738,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- MOBILE NAV DRAWER -->
 <div class="nav-drawer__backdrop" id="navBackdrop"></div>
 <nav class="nav-drawer" id="navDrawer" aria-label="Menú móvil">
-  <a href="#inicio"><span>🏠 Inicio</span><span class="arrow">›</span></a>
-  <a href="#empezar"><span>🚀 Empezar en 3 pasos</span><span class="arrow">›</span></a>
-  <a href="#videos"><span>🎬 Videos por Nivel</span><span class="arrow">›</span></a>
-  <a href="#anatomia"><span>🦈 Anatomía del Foil</span><span class="arrow">›</span></a>
-  <a href="#spots"><span>📍 Spots Argentina</span><span class="arrow">›</span></a>
-  <a href="#sudestada"><span>🌊 Sudestada y crecidas</span><span class="arrow">›</span></a>
-  <a href="#instructores"><span>👨‍🏫 Instructores</span><span class="arrow">›</span></a>
-  <a href="#venta-de-wingfoil"><span>🛒 Equipos en venta</span><span class="arrow">›</span></a>
-  <a href="#riders"><span>🌟 Riders & Legends</span><span class="arrow">›</span></a>
-  <a href="#glosario"><span>📖 Glosario</span><span class="arrow">›</span></a>
-  <a href="#marcas"><span>🏷️ Marcas</span><span class="arrow">›</span></a>
-  <a href="#faq"><span>❓ Preguntas frecuentes</span><span class="arrow">›</span></a>
-  <a href="#comparador"><span>⚖️ Comparador de marcas</span><span class="arrow">›</span></a>
-  <a href="#camaras"><span>📡 Cámaras en vivo</span><span class="arrow">›</span></a>
+  <a href="/" data-nav="inicio"><span data-en="Home">Inicio</span><span class="arrow">›</span></a>
+  <a href="/aprender" data-nav="aprender"><span data-en="Learn">Aprender</span><span class="arrow">›</span></a>
+  <a href="/spots" data-nav="spots"><span>Spots</span><span class="arrow">›</span></a>
+  <a href="/instructores" data-nav="instructores"><span data-en="Instructors">Instructores</span><span class="arrow">›</span></a>
+  <a href="/equipos" data-nav="equipos"><span data-en="Gear">Equipos</span><span class="arrow">›</span></a>
+  <a href="/herramientas" data-nav="herramientas"><span data-en="Tools">Herramientas</span><span class="arrow">›</span></a>
   <div class="nav-drawer__footer">
     <button class="nav-drawer__theme" id="drawerTheme">
       <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -1599,101 +1760,137 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div id="navBgOverlay" aria-hidden="true"></div>
 
 <!-- ============================================================ HERO ============================================================ -->
-<section class="hero" id="inicio">
-  <div class="hero__bg" aria-hidden="true">
-    <video class="hero__bg-video" id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="https://images.pexels.com/photos/15151070/pexels-photo-15151070.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" aria-hidden="true">
-      <source src="https://videos.pexels.com/video-files/34379407/14564404_1440_2560_30fps.mp4" type="video/mp4"/>
-    </video>
-    <div class="hero__bg-img" id="heroParallax"></div>
-  </div>
-  <div class="container hero__content">
-    <span class="hero__eyebrow">🌊 Escuela de Wingfoil · Argentina</span>
-    <h1 class="hero__title">Aprendé <em>WingFoil</em> GRATIS</h1>
-    <p class="hero__sub">La plataforma educativa #1 de habla hispana. Videos por nivel, spots en todo el país, instructores certificados y la comunidad más activa del Río de la Plata.</p>
-    <div class="hero__ctas">
-      <a href="#videos" class="btn btn--primary" data-en="Start now →">Empezar ahora →</a>
-      <a href="#spots" class="btn btn--white" data-en="See the spots">Ver spots</a>
+<section class="nx-hero" id="inicio" data-pg="inicio">
+  <div class="nx-wrap nx-hero__grid">
+    <div class="nx-hero__txt">
+      <span class="nx-m" data-en="Open wingfoil guide · Argentina">Guía abierta de wingfoil · Argentina</span>
+      <h1 class="nx-d nx-hero__t" data-en="Learn wingfoil and &lt;span&gt;fly&lt;/span&gt; over the water.">Aprendé wingfoil y <span>volá</span> sobre el agua.</h1>
+      <p class="nx-lead" data-en="Videos by level, spots, instructors and gear. All in one place, in Spanish and free.">Videos por nivel, spots, instructores y equipos. Todo en un solo lugar, en español y gratis.</p>
+      <div class="nx-row">
+        <a class="nx-btn nx-btn--ink" href="/aprender" data-en="Start now">Empezar ahora</a>
+        <a class="nx-btn nx-btn--line" href="/spots" data-en="See spots">Ver spots</a>
+      </div>
+      <ol class="nx-pasos">
+        <li><span class="nx-m">01</span><a href="/instructores" data-en="Lesson with an instructor">Clase con instructor</a></li>
+        <li><span class="nx-m">02</span><a href="/herramientas#calculadora" data-en="Your gear">Tu equipo</a></li>
+        <li><span class="nx-m">03</span><a href="/aprender#videos" data-en="Guided practice">Práctica guiada</a></li>
+      </ol>
     </div>
-    <div class="hero__stats">
-      <div class="hero__stat"><div class="hero__stat-num counter" data-target="22" data-suffix="+">0</div><div class="hero__stat-label" data-en="Spots in Argentina">Spots Argentina</div></div>
-      <div class="hero__stat"><div class="hero__stat-num counter" data-target="3">0</div><div class="hero__stat-label" data-en="Learning levels">Niveles aprendizaje</div></div>
-      <div class="hero__stat"><div class="hero__stat-num counter" data-target="100" data-suffix="%">0</div><div class="hero__stat-label" data-en="Free">Gratuito</div></div>
-      <div class="hero__stat"><div class="hero__stat-num counter" data-target="4">0</div><div class="hero__stat-label" data-en="Cable Parks">Cable Parks</div></div>
+    <figure class="nx-hero__fig">
+<svg class="nx-anat" viewBox="0 0 560 540" width="100%" role="img" aria-label="Esquema de un equipo de wingfoil con sus partes: ala, tabla, mástil, front wing, fuselaje y estabilizador">
+      <circle cx="280" cy="200" r="160" fill="none" stroke="currentColor" stroke-opacity=".28" stroke-dasharray="2 7"/>
+      <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M110 150 C 210 60, 350 60, 450 150 C 350 118, 210 118, 110 150 Z" class="a-p"/>
+        <path d="M280 88 L 280 150"/>
+        <path d="M255 150 L 305 150"/>
+        <path d="M100 330 Q 280 296 460 330 L 448 354 Q 280 382 112 354 Z" class="a-p"/>
+        <path d="M262 366 L 276 366 L 280 462 L 258 462 Z" class="a-p"/>
+        <rect x="150" y="460" width="270" height="14" rx="7" class="a-p"/>
+        <path d="M30 482 C 80 448, 130 448, 170 456 C 210 448, 260 448, 310 482 C 260 470, 210 474, 170 478 C 130 474, 80 470, 30 482 Z" class="a-s"/>
+        <path d="M376 470 C 396 462, 430 462, 470 478 C 440 478, 410 478, 376 478 Z" class="a-p"/>
+      </g>
+      <g stroke="currentColor" stroke-width="1" fill="none">
+        <path d="M130 130 L 60 92"/><path d="M450 340 L 510 304"/><path d="M279 412 L 330 412"/><path d="M70 474 L 60 512"/><path d="M230 474 L 240 512"/><path d="M440 474 L 450 512"/>
+      </g>
+      <g class="a-s"><circle cx="130" cy="130" r="4"/><circle cx="450" cy="340" r="4"/><circle cx="279" cy="412" r="4"/><circle cx="70" cy="474" r="4"/><circle cx="230" cy="474" r="4"/><circle cx="440" cy="474" r="4"/></g>
+      <g fill="currentColor" style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em">
+        <text x="10" y="84">01 ALA</text><text x="470" y="296">02 TABLA</text><text x="336" y="416">03 MÁSTIL</text><text x="10" y="528">04 FRONT WING</text><text x="210" y="528">05 FUSELAJE</text><text x="396" y="528">06 ESTABILIZADOR</text>
+      </g>
+    </svg>
+      <figcaption class="nx-m" data-en="Anatomy of a setup · diagram">Anatomía de un equipo · esquema</figcaption>
+    </figure>
+  </div>
+</section>
+
+<div class="nx-cinta" data-pg="inicio" aria-hidden="true"><div class="nx-cinta__in">
+  <span>Principiante</span><i>●</i><span>Intermedio</span><i>●</i><span>Avanzado</span><i>●</i><span>Spots</span><i>●</i><span>Instructores</span><i>●</i><span>Equipos</span><i>●</i><span>Sudestada</span><i>●</i><span>Cámaras en vivo</span><i>●</i>
+  <span>Principiante</span><i>●</i><span>Intermedio</span><i>●</i><span>Avanzado</span><i>●</i><span>Spots</span><i>●</i><span>Instructores</span><i>●</i><span>Equipos</span><i>●</i><span>Sudestada</span><i>●</i><span>Cámaras en vivo</span><i>●</i>
+</div></div>
+
+<section class="nx-sec" data-pg="inicio">
+  <div class="nx-wrap">
+    <div class="nx-head">
+      <h2 class="nx-d nx-h2" data-en="Your path, level by level.">Tu camino, nivel por nivel.</h2>
+      <a class="nx-btn nx-btn--line" href="/aprender#videos" data-en="See all videos">Ver todos los videos</a>
+    </div>
+    <div class="nx-niveles">
+      <a class="nx-card nx-nivel" href="/aprender#nivel-1"><span class="nx-d nx-nivel__n">01</span><h3 class="nx-d" data-en="Beginner">Principiante</h3><p data-en="Wing handling on land, first runs on the water and your first short flight.">Manejo del ala en tierra, primeras bajadas al agua y tu primer vuelo corto.</p><span class="nx-m" data-en="See videos →">Ver videos →</span></a>
+      <a class="nx-card nx-nivel nx-nivel--mar" href="/aprender#nivel-2"><span class="nx-d nx-nivel__n">02</span><h3 class="nx-d" data-en="Intermediate">Intermedio</h3><p data-en="Take off consistently, hold your height and start turning without falling.">Despegar seguido, mantener la altura y empezar a girar sin caerte.</p><span class="nx-m" data-en="See videos →">Ver videos →</span></a>
+      <a class="nx-card nx-nivel nx-nivel--tinta" href="/aprender#nivel-3"><span class="nx-d nx-nivel__n">03</span><h3 class="nx-d" data-en="Advanced">Avanzado</h3><p data-en="Tacks, transitions, waves and downwind. Fine technique to fly further.">Viradas, transiciones, olas y downwind. Técnica fina para volar más lejos.</p><span class="nx-m" data-en="See videos →">Ver videos →</span></a>
     </div>
   </div>
-  <div class="hero__scroll">
-    <span class="hero__scroll-text" data-en="Scroll">Scroll</span>
-    <div class="hero__scroll-line"></div>
+</section>
+
+<section class="nx-sec nx-sec--arena" data-pg="inicio">
+  <div class="nx-wrap nx-split">
+    <div class="nx-stack">
+      <span class="nx-m nx-c-mar" data-en="On the water today">Hoy en el agua</span>
+      <h2 class="nx-d nx-h2" data-en="Check before you go.">Mirá antes de salir.</h2>
+      <p class="nx-lead" data-en="Live cameras, the wind forecast for each spot and the state of the Río de la Plata.">Cámaras en vivo, el pronóstico de viento de cada spot y el estado del Río de la Plata.</p>
+      <a class="nx-btn nx-btn--ink" href="/spots" data-en="See spots and cameras">Ver spots y cámaras</a>
+    </div>
+    <div class="nx-tiles">
+      <a class="nx-card nx-tile nx-tile--bruma" href="/spots#camaras"><span class="nx-pill nx-pill--signal" data-en="Live">En vivo</span><span class="nx-d nx-tile__t" data-en="Cameras: San Isidro and Mar del Plata">Cámaras: San Isidro y Mar del Plata</span></a>
+      <a class="nx-card nx-tile nx-tile--bruma" href="/spots#salgo-hoy"><span class="nx-pill" data-en="Forecast">Pronóstico</span><span class="nx-d nx-tile__t" data-en="Can I ride today? Spot by spot">¿Salgo hoy? Spot por spot</span></a>
+      <a class="nx-card nx-tile nx-tile--tinta" href="/spots#sudestada"><span class="nx-m nx-c-signal" data-en="Sudestada · Río de la Plata">Sudestada · Río de la Plata</span><span class="nx-d nx-tile__t" data-en="Floods, low tides and live tide">Crecidas, bajantes y marea en vivo</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="nx-sec" data-pg="inicio">
+  <div class="nx-wrap">
+    <div class="nx-head">
+      <h2 class="nx-d nx-h2" data-en="Instructors who get you flying.">Instructores que te ponen a volar.</h2>
+      <a class="nx-btn nx-btn--line" href="/instructores" data-en="See directory">Ver directorio</a>
+    </div>
+    <div class="nx-grid3">
+      <a class="nx-card nx-box" href="/instructores"><span class="nx-m nx-c-mar" data-en="Directory">Directorio</span><span class="nx-d nx-box__t" data-en="Choose by spot and level and write to them directly.">Elegí por spot y nivel, y escribile directo.</span><span class="nx-m" data-en="See instructors →">Ver instructores →</span></a>
+      <a class="nx-card nx-box" href="/herramientas#calculadora"><span class="nx-m nx-c-mar" data-en="Before your lesson">Antes de tu clase</span><span class="nx-d nx-box__t" data-en="Find out what gear size fits you.">Sabé qué tamaño de equipo te sirve.</span><span class="nx-m" data-en="Calculate →">Calcular →</span></a>
+      <a class="nx-card nx-box nx-box--signal" href="/instructores"><span class="nx-m" data-en="Do you teach?">¿Das clases?</span><span class="nx-d nx-box__t" data-en="Add your profile, free.">Sumá tu perfil, gratis.</span><span class="nx-m" data-en="Publish profile →">Publicar perfil →</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="nx-sec nx-sec--arena" data-pg="inicio">
+  <div class="nx-wrap">
+    <div class="nx-head">
+      <h2 class="nx-d nx-h2" data-en="Gear prices, updated every day.">Precios de equipos, al día.</h2>
+      <a class="nx-btn nx-btn--line" href="/equipos" data-en="See all gear">Ver todos los equipos</a>
+    </div>
+    <div class="nx-grid3">
+      <a class="nx-card nx-box nx-box--papel" href="/equipos"><span class="nx-m nx-c-mar">Mercado Libre</span><span class="nx-d nx-box__t" data-en="Wings, boards and foils: prices and sellers.">Alas, tablas y foils: precios y vendedores.</span><span class="nx-m" data-en="See prices →">Ver precios →</span></a>
+      <a class="nx-card nx-box nx-box--papel" href="/equipos"><span class="nx-m nx-c-mar">Hard Wind</span><span class="nx-d nx-box__t" data-en="The store's catalogue, with stock and price changes.">El catálogo de la tienda, con stock y cambios de precio.</span><span class="nx-m" data-en="See store →">Ver tienda →</span></a>
+      <a class="nx-card nx-box nx-box--papel" href="/herramientas#comparador"><span class="nx-m nx-c-mar" data-en="Comparison">Comparador</span><span class="nx-d nx-box__t" data-en="Brands side by side before you buy.">Marcas lado a lado antes de comprar.</span><span class="nx-m" data-en="Compare →">Comparar →</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="nx-sec" data-pg="inicio">
+  <div class="nx-wrap">
+    <div class="nx-calc">
+      <div class="nx-stack">
+        <span class="nx-m nx-c-signal" data-en="Gear calculator">Calculadora de equipo</span>
+        <h2 class="nx-d nx-h2" data-en="What gear do I need?">¿Qué equipo necesito?</h2>
+        <p class="nx-lead" data-en="Tell us your weight, your level and your spot's wind. We'll put together a recommendation.">Contanos tu peso, tu nivel y el viento de tu spot. Te armamos una recomendación.</p>
+      </div>
+      <a class="nx-btn nx-btn--signal" href="/herramientas#calculadora" data-en="Calculate my gear">Calcular mi equipo</a>
+    </div>
   </div>
 </section>
 
 
-<!-- ============================================================ HUB: ELEGÍ TU CAMINO ============================================================ -->
-<section class="section hub" id="hub" aria-labelledby="hubTitle">
-  <div class="container">
-    <span class="eyebrow" data-en="🧭 Choose your path">🧭 Elegí tu camino</span>
-    <h2 class="section-title" id="hubTitle" data-en="What are you looking for today?">¿Qué buscás hoy?</h2>
-    <div class="hub-grid">
-    <a class="hub-card hub-card--big" href="#videos">
-      <img src="https://images.pexels.com/photos/23190954/pexels-photo-23190954.jpeg?auto=compress&cs=tinysrgb&w=1200&fit=crop" alt="" loading="lazy" onerror="this.remove()" width="1200" height="900"/>
-      <span class="hub-card__body">
-        <span class="hub-card__ico" aria-hidden="true">🎓</span>
-        <span class="hub-card__t" data-en="Learn">Aprender</span>
-        <span class="hub-card__s" data-en="Videos by level, from zero to flying">Videos por nivel, de cero a volar</span>
-      </span>
-      <span class="hub-card__go" aria-hidden="true">→</span>
-    </a>
-    <a class="hub-card " href="#salgo-hoy">
-      <img src="https://images.pexels.com/photos/2534824/pexels-photo-2534824.jpeg?auto=compress&cs=tinysrgb&w=700&fit=crop" alt="" loading="lazy" onerror="this.remove()" width="700" height="525"/>
-      <span class="hub-card__body">
-        <span class="hub-card__ico" aria-hidden="true">🌬️</span>
-        <span class="hub-card__t" data-en="Can I ride today?">¿Salgo hoy?</span>
-        <span class="hub-card__s" data-en="Wind and forecast per spot">Viento y pronóstico por spot</span>
-      </span>
-      <span class="hub-card__go" aria-hidden="true">→</span>
-    </a>
-    <a class="hub-card " href="#spots">
-      <img src="https://images.pexels.com/photos/32217989/pexels-photo-32217989.jpeg?auto=compress&cs=tinysrgb&w=700&fit=crop" alt="" loading="lazy" onerror="this.remove()" width="700" height="525"/>
-      <span class="hub-card__body">
-        <span class="hub-card__ico" aria-hidden="true">📍</span>
-        <span class="hub-card__t" data-en="Spots & cameras">Spots y cámaras</span>
-        <span class="hub-card__s" data-en="Where to ride across Argentina">Dónde navegar en todo el país</span>
-      </span>
-      <span class="hub-card__go" aria-hidden="true">→</span>
-    </a>
-    <a class="hub-card " href="#venta-de-wingfoil">
-      <img src="https://images.pexels.com/photos/15151070/pexels-photo-15151070.jpeg?auto=compress&cs=tinysrgb&w=700&fit=crop" alt="" loading="lazy" onerror="this.remove()" width="700" height="525"/>
-      <span class="hub-card__body">
-        <span class="hub-card__ico" aria-hidden="true">🏄</span>
-        <span class="hub-card__t" data-en="Gear">Equipos</span>
-        <span class="hub-card__s" data-en="Mercado Libre and Hard Wind prices">Precios de Mercado Libre y Hard Wind</span>
-      </span>
-      <span class="hub-card__go" aria-hidden="true">→</span>
-    </a>
-    <a class="hub-card " href="#instructores">
-      <img src="https://images.pexels.com/photos/6299934/pexels-photo-6299934.jpeg?auto=compress&cs=tinysrgb&w=700&fit=crop" alt="" loading="lazy" onerror="this.remove()" width="700" height="525"/>
-      <span class="hub-card__body">
-        <span class="hub-card__ico" aria-hidden="true">🧑‍🏫</span>
-        <span class="hub-card__t" data-en="Instructors">Instructores</span>
-        <span class="hub-card__s" data-en="Lessons with certified people">Clases con gente certificada</span>
-      </span>
-      <span class="hub-card__go" aria-hidden="true">→</span>
-    </a>
-    <a class="hub-card " href="#riders">
-      <img src="https://images.pexels.com/photos/10087027/pexels-photo-10087027.jpeg?auto=compress&cs=tinysrgb&w=700&fit=crop" alt="" loading="lazy" onerror="this.remove()" width="700" height="525"/>
-      <span class="hub-card__body">
-        <span class="hub-card__ico" aria-hidden="true">🌟</span>
-        <span class="hub-card__t" data-en="Community">Comunidad</span>
-        <span class="hub-card__s" data-en="Riders, manoeuvres and guides">Riders, maniobras y guías</span>
-      </span>
-      <span class="hub-card__go" aria-hidden="true">→</span>
-    </a>
-    </div>
-  </div>
-</section>
 
 <!-- ============================================================ ¿SALGO HOY? ============================================================ -->
-<section class="section hoy" id="salgo-hoy" hidden>
+<section class="nx-intro" data-pg="spots" id="pagina-spots">
+  <div class="nx-wrap nx-stack">
+    <span class="nx-m" data-en="Spots · Argentina">Spots · Argentina</span>
+    <h1 class="nx-d nx-intro__t" data-en="Where to fly today.">Dónde volar hoy.</h1>
+    <p class="nx-lead" data-en="Map, live cameras and the state of the Río de la Plata. Check before loading the car.">Mapa, cámaras en vivo y estado del Río de la Plata. Mirá antes de cargar el auto.</p>
+    <nav class="nx-chips" aria-label="En esta página"><a class="nx-chip" href="#salgo-hoy" data-en="Can I ride today?">¿Salgo hoy?</a><a class="nx-chip" href="#spots" data-en="Spot map">Mapa de spots</a><a class="nx-chip" href="#camaras" data-en="Live cameras">Cámaras en vivo</a><a class="nx-chip" href="#sudestada" data-en="Sudestada">Sudestada</a></nav>
+  </div>
+</section>
+
+<section class="section hoy" id="salgo-hoy" hidden data-pg="spots">
     <div class="hoy__fondo" aria-hidden="true">
       <svg viewBox="0 0 1200 340" preserveAspectRatio="xMidYMid slice" role="presentation" focusable="false">
         <defs>
@@ -1793,7 +1990,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ QUICK START ============================================================ -->
-<section class="quickstart" id="empezar">
+<section class="nx-intro" data-pg="aprender" id="pagina-aprender">
+  <div class="nx-wrap nx-stack">
+    <span class="nx-m" data-en="Learn · Free videos and guides">Aprender · Videos y guías gratis</span>
+    <h1 class="nx-d nx-intro__t" data-en="From the shore to your first flight.">De la orilla al primer vuelo.</h1>
+    <p class="nx-lead" data-en="Three levels, one clear progression. Pick where you are and continue from there.">Tres niveles, una progresión clara. Elegí dónde estás y seguí desde ahí.</p>
+    <nav class="nx-chips" aria-label="En esta página"><a class="nx-chip" href="#nivel-1" data-en="01 Beginner">01 Principiante</a><a class="nx-chip" href="#nivel-2" data-en="02 Intermediate">02 Intermedio</a><a class="nx-chip" href="#nivel-3" data-en="03 Advanced">03 Avanzado</a><a class="nx-chip" href="#anatomia" data-en="Anatomy">Anatomía</a><a class="nx-chip" href="#maniobras" data-en="Manoeuvres">Maniobras</a><a class="nx-chip" href="#glosario" data-en="Glossary">Glosario</a><a class="nx-chip" href="#blog" data-en="Guides">Guías</a><a class="nx-chip" href="#faq" data-en="FAQ">Preguntas</a></nav>
+  </div>
+</section>
+
+<section class="quickstart" id="empezar" data-pg="aprender">
   <div class="container">
     <span class="eyebrow" data-en="🚀 Start now">🚀 Empezar ahora</span>
     <h2 class="section-title" data-en="Want to start? <em>3 steps</em>.">¿Querés arrancar? <em>3 pasos</em>.</h2>
@@ -1829,7 +2035,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ TESTIMONIOS ============================================================ -->
-<section class="section testimonials" id="testimonios">
+<section class="section testimonials" id="testimonios" data-pg="inicio">
   <div class="container">
     <span class="eyebrow" data-en="💬 Community">💬 Comunidad</span>
     <h2 class="section-title" data-en="People already flying">La gente que ya está volando</h2>
@@ -1889,7 +2095,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ ABOUT ============================================================ -->
-<section class="section" id="que-es">
+<section class="section" id="que-es" data-pg="aprender">
   <div class="container">
     <div class="about__split">
       <div>
@@ -1914,7 +2120,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- IMPACT STRIP -->
-<div class="impact-strip">
+<div class="impact-strip" data-pg="inicio">
   <div class="impact-strip__inner">
     <div class="impact-strip__img"><img width="1256" height="620" src="https://www.clarin.com/img/2026/01/05/u69gwDqEC_1256x620__2.jpg#1767723957906" alt="Wingfoil Argentina 2026" loading="lazy"/></div>
     <div class="impact-strip__img"><img width="780" height="519" src="https://resizer.glanacion.com/resizer/v2/el-windsurf-perdio-la-onda-todo-va-hacia-el-foil-AQSI2OWHD5GHLNZRLS2IDHSYEY.jpeg?auth=2a8e00a13f3548c9c8446c17376138a19bfd9ce0a172517f560ab580a1d3bf9c&width=780&height=519&quality=70&smart=true" alt="Foil Argentina" loading="lazy"/></div>
@@ -1923,7 +2129,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 
 <!-- ============================================================ VIDEOS ============================================================ -->
-<section class="section" id="videos">
+<section class="section" id="videos" data-pg="aprender">
   <div class="container">
     <span class="eyebrow">Aprendizaje</span>
     <h2 class="section-title" data-en="Videos by Level">Videos por Nivel</h2>
@@ -1997,7 +2203,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ ANATOMÍA ============================================================ -->
-<section class="section anatomy" id="anatomia">
+<section class="section anatomy" id="anatomia" data-pg="aprender">
   <div class="container">
     <span class="eyebrow">Guía visual interactiva</span>
     <h2 class="section-title" data-en="Anatomy of the <span style=&quot;color:var(--primary)&quot;>Foil</span>">Anatomía del <span style="color:var(--primary)">Foil</span></h2>
@@ -2026,7 +2232,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ ANATOMÍA DEL ALA DE WING ============================================================ -->
-<section class="section anatomy" id="anatomia-ala">
+<section class="section anatomy" id="anatomia-ala" data-pg="aprender">
   <div class="container">
     <span class="eyebrow">Guía visual interactiva</span>
     <h2 class="section-title" data-en="Anatomy of the <span style=&quot;color:var(--primary)&quot;>Wing</span>">Anatomía del <span style="color:var(--primary)">Ala de Wing</span></h2>
@@ -2073,7 +2279,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ SPOTS ============================================================ -->
-<section class="section" id="spots">
+<section class="section" id="spots" data-pg="spots">
   <div class="container">
     <span class="eyebrow">🇦🇷 Argentina</span>
     <h2 class="section-title" data-en="Argentine waters">Aguas argentinas</h2>
@@ -2093,7 +2299,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ CÁMARAS EN VIVO — SAN ISIDRO ============================================================ -->
-<section class="section cameras-section" id="camaras">
+<section class="section cameras-section" id="camaras" data-pg="spots">
   <div class="container">
     <span class="eyebrow" data-en="Live · Río de la Plata and Atlantic coast">En vivo · Río de la Plata y costa atlántica</span>
     <h2 class="section-title" data-en="Live cameras: San Isidro and Mar del Plata">Cámaras en vivo: San Isidro y Mar del Plata</h2>
@@ -2287,7 +2493,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ SUDESTADA Y CRECIDAS DEL RÍO DE LA PLATA ============================================================ -->
-<section class="section" id="sudestada">
+<section class="section" id="sudestada" data-pg="spots">
   <div class="container">
     <span class="eyebrow" data-en="🌊 Río de la Plata · water level">🌊 Río de la Plata · nivel del agua</span>
     <h2 class="section-title" data-en="Sudestada, floods and low water on the Río de la Plata">Sudestada, crecidas y bajantes del Río de la Plata</h2>
@@ -2363,7 +2569,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ CALCULADORA ============================================================ -->
-<section class="section calc-section" id="calculadora">
+<section class="nx-intro" data-pg="herramientas" id="pagina-herramientas">
+  <div class="nx-wrap nx-stack">
+    <span class="nx-m" data-en="Tools">Herramientas</span>
+    <h1 class="nx-d nx-intro__t" data-en="Decide with data, not doubts.">Decidí con datos, no con dudas.</h1>
+    <p class="nx-lead" data-en="Gear calculator and brand comparison, to choose wisely.">Calculadora de equipo y comparador de marcas, para elegir con criterio.</p>
+    <nav class="nx-chips" aria-label="En esta página"><a class="nx-chip" href="#calculadora" data-en="01 Calculator">01 Calculadora</a><a class="nx-chip" href="#comparador" data-en="02 Comparison">02 Comparador</a><a class="nx-chip" href="#participa" data-en="03 Take part">03 Participá</a></nav>
+  </div>
+</section>
+
+<section class="section calc-section" id="calculadora" data-pg="herramientas">
   <div class="container">
     <span class="eyebrow">Herramienta</span>
     <h2 class="section-title" data-en="Gear Calculator">Calculadora de Equipo</h2>
@@ -2408,7 +2623,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ INSTRUCTORES ============================================================ -->
-<section class="section instructors" id="instructores">
+<section class="nx-intro" data-pg="instructores" id="pagina-instructores">
+  <div class="nx-wrap nx-stack">
+    <span class="nx-m" data-en="Instructors · Directory">Instructores · Directorio</span>
+    <h1 class="nx-d nx-intro__t" data-en="Your first lesson, with someone who knows.">Tu primera clase, con alguien que sabe.</h1>
+    <p class="nx-lead" data-en="This guide does not teach: it brings independent instructors together. Choose by spot and level and write to them directly.">Esta guía no dicta clases: reúne a instructores independientes. Elegí por spot y nivel, y escribile directo.</p>
+    
+  </div>
+</section>
+
+<section class="section instructors" id="instructores" data-pg="instructores">
   <div class="container">
     <span class="eyebrow">Comunidad</span>
     <h2 class="section-title" data-en="Are you an Instructor?">¿Sos Instructor?</h2>
@@ -2466,7 +2690,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ EQUIPOS ============================================================ -->
-<section class="section" id="venta-de-wingfoil">
+<section class="nx-intro" data-pg="equipos" id="pagina-equipos">
+  <div class="nx-wrap nx-stack">
+    <span class="nx-m" data-en="Gear · Used and new">Equipos · Usados y nuevos</span>
+    <h1 class="nx-d nx-intro__t" data-en="Gear with a story.">Equipo con historia.</h1>
+    <p class="nx-lead" data-en="Mercado Libre and Hard Wind store prices, updated every day, and the brands we trust.">Precios de Mercado Libre y de la tienda Hard Wind, relevados todos los días, y las marcas que confiamos.</p>
+    
+  </div>
+</section>
+
+<section class="section" id="venta-de-wingfoil" data-pg="equipos">
   <div class="container">
     <span class="eyebrow">Comunidad</span>
     <h2 class="section-title" data-en="Gear for Sale">Equipos en Venta</h2>
@@ -2656,7 +2889,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ MANIOBRAS ============================================================ -->
-<section class="section maniobras" id="maniobras">
+<section class="section maniobras" id="maniobras" data-pg="aprender">
   <div class="container">
     <span class="eyebrow">🎯 Catálogo</span>
     <h2 class="section-title" data-en="WingFoil Manoeuvres">Maniobras del WingFoil</h2>
@@ -2675,7 +2908,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ RIDERS & LEGENDS ============================================================ -->
-<section class="section riders" id="riders">
+<section class="section riders" id="riders" data-pg="aprender">
   <div class="container">
     <span class="eyebrow" data-en="🌟 Inspiration">🌟 Inspiración</span>
     <h2 class="section-title" data-en="Riders &amp; Legends">Riders &amp; Legends</h2>
@@ -2771,7 +3004,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ GLOSARIO ============================================================ -->
-<section class="section glosario" id="glosario">
+<section class="section glosario" id="glosario" data-pg="aprender">
   <div class="container">
     <span class="eyebrow">📖 Diccionario</span>
     <h2 class="section-title" data-en="WingFoil Glossary">Glosario del WingFoil</h2>
@@ -2786,7 +3019,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ BLOG TEASER ============================================================ -->
-<section class="section blog-teaser" id="blog">
+<section class="section blog-teaser" id="blog" data-pg="aprender">
   <div class="container">
     <span class="eyebrow">📚 Recursos</span>
     <h2 class="section-title" data-en="Guides and articles">Guías y artículos</h2>
@@ -3207,7 +3440,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ MARCAS ============================================================ -->
-<section class="section brands" id="marcas">
+<section class="section brands" id="marcas" data-pg="equipos">
   <div class="container">
     <span class="eyebrow">🏷️ Equipo</span>
     <h2 class="section-title" data-en="Brands we trust">Marcas que confiamos</h2>
@@ -3409,7 +3642,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 
 <!-- ============================================================ FAQ ============================================================ -->
-<section class="section" id="faq">
+<section class="section" id="faq" data-pg="aprender">
   <div class="container">
     <span class="eyebrow" data-en="❓ Common questions">❓ Dudas frecuentes</span>
     <h2 class="section-title" data-en="Frequently asked questions">Preguntas frecuentes</h2>
@@ -3476,7 +3709,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ COMPARADOR DE MARCAS ============================================================ -->
-<section class="section" id="comparador">
+<section class="section" id="comparador" data-pg="herramientas">
   <div class="container">
     <span class="eyebrow" data-en="🏷️ Brands">🏷️ Marcas</span>
     <h2 class="section-title" data-en="Brand comparison">Comparador de marcas</h2>
@@ -3605,7 +3838,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ ENCUESTA + SPONSORS ============================================================ -->
-<section class="section" id="participa">
+<section class="section" id="participa" data-pg="herramientas">
   <div class="container">
     <span class="eyebrow">🤝 Participá</span>
     <h2 class="section-title" data-en="Help us improve & sponsors">Ayudanos a mejorar y sumate como sponsor</h2>
@@ -3685,12 +3918,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <div class="footer__inner">
       <div>
-        <a href="#inicio" class="logo" style="color:var(--primary)" aria-label="Escuela de Wingfoil">
+        <a href="/" class="logo" aria-label="Escuela de Wingfoil">
           <svg width="32" height="32" viewBox="0 0 36 36" fill="none"><path d="M18 16 C14 10 7 8 2 10 C7 11 12 13 15 17 Z" fill="currentColor" opacity=".9"/><path d="M18 16 C22 10 29 8 34 10 C29 11 24 13 21 17 Z" fill="currentColor" opacity=".75"/><circle cx="21.5" cy="16" r="2" fill="currentColor"/></svg>
           <span class="logo__text">Escuela de Wingfoil</span>
         </a>
         <p class="footer__desc" data-en="The most complete free wingfoil learning platform in Argentina. Made by riders, for riders.">La plataforma educativa gratuita de wingfoil más completa de Argentina. Creada por riders, para riders.</p>
       </div>
+      <nav class="nx-foot-nav" aria-label="Páginas">
+        <a href="/aprender" data-en="Learn">Aprender</a><a href="/spots">Spots</a><a href="/instructores" data-en="Instructors">Instructores</a><a href="/equipos" data-en="Gear">Equipos</a><a href="/herramientas" data-en="Tools">Herramientas</a>
+      </nav>
       <div class="footer__links">
         <div class="footer__col">
           <h4>Aprender</h4>
@@ -3729,6 +3965,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
     </div>
   </div>
+  <div class="nx-wordmark" aria-hidden="true">WINGFOIL</div>
   <div class="footer__bottom">
     <div class="footer__bottom-inner">
       <div>
@@ -3809,8 +4046,7 @@ var SPOTS=[
 window.__EWF = window.__EWF || {}; window.__EWF.SPOTS = SPOTS;
 
 // ============ THEME ============
-function setTheme(t){document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('wf-theme',t)}catch(e){}}
-try{var s=localStorage.getItem('wf-theme');if(s)setTheme(s)}catch(e){}
+function setTheme(t){document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('wf-tema',t)}catch(e){}}
 var themeBtn=document.getElementById('themeToggle');
 var drawerTheme=document.getElementById('drawerTheme');
 function toggleTheme(){var c=document.documentElement.getAttribute('data-theme');setTheme(c==='dark'?'light':'dark')}
@@ -7066,14 +7302,139 @@ if(/^\/venta-de-wingfoil\/?$/.test(location.pathname)){window.addEventListener('
     if(!el) return;
     grupos.forEach(function(g){ if(g.box && g.box.contains(el) && g.abrir){ g.abrir(); el.scrollIntoView(); } });
   }
-  // Si "¿Salgo hoy?" no se muestra (sin pronóstico), la tarjeta lleva a las cámaras
-  document.addEventListener('click', function(e){
-    var a = e.target.closest && e.target.closest('.hub-card[href="#salgo-hoy"]');
-    var sec = document.getElementById('salgo-hoy');
-    if(a && sec && sec.hidden){ e.preventDefault(); location.hash = 'camaras'; }
-  });
   window.addEventListener('hashchange', alHash);
   alHash();
+})();
+</script>
+
+<script>
+// ===== PÁGINAS =====
+// El sitio sigue siendo un solo archivo, pero cada sección vive en una de seis
+// páginas con su propia dirección (/aprender, /spots…). Cambiar de página no
+// recarga: se muestran sus secciones y se actualizan título, descripción y
+// canonical. Los links viejos con #seccion siguen andando: llevan a la página
+// donde está esa sección.
+(function(){
+  var root = document.documentElement;
+  var BASE = 'https://www.escueladewingfoil.com.ar';
+  var PAG = {
+    inicio:       { url:'/',             t:'Escuela de Wingfoil Argentina | Aprendé GRATIS 2026', d:null },
+    aprender:     { url:'/aprender',     t:'Aprender wingfoil: videos por nivel, maniobras y guías | Escuela de Wingfoil', d:'Videos de wingfoil por nivel en español, anatomía del equipo, maniobras, glosario y guías para pasar de la orilla al primer vuelo.' },
+    spots:        { url:'/spots',        t:'Spots de wingfoil en Argentina, cámaras y sudestada | Escuela de Wingfoil', d:'Dónde navegar wingfoil en Argentina: mapa de spots, pronóstico por spot, cámaras en vivo y estado del Río de la Plata.' },
+    instructores: { url:'/instructores', t:'Instructores de wingfoil en Argentina | Escuela de Wingfoil', d:'Directorio de instructores de wingfoil en Argentina. Elegí por spot y nivel, y escribiles directo.' },
+    equipos:      { url:'/equipos',      t:'Equipos de wingfoil: precios en Mercado Libre y Hard Wind | Escuela de Wingfoil', d:'Precios de alas, tablas y foils de wingfoil en Argentina, relevados todos los días en Mercado Libre y Hard Wind.' },
+    herramientas: { url:'/herramientas', t:'Calculadora de equipo y comparador de marcas de wingfoil | Escuela de Wingfoil', d:'Calculá qué tamaño de ala, tabla y foil te sirve y compará marcas de wingfoil lado a lado.' }
+  };
+  var desc = document.querySelector('meta[name="description"]');
+  var canon = document.querySelector('link[rel="canonical"]');
+  var ogUrl = document.querySelector('meta[property="og:url"]');
+  if(desc) PAG.inicio.d = desc.getAttribute('content');
+
+  // id de sección → página donde vive
+  function paginaDe(el){
+    var s = el && el.closest ? el.closest('[data-pg]') : null;
+    return s ? s.getAttribute('data-pg').split(' ')[0] : null;
+  }
+  function pagActual(){ return root.getAttribute('data-page') || 'inicio'; }
+
+  function marcarMenu(p){
+    document.querySelectorAll('[data-nav]').forEach(function(a){
+      if(a.getAttribute('data-nav') === p) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+  }
+  function aplicar(p){
+    root.setAttribute('data-page', p);
+    var info = PAG[p] || PAG.inicio;
+    document.title = info.t;
+    if(desc && info.d) desc.setAttribute('content', info.d);
+    if(canon) canon.setAttribute('href', BASE + info.url);
+    if(ogUrl) ogUrl.setAttribute('content', BASE + info.url);
+    marcarMenu(p);
+    // mapas, carruseles y gráficos que se armaron ocultos recalculan su tamaño
+    setTimeout(function(){ window.dispatchEvent(new Event('resize')); }, 30);
+  }
+
+  // Busca el elemento de un #hash (#nivel-2 = la sección de videos)
+  function buscar(hash){
+    var id = (hash || '').replace(/^#/, '');
+    if(!id) return null;
+    if(/^nivel-[123]$/.test(id)) return document.getElementById('videos');
+    try{ return document.getElementById(decodeURIComponent(id)); }catch(e){ return null; }
+  }
+  // Igual que buscar, pero además abre la pestaña del nivel pedido
+  function destino(hash){
+    var nv = /^#?nivel-([123])$/.exec(hash || '');
+    if(nv){
+      var tab = document.querySelector('.video-tab[data-tab="n' + nv[1] + '"]');
+      if(tab) tab.click();
+    }
+    return buscar(hash);
+  }
+  function bajarA(el){
+    if(el) requestAnimationFrame(function(){ el.scrollIntoView({ block:'start' }); });
+    else window.scrollTo(0, 0);
+  }
+
+  function ir(p, hash, apilar){
+    var cambia = p !== pagActual();
+    aplicar(p);
+    var url = (PAG[p] || PAG.inicio).url + location.search + (hash || '');
+    if(apilar && (cambia || hash)) history.pushState({ p:p }, '', url);
+    var el = destino(hash);
+    if(cambia || el) bajarA(el);
+    if(cambia && typeof gtag === 'function'){
+      try{ gtag('event', 'page_view', { page_location: location.href, page_title: document.title }); }catch(e){}
+    }
+  }
+
+  // Clicks: links a páginas (/aprender) y a secciones (#videos) de otra página
+  document.addEventListener('click', function(e){
+    if(e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest && e.target.closest('a[href]');
+    if(!a || a.target === '_blank' || a.hasAttribute('download')) return;
+    var href = a.getAttribute('href');
+    var u;
+    try{ u = new URL(href, location.href); }catch(err){ return; }
+    if(u.origin !== location.origin) return;
+    var ruta = u.pathname.replace(/\/+$/, '') || '/';
+    var aqui = location.pathname.replace(/\/+$/, '') || '/';
+    var p = null;
+    for(var k in PAG){ if(PAG[k].url === ruta) p = k; }
+    if(ruta === '/venta-de-wingfoil') p = 'equipos';
+    if(!p && ruta !== aqui) return;                 // otra parte del sitio (blog…)
+    var el = u.hash ? buscar(u.hash) : null;
+    var pe = el && paginaDe(el);
+    if(pe) p = pe;                                  // la sección manda
+    if(!p) p = pagActual();
+    if(p === pagActual() && u.hash && !/^#nivel-/.test(u.hash)) return;   // ancla en la misma página: normal
+    e.preventDefault();
+    ir(p, u.hash, true);
+  });
+
+  window.addEventListener('popstate', function(){ arranque(false); });
+
+  // Al entrar: página según la dirección; un #seccion viejo manda a su página
+  function arranque(primera){
+    var p = pagActual();
+    var el = destino(location.hash);
+    var dePag = el && paginaDe(el);
+    var r = location.pathname.replace(/\/+$/, '');
+    if(!primera){
+      p = 'inicio';
+      for(var k in PAG){ if(PAG[k].url === (r || '/')) p = k; }
+      if(r === '/venta-de-wingfoil') p = 'equipos';
+    }
+    if(dePag && dePag !== p && (r === '' || r === '/index.html')){
+      p = dePag;
+      history.replaceState(null, '', PAG[p].url + location.search + location.hash);
+    }
+    aplicar(p);
+    if(el) bajarA(el);
+    else if(!primera) window.scrollTo(0, 0);
+  }
+  arranque(true);
+  window.addEventListener('load', function(){ var el = destino(location.hash); if(el) bajarA(el); });
 })();
 </script>
 </body>
