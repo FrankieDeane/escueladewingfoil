@@ -1965,10 +1965,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </svg>
     </div>
   <div class="container">
-    <!-- Acordeón: arranca plegado. La respuesta igual está, porque el resumen
-         vive en la cabecera; el que quiere el detalle lo abre, y si lo abre se
-         lo recordamos para la próxima visita. -->
-    <details class="hoy__acc" id="hoyAcc">
+    <!-- Acordeón: arranca siempre abierto, con el detalle a la vista. Se puede
+         cerrar, pero en la próxima visita vuelve a aparecer abierto. -->
+    <details class="hoy__acc" id="hoyAcc" open>
       <summary class="hoy__head">
         <div>
           <span class="eyebrow" data-en="🌬️ Forecast matched to each spot">🌬️ Pronóstico cruzado con cada spot</span>
@@ -7015,12 +7014,8 @@ else loadEquipos();
   (function(){
     var acc = document.getElementById('hoyAcc');
     if(!acc) return;
-    try{
-      if(localStorage.getItem('wf-hoy') === 'abierto') acc.setAttribute('open','');
-    }catch(e){}
-    acc.addEventListener('toggle', function(){
-      try{ localStorage.setItem('wf-hoy', acc.open ? 'abierto' : 'cerrado'); }catch(e){}
-    });
+    // Siempre arranca abierto: el pronóstico es lo que la gente viene a ver.
+    acc.setAttribute('open','');
   })();
 
   // Acordeones de cámaras (San Isidro y Mar del Plata): arrancan abiertos

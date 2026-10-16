@@ -22,17 +22,26 @@ jobs:
         17901682 18388700 39731095 19532131 18388624 13910811 14447118 13910810
         33834673 38999274 33834675 13910812 13910772 14740931 19169575 19532132
         18546149 33834676 19169514 18388625 19169526 33834674 13910809 14476472
-        33008695 13910773 18388623 23190954
+        33008695 13910773 18388623 23190954 15151064 38774856 13910771 15151231
+        14586362 26077474 15164622 18647645 14740928 39731092 18707350
       UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36
     steps:
       - uses: actions/checkout@v4
+      - run: pip install -q pillow
       - name: Bajar y achicar
         run: |
           mkdir -p assets/img
           for id in $IDS; do
             curl -sfL -A "$UA" -o /tmp/$id.jpg "https://images.pexels.com/photos/$id/pexels-photo-$id.jpeg?auto=compress&cs=tinysrgb&w=2000" || { echo "falló $id"; continue; }
-            convert /tmp/$id.jpg -strip -resize '1600x1600>' -quality 72 -interlace Plane assets/img/wf-$id.jpg
-            convert /tmp/$id.jpg -strip -resize '800x800>' -quality 70 -interlace Plane assets/img/wf-$id-800.jpg
+            python3 - "$id" <<'PY'
+          import sys
+          from PIL import Image, ImageOps
+          i = sys.argv[1]
+          im = ImageOps.exif_transpose(Image.open(f'/tmp/{i}.jpg')).convert('RGB')
+          for lado, sufijo, q in ((1600, '', 72), (800, '-800', 70)):
+              c = im.copy(); c.thumbnail((lado, lado))
+              c.save(f'assets/img/wf-{i}{sufijo}.jpg', quality=q, optimize=True, progressive=True)
+          PY
           done
           ls -la assets/img | head -100
       - name: Guardar en la rama
