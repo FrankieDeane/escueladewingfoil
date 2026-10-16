@@ -1,0 +1,24 @@
+name: Prueba Hard Wind (temporal)
+on:
+  push:
+    branches: [claude/project-thread-x8qspj]
+    paths: [.github/workflows/hardwind-probe.yml]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
+          curl -sL -A "$UA" 'https://hardwind.com/wing/?page=1' -o p.html
+          wc -c p.html
+          echo "=== google items"; grep -o 'findGoogleItemByProductId' p.html | head -2
+          python3 - <<'PY'
+          import re
+          h=open('p.html',encoding='utf-8').read()
+          i=h.find('findGoogleItemByProductId'); print(h[i-3000:i+300])
+          print("=== item block")
+          j=h.find('js-item-product'); print(h[j-300:j+5000])
+          print("=== ld+json count", len(re.findall('application/ld\\+json',h)))
+          k=h.find('application/ld+json'); print(h[k:k+1500])
+          print("=== page links", sorted(set(re.findall(r'page=\d+|/page/\d+/',h))))
+          PY
