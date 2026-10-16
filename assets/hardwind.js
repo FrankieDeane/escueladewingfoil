@@ -33,7 +33,12 @@
   function rels() { return (state.raw && state.raw.relevamientos) || []; }
   function ultimo() { var r = rels(); return r[r.length - 1] || null; }
   function anterior() { var r = rels(); return r[r.length - 2] || null; }
-  function cat(p) { return p.categoria || 'Otros'; }
+  // Sección de la tienda (Wing foil, Foil, Usados…); si falta, la categoría del producto
+  function cat(p) {
+    var id = p.secciones && p.secciones[0];
+    var c = ((state.raw && state.raw.categorias) || []).find(function (x) { return x.id === id; });
+    return c ? c.nombre : ((p.categoria || '').trim() || 'Otros');
+  }
 
   // ── Resumen ──────────────────────────────────────────────────────────
   function kpi(t, v, s) {
