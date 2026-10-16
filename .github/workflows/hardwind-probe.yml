@@ -15,10 +15,13 @@ jobs:
           python3 - <<'PY'
           import re
           h=open('p.html',encoding='utf-8').read()
-          i=h.find('findGoogleItemByProductId'); print(h[i-3000:i+300])
-          print("=== item block")
-          j=h.find('js-item-product'); print(h[j-300:j+5000])
-          print("=== ld+json count", len(re.findall('application/ld\\+json',h)))
-          k=h.find('application/ld+json'); print(h[k:k+1500])
-          print("=== page links", sorted(set(re.findall(r'page=\d+|/page/\d+/',h))))
+          lds=[m.start() for m in re.finditer('application/ld\\+json',h)]
+          print("=== ld 2"); print(h[lds[1]:lds[1]+2500])
+          j=h.find('class="js-item-product'); print("=== item div", j); print(h[j-100:j+4000])
+          print("=== next", re.findall(r'(?:mpage|page)[=/]\d+[^"\']{0,40}', h)[:10])
+          print("=== js-load-more", h[h.find('js-load-more'):h.find('js-load-more')+400])
+          import subprocess
+          for u in ['https://hardwind.com/wing/page/3/','https://hardwind.com/wing/?mpage=3']:
+              o=subprocess.run(['curl','-sL','-A','Mozilla/5.0',u],capture_output=True,text=True).stdout
+              print('===',u,len(o),re.findall(r'"item_name":"([^"]{0,40})',o)[:3])
           PY
