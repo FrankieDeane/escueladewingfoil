@@ -1,0 +1,46 @@
+name: Preparar video de portada
+
+# Baja los dos clips de Pexels (licencia libre) que usa la portada, los recorta
+# a 12 s sin audio y los comprime para web: uno horizontal para compu y uno
+# vertical para celular, más una foto fija de cada uno. Los deja en
+# assets/video/ y los commitea en la misma rama. Corre solo cuando cambia este
+# archivo; para cambiar de clip, editá las URLs de abajo.
+
+on:
+  workflow_dispatch:
+  push:
+    paths: ['.github/workflows/video-portada.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  video:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      HORIZONTAL: https://videos.pexels.com/video-files/34363472/14557741_2560_1440_60fps.mp4
+      VERTICAL: https://videos.pexels.com/video-files/34379407/14564404_1440_2560_30fps.mp4
+      UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: Bajar y comprimir
+        run: |
+          mkdir -p assets/video
+          curl -sfL -A "$UA" -o /tmp/h.mp4 "$HORIZONTAL"
+          curl -sfL -A "$UA" -o /tmp/v.mp4 "$VERTICAL"
+          comun="-an -t 12 -c:v libx264 -preset slow -crf 29 -pix_fmt yuv420p -movflags +faststart"
+          ffmpeg -y -i /tmp/h.mp4 -vf "scale=1280:-2,fps=30" $comun assets/video/portada.mp4
+          ffmpeg -y -i /tmp/v.mp4 -vf "scale=720:-2,fps=30" $comun assets/video/portada-movil.mp4
+          ffmpeg -y -ss 1 -i assets/video/portada.mp4 -frames:v 1 -q:v 4 assets/video/portada.jpg
+          ffmpeg -y -ss 1 -i assets/video/portada-movil.mp4 -frames:v 1 -q:v 4 assets/video/portada-movil.jpg
+          ls -la assets/video
+      - name: Guardar en la rama
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898599+github-actions[bot]@users.noreply.github.com"
+          git add assets/video
+          git diff --cached --quiet && exit 0
+          git commit -m "Video de portada comprimido (Pexels, licencia libre)"
+          git push
