@@ -1435,6 +1435,39 @@ html{scroll-padding-top:var(--barra-alta)}
 .sud__lista li{margin-bottom:8px}
 .sud__lista b{color:var(--text)}
 @media(max-width:640px){.sud__mes span{min-width:0;font-size:11px;padding:8px 2px}}
+
+/* ── Hub "¿Qué buscás hoy?" ── */
+.hub{padding-block:clamp(32px,4vw,56px)}
+.hub .section-title{margin-bottom:24px}
+.hub-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:200px;gap:14px}
+.hub-card{position:relative;display:block;border-radius:18px;overflow:hidden;color:#fff;text-decoration:none;background:linear-gradient(135deg,var(--primary),var(--accent));isolation:isolate;box-shadow:0 6px 24px rgba(0,0,0,.18)}
+.hub-card--big{grid-column:span 2;grid-row:span 2}
+.hub-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .5s ease}
+.hub-card::after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(4,14,26,.05) 25%,rgba(4,14,26,.85) 100%)}
+.hub-card__body{position:absolute;left:18px;right:44px;bottom:16px;display:flex;flex-direction:column;gap:4px}
+.hub-card__ico{font-size:22px;line-height:1}
+.hub-card__t{font-family:'Clash Display',sans-serif;font-weight:700;font-size:21px;letter-spacing:-.01em;line-height:1.15}
+.hub-card--big .hub-card__t{font-size:clamp(28px,3vw,40px)}
+.hub-card__s{font-size:13px;opacity:.88;line-height:1.35}
+.hub-card__go{position:absolute;right:14px;bottom:14px;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.18);backdrop-filter:blur(6px);font-weight:700;transition:background .2s,transform .2s}
+.hub-card:hover img,.hub-card:focus-visible img{transform:scale(1.06)}
+.hub-card:hover .hub-card__go,.hub-card:focus-visible .hub-card__go{background:var(--accent);transform:translateX(3px)}
+.hub-card:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+@media(max-width:900px){.hub-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:140px;gap:10px}.hub-card--big{grid-row:span 1}.hub-card:last-child{grid-column:span 2}.hub-card__t{font-size:17px}.hub-card__s{display:none}.hub-card--big .hub-card__s{display:block}.hub-card__body{left:14px;bottom:12px}}
+@media(prefers-reduced-motion:reduce){.hub-card img,.hub-card__go{transition:none}}
+
+/* ── Secciones largas: muestran unas pocas y el resto con "Ver más" ── */
+.plegado.blog-grid > :nth-child(n+5),.plegado.riders-grid > :nth-child(n+5),.plegado.man-grid > :nth-child(n+7),.plegado.glosario-list > :nth-child(n+9){display:none}
+@media(max-width:700px){.plegado.blog-grid > :nth-child(n+4),.plegado.riders-grid > :nth-child(n+3),.plegado.man-grid > :nth-child(n+4),.plegado.glosario-list > :nth-child(n+7){display:none}}
+.ver-mas{display:flex;margin:22px auto 0;align-items:center;gap:8px;padding:12px 22px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-weight:700;font-size:14px;cursor:pointer;transition:border-color .2s,color .2s}
+.ver-mas:hover{border-color:var(--primary);color:var(--primary)}
+.ver-mas[hidden]{display:none}
+/* En celular, testimonios y pasos de cada nivel se deslizan de costado */
+@media(max-width:700px){
+  .testi-grid,.steps-grid{display:grid;grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:82%;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;padding-bottom:10px;margin-inline:calc(-1 * clamp(20px,5vw,64px));padding-inline:clamp(20px,5vw,64px);scroll-padding-inline:clamp(20px,5vw,64px);scrollbar-width:none}
+  .testi-grid::-webkit-scrollbar,.steps-grid::-webkit-scrollbar{display:none}
+  .testi-grid > *,.steps-grid > *{scroll-snap-align:start}
+}
 </style>
 
   <!-- Leaflet -->
@@ -1591,6 +1624,71 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="hero__scroll">
     <span class="hero__scroll-text" data-en="Scroll">Scroll</span>
     <div class="hero__scroll-line"></div>
+  </div>
+</section>
+
+
+<!-- ============================================================ HUB: ELEGÍ TU CAMINO ============================================================ -->
+<section class="section hub" id="hub" aria-labelledby="hubTitle">
+  <div class="container">
+    <span class="eyebrow" data-en="🧭 Choose your path">🧭 Elegí tu camino</span>
+    <h2 class="section-title" id="hubTitle" data-en="What are you looking for today?">¿Qué buscás hoy?</h2>
+    <div class="hub-grid">
+    <a class="hub-card hub-card--big" href="#videos">
+      <img src="https://images.pexels.com/photos/23190954/pexels-photo-23190954.jpeg?auto=compress&cs=tinysrgb&w=1200&fit=crop" alt="" loading="lazy" onerror="this.remove()" width="1200" height="900"/>
+      <span class="hub-card__body">
+        <span class="hub-card__ico" aria-hidden="true">🎓</span>
+        <span class="hub-card__t" data-en="Learn">Aprender</span>
+        <span class="hub-card__s" data-en="Videos by level, from zero to flying">Videos por nivel, de cero a volar</span>
+      </span>
+      <span class="hub-card__go" aria-hidden="true">→</span>
+    </a>
+    <a class="hub-card " href="#salgo-hoy">
+      <img src="https://images.pexels.com/photos/2534824/pexels-photo-2534824.jpeg?auto=compress&cs=tinysrgb&w=700&fit=crop" alt="" loading="lazy" onerror="this.remove()" width="700" height="525"/>
+      <span class="hub-card__body">
+        <span class="hub-card__ico" aria-hidden="true">🌬️</span>
+        <span class="hub-card__t" data-en="Can I ride today?">¿Salgo hoy?</span>
+        <span class="hub-card__s" data-en="Wind and forecast per spot">Viento y pronóstico por spot</span>
+      </span>
+      <span class="hub-card__go" aria-hidden="true">→</span>
+    </a>
+    <a class="hub-card " href="#spots">
+      <img src="https://images.pexels.com/photos/32217989/pexels-photo-32217989.jpeg?auto=compress&cs=tinysrgb&w=700&fit=crop" alt="" loading="lazy" onerror="this.remove()" width="700" height="525"/>
+      <span class="hub-card__body">
+        <span class="hub-card__ico" aria-hidden="true">📍</span>
+        <span class="hub-card__t" data-en="Spots & cameras">Spots y cámaras</span>
+        <span class="hub-card__s" data-en="Where to ride across Argentina">Dónde navegar en todo el país</span>
+      </span>
+      <span class="hub-card__go" aria-hidden="true">→</span>
+    </a>
+    <a class="hub-card " href="#venta-de-wingfoil">
+      <img src="https://images.pexels.com/photos/15151070/pexels-photo-15151070.jpeg?auto=compress&cs=tinysrgb&w=700&fit=crop" alt="" loading="lazy" onerror="this.remove()" width="700" height="525"/>
+      <span class="hub-card__body">
+        <span class="hub-card__ico" aria-hidden="true">🏄</span>
+        <span class="hub-card__t" data-en="Gear">Equipos</span>
+        <span class="hub-card__s" data-en="Mercado Libre and Hard Wind prices">Precios de Mercado Libre y Hard Wind</span>
+      </span>
+      <span class="hub-card__go" aria-hidden="true">→</span>
+    </a>
+    <a class="hub-card " href="#instructores">
+      <img src="https://images.pexels.com/photos/6299934/pexels-photo-6299934.jpeg?auto=compress&cs=tinysrgb&w=700&fit=crop" alt="" loading="lazy" onerror="this.remove()" width="700" height="525"/>
+      <span class="hub-card__body">
+        <span class="hub-card__ico" aria-hidden="true">🧑‍🏫</span>
+        <span class="hub-card__t" data-en="Instructors">Instructores</span>
+        <span class="hub-card__s" data-en="Lessons with certified people">Clases con gente certificada</span>
+      </span>
+      <span class="hub-card__go" aria-hidden="true">→</span>
+    </a>
+    <a class="hub-card " href="#riders">
+      <img src="https://images.pexels.com/photos/10087027/pexels-photo-10087027.jpeg?auto=compress&cs=tinysrgb&w=700&fit=crop" alt="" loading="lazy" onerror="this.remove()" width="700" height="525"/>
+      <span class="hub-card__body">
+        <span class="hub-card__ico" aria-hidden="true">🌟</span>
+        <span class="hub-card__t" data-en="Community">Comunidad</span>
+        <span class="hub-card__s" data-en="Riders, manoeuvres and guides">Riders, maniobras y guías</span>
+      </span>
+      <span class="hub-card__go" aria-hidden="true">→</span>
+    </a>
+    </div>
   </div>
 </section>
 
@@ -6921,6 +7019,62 @@ else loadEquipos();
 if(/^\/venta-de-wingfoil\/?$/.test(location.pathname)){window.addEventListener('load',function(){var el=document.getElementById('venta-de-wingfoil');if(el)el.scrollIntoView();});}
 // Vuelta del login de Mercado Libre (?code=TG-…): se canjea en /api/ml-auth y se limpia la URL.
 (function(){var c=new URLSearchParams(location.search).get('code');if(!c||!/^TG-/.test(c))return;history.replaceState(null,'',location.pathname);fetch('/api/ml-auth',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({code:c})}).then(function(r){return r.json()}).then(function(j){alert(j.ok?'Mercado Libre quedó conectado.':'No se pudo conectar Mercado Libre ('+(j.mensaje||j.error||j.motivo)+').')}).catch(function(){alert('No se pudo conectar Mercado Libre.')});})();
+</script>
+
+<script>
+// Secciones largas (blog, maniobras, riders, glosario): muestran unas pocas
+// tarjetas y el resto se abre con "Ver más". Si alguien filtra, busca o llega
+// con un link a una tarjeta escondida, se abre sola.
+(function(){
+  var en = function(){ return document.documentElement.lang === 'en'; };
+  var grupos = [
+    { sel: '#blog .blog-grid' }, { sel: '#manGrid' }, { sel: '.riders-grid' }, { sel: '#glosarioGrid' }
+  ];
+  grupos.forEach(function(g){
+    var box = document.querySelector(g.sel);
+    if(!box) return;
+    box.classList.add('plegado');
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'ver-mas';
+    box.insertAdjacentElement('afterend', btn);
+    function ocultas(){ return [].filter.call(box.children, function(c){ return c.offsetParent === null && !c.hidden; }).length; }
+    function pintar(){
+      if(!box.classList.contains('plegado')){ btn.hidden = true; return; }
+      var n = ocultas();
+      btn.hidden = !n;
+      btn.textContent = (en() ? 'See ' + n + ' more' : 'Ver ' + n + ' más') + ' ↓';
+    }
+    function abrir(){ box.classList.remove('plegado'); pintar(); }
+    btn.addEventListener('click', abrir);
+    new MutationObserver(pintar).observe(box, { childList: true });
+    window.addEventListener('resize', pintar);
+    new MutationObserver(pintar).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+    g.abrir = abrir; g.box = box;
+    setTimeout(pintar, 0);
+  });
+  // Filtrar maniobras o buscar en el glosario muestra todo lo que coincide
+  document.addEventListener('click', function(e){
+    if(e.target.closest && e.target.closest('.man-filter')) grupos[1].abrir && grupos[1].abrir();
+  });
+  var gs = document.getElementById('glossSearch');
+  if(gs) gs.addEventListener('input', function(){ grupos[3].abrir && grupos[3].abrir(); });
+  // Links directos a una tarjeta escondida (#blogCard-…)
+  function alHash(){
+    var id = location.hash.slice(1);
+    var el = id && document.getElementById(id);
+    if(!el) return;
+    grupos.forEach(function(g){ if(g.box && g.box.contains(el) && g.abrir){ g.abrir(); el.scrollIntoView(); } });
+  }
+  // Si "¿Salgo hoy?" no se muestra (sin pronóstico), la tarjeta lleva a las cámaras
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('.hub-card[href="#salgo-hoy"]');
+    var sec = document.getElementById('salgo-hoy');
+    if(a && sec && sec.hidden){ e.preventDefault(); location.hash = 'camaras'; }
+  });
+  window.addEventListener('hashchange', alHash);
+  alHash();
+})();
 </script>
 </body>
 </html>
