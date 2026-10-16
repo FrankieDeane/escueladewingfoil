@@ -29,14 +29,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta property="og:site_name" content="Escuela de Wingfoil Argentina" />
   <meta property="og:title" content="Escuela de Wingfoil Argentina · Aprendé GRATIS 2026" />
   <meta property="og:description" content="Videos por nivel, 18+ spots, instructores certificados y el nivel real del Río de la Plata por fecha: marea del SHN, sudestada y crecidas. Todo gratis." />
-  <meta property="og:image" content="https://images.unsplash.com/photo-1666175497584-dab60dcf1419?w=1200&h=630&fit=crop&auto=format&q=80" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
+  <meta property="og:image" content="https://www.escueladewingfoil.com.ar/assets/video/portada.jpg" />
+  <meta property="og:image:width" content="1280" />
+  <meta property="og:image:height" content="720" />
   <meta property="og:image:alt" content="Wingfoil en Argentina — volá sobre el agua con ala y foil" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Escuela de Wingfoil Argentina · Aprendé GRATIS 2026" />
   <meta name="twitter:description" content="Videos por nivel, 18+ spots, instructores certificados y el nivel real del Río de la Plata por fecha. Todo gratis." />
-  <meta name="twitter:image" content="https://images.unsplash.com/photo-1666175497584-dab60dcf1419?w=1200&h=630&fit=crop&auto=format&q=80" />
+  <meta name="twitter:image" content="https://www.escueladewingfoil.com.ar/assets/video/portada.jpg" />
   <meta property="al:android:url" content="https://www.escueladewingfoil.com.ar/" />
   <meta property="al:android:app_name" content="Escuela de Wingfoil Argentina" />
   <meta property="al:ios:url" content="https://www.escueladewingfoil.com.ar/" />
@@ -102,7 +102,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     "description": "Guía paso a paso para aprender wingfoil en Argentina: desde elegir el spot hasta tu primer vuelo.",
     "totalTime": "PT10H",
     "estimatedCost": {"@type":"MonetaryAmount","currency":"USD","value":"1000"},
-    "image": "https://images.unsplash.com/photo-1666175497584-dab60dcf1419?w=1200&h=630&fit=crop&auto=format&q=80",
+    "image": "https://www.escueladewingfoil.com.ar/assets/video/portada.jpg",
     "step": [
       {
         "@type": "HowToStep",
@@ -143,7 +143,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     "description": "Qué es la sudestada, por qué las crecidas del Río de la Plata se concentran entre septiembre y marzo, cómo leer la altura del río antes de salir a navegar y qué pasa con la bajante.",
     "inLanguage": "es-AR",
     "mainEntityOfPage": {"@type":"WebPage","@id":"https://www.escueladewingfoil.com.ar/#sudestada"},
-    "image": "https://images.unsplash.com/photo-1666175497584-dab60dcf1419?w=1200&h=630&fit=crop&auto=format&q=80",
+    "image": "https://www.escueladewingfoil.com.ar/assets/video/portada.jpg",
     "datePublished": "2026-09-05",
     "dateModified": "2026-09-05",
     "author": {"@id":"https://www.escueladewingfoil.com.ar/#organization"},
@@ -1719,6 +1719,43 @@ html[data-page="herramientas"] [data-pg]:not([data-pg~="herramientas"]){display:
   .nx-viento{width:100%}
 }
 @media(prefers-reduced-motion:reduce){.nx-viento__dot{animation:none}.nx-foto img{transition:none}}
+
+/* ===== Fotos: portada de cada página con foto de fondo y foto de frente ===== */
+.nx-intro--foto{position:relative;isolation:isolate;overflow:hidden;color:#F7F4EC;background:#0B1A22;padding:clamp(150px,16vw,200px) 0 clamp(48px,6vw,80px)}
+.nx-intro__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.nx-intro--foto::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(11,26,34,.88) 0%,rgba(11,26,34,.6) 55%,rgba(11,26,34,.25) 100%)}
+.nx-intro__grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);gap:clamp(24px,4vw,56px);align-items:end}
+.nx-intro--foto .nx-lead{color:rgba(247,244,236,.86)}
+.nx-intro--foto .nx-chip{color:#F7F4EC;border-color:rgba(247,244,236,.55);background:rgba(11,26,34,.25);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.nx-intro--foto .nx-chip:hover{background:#F7F4EC;color:#0B1A22;border-color:#F7F4EC}
+.nx-intro__fig{margin:0;aspect-ratio:4/5;border-radius:28px 28px 28px 120px;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.35);border:4px solid rgba(247,244,236,.9)}
+.nx-intro__fig img{width:100%;height:100%;object-fit:cover;display:block}
+@media(max-width:860px){
+  .nx-intro__grid{grid-template-columns:1fr}
+  .nx-intro__fig{aspect-ratio:16/10;border-radius:24px 24px 24px 72px}
+  .nx-intro--foto::after{background:linear-gradient(180deg,rgba(11,26,34,.8) 0%,rgba(11,26,34,.72) 100%)}
+}
+/* Frase de la portada sobre foto */
+.nx-frase--foto{position:relative;isolation:isolate;overflow:hidden;background:#0B1A22}
+.nx-frase--foto .nx-frase__t{color:#F7F4EC}
+.nx-frase__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.nx-frase--foto::after{content:"";position:absolute;inset:0;z-index:-1;background:rgba(11,26,34,.55)}
+.nx-frase--foto .nx-frase__img{border:3px solid rgba(247,244,236,.9)}
+.nx-frase--foto{padding:clamp(96px,12vw,180px) 0}
+/* Galería al pie de cada página */
+.nx-galeria{padding:clamp(56px,7vw,96px) 0;background:var(--sand)}
+.nx-galeria__in{display:grid;grid-template-columns:1.4fr 1fr;max-width:1180px;grid-template-rows:auto auto;gap:clamp(14px,2vw,24px);align-items:end}
+.nx-galeria figure{margin:0;overflow:hidden}
+.nx-galeria img{width:100%;height:100%;object-fit:cover;display:block}
+.nx-galeria__a{grid-row:1 / span 2;aspect-ratio:16/10;border-radius:120px 28px 28px 28px}
+.nx-galeria__b{aspect-ratio:4/3;border-radius:28px 28px 120px 28px}
+.nx-galeria__t{margin:0;grid-column:2;grid-row:1;font-size:clamp(28px,3.4vw,52px);line-height:1;letter-spacing:-.04em;color:var(--ink)}
+@media(max-width:700px){
+  .nx-galeria__in{grid-template-columns:1fr 1fr}
+  .nx-galeria__t{grid-column:1 / span 2;grid-row:1}
+  .nx-galeria__a{grid-row:2;grid-column:1;aspect-ratio:3/4;border-radius:72px 20px 20px 20px}
+  .nx-galeria__b{grid-row:2;grid-column:2;aspect-ratio:3/4;border-radius:20px 20px 72px 20px}
+}
 </style>
 
   <!-- Leaflet -->
@@ -1861,40 +1898,41 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- Frase grande con fotos metidas en el texto -->
-<section class="nx-frase" data-pg="inicio" aria-label="Escuela de Wingfoil">
+<section class="nx-frase nx-frase--foto" data-pg="inicio" aria-label="Escuela de Wingfoil">
+  <img class="nx-frase__bg" src="/assets/img/wf-1666175496147-9faf7d295503.jpg" alt="" loading="lazy"/>
   <div class="nx-wrap">
     <p class="nx-d nx-frase__t">
       <span data-en="From the shore">De la orilla</span>
-      <span class="nx-frase__img"><img src="https://images.pexels.com/photos/6299950/pexels-photo-6299950.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=600" alt="" loading="lazy"/></span>
+      <span class="nx-frase__img"><img src="/assets/img/wf-14740931-800.jpg" alt="" loading="lazy"/></span>
       <span data-en="to your first">al primer</span>
-      <span class="nx-frase__img nx-frase__img--l"><img src="https://images.pexels.com/photos/23190954/pexels-photo-23190954.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900" alt="" loading="lazy"/></span>
+      <span class="nx-frase__img nx-frase__img--l"><img src="/assets/img/wf-33834659-800.jpg" alt="" loading="lazy"/></span>
       <span data-en="flight, free.">vuelo, gratis.</span>
     </p>
   </div>
 </section>
 
 <!-- Las cinco páginas, con foto -->
-<section class="nx-sec nx-sec--top0" data-pg="inicio">
+<section class="nx-sec" data-pg="inicio">
   <div class="nx-wrap">
     <div class="nx-fotos">
       <a class="nx-foto nx-foto--xl" href="/aprender">
-        <img src="https://images.pexels.com/photos/23190954/pexels-photo-23190954.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1400" alt="Rider de wingfoil volando sobre el foil" loading="lazy"/>
+        <img src="/assets/img/wf-18388624.jpg" alt="Rider de wingfoil volando sobre el foil" loading="lazy"/>
         <span class="nx-foto__txt"><span class="nx-m">01 · <span data-en="Learn">Aprender</span></span><span class="nx-d nx-foto__t" data-en="Videos by level">Videos por nivel</span></span>
       </a>
       <a class="nx-foto nx-foto--xl" href="/spots">
-        <img src="https://images.pexels.com/photos/32217989/pexels-photo-32217989.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1400" alt="Dique Potrerillos, en Mendoza" loading="lazy"/>
+        <img src="/assets/img/wf-14586362.jpg" alt="Wingfoil en un lago entre montañas" loading="lazy"/>
         <span class="nx-foto__txt"><span class="nx-m">02 · Spots</span><span class="nx-d nx-foto__t" data-en="Map, cameras and wind">Mapa, cámaras y viento</span></span>
       </a>
       <a class="nx-foto" href="/instructores">
-        <img src="https://images.pexels.com/photos/6299934/pexels-photo-6299934.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900" alt="Instructor enseñando en la playa" loading="lazy"/>
+        <img src="/assets/img/wf-26077474-800.jpg" alt="Rider preparando el ala en la playa" loading="lazy"/>
         <span class="nx-foto__txt"><span class="nx-m">03 · <span data-en="Instructors">Instructores</span></span><span class="nx-d nx-foto__t" data-en="Your first lesson">Tu primera clase</span></span>
       </a>
       <a class="nx-foto" href="/equipos">
-        <img src="https://www.kiteworldshop.com/img/cms/blog/ala-wing-foil-duotone-unit-jpg.jpg" alt="Ala de wingfoil" loading="lazy"/>
+        <img src="/assets/img/wf-15151064-800.jpg" alt="Ala de wingfoil en el agua" loading="lazy"/>
         <span class="nx-foto__txt"><span class="nx-m">04 · <span data-en="Gear">Equipos</span></span><span class="nx-d nx-foto__t" data-en="Prices, updated daily">Precios al día</span></span>
       </a>
       <a class="nx-foto" href="/herramientas">
-        <img src="https://images.pexels.com/videos/34379407/pexels-photo-34379407.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900" alt="Wingfoil en mar abierto" loading="lazy"/>
+        <img src="/assets/img/wf-38774856-800.jpg" alt="Wingfoil al atardecer" loading="lazy"/>
         <span class="nx-foto__txt"><span class="nx-m">05 · <span data-en="Tools">Herramientas</span></span><span class="nx-d nx-foto__t" data-en="Which gear fits you">Qué equipo te sirve</span></span>
       </a>
     </div>
@@ -1907,12 +1945,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div></div>
 
 <!-- ============================================================ ¿SALGO HOY? ============================================================ -->
-<section class="nx-intro" data-pg="spots" id="pagina-spots">
-  <div class="nx-wrap nx-stack">
+<section class="nx-intro nx-intro--foto" data-pg="spots" id="pagina-spots">
+  <img class="nx-intro__bg" src="/assets/img/wf-14740926.jpg" alt="" loading="lazy"/>
+  <div class="nx-wrap nx-intro__grid">
+    <div class="nx-stack">
     <span class="nx-m" data-en="Spots · Argentina">Spots · Argentina</span>
     <h1 class="nx-d nx-intro__t" data-en="Where to fly today.">Dónde volar hoy.</h1>
     <p class="nx-lead" data-en="Map, live cameras and the state of the Río de la Plata. Check before loading the car.">Mapa, cámaras en vivo y estado del Río de la Plata. Mirá antes de cargar el auto.</p>
     <nav class="nx-chips" aria-label="En esta página"><a class="nx-chip" href="#salgo-hoy" data-en="Can I ride today?">¿Salgo hoy?</a><a class="nx-chip" href="#spots" data-en="Spot map">Mapa de spots</a><a class="nx-chip" href="#camaras" data-en="Live cameras">Cámaras en vivo</a><a class="nx-chip" href="#sudestada" data-en="Sudestada">Sudestada</a></nav>
+    </div>
+    <figure class="nx-intro__fig"><img src="/assets/img/wf-19169575-800.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
   </div>
 </section>
 
@@ -2015,12 +2057,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ QUICK START ============================================================ -->
-<section class="nx-intro" data-pg="aprender" id="pagina-aprender">
-  <div class="nx-wrap nx-stack">
+<section class="nx-intro nx-intro--foto" data-pg="aprender" id="pagina-aprender">
+  <img class="nx-intro__bg" src="/assets/img/wf-13910812.jpg" alt="" loading="lazy"/>
+  <div class="nx-wrap nx-intro__grid">
+    <div class="nx-stack">
     <span class="nx-m" data-en="Learn · Free videos and guides">Aprender · Videos y guías gratis</span>
     <h1 class="nx-d nx-intro__t" data-en="From the shore to your first flight.">De la orilla al primer vuelo.</h1>
     <p class="nx-lead" data-en="Three levels, one clear progression. Pick where you are and continue from there.">Tres niveles, una progresión clara. Elegí dónde estás y seguí desde ahí.</p>
     <nav class="nx-chips" aria-label="En esta página"><a class="nx-chip" href="#nivel-1" data-en="01 Beginner">01 Principiante</a><a class="nx-chip" href="#nivel-2" data-en="02 Intermediate">02 Intermedio</a><a class="nx-chip" href="#nivel-3" data-en="03 Advanced">03 Avanzado</a><a class="nx-chip" href="#anatomia" data-en="Anatomy">Anatomía</a><a class="nx-chip" href="#maniobras" data-en="Manoeuvres">Maniobras</a><a class="nx-chip" href="#glosario" data-en="Glossary">Glosario</a><a class="nx-chip" href="#blog" data-en="Guides">Guías</a><a class="nx-chip" href="#faq" data-en="FAQ">Preguntas</a></nav>
+    </div>
+    <figure class="nx-intro__fig"><img src="/assets/img/wf-14447119-800.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
   </div>
 </section>
 
@@ -2525,12 +2571,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ CALCULADORA ============================================================ -->
-<section class="nx-intro" data-pg="herramientas" id="pagina-herramientas">
-  <div class="nx-wrap nx-stack">
+<section class="nx-intro nx-intro--foto" data-pg="herramientas" id="pagina-herramientas">
+  <img class="nx-intro__bg" src="/assets/img/wf-40076942.jpg" alt="" loading="lazy"/>
+  <div class="nx-wrap nx-intro__grid">
+    <div class="nx-stack">
     <span class="nx-m" data-en="Tools">Herramientas</span>
     <h1 class="nx-d nx-intro__t" data-en="Decide with data, not doubts.">Decidí con datos, no con dudas.</h1>
     <p class="nx-lead" data-en="Gear calculator and brand comparison, to choose wisely.">Calculadora de equipo y comparador de marcas, para elegir con criterio.</p>
     <nav class="nx-chips" aria-label="En esta página"><a class="nx-chip" href="#calculadora" data-en="01 Calculator">01 Calculadora</a><a class="nx-chip" href="#comparador" data-en="02 Comparison">02 Comparador</a><a class="nx-chip" href="#participa" data-en="03 Take part">03 Participá</a></nav>
+    </div>
+    <figure class="nx-intro__fig"><img src="/assets/img/wf-39731095-800.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
   </div>
 </section>
 
@@ -2579,12 +2629,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ INSTRUCTORES ============================================================ -->
-<section class="nx-intro" data-pg="instructores" id="pagina-instructores">
-  <div class="nx-wrap nx-stack">
+<section class="nx-intro nx-intro--foto" data-pg="instructores" id="pagina-instructores">
+  <img class="nx-intro__bg" src="/assets/img/wf-18707350.jpg" alt="" loading="lazy"/>
+  <div class="nx-wrap nx-intro__grid">
+    <div class="nx-stack">
     <span class="nx-m" data-en="Instructors · Directory">Instructores · Directorio</span>
     <h1 class="nx-d nx-intro__t" data-en="Your first lesson, with someone who knows.">Tu primera clase, con alguien que sabe.</h1>
     <p class="nx-lead" data-en="This guide does not teach: it brings independent instructors together. Choose by spot and level and write to them directly.">Esta guía no dicta clases: reúne a instructores independientes. Elegí por spot y nivel, y escribile directo.</p>
     
+    </div>
+    <figure class="nx-intro__fig"><img src="/assets/img/wf-15151070-800.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
   </div>
 </section>
 
@@ -2646,12 +2700,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ EQUIPOS ============================================================ -->
-<section class="nx-intro" data-pg="equipos" id="pagina-equipos">
-  <div class="nx-wrap nx-stack">
+<section class="nx-intro nx-intro--foto" data-pg="equipos" id="pagina-equipos">
+  <img class="nx-intro__bg" src="/assets/img/wf-19532132.jpg" alt="" loading="lazy"/>
+  <div class="nx-wrap nx-intro__grid">
+    <div class="nx-stack">
     <span class="nx-m" data-en="Gear · Used and new">Equipos · Usados y nuevos</span>
     <h1 class="nx-d nx-intro__t" data-en="Gear with a story.">Equipo con historia.</h1>
     <p class="nx-lead" data-en="Mercado Libre and Hard Wind store prices, updated every day, and the brands we trust.">Precios de Mercado Libre y de la tienda Hard Wind, relevados todos los días, y las marcas que confiamos.</p>
     
+    </div>
+    <figure class="nx-intro__fig"><img src="/assets/img/wf-18388700-800.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
   </div>
 </section>
 
@@ -2985,7 +3043,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE CARD: wingfoil-para-ex-kitesurfistas -->
       <article class="blog-card" id="blogCard-wingfoil-para-ex-kitesurfistas">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.pexels.com/photos/10087027/pexels-photo-10087027.jpeg?auto=compress&cs=tinysrgb&w=800&h=450&fit=crop" alt="Kitesurfista navegando en el mar" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-17901682-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Technique">Técnica</span>
           <h3 class="blog-card__title" data-en="Wingfoil for kitesurfers">Wingfoil para ex-kitesurfistas</h3>
@@ -3000,7 +3058,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE CARD: progresion-wingfoil-principiante-a-avanzado-6-meses -->
       <article class="blog-card" id="blogCard-progresion-wingfoil-principiante-a-avanzado-6-meses">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.pexels.com/photos/13012147/pexels-photo-13012147.jpeg?auto=compress&cs=tinysrgb&w=800&h=450&fit=crop" alt="Mujer navegando en windsurf" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-18388623-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Technique">Técnica</span>
           <h3 class="blog-card__title" data-en="From beginner to advanced in 6 months">De principiante a avanzado en 6 meses</h3>
@@ -3015,7 +3073,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE CARD: entrenar-wingfoil-sin-viento-tierra-gimnasio -->
       <article class="blog-card" id="blogCard-entrenar-wingfoil-sin-viento-tierra-gimnasio">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.pexels.com/photos/4164850/pexels-photo-4164850.jpeg?auto=compress&cs=tinysrgb&w=800&h=450&fit=crop" alt="Hombre haciendo sentadillas en el gimnasio" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-15151231-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Training">Entrenamiento</span>
           <h3 class="blog-card__title" data-en="How to train for wingfoil without wind">Cómo entrenar wingfoil sin viento</h3>
@@ -3030,7 +3088,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE CARD: drills-wingfoil-equilibrio-control -->
       <article class="blog-card" id="blogCard-drills-wingfoil-equilibrio-control">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.pexels.com/photos/374101/pexels-photo-374101.jpeg?auto=compress&cs=tinysrgb&w=800&h=450&fit=crop" alt="Mujer haciendo un ejercicio de equilibrio" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-14447118-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Technique">Técnica</span>
           <h3 class="blog-card__title" data-en="Drills for balance and control">Drills para equilibrio y control</h3>
@@ -3045,7 +3103,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE CARD: transiciones-giros-wingfoil-trasluchada-virada -->
       <article class="blog-card" id="blogCard-transiciones-giros-wingfoil-trasluchada-virada">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.pexels.com/photos/2534824/pexels-photo-2534824.jpeg?auto=compress&cs=tinysrgb&w=800&h=450&fit=crop" alt="Windsurfista navegando con viento" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-14740928-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Technique">Técnica</span>
           <h3 class="blog-card__title" data-en="Transitions, turns and changes of direction">Transiciones, giros y cambios de dirección</h3>
@@ -3060,7 +3118,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE CARD: certificaciones-niveles-wingfoil-argentina -->
       <article class="blog-card" id="blogCard-certificaciones-niveles-wingfoil-argentina">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.pexels.com/photos/6299934/pexels-photo-6299934.jpeg?auto=compress&cs=tinysrgb&w=800&h=450&fit=crop" alt="Instructor enseñando a un grupo en la playa" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-33834676-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="First steps">Primeros pasos</span>
           <h3 class="blog-card__title" data-en="Wingfoil certifications and levels">Certificaciones y niveles de wingfoil</h3>
@@ -3075,7 +3133,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE CARD: parawing-que-es-vs-wingfoil -->
       <article class="blog-card" id="blogCard-parawing-que-es-vs-wingfoil">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.unsplash.com/photo-1666175497584-dab60dcf1419?w=800&h=450&fit=crop&auto=format&q=70" alt="Rider de foil navegando con el ala sobre el agua" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-19532133-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Trends">Tendencias</span>
           <h3 class="blog-card__title" data-en="Parawing: what it is and whether it beats the wing">Parawing: qué es y si conviene más que el wing</h3>
@@ -3090,7 +3148,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE CARD: escaparte-a-navegar-cuando-hay-viento-evento-familiar -->
       <article class="blog-card" id="blogCard-escaparte-a-navegar-cuando-hay-viento-evento-familiar">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.pexels.com/photos/30995711/pexels-photo-30995711.jpeg?auto=compress&cs=tinysrgb&w=800&h=450&fit=crop" alt="Hombre de traje en la playa frente al mar" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-13910771-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Rider life">Vida de rider</span>
           <h3 class="blog-card__title" data-en="Windy day, wedding night: how to go and come back">Hay viento y tenés casamiento: cómo ir y volver</h3>
@@ -3105,7 +3163,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE CARD: errores-comunes-principiantes-wingfoil -->
       <article class="blog-card" id="blogCard-errores-comunes-principiantes-wingfoil">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.unsplash.com/photo-1666175497804-e28c2d800ab9?w=800&h=450&fit=crop&auto=format&q=70" alt="Rider de wingfoil navegando con el ala en el mar" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-13910809-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Technique">Técnica</span>
           <h3 class="blog-card__title" data-en="The 10 most common beginner mistakes">Los 10 errores más comunes de principiantes</h3>
@@ -3120,7 +3178,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE CARD: ejercicios-en-tierra-manejo-del-ala-wingfoil -->
       <article class="blog-card" id="blogCard-ejercicios-en-tierra-manejo-del-ala-wingfoil">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.unsplash.com/photo-1666175497141-ef62a9c65558?w=800&h=450&fit=crop&auto=format&q=70" alt="Rider de wingfoil navegando sobre el agua" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-14447157-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Technique">Técnica</span>
           <h3 class="blog-card__title" data-en="Land drills with the wing">Ejercicios en tierra con el ala</h3>
@@ -3135,7 +3193,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE CARD: como-levantarse-en-foil-paso-a-paso -->
       <article class="blog-card" id="blogCard-como-levantarse-en-foil-paso-a-paso">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.pexels.com/photos/23190954/pexels-photo-23190954.jpeg?auto=compress&cs=tinysrgb&w=800&h=450&fit=crop" alt="Rider de wingfoil volando sobre el foil en un lago" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-13910810-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Technique">Técnica</span>
           <h3 class="blog-card__title" data-en="How to get up on the foil, step by step">Cómo levantarte en foil, paso a paso</h3>
@@ -3150,7 +3208,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE CARD: cuantas-clases-wingfoil-para-salir-solo -->
       <article class="blog-card" id="blogCard-cuantas-clases-wingfoil-para-salir-solo">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.pexels.com/photos/6299950/pexels-photo-6299950.jpeg?auto=compress&cs=tinysrgb&w=800&h=450&fit=crop" alt="Instructor dando una clase en la playa" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-18546149-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="First steps">Primeros pasos</span>
           <h3 class="blog-card__title" data-en="How many lessons to ride on your own">Cuántas clases necesitás para salir solo</h3>
@@ -3165,7 +3223,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE CARD: aprender-wingfoil-solo-pros-contras-riesgos -->
       <article class="blog-card" id="blogCard-aprender-wingfoil-solo-pros-contras-riesgos">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.unsplash.com/photo-1666175497378-490ab9cc2ba1?w=800&h=450&fit=crop&auto=format&q=70" alt="Rider de wingfoil saltando con el ala sobre el agua" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-19169526-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="First steps">Primeros pasos</span>
           <h3 class="blog-card__title" data-en="Learning on your own: pros, cons and risks">Aprender wingfoil solo: pros, contras y riesgos</h3>
@@ -3180,7 +3238,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE CARD: aprender-wingfoil-despues-de-los-40 -->
       <article class="blog-card" id="blogCard-aprender-wingfoil-despues-de-los-40">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.pexels.com/photos/19221474/pexels-photo-19221474.jpeg?auto=compress&cs=tinysrgb&w=800&h=450&fit=crop" alt="Hombre surfeando una ola cerca de la orilla" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-19532131-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="First steps">Primeros pasos</span>
           <h3 class="blog-card__title" data-en="Learning wingfoil after 40">Aprender wingfoil después de los 40</h3>
@@ -3195,7 +3253,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE CARD: viento-termico-wingfoil-cuesta-del-viento-potrerillos -->
       <article class="blog-card" id="blogCard-viento-termico-wingfoil-cuesta-del-viento-potrerillos">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.pexels.com/photos/32217989/pexels-photo-32217989.jpeg?auto=compress&cs=tinysrgb&w=800&h=450&fit=crop" alt="Dique Potrerillos, en Mendoza, con la cordillera de fondo" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-39731092-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Spots">Spots</span>
           <h3 class="blog-card__title" data-en="Thermal wind: Cuesta del Viento and Potrerillos">Viento térmico: Cuesta del Viento y Potrerillos</h3>
@@ -3210,7 +3268,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE CARD: que-es-el-wingfoil-por-que-empezar -->
       <article class="blog-card" id="blogCard-que-es-el-wingfoil-por-que-empezar">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.unsplash.com/photo-1666175497141-ef62a9c65558?w=800&auto=format&fit=crop&q=60" alt="Rider de wingfoil navegando sobre el agua" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-18388625-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="First steps">Primeros pasos</span>
           <h3 class="blog-card__title" data-en="What wingfoil is and why start">Qué es el wingfoil y por qué empezar</h3>
@@ -3225,7 +3283,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE CARD: que-tamano-de-ala-wingfoil-segun-viento -->
       <article class="blog-card" id="blogCard-que-tamano-de-ala-wingfoil-segun-viento">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=800&auto=format&fit=crop&q=60" alt="Playa con viento para navegar en wingfoil" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-13910772-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Gear">Equipo</span>
           <h3 class="blog-card__title" data-en="Which wing size to use for the wind">Qué tamaño de ala usar según el viento</h3>
@@ -3240,7 +3298,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE CARD: comprar-equipo-wingfoil-mercado-libre-precios -->
       <article class="blog-card" id="blogCard-comprar-equipo-wingfoil-mercado-libre-precios">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.unsplash.com/photo-1666175497562-ccb66e6c373b?w=800&auto=format&fit=crop&q=60" alt="Equipo de wingfoil en la playa" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-33834674-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Smart buying">Compra inteligente</span>
           <h3 class="blog-card__title" data-en="Wingfoil on Mercado Libre: 2026 prices">Wingfoil en Mercado Libre: precios 2026</h3>
@@ -3255,7 +3313,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE CARD: mejores-riders-wingfoil-argentina-2026 -->
       <article class="blog-card" id="blogCard-mejores-riders-wingfoil-argentina-2026">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.unsplash.com/photo-1730134427096-c167c128e119?w=800&auto=format&fit=crop&q=60" alt="Wingfoil en un lago patagónico de Argentina" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-23190954-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Community">Comunidad</span>
           <h3 class="blog-card__title" data-en="The best Argentine wingfoil riders of 2026">Mejores riders de wingfoil de Argentina 2026</h3>
@@ -3270,7 +3328,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE CARD: SÚPER NIÑO 2026-27 -->
       <article class="blog-card" id="blogCardSuperNino">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.unsplash.com/photo-1666175497584-dab60dcf1419?w=800&auto=format&fit=crop&q=60" alt="Rider de wingfoil navegando con el ala sobre el agua" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-38999274-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="2026-27 season">Temporada 2026-27</span>
           <h3 class="blog-card__title" data-en="Super El Niño 2026-2027 and the Río de la Plata">Súper Niño 2026-2027 y el Río de la Plata</h3>
@@ -3284,7 +3342,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </article>
 
       <article class="blog-card" id="blogCardFoil">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800&auto=format&fit=crop&q=60" alt="Persona surfeando con foil en el océano" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-13910811-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Complete guide">Guía completa</span>
           <h3 class="blog-card__title" data-en="How to choose your first foil">Cómo elegir tu primer foil</h3>
@@ -3299,7 +3357,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <article class="blog-card" id="blogCardKite">
         <div class="blog-card__cover" style="padding:0;overflow:hidden">
-          <img src="https://images.pexels.com/photos/29918279/pexels-photo-29918279.jpeg?auto=compress&cs=tinysrgb&w=800&h=450&dpr=1" alt="Kitesurfer comparativa wingfoil" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/>
+          <img src="/assets/img/wf-14476472-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/>
         </div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Comparison">Comparativa</span>
@@ -3315,7 +3373,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <article class="blog-card" id="blogCardViento">
         <div class="blog-card__cover" style="padding:0;overflow:hidden">
-          <img src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=800&auto=format&fit=crop&q=60&crop=entropy" alt="Playa costera con viento" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/>
+          <img src="/assets/img/wf-13910773-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/>
         </div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Technique">Técnica</span>
@@ -3331,7 +3389,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE: SPOTS -->
       <article class="blog-card" id="blogCardSpots">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.unsplash.com/photo-1730134427096-c167c128e119?w=800&auto=format&fit=crop&q=60" alt="Wingfoil en lago patagónico argentina" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-33834675-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Spot guide">Guía de spots</span>
           <h3 class="blog-card__title" data-en="The best wingfoil spots in Argentina 2026">Los mejores spots de wingfoil en Argentina 2026</h3>
@@ -3346,7 +3404,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE: EQUIPO USADO -->
       <article class="blog-card" id="blogCardUsado">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.unsplash.com/photo-1666175497562-ccb66e6c373b?w=800&auto=format&fit=crop&q=60" alt="Equipo de wingfoil en la playa" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-33834673-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Smart buying">Compra inteligente</span>
           <h3 class="blog-card__title" data-en="Used wingfoil gear: what to check before buying">Equipo de wingfoil usado: qué revisar antes de comprar</h3>
@@ -3361,7 +3419,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ARTICLE: SEGURIDAD -->
       <article class="blog-card" id="blogCardSeguridad">
-        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="https://images.unsplash.com/photo-1615840956750-3262c5fffb62?w=800&auto=format&fit=crop&q=60" alt="Deportista con casco y chaleco en wingfoil" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-33008695-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Safety">Seguridad</span>
           <h3 class="blog-card__title" data-en="Is wingfoil dangerous? A complete safety guide">¿Es peligroso el wingfoil? Guía completa de seguridad</h3>
@@ -3377,7 +3435,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <!-- ARTICLE CARD: BRASIL 2026 -->
       <article class="blog-card" id="blogCardBrasil2026">
         <div class="blog-card__cover" style="padding:0;overflow:hidden">
-          <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&auto=format&fit=crop&q=60" alt="Kitesurf en las lagunas turquesas del nordeste de Brasil" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/>
+          <img src="/assets/img/wf-19169514-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/>
         </div>
         <div class="blog-card__body">
           <span class="blog-card__cat" data-en="Destinations · Brazil 2026">Destinos · Brasil 2026</span>
@@ -3855,6 +3913,41 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ DISCLAIMER ============================================================ -->
+<section class="nx-galeria" data-pg="aprender" aria-label="Fotos">
+  <div class="nx-wrap nx-galeria__in">
+    <figure class="nx-galeria__a"><img src="/assets/img/wf-1666175497584-dab60dcf1419.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
+    <p class="nx-d nx-galeria__t" data-en="Every session counts.">Cada sesión suma.</p>
+    <figure class="nx-galeria__b"><img src="/assets/img/wf-1730134427101-ec7982a3d773-800.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
+  </div>
+</section>
+<section class="nx-galeria" data-pg="spots" aria-label="Fotos">
+  <div class="nx-wrap nx-galeria__in">
+    <figure class="nx-galeria__a"><img src="/assets/img/wf-1652732255684-d92200fffa0f.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
+    <p class="nx-d nx-galeria__t" data-en="Water, wind, and off you go.">Agua, viento y a volar.</p>
+    <figure class="nx-galeria__b"><img src="/assets/img/wf-1740688245004-d4e836b7eb58-800.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
+  </div>
+</section>
+<section class="nx-galeria" data-pg="instructores" aria-label="Fotos">
+  <div class="nx-wrap nx-galeria__in">
+    <figure class="nx-galeria__a"><img src="/assets/img/wf-1740688244435-047d479f8113.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
+    <p class="nx-d nx-galeria__t" data-en="With someone beside you, you learn twice as fast.">Con alguien al lado, se aprende el doble.</p>
+    <figure class="nx-galeria__b"><img src="/assets/img/wf-1666175497562-ccb66e6c373b-800.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
+  </div>
+</section>
+<section class="nx-galeria" data-pg="equipos" aria-label="Fotos">
+  <div class="nx-wrap nx-galeria__in">
+    <figure class="nx-galeria__a"><img src="/assets/img/wf-1666175497804-e28c2d800ab9.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
+    <p class="nx-d nx-galeria__t" data-en="The right gear changes everything.">El equipo justo cambia todo.</p>
+    <figure class="nx-galeria__b"><img src="/assets/img/wf-1740688244924-4deca73383dc-800.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
+  </div>
+</section>
+<section class="nx-galeria" data-pg="herramientas" aria-label="Fotos">
+  <div class="nx-wrap nx-galeria__in">
+    <figure class="nx-galeria__a"><img src="/assets/img/wf-1666175496646-6b5ad13b902f.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
+    <p class="nx-d nx-galeria__t" data-en="Choose well and fly sooner.">Elegí bien y volá antes.</p>
+    <figure class="nx-galeria__b"><img src="/assets/img/wf-1730134427096-c167c128e119-800.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
+  </div>
+</section>
 <section class="disclaimer-section">
   <div class="container">
     <div class="disclaimer-box">
@@ -5151,13 +5244,6 @@ if(mBread && mBreadCurrent && 'IntersectionObserver' in window){
   }, {passive: true});
 }
 
-// ============ PWA SERVICE WORKER REGISTRATION ============
-if('serviceWorker' in navigator){
-  window.addEventListener('load', function(){
-    navigator.serviceWorker.register('/sw.js').catch(function(){});
-  });
-}
-
 // ============ MANIOBRAS CATALOG ============
 var MANIOBRAS = [
   {n:'Foileo',sub:'Take off / Touch up',cat:'basic',catLabel:'Básica',diff:1,img:'https://images.unsplash.com/photo-1666175497562-ccb66e6c373b?w=600&auto=format&fit=crop&q=60',vid:'KyizUfMxboU',d:'La primera vez que la tabla despega del agua y empezás a volar. El logro principal del primer mes.',catLabelEn:'Basic',nEn:'First ride on the foil',dEn:'The first time the board lifts off the water and you start flying. The main milestone of month one.'},
@@ -5200,7 +5286,7 @@ function renderManiobras(){
     var catLabel = en && m.catLabelEn ? m.catLabelEn : m.catLabel;
     return '<article class="man-card" data-mani-idx="' + MANIOBRAS.indexOf(m) + '" role="button" tabindex="0" aria-label="' + (en?'Watch video: ':'Ver video: ') + n + '">' +
       '<div class="man-card__visual">' +
-        '<img class="man-card__img" src="' + m.img + '" alt="' + n + '" loading="lazy"/>' +
+        '<img class="man-card__img" src="' + (m.vid ? 'https://i.ytimg.com/vi/' + m.vid + '/mqdefault.jpg' : m.img) + '" alt="' + n + '" loading="lazy"/>' +
         '<div class="man-card__visual-overlay"></div>' +
         '<span class="man-card__cat">' + catLabel + '</span>' +
         '<div class="man-card__diff">' + dots + '</div>' +
