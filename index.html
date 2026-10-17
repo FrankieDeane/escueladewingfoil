@@ -1667,6 +1667,8 @@ html[data-page="articulos"] [data-pg]:not([data-pg~="articulos"]){display:none!i
   .sud__tabla tbody th,.sud__tabla tbody td{padding:2px 0;border:0}
   .bram-fab{width:50px;height:50px;font-size:24px}
 }
+/* iPhone: body con overflow-x:hidden no alcanza en Safari; clip en html evita que quede espacio a la derecha */
+html,body{overflow-x:clip}
 @media(max-width:400px){.topbar{letter-spacing:.03em;font-size:9.5px}.topbar__text strong{white-space:normal}}
 .mld__card,.mld__chart{min-width:0;max-width:100%}.mld__chart canvas{max-width:100%!important}
 @media(max-width:360px){.logo__text-mobile{font-size:15.5px!important}.lang button{min-width:31px;padding:0 6px}.header__actions .btn-icon{width:34px}}
