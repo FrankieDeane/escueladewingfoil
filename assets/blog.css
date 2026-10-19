@@ -94,3 +94,10 @@ html,body{overflow-x:clip}
 @media(max-width:520px){.post table{display:block;max-width:100%;overflow-x:auto}.post div[style*="1fr 1fr 1fr"]{grid-template-columns:1fr!important}}
 @media(max-width:380px){.post div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important}}
 .post,.post p,.post li,.post h1,.post h2,.post h3{overflow-wrap:break-word}
+
+/* Contraste: etiquetas y botón de WhatsApp legibles en los dos modos */
+html:not([data-theme="dark"]) .blog-card__cat{color:#B93A10}
+body .share-btn--wa{border-color:#0E7A3E;color:#0E7A3E}
+body .share-btn--wa:hover{background:#0E7A3E;color:#fff}
+html[data-theme="dark"] body .share-btn--wa{border-color:#4FD88A;color:#4FD88A}
+html[data-theme="dark"] body .share-btn--wa:hover{background:#4FD88A;color:#0B1A22}
