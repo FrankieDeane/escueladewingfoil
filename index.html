@@ -1670,7 +1670,6 @@ html[data-page="articulos"] [data-pg]:not([data-pg~="articulos"]){display:none!i
 /* iPhone: body con overflow-x:hidden no alcanza en Safari; clip en html evita que quede espacio a la derecha */
 html,body{overflow-x:clip}
 @media(max-width:400px){.topbar{letter-spacing:.03em;font-size:9.5px}.topbar__text strong{white-space:normal}}
-.mld__card,.mld__chart{min-width:0;max-width:100%}.mld__chart canvas{max-width:100%!important}
 @media(max-width:360px){.logo__text-mobile{font-size:15.5px!important}.lang button{min-width:31px;padding:0 6px}.header__actions .btn-icon{width:34px}}
 
 /* ===== Portada 2: video, frase con fotos y cinco páginas con foto ===== */
@@ -1785,7 +1784,6 @@ html,body{overflow-x:clip}
   <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
-<link rel="stylesheet" href="/assets/ml-dashboard.css">
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -1955,7 +1953,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </a>
       <a class="nx-foto" href="/equipos">
         <img src="/assets/img/wf-15151064-800.jpg" alt="Ala de wingfoil en el agua" loading="lazy"/>
-        <span class="nx-foto__txt"><span class="nx-m">04 · <span data-en="Gear">Equipos</span></span><span class="nx-d nx-foto__t" data-en="Prices, updated daily">Precios al día</span></span>
+        <span class="nx-foto__txt"><span class="nx-m">04 · <span data-en="Gear">Equipos</span></span><span class="nx-d nx-foto__t" data-en="Used gear from riders">Usados de riders</span></span>
       </a>
       <a class="nx-foto" href="/herramientas">
         <img src="/assets/img/wf-38774856-800.jpg" alt="Wingfoil al atardecer" loading="lazy"/>
@@ -2732,7 +2730,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="nx-stack">
     <span class="nx-m" data-en="Gear · Used and new">Equipos · Usados y nuevos</span>
     <h1 class="nx-d nx-intro__t" data-en="Gear with a story.">Equipo con historia.</h1>
-    <p class="nx-lead" data-en="Mercado Libre and Hard Wind store prices, updated every day, and the brands we trust.">Precios de Mercado Libre y de la tienda Hard Wind, relevados todos los días, y las marcas que confiamos.</p>
+    <p class="nx-lead" data-en="Used gear from the community and the brands we trust.">Equipos usados de la comunidad y las marcas que confiamos.</p>
     
     </div>
     <figure class="nx-intro__fig"><img src="/assets/img/wf-18388700-800.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
@@ -2743,119 +2741,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <span class="eyebrow">Comunidad</span>
     <h2 class="section-title" data-en="Gear for Sale">Equipos en Venta</h2>
-    <p class="section-sub">Qué se vende más y a qué precio en Mercado Libre y en la tienda Hard Wind: tablas, wings, foils, neoprenes y accesorios. O publicá tu equipo gratis en la comunidad.</p>
-
-    <div class="eq-tabs" role="tablist">
-      <button class="eq-tab active" role="tab" aria-selected="true" aria-controls="eqPanelBuscador" data-eqtab="buscador">📊 Mercado Libre</button>
-      <button class="eq-tab" role="tab" aria-selected="false" aria-controls="eqPanelHardwind" data-eqtab="hardwind">🏄 Hard Wind</button>
-      <button class="eq-tab" role="tab" aria-selected="false" aria-controls="eqPanelComunidad" data-eqtab="comunidad">🤝 Comunidad · publicar</button>
-    </div>
-
-    <!-- DASHBOARD MERCADO LIBRE (assets/ml-dashboard.js) -->
-    <div id="eqPanelBuscador">
-      <div class="mld is-loading" id="mlDash">
-        <div class="mld__head">
-          <p class="mld__estado" id="mldEstado" aria-live="polite">Cargando datos de Mercado Libre…</p>
-          <button type="button" class="mld__btn" id="mldRelevar">↻ Relevar ahora</button>
-        </div>
-        <p class="mld__aviso" id="mldAviso" aria-live="polite" hidden></p>
-        <div class="mld__chips" id="mldChips" role="group" aria-label="Categoría"></div>
-
-        <h3 class="mld__h">Tendencias</h3>
-        <p class="mld__sub" id="mldTendSub"></p>
-        <div class="mld__kpis" id="mldKpis"></div>
-
-        <h3 class="mld__h">Más vendidos</h3>
-        <div class="mld__grid">
-          <div class="mld__card"><h4>Por marca</h4><p class="mld__sub" id="mldPieMarcasSub"></p><div class="mld__chart"><canvas id="mldPieMarcas" aria-label="Más vendidos por marca" role="img"></canvas></div></div>
-          <div class="mld__card"><h4>Por categoría</h4><p class="mld__sub" id="mldPieCatsSub"></p><div class="mld__chart"><canvas id="mldPieCats" aria-label="Más vendidos por categoría" role="img"></canvas></div></div>
-        </div>
-        <div class="mld__card"><h4>Top vendedores</h4><p class="mld__sub" id="mldVendSub"></p><div class="mld__chart mld__chart--vend"><canvas id="mldVend" aria-label="Top vendedores" role="img"></canvas></div><p class="mld__vacio" id="mldVendVacio" hidden>Mercado Libre todavía no informó vendedores de estos productos: aparecen con el próximo relevamiento.</p></div>
-
-        <h3 class="mld__h">Evolución en el ranking</h3>
-        <div class="mld__grid">
-          <div class="mld__card"><h4>Puesto de los productos top</h4><p class="mld__sub">1º arriba. Tocá un producto en la leyenda para ocultarlo.</p><div class="mld__chart"><canvas id="mldEvoProd" aria-label="Evolución del puesto por producto" role="img"></canvas></div><p class="mld__evo-hint" hidden>Por ahora hay un solo relevamiento: la línea se arma con cada relevamiento nuevo.</p></div>
-          <div class="mld__card"><h4>Top marcas</h4><p class="mld__sub">Mejor puesto de cada marca en cada fecha.</p><div class="mld__chart"><canvas id="mldEvoMarcas" aria-label="Evolución de las marcas top" role="img"></canvas></div><p class="mld__evo-hint" hidden>Por ahora hay un solo relevamiento: la línea se arma con cada relevamiento nuevo.</p></div>
-        </div>
-
-        <h3 class="mld__h">Precios</h3>
-        <div class="mld__grid">
-          <div class="mld__card"><h4>Precios por categoría</h4><p class="mld__sub">Más barato, promedio y más caro del último relevamiento.</p><div class="mld__chart"><canvas id="mldPrecios" aria-label="Precios por categoría" role="img"></canvas></div></div>
-          <div class="mld__card"><h4>Precio promedio en el tiempo</h4><p class="mld__sub">Por categoría, en cada relevamiento.</p><div class="mld__chart"><canvas id="mldPreciosEvo" aria-label="Evolución del precio promedio por categoría" role="img"></canvas></div></div>
-        </div>
-        <div class="mld__card">
-          <div class="mld__bar">
-            <h4>Los más caros por fecha</h4>
-            <label class="sr-only" for="mldFechaCaros">Fecha</label>
-            <select id="mldFechaCaros" data-f="fechaCaros"></select>
-            <button type="button" class="mld__btn mld__btn--sm" id="mldOrdenCaros">↓ De caro a barato</button>
-          </div>
-          <ol class="mld__caros" id="mldCaros"></ol>
-        </div>
-
-        <h3 class="mld__h">Lo que dicen los compradores</h3>
-        <p class="mld__sub">Opiniones de Mercado Libre de los productos con más calificaciones.</p>
-        <div class="mld__ops" id="mldOps"></div>
-
-        <h3 class="mld__h">Todos los productos</h3>
-        <div class="mld__card">
-          <div class="mld__bar">
-            <label class="sr-only" for="mldQ">Buscar</label>
-            <input id="mldQ" type="search" data-f="q" placeholder="Buscar: tabla 120, Duotone, casco…" autocomplete="off">
-            <label class="sr-only" for="mldMarca">Marca</label><select id="mldMarca" data-f="marca"></select>
-            <label class="sr-only" for="mldVendedor">Vendedor</label><select id="mldVendedor" data-f="vendedor"></select>
-            <label class="sr-only" for="mldOrden">Ordenar</label>
-            <select id="mldOrden" data-f="orden"><option value="puesto">Ranking</option><option value="barato">Precio: de barato a caro</option><option value="caro">Precio: de caro a barato</option></select>
-            <span class="mld__count" id="mldCount"></span>
-          </div>
-          <div class="mld__tablewrap">
-            <table class="mld__table">
-              <thead><tr><th>Puesto</th><th>Producto</th><th>Categoría</th><th>Marca</th><th>Precio del link</th><th>Precio oficial ML</th><th>Vendedor</th><th>Vendidos</th><th>Opiniones</th><th></th></tr></thead>
-              <tbody id="mldTabla"></tbody>
-            </table>
-          </div>
-          <button type="button" class="mld__btn mld__btn--sm mld__mas" id="mldMas" hidden></button>
-        </div>
-        <p class="equipos-disclaimer" style="margin-bottom:0">⚠️ Los productos los publican vendedores de Mercado Libre: no tenemos relación comercial con ellos ni garantizamos precio, stock o estado del equipo. El ranking sigue el orden en que Mercado Libre muestra los productos en sus listados de wingfoil. Verificá siempre en la publicación original antes de comprar.</p>
-      </div>
-    </div>
-
-    <!-- PRECIOS HARD WIND (assets/hardwind.js) -->
-    <div id="eqPanelHardwind" hidden>
-      <div class="mld is-loading" id="hwDash">
-        <div class="mld__head">
-          <p class="mld__estado" id="hwEstado" aria-live="polite">Cargando precios de Hard Wind…</p>
-          <button type="button" class="mld__btn" id="hwRelevar">🔄 Relevar</button>
-        </div>
-        <p class="mld__aviso" id="hwAviso" hidden aria-live="polite"></p>
-        <div class="mld__kpis" id="hwKpis"></div>
-        <div class="mld__grid">
-          <div class="mld__card"><h4>Precio promedio por categoría</h4><p class="mld__sub">Precio de lista de los productos con precio publicado, y rango de mínimo a máximo.</p><ul class="hw__bars" id="hwCats"></ul></div>
-          <div class="mld__card"><h4>Cambios de precio</h4><p class="mld__sub">Productos que subieron o bajaron desde el relevamiento anterior.</p><ol class="mld__caros" id="hwCambios"></ol></div>
-        </div>
-        <div class="mld__card">
-          <div class="mld__bar">
-            <h4>Todos los productos</h4>
-            <label class="sr-only" for="hwBuscar">Buscar</label><input type="search" id="hwBuscar" placeholder="Buscar producto o marca…">
-            <label class="sr-only" for="hwCat">Categoría</label><select id="hwCat"></select>
-            <label class="sr-only" for="hwOrden">Ordenar</label><select id="hwOrden"><option value="precio-desc">Más caro primero</option><option value="precio-asc">Más barato primero</option><option value="nombre">Nombre</option></select>
-            <label class="hw__check"><input type="checkbox" id="hwStock"> Solo con stock</label>
-            <span class="mld__count" id="hwCount"></span>
-          </div>
-          <div class="mld__tablewrap">
-            <table class="mld__table hw__table">
-              <thead><tr><th>Producto</th><th>Categoría</th><th>Precio</th><th>Transferencia</th><th>Stock</th><th></th></tr></thead>
-              <tbody id="hwTabla"></tbody>
-            </table>
-          </div>
-          <button type="button" class="mld__btn mld__btn--sm mld__mas" id="hwMas" hidden></button>
-        </div>
-        <p class="equipos-disclaimer" style="margin-bottom:0">⚠️ Precios publicados en <a href="https://hardwind.com" target="_blank" rel="noopener nofollow">hardwind.com</a> el día del relevamiento. No tenemos relación comercial con la tienda: verificá precio y stock en su web antes de comprar.</p>
-      </div>
-    </div>
+    <p class="section-sub">Tablas, wings, foils, neoprenes y accesorios que venden otros riders. Publicá tu equipo gratis en la comunidad.</p>
 
     <!-- COMUNIDAD -->
-    <div id="eqPanelComunidad" hidden>
+    <div id="eqPanelComunidad">
 
       <p class="equipos-disclaimer">⚠️ La Escuela de Wingfoil no es responsable de la venta de productos publicados. Las transacciones son entre particulares, bajo exclusiva responsabilidad de las partes.</p>
       <div class="equipos-grid" id="equiposGrid">
@@ -5666,20 +5555,6 @@ async function loadEquipos(){
   }catch(e){}
 }
 
-// ============ EQUIPOS TABS ============
-document.querySelectorAll('.eq-tab').forEach(function(btn){
-  btn.addEventListener('click',function(){
-    document.querySelectorAll('.eq-tab').forEach(function(b){b.classList.remove('active');b.setAttribute('aria-selected','false')});
-    btn.classList.add('active');btn.setAttribute('aria-selected','true');
-    var showId=btn.getAttribute('aria-controls');
-    document.getElementById('eqPanelComunidad').hidden=(showId!=='eqPanelComunidad');
-    document.getElementById('eqPanelBuscador').hidden=(showId!=='eqPanelBuscador');
-    if(showId==='eqPanelBuscador'&&window.EQS_LOAD)window.EQS_LOAD();
-    document.getElementById('eqPanelHardwind').hidden=(showId!=='eqPanelHardwind');
-    if(showId==='eqPanelHardwind'&&window.HW_LOAD)window.HW_LOAD();
-  });
-});
-
 loadInstructors();
 // Avisos de la comunidad (/api/equipos).
 window.EQ_COMUNIDAD=fetch('/api/equipos').then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()});
@@ -5693,8 +5568,6 @@ else loadEquipos();
 </script>
 
 <script src="/assets/equipo-normalizer.js" defer></script>
-<script src="/assets/ml-dashboard.js" defer></script>
-<script src="/assets/hardwind.js" defer></script>
 
 <!-- Three.js for 3D foil -->
 <script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
@@ -7328,8 +7201,6 @@ else loadEquipos();
 <script>
 // /venta-de-wingfoil (sin #) abre la home directo en la sección de equipos.
 if(/^\/venta-de-wingfoil\/?$/.test(location.pathname)){window.addEventListener('load',function(){var el=document.getElementById('venta-de-wingfoil');if(el)el.scrollIntoView();});}
-// Vuelta del login de Mercado Libre (?code=TG-…): se canjea en /api/ml-auth y se limpia la URL.
-(function(){var c=new URLSearchParams(location.search).get('code');if(!c||!/^TG-/.test(c))return;history.replaceState(null,'',location.pathname);fetch('/api/ml-auth',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({code:c})}).then(function(r){return r.json()}).then(function(j){alert(j.ok?'Mercado Libre quedó conectado.':'No se pudo conectar Mercado Libre ('+(j.mensaje||j.error||j.motivo)+').')}).catch(function(){alert('No se pudo conectar Mercado Libre.')});})();
 </script>
 
 <script>
@@ -7397,7 +7268,7 @@ if(/^\/venta-de-wingfoil\/?$/.test(location.pathname)){window.addEventListener('
     aprender:     { url:'/aprender',     t:'Aprender wingfoil: videos por nivel, maniobras y guías | Escuela de Wingfoil', d:'Videos de wingfoil por nivel en español, anatomía del equipo, maniobras, glosario y guías para pasar de la orilla al primer vuelo.' },
     spots:        { url:'/spots',        t:'Spots de wingfoil en Argentina, cámaras y sudestada | Escuela de Wingfoil', d:'Dónde navegar wingfoil en Argentina: mapa de spots, pronóstico por spot, cámaras en vivo y estado del Río de la Plata.' },
     instructores: { url:'/instructores', t:'Instructores de wingfoil en Argentina | Escuela de Wingfoil', d:'Directorio de instructores de wingfoil en Argentina. Elegí por spot y nivel, y escribiles directo.' },
-    equipos:      { url:'/equipos',      t:'Equipos de wingfoil: precios en Mercado Libre y Hard Wind | Escuela de Wingfoil', d:'Precios de alas, tablas y foils de wingfoil en Argentina, relevados todos los días en Mercado Libre y Hard Wind.' },
+    equipos:      { url:'/equipos',      t:'Equipos de wingfoil usados y marcas | Escuela de Wingfoil', d:'Equipos de wingfoil usados que publica la comunidad, marcas, anatomía y calculadora de equipo en Argentina.' },
     articulos:    { url:'/articulos',    t:'Artículos de wingfoil: guías, técnica, equipo y spots | Escuela de Wingfoil', d:'27 artículos de wingfoil en español: cómo empezar, técnica, viento, equipo, seguridad y los mejores spots de Argentina y Brasil.' },
     herramientas: { url:'/herramientas', t:'Calculadora de equipo y comparador de marcas de wingfoil | Escuela de Wingfoil', d:'Calculá qué tamaño de ala, tabla y foil te sirve y compará marcas de wingfoil lado a lado.' }
   };
