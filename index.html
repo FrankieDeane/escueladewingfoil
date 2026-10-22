@@ -1791,6 +1791,7 @@ html[data-theme="dark"] .eyebrow,html[data-theme="dark"] .nx-c-mar{color:#6FC3D1
   <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
+<link rel="stylesheet" href="/assets/ml-vidriera.css">
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -1960,7 +1961,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </a>
       <a class="nx-foto" href="/equipos">
         <img src="/assets/img/wf-15151064-800.jpg" alt="Ala de wingfoil en el agua" loading="lazy"/>
-        <span class="nx-foto__txt"><span class="nx-m">04 · <span data-en="Gear">Equipos</span></span><span class="nx-d nx-foto__t" data-en="Used gear from riders">Usados de riders</span></span>
+        <span class="nx-foto__txt"><span class="nx-m">04 · <span data-en="Gear">Equipos</span></span><span class="nx-d nx-foto__t" data-en="Compare prices">Compará precios</span></span>
       </a>
       <a class="nx-foto" href="/herramientas">
         <img src="/assets/img/wf-38774856-800.jpg" alt="Wingfoil al atardecer" loading="lazy"/>
@@ -2737,10 +2738,95 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="nx-stack">
     <span class="nx-m" data-en="Gear · Used and new">Equipos · Usados y nuevos</span>
     <h1 class="nx-d nx-intro__t" data-en="Gear with a story.">Equipo con historia.</h1>
-    <p class="nx-lead" data-en="Used gear from the community and the brands we trust.">Equipos usados de la comunidad y las marcas que confiamos.</p>
+    <p class="nx-lead" data-en="Mercado Libre prices updated every day, a price comparator, Marketplace and used gear from riders.">Precios de Mercado Libre al día, un comparador de precios, Marketplace y usados de riders.</p>
     
     </div>
     <figure class="nx-intro__fig"><img src="/assets/img/wf-18388700-800.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
+  </div>
+</section>
+
+<!-- ============ VIDRIERA MERCADO LIBRE + COMPARADOR (assets/ml-vidriera.js) ============ -->
+<section class="mlv" id="mercado-libre" data-pg="equipos" aria-labelledby="mlvTitulo">
+  <div class="mlv__glow" aria-hidden="true"></div>
+  <div class="nx-wrap mlv__wrap">
+    <div class="mlv__top">
+      <span class="mlv__pill"><span class="mlv__dot" aria-hidden="true"></span><span data-en="Live on Mercado Libre">En vivo en Mercado Libre</span></span>
+      <span class="nx-m mlv__fecha" id="mlvFecha" aria-live="polite">Cargando…</span>
+    </div>
+    <h2 class="nx-d mlv__t" id="mlvTitulo"><span data-en="The wing">La vidriera</span> <em data-en="showcase.">del wing.</em></h2>
+    <p class="mlv__lead" data-en="Every wing, board and foil for sale on Mercado Libre, checked every morning. Compare it with Facebook Marketplace and rider listings in one tap.">Todo el wing que se vende en Mercado Libre, relevado cada mañana. Comparalo con Facebook Marketplace y los avisos de riders en un toque.</p>
+
+    <div class="mlv__kpis" id="mlvKpis" aria-live="polite">
+      <div class="mlv__kpi"><b data-n="0">—</b><span data-en="products">productos</span></div>
+      <div class="mlv__kpi"><b>—</b><span data-en="cheapest">el más barato</span></div>
+      <div class="mlv__kpi"><b>—</b><span data-en="brands">marcas</span></div>
+      <div class="mlv__kpi"><b>—</b><span data-en="on sale">en oferta</span></div>
+    </div>
+  </div>
+
+  <div class="mlv__ticker" aria-hidden="true"><div class="mlv__track" id="mlvTicker"></div></div>
+
+  <div class="nx-wrap mlv__wrap">
+    <div class="mlv__podio-head">
+      <h3 class="nx-d mlv__h" data-en="The podium">El podio</h3>
+      <p class="mlv__sub" data-en="The 3 products Mercado Libre shows first when you search wingfoil.">Los 3 productos que Mercado Libre muestra primero cuando buscás wingfoil.</p>
+    </div>
+    <div class="mlv__podio" id="mlvPodio"></div>
+  </div>
+</section>
+
+<section class="cmp" id="comparador-precios" data-pg="equipos" aria-labelledby="cmpTitulo">
+  <div class="nx-wrap">
+    <span class="nx-m cmp__eyebrow" data-en="Price comparator">Comparador de precios</span>
+    <h2 class="nx-d cmp__t" id="cmpTitulo"><span data-en="How much is a">¿Cuánto sale un</span> <span class="cmp__t-cat" id="cmpTCat">wing</span>?</h2>
+    <p class="cmp__lead" data-en="1. Pick what you are looking for. 2. Move your budget. 3. Tap + to compare side by side.">1. Elegí qué buscás. 2. Mové tu presupuesto. 3. Tocá + para comparar lado a lado.</p>
+
+    <div class="cmp__cats" id="cmpCats" role="group" aria-label="Qué buscás"></div>
+
+    <div class="cmp__fuentes" id="cmpFuentes" role="group" aria-label="Dónde buscar"></div>
+
+    <div class="cmp__panel">
+      <div class="cmp__rango">
+        <div class="cmp__dato cmp__dato--min"><span data-en="Cheapest">Más barato</span><b id="cmpMin">—</b></div>
+        <div class="cmp__dato cmp__dato--prom"><span data-en="Typical">Lo normal</span><b id="cmpProm">—</b></div>
+        <div class="cmp__dato cmp__dato--max"><span data-en="Most expensive">Más caro</span><b id="cmpMax">—</b></div>
+      </div>
+      <div class="cmp__termo" id="cmpTermo">
+        <div class="cmp__barra"></div>
+        <div class="cmp__puntos" id="cmpPuntos"></div>
+        <div class="cmp__presu-linea" id="cmpLinea" aria-hidden="true"><span id="cmpLineaTxt"></span></div>
+      </div>
+      <div class="cmp__presu">
+        <label for="cmpPresu" class="cmp__presu-l"><span data-en="My budget">Mi presupuesto</span> <b id="cmpPresuTxt">—</b></label>
+        <input type="range" id="cmpPresu" min="0" max="100" step="1" value="50">
+        <p class="cmp__alcanza" id="cmpAlcanza" aria-live="polite"></p>
+      </div>
+      <p class="cmp__vacio" id="cmpVacio" hidden></p>
+    </div>
+
+    <div class="cmp__lista-head">
+      <h3 class="nx-d cmp__h" id="cmpListaT">Las opciones, de barata a cara</h3>
+      <div class="cmp__orden" role="group" aria-label="Ordenar">
+        <button type="button" class="cmp__ord is-on" data-orden="barato">$ ↑</button>
+        <button type="button" class="cmp__ord" data-orden="caro">$ ↓</button>
+        <button type="button" class="cmp__ord" data-orden="ranking">Top ML</button>
+      </div>
+    </div>
+    <div class="cmp__grid" id="cmpGrid"></div>
+    <button type="button" class="cmp__mas" id="cmpMas" hidden></button>
+
+    <div class="cmp__vs" id="cmpVs" hidden>
+      <h3 class="nx-d cmp__h" data-en="Side by side">Cara a cara</h3>
+      <div class="cmp__vs-grid" id="cmpVsGrid"></div>
+    </div>
+
+    <p class="cmp__nota">⚠️ Precios publicados por vendedores de Mercado Libre y por particulares (Marketplace y comunidad) el día que se relevaron. No tenemos relación comercial con ellos: verificá precio, stock y estado en la publicación antes de comprar. Los precios en dólares se pasan a pesos con el dólar oficial del día.</p>
+  </div>
+
+  <div class="cmp__bandeja" id="cmpBandeja" hidden>
+    <div class="cmp__bandeja-fotos" id="cmpBandejaFotos"></div>
+    <button type="button" class="cmp__bandeja-btn" id="cmpBandejaBtn">Comparar</button>
+    <button type="button" class="cmp__bandeja-x" id="cmpBandejaX" aria-label="Vaciar comparación">✕</button>
   </div>
 </section>
 
@@ -2787,6 +2873,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
         <div class="form-group"><label for="eq-desc">Descripción <span class="form-required">*</span></label><textarea id="eq-desc" name="descripcion" rows="3" placeholder="Estado, medidas, accesorios, año..." required></textarea></div>
         <div class="form-group"><label for="eq-wa">WhatsApp <span class="form-required">*</span></label><input type="tel" id="eq-wa" name="whatsapp" placeholder="541155556666" required/></div>
+        <div class="form-group"><label for="eq-mp"><span class="mp-ico" aria-hidden="true">f</span> ¿Ya lo publicaste en Facebook Marketplace? <span class="form-optional">(opcional)</span></label><input type="url" id="eq-mp" name="marketplace" inputmode="url" placeholder="Pegá el link: facebook.com/marketplace/item/…" autocomplete="off"/></div>
         <div class="form-group">
           <label>Fotos del equipo <span class="form-optional">(hasta 4)</span></label>
           <div class="foto-upload" id="fotoUploadArea">
@@ -4808,12 +4895,14 @@ if(equipoForm){
     var ub=document.getElementById('eq-ubicacion').value;
     var desc=document.getElementById('eq-desc').value.trim();
     var wa=document.getElementById('eq-wa').value.trim();
+    var mpEl=document.getElementById('eq-mp');var mp=mpEl?mpEl.value.trim():'';
     var msg=document.getElementById('equipoMsg');
     function showEqMsg(ok,text){msg.innerHTML='<div class="form-msg '+(ok?'form-msg--ok':'form-msg--err')+'">'+formEsc(text)+'</div>';if(ok)setTimeout(function(){msg.innerHTML=''},5000)}
     if(!tipo||!marca||!precio||!ub||!desc||!wa){showEqMsg(false,'Completá todos los campos.');return}
     if(!/[0-9]/.test(precio)){showEqMsg(false,'Poné el precio en números (ej: 850000).');return}
+    if(mp&&!window.mpLinkOk(mp)){showEqMsg(false,'El link de Marketplace tiene que ser de facebook.com/marketplace o fb.me. Si no lo tenés, dejalo vacío.');return}
     var eqBot=(equipoForm.querySelector('[name="bot-field"]')||{}).value||'';
-    var fields={tipo:tipo,marca:marca,precio:precio,moneda:moneda,ubicacion:ub,descripcion:desc,whatsapp:wa,'bot-field':eqBot};
+    var fields={tipo:tipo,marca:marca,precio:precio,moneda:moneda,ubicacion:ub,descripcion:desc,whatsapp:wa,marketplace:mp,'bot-field':eqBot};
     formBusy(equipoForm,true);
     // Espera a que terminen de reducirse las fotos: antes, si se enviaba
     // rápido, las fotos todavía no estaban listas y se perdían.
@@ -4828,14 +4917,15 @@ if(equipoForm){
       var fotosHtml='';
       if(fotosIds.length)fotosHtml='<div class="equipo-card__fotos">'+fotosIds.map(function(id){return '<img src="/api/equipos-foto/'+encodeURIComponent(id)+'" alt="">'}).join('')+'</div>';
       var card=document.createElement('div');
-      card.className='equipo-card';
-      card.innerHTML='<span class="equipo-card__badge">'+formEsc(tipo)+'</span>'+fotosHtml+
+      card.className='equipo-card'+(mp?' equipo-card--mp':'');
+      card.innerHTML='<span class="equipo-card__badge">'+formEsc(tipo)+'</span>'+(mp?window.mpBadge():'')+fotosHtml+
         '<div class="equipo-card__title">'+formEsc(marca)+'</div>'+
         '<div class="equipo-card__precio">'+formEsc(window.formatPrecioEquipo?window.formatPrecioEquipo(precio,moneda):precio)+'</div>'+
         '<p class="equipo-card__desc">'+formEsc(desc)+'</p>'+
         '<div class="equipo-card__meta">📍 '+formEsc(ub)+'</div>'+
-        '<a class="equipo-card__wa" href="https://wa.me/'+wa.replace(/[^0-9]/g,'')+'" target="_blank" rel="noopener">Contactar</a>';
+        '<a class="equipo-card__wa" href="https://wa.me/'+wa.replace(/[^0-9]/g,'')+'" target="_blank" rel="noopener">Contactar</a>'+(mp?window.mpBoton(mp):'');
       document.getElementById('equiposGrid').appendChild(card);
+      try{window.dispatchEvent(new CustomEvent('ewf:equipo',{detail:{tipo:tipo,marca:marca,precio:precio,moneda:moneda,ubicacion:ub,descripcion:desc,whatsapp:wa,marketplace:mp,fotos:fotosIds,ts:new Date().toISOString()}}))}catch(e){}
       showEqMsg(true,'✓ Equipo publicado.');
       equipoForm.reset();fotosData=[];fotosPending=[];if(fotoPreview)fotoPreview.innerHTML='';
     }).catch(function(err){
@@ -5489,6 +5579,10 @@ function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt
 // "$ 800" y "1.500,50" salía "$ 150.050". Ahora se usa el mismo parser del
 // buscador (entiende USD, miles con punto y decimales con coma) y la moneda
 // que elige quien publica.
+// Facebook Marketplace: el aviso puede traer el link de su publicación.
+window.mpLinkOk=function(u){return /^https:\/\/((www|m|web)\.)?(facebook\.com\/marketplace\/item\/\d+|fb\.me\/[\w-]+|facebook\.com\/share\/[\w/-]+)/i.test(String(u||'').trim())};
+window.mpBadge=function(){return '<span class="mp-badge"><span class="mp-ico" aria-hidden="true">f</span> Marketplace</span>'};
+window.mpBoton=function(u){return '<a class="mp-btn" href="'+String(u).replace(/"/g,'%22')+'" target="_blank" rel="noopener nofollow">Ver en Marketplace ↗</a>'};
 window.formatPrecioEquipo=function(raw,moneda){
   var N=window.EquipoNormalizer;
   var p=N?N.parsePrecio(raw,moneda):null;
@@ -5550,13 +5644,14 @@ async function loadEquipos(){
       var fotosHtml='';
       if(Array.isArray(d.fotos)&&d.fotos.length)fotosHtml='<div class="equipo-card__fotos">'+d.fotos.map(function(id){return '<img src="/api/equipos-foto/'+encodeURIComponent(id)+'" alt="" loading="lazy">'}).join('')+'</div>';
       var card=document.createElement('div');
-      card.className='equipo-card';
-      card.innerHTML='<span class="equipo-card__badge">'+escHtml(d.tipo)+'</span>'+fotosHtml+
+      var mpOk=d.marketplace&&window.mpLinkOk(d.marketplace);
+      card.className='equipo-card'+(mpOk?' equipo-card--mp':'');
+      card.innerHTML='<span class="equipo-card__badge">'+escHtml(d.tipo)+'</span>'+(mpOk?window.mpBadge():'')+fotosHtml+
         '<div class="equipo-card__title">'+escHtml(d.marca)+'</div>'+
         '<div class="equipo-card__precio">'+precioFmt+'</div>'+
         '<p class="equipo-card__desc">'+escHtml(d.descripcion)+'</p>'+
         '<div class="equipo-card__meta">📍 '+escHtml(d.ubicacion)+'</div>'+
-        '<a class="equipo-card__wa" href="https://wa.me/'+(d.whatsapp||'').replace(/[^0-9]/g,'')+'" target="_blank" rel="noopener">Contactar</a>';
+        '<a class="equipo-card__wa" href="https://wa.me/'+(d.whatsapp||'').replace(/[^0-9]/g,'')+'" target="_blank" rel="noopener">Contactar</a>'+(mpOk?window.mpBoton(d.marketplace):'');
       grid.appendChild(card);
     });
   }catch(e){}
@@ -5575,6 +5670,7 @@ else loadEquipos();
 </script>
 
 <script src="/assets/equipo-normalizer.js" defer></script>
+<script src="/assets/ml-vidriera.js" defer></script>
 
 <!-- Three.js for 3D foil -->
 <script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
@@ -7208,6 +7304,8 @@ else loadEquipos();
 <script>
 // /venta-de-wingfoil (sin #) abre la home directo en la sección de equipos.
 if(/^\/venta-de-wingfoil\/?$/.test(location.pathname)){window.addEventListener('load',function(){var el=document.getElementById('venta-de-wingfoil');if(el)el.scrollIntoView();});}
+// Vuelta del login de Mercado Libre (?code=TG-…): se canjea en /api/ml-auth y se limpia la URL.
+(function(){var c=new URLSearchParams(location.search).get('code');if(!c||!/^TG-/.test(c))return;history.replaceState(null,'',location.pathname);fetch('/api/ml-auth',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({code:c})}).then(function(r){return r.json()}).then(function(j){alert(j.ok?'Mercado Libre quedó conectado.':'No se pudo conectar Mercado Libre ('+(j.mensaje||j.error||j.motivo)+').')}).catch(function(){alert('No se pudo conectar Mercado Libre.')});})();
 </script>
 
 <script>
@@ -7275,7 +7373,7 @@ if(/^\/venta-de-wingfoil\/?$/.test(location.pathname)){window.addEventListener('
     aprender:     { url:'/aprender',     t:'Aprender wingfoil: videos por nivel, maniobras y guías | Escuela de Wingfoil', d:'Videos de wingfoil por nivel en español, anatomía del equipo, maniobras, glosario y guías para pasar de la orilla al primer vuelo.' },
     spots:        { url:'/spots',        t:'Spots de wingfoil en Argentina, cámaras y sudestada | Escuela de Wingfoil', d:'Dónde navegar wingfoil en Argentina: mapa de spots, pronóstico por spot, cámaras en vivo y estado del Río de la Plata.' },
     instructores: { url:'/instructores', t:'Instructores de wingfoil en Argentina | Escuela de Wingfoil', d:'Directorio de instructores de wingfoil en Argentina. Elegí por spot y nivel, y escribiles directo.' },
-    equipos:      { url:'/equipos',      t:'Equipos de wingfoil usados y marcas | Escuela de Wingfoil', d:'Equipos de wingfoil usados que publica la comunidad, marcas, anatomía y calculadora de equipo en Argentina.' },
+    equipos:      { url:'/equipos',      t:'Equipos de wingfoil: precios de Mercado Libre y comparador | Escuela de Wingfoil', d:'Precios de alas, tablas y foils de wingfoil en Mercado Libre, relevados todos los días, comparador de precios con Facebook Marketplace y usados de riders.' },
     articulos:    { url:'/articulos',    t:'Artículos de wingfoil: guías, técnica, equipo y spots | Escuela de Wingfoil', d:'27 artículos de wingfoil en español: cómo empezar, técnica, viento, equipo, seguridad y los mejores spots de Argentina y Brasil.' },
     herramientas: { url:'/herramientas', t:'Calculadora de equipo y comparador de marcas de wingfoil | Escuela de Wingfoil', d:'Calculá qué tamaño de ala, tabla y foil te sirve y compará marcas de wingfoil lado a lado.' }
   };
