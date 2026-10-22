@@ -261,7 +261,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   // Cada sección del sitio vive en una de 6 páginas (/aprender, /spots…). Se
   // decide antes de pintar para que no se vea la home un instante.
   (function(){
-    var P={'':'inicio',aprender:'aprender',spots:'spots',instructores:'instructores',equipos:'equipos','venta-de-wingfoil':'equipos',herramientas:'herramientas',articulos:'articulos'};
+    var P={'':'inicio',aprender:'aprender',spots:'spots',instructores:'instructores',equipos:'equipos','venta-de-wingfoil':'equipos',herramientas:'equipos',articulos:'articulos'};
     var r=location.pathname.replace(/^\/+|\/+$/g,'').replace(/(^|\/)index\.html$/,'');
     document.documentElement.setAttribute('data-page',P[r]||'inicio');
     try{if(localStorage.getItem('wf-tema')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}
@@ -1485,7 +1485,6 @@ html[data-page="aprender"] [data-pg]:not([data-pg~="aprender"]),
 html[data-page="spots"] [data-pg]:not([data-pg~="spots"]),
 html[data-page="instructores"] [data-pg]:not([data-pg~="instructores"]),
 html[data-page="equipos"] [data-pg]:not([data-pg~="equipos"]),
-html[data-page="herramientas"] [data-pg]:not([data-pg~="herramientas"]),
 html[data-page="articulos"] [data-pg]:not([data-pg~="articulos"]){display:none!important}
 
 /* ── Piezas base ── */
@@ -1672,6 +1671,46 @@ html,body{overflow-x:clip}
 @media(max-width:400px){.topbar{letter-spacing:.03em;font-size:9.5px}.topbar__text strong{white-space:normal}}
 @media(max-width:360px){.logo__text-mobile{font-size:15.5px!important}.lang button{min-width:31px;padding:0 6px}.header__actions .btn-icon{width:34px}}
 
+
+/* ===== Sumate: novedades + sponsors, arriba del footer en todas las páginas ===== */
+#sudestada .sud__tabla{min-width:0}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.sumate{background:var(--sand);border-top:1px solid var(--divider);padding:clamp(32px,4vw,56px) 0}
+.sumate__in{display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(20px,3vw,40px);align-items:start}
+.sumate__t{font-size:clamp(24px,2.6vw,34px);letter-spacing:-.03em;color:var(--text);margin-bottom:6px}
+.sumate__p{color:var(--text-muted);font-size:15px;margin-bottom:16px}
+.sumate__form{grid-template-columns:1fr 1.3fr auto}
+.sumate__sp{background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden}
+.sumate__sp summary{display:flex;align-items:center;gap:14px;padding:18px 20px;cursor:pointer;list-style:none}
+.sumate__sp summary::-webkit-details-marker{display:none}
+.sumate__sp-ico{font-size:28px}
+.sumate__sp summary b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:19px;color:var(--text)}
+.sumate__sp summary small{display:block;font-size:13.5px;color:var(--text-muted);margin-top:2px}
+.sumate__sp-btn{margin-left:auto;flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--text);color:var(--bg);font-size:22px;font-weight:700;transition:transform .2s}
+.sumate__sp[open] .sumate__sp-btn{transform:rotate(45deg)}
+.sumate__sp form{padding:0 20px 20px}
+@media(max-width:860px){.sumate__in{grid-template-columns:1fr}.sumate__form{grid-template-columns:1fr}}
+
+/* ===== Home: lo último del blog ===== */
+.home-blog__head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px 24px;margin-bottom:22px}
+.home-blog__eyebrow{color:#B93A10}[data-theme='dark'] .home-blog__eyebrow{color:var(--accent)}
+.home-blog__t{font-size:clamp(34px,5vw,64px);line-height:.95;letter-spacing:-.045em;color:var(--text);margin-top:8px}
+.home-blog__all{font-weight:800;color:var(--primary);text-decoration:none;border-bottom:2px solid currentColor;padding-bottom:2px}
+.home-blog__grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;grid-template-rows:repeat(2,minmax(220px,auto));gap:14px}
+.hb-card{position:relative;isolation:isolate;display:flex;align-items:flex-end;border-radius:22px;overflow:hidden;min-height:220px;color:#F7F4EC;text-decoration:none;background:#0B1A22}
+.hb-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .6s}
+.hb-card::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(11,26,34,.1) 0%,rgba(11,26,34,.5) 45%,rgba(11,26,34,.92) 100%)}
+.hb-card:hover img{transform:scale(1.05)}
+.hb-card--xl{grid-row:span 2}
+.hb-card__txt{display:flex;flex-direction:column;gap:8px;padding:clamp(16px,2vw,26px)}
+.hb-card__cat{color:#FFD84A}
+.hb-card__t{font-size:clamp(19px,1.8vw,24px);line-height:1.1;letter-spacing:-.02em}
+.hb-card--xl .hb-card__t{font-size:clamp(28px,3.4vw,46px)}
+.hb-card__ex{font-size:15px;line-height:1.45;color:rgba(247,244,236,.88);max-width:520px}
+.hb-card__min{font:500 12px/1 'DM Mono',monospace;color:rgba(247,244,236,.78)}
+.home-blog__grid .hb-card:nth-child(4){grid-column:2 / span 2}
+@media(max-width:860px){.home-blog__grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}.hb-card--xl{grid-column:1 / -1;grid-row:auto;min-height:340px}.home-blog__grid .hb-card:nth-child(4){grid-column:1 / -1}}
+@media(max-width:520px){.home-blog__grid{grid-template-columns:1fr}.hb-card{min-height:220px}.hb-card--xl{min-height:400px}}
 /* ===== Portada 2: video, frase con fotos y cinco páginas con foto ===== */
 .nx-hv{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;color:#F7F4EC;overflow:hidden;background:#0B1A22;isolation:isolate}
 .nx-hv__media{position:absolute;inset:0;z-index:-1}
@@ -1843,7 +1882,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <a href="/spots" data-nav="spots" data-en="Spots">Spots</a>
       <a href="/instructores" data-nav="instructores" data-en="Instructors">Instructores</a>
       <a href="/equipos" data-nav="equipos" data-en="Gear">Equipos</a>
-      <a href="/herramientas" data-nav="herramientas" data-en="Tools">Herramientas</a>
       <a href="/articulos" data-nav="articulos" data-en="Articles">Artículos</a>
       </nav>
       <button class="nav-rail__arrow nav-rail__arrow--next" id="navNext" type="button" tabindex="-1" aria-label="Ver más opciones del menú" data-en-aria-label="Show more menu items">›</button>
@@ -1882,7 +1920,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <a href="/spots" data-nav="spots"><span>Spots</span><span class="arrow">›</span></a>
   <a href="/instructores" data-nav="instructores"><span data-en="Instructors">Instructores</span><span class="arrow">›</span></a>
   <a href="/equipos" data-nav="equipos"><span data-en="Gear">Equipos</span><span class="arrow">›</span></a>
-  <a href="/herramientas" data-nav="herramientas"><span data-en="Tools">Herramientas</span><span class="arrow">›</span></a>
   <a href="/articulos" data-nav="articulos"><span data-en="Articles">Artículos</span><span class="arrow">›</span></a>
   <div class="nav-drawer__footer">
     <button class="nav-drawer__theme" id="drawerTheme">
@@ -1963,14 +2000,52 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <img src="/assets/img/wf-15151064-800.jpg" alt="Ala de wingfoil en el agua" loading="lazy"/>
         <span class="nx-foto__txt"><span class="nx-m">04 · <span data-en="Gear">Equipos</span></span><span class="nx-d nx-foto__t" data-en="Compare prices">Compará precios</span></span>
       </a>
-      <a class="nx-foto" href="/herramientas">
+      <a class="nx-foto" href="/articulos">
         <img src="/assets/img/wf-38774856-800.jpg" alt="Wingfoil al atardecer" loading="lazy"/>
-        <span class="nx-foto__txt"><span class="nx-m">05 · <span data-en="Tools">Herramientas</span></span><span class="nx-d nx-foto__t" data-en="Which gear fits you">Qué equipo te sirve</span></span>
+        <span class="nx-foto__txt"><span class="nx-m">05 · <span data-en="Articles">Artículos</span></span><span class="nx-d nx-foto__t" data-en="Guides to read">Guías para leer</span></span>
       </a>
     </div>
   </div>
 </section>
 
+<!-- Mercado Libre vs Marketplace (lo dibuja assets/ml-vidriera.js) -->
+<section class="duelo" data-pg="inicio" aria-labelledby="dueloTitulo">
+  <div class="nx-wrap">
+    <span class="nx-m duelo__eyebrow" data-en="Today's prices">Precios de hoy</span>
+    <h2 class="nx-d duelo__t" id="dueloTitulo"><span class="duelo__ml">Mercado Libre</span> <span class="duelo__vs">vs</span> <span class="duelo__mp">Marketplace</span></h2>
+    <p class="duelo__lead" data-en="The cheapest of each, side by side, and which one is usually cheaper.">El más barato de cada lado, cara a cara, y dónde suele salir menos.</p>
+    <div class="duelo__grid" id="homeDuelo" aria-live="polite"></div>
+    <a class="duelo__cta" href="/equipos#comparador-precios" data-en="Compare every price →">Comparar todos los precios →</a>
+  </div>
+</section>
+<!-- Lo último del blog -->
+<section class="nx-sec home-blog" data-pg="inicio" aria-labelledby="hbTitulo">
+  <div class="nx-wrap">
+    <div class="home-blog__head">
+      <div><span class="nx-m home-blog__eyebrow" data-en="Fresh from the blog">Recién salido del blog</span>
+      <h2 class="nx-d home-blog__t" id="hbTitulo" data-en="Read before you go out.">Leé antes de salir.</h2></div>
+      <a class="home-blog__all" href="/articulos" data-en="All articles →">Todos los artículos →</a>
+    </div>
+    <div class="home-blog__grid">
+      <a class="hb-card hb-card--xl" href="/blog/wingfoil-para-ex-kitesurfistas">
+        <img src="/assets/img/wf-17901682.jpg" alt="" loading="lazy"/>
+        <span class="hb-card__txt"><span class="nx-m hb-card__cat" data-en="Technique">Técnica</span><span class="nx-d hb-card__t" data-en="Wingfoil for kitesurfers">Wingfoil para ex-kitesurfistas</span><span class="hb-card__ex" data-en="What you already know helps, but some kiter reflexes work against you. What changes and how to adapt fast.">Lo que ya sabés te sirve, pero algunos reflejos de kiter juegan en contra. Qué cambia y cómo adaptarte rápido.</span><span class="hb-card__min">6 min</span></span>
+      </a>
+      <a class="hb-card" href="/blog/progresion-wingfoil-principiante-a-avanzado-6-meses">
+        <img src="/assets/img/wf-18388623-800.jpg" alt="" loading="lazy"/>
+        <span class="hb-card__txt"><span class="nx-m hb-card__cat" data-en="Technique">Técnica</span><span class="nx-d hb-card__t" data-en="From beginner to advanced in 6 months">De principiante a avanzado en 6 meses</span><span class="hb-card__min">7 min</span></span>
+      </a>
+      <a class="hb-card" href="/blog/entrenar-wingfoil-sin-viento-tierra-gimnasio">
+        <img src="/assets/img/wf-15151231-800.jpg" alt="" loading="lazy"/>
+        <span class="hb-card__txt"><span class="nx-m hb-card__cat" data-en="Training">Entrenamiento</span><span class="nx-d hb-card__t" data-en="How to train for wingfoil without wind">Cómo entrenar wingfoil sin viento</span><span class="hb-card__min">6 min</span></span>
+      </a>
+      <a class="hb-card" href="/blog/drills-wingfoil-equilibrio-control">
+        <img src="/assets/img/wf-14447118-800.jpg" alt="" loading="lazy"/>
+        <span class="hb-card__txt"><span class="nx-m hb-card__cat" data-en="Technique">Técnica</span><span class="nx-d hb-card__t" data-en="Drills for balance and control">Drills para equilibrio y control</span><span class="hb-card__min">6 min</span></span>
+      </a>
+    </div>
+  </div>
+</section>
 <div class="nx-cinta" data-pg="inicio" aria-hidden="true"><div class="nx-cinta__in">
   <span>San Isidro</span><i>●</i><span>Mar del Plata</span><i>●</i><span>Bariloche</span><i>●</i><span>Pinamar</span><i>●</i><span>Chascomús</span><i>●</i><span>Potrerillos</span><i>●</i>
   <span>San Isidro</span><i>●</i><span>Mar del Plata</span><i>●</i><span>Bariloche</span><i>●</i><span>Pinamar</span><i>●</i><span>Chascomús</span><i>●</i><span>Potrerillos</span><i>●</i>
@@ -2121,7 +2196,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="qs-step__num">02</div>
         <div class="qs-step__icon">🏄</div>
         <div class="qs-step__title">Conseguí tu equipo</div>
-        <p class="qs-step__desc">Mirá la calculadora para saber qué tabla, ala y mástil necesitás según tu peso y nivel. Equipos usados en venta a buen precio.</p>
+        <p class="qs-step__desc">Compará precios de tablas, alas y foils en Mercado Libre y Marketplace, nuevos y usados.</p>
         <span class="qs-step__cta">Ver equipos en venta</span>
       </a>
 
@@ -2530,135 +2605,47 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="section" id="sudestada" data-pg="spots">
   <div class="container">
     <span class="eyebrow" data-en="🌊 Río de la Plata · water level">🌊 Río de la Plata · nivel del agua</span>
-    <h2 class="section-title" data-en="Sudestada, floods and low water on the Río de la Plata">Sudestada, crecidas y bajantes del Río de la Plata</h2>
-    <p class="section-sub" data-en="Between September and March the Río de la Plata gives its best wind and its worst surges. Understanding the sudestada — and the low water that follows it — is what separates a good session from a rescue.">Entre septiembre y marzo el Río de la Plata da su mejor viento y también sus peores crecidas. Entender la sudestada — y la bajante que suele venir atrás — es lo que separa una buena sesión de un rescate.</p>
+    <h2 class="section-title" data-en="Sudestada and low water, in 1 minute">Sudestada y bajante, en 1 minuto</h2>
+    <p class="section-sub" data-en="The wind moves the river. Check the water before you load the car.">El viento mueve el río. Mirá el agua antes de cargar el auto.</p>
 
     <div class="sud__grid">
       <article class="sud__card">
-        <h3>¿Qué es una sudestada?</h3>
-        <p>Es un viento persistente del <b>sudeste</b> sobre el Río de la Plata, muchas veces acompañado de baja presión y lluvia. El estuario es un embudo orientado al sudeste: ese viento empuja el agua del océano hacia adentro y la apila contra la costa bonaerense, desde La Plata hasta el Delta.</p>
-        <p>No es la marea la que inunda: la marea astronómica del río rara vez pasa el metro. Lo que hace la diferencia es la <b>sobreelevación por viento</b>, que en un episodio fuerte suma dos metros o más arriba de la marea prevista.</p>
+        <h3 data-en="⬆️ Sudestada: the river rises">⬆️ Sudestada: el río sube</h3>
+        <p data-en="Wind from the <b>southeast</b> pushes the sea in and the water piles up on the coast. More waves, current and floating logs.">Viento del <b>sudeste</b> empuja el mar hacia adentro y el agua se apila en la costa. Más ola, corriente y troncos flotando.</p>
       </article>
       <article class="sud__card">
-        <h3>Por qué de septiembre a marzo</h3>
-        <p>Es la misma temporada por dos motivos opuestos. Del lado bueno, el <b>viento termal del S/SO</b> entra casi todas las tardes de 13 a 19 h y es lo que hace navegable San Isidro, Vicente López y Quilmes.</p>
-        <p>Del lado malo, la primavera y el verano son cuando pasan los <b>sistemas frontales</b> que giran el viento al sudeste y lo sostienen 12, 24 o 48 horas. Las crecidas más recordadas del Río de la Plata caen casi todas en esa ventana.</p>
-        <p>Esta temporada viene con un El Niño muy fuerte: más agua de fondo y sudestadas que arrancan desde más alto. Lo contamos en <a href="/blog/super-nino-2026-rio-de-la-plata-wingfoil">Súper Niño 2026-2027 y el Río de la Plata</a>.</p>
+        <h3 data-en="⬇️ Low water: the river drops">⬇️ Bajante: el río baja</h3>
+        <p data-en="Wind from the <b>northwest or west</b> pushes the water out. Under 60 cm the foil hits the bottom and breaks.">Viento del <b>noroeste u oeste</b> saca el agua. Con menos de 60 cm el foil toca fondo y se rompe.</p>
       </article>
       <article class="sud__card">
-        <h3>La bajante: el otro extremo</h3>
-        <p>Cuando el viento sopla sostenido del <b>noroeste u oeste</b>, empuja el agua hacia afuera del estuario y el río se retira. En San Isidro una bajante fuerte deja el fondo a la vista cientos de metros mar adentro.</p>
-        <p>Para el wingfoil la bajante es tan peligrosa como la crecida: con <b>menos de 60 cm</b> el mástil y el ala tocan fondo, y un foil clavado a velocidad rompe el equipo y lastima. Es la causa número uno de roturas en el río.</p>
-      </article>
-      <article class="sud__card">
-        <h3>Cómo se mide</h3>
-        <p>El <b>Servicio de Hidrografía Naval</b> publica el pronóstico de marea del Río de la Plata y los avisos de crecida. Las alturas se dan sobre el <b>plano de reducción de sondajes</b>, no sobre el nivel de la calle: 3 m en la escala no significa tres metros de agua en la vereda.</p>
-        <p>La medición minuto a minuto la dan los mareógrafos: el de <b>Pilote Norden</b> de la CARP en el Canal Martín García, y los del SHN en San Fernando y Buenos Aires.</p>
+        <h3 data-en="✅ Before going out">✅ Antes de salir</h3>
+        <p data-en="Check the <b>wind direction</b>, how many hours it has been blowing and the SHN alert. If there is a flood alert, do not go out.">Mirá la <b>dirección del viento</b>, hace cuántas horas sopla y el aviso del SHN. Si hay alerta de crecida, no se sale.</p>
       </article>
     </div>
-
-    <h3 class="section-title" style="font-size:clamp(20px,2.4vw,26px);margin-top:12px" data-en="The season, month by month">La temporada, mes a mes</h3>
-    <div class="sud__mes" aria-hidden="true">
-      <span>Jul</span><span>Ago</span><span class="pico">Sep</span><span class="pico">Oct</span>
-      <span class="pico">Nov</span><span class="pico">Dic</span><span class="pico">Ene</span>
-      <span class="pico">Feb</span><span class="pico">Mar</span><span>Abr</span><span>May</span><span>Jun</span>
-    </div>
-    <p class="sud__mes-pie">Los meses marcados son la temporada de wingfoil en el Río de la Plata — y también la ventana en la que se concentran las sudestadas y las crecidas. Fuera de esa franja el viento es más de tierra, el agua está más fría y el río tiende a estar más bajo.</p>
 
     <div class="sud__tabla-wrap">
       <table class="sud__tabla">
-        <caption>Cómo leer la altura del río antes de salir. Alturas de referencia sobre el plano de reducción del SHN en la zona de San Isidro y San Fernando.</caption>
-        <thead>
-          <tr><th scope="col">Altura</th><th scope="col">Cómo se llama</th><th scope="col">Qué significa para navegar</th></tr>
-        </thead>
+        <caption data-en="River height in San Isidro (SHN scale) and what it means.">Altura del río en San Isidro (escala del SHN) y qué significa.</caption>
         <tbody>
-          <tr><th scope="row">bajo 0,60 m</th><td>Bajante fuerte</td><td>El foil toca fondo cerca de la orilla. No se sale: se rompe equipo y se lastima gente. Ojo con el viento sostenido del NO y del O.</td></tr>
-          <tr><th scope="row">0,60 – 1,00 m</th><td>Bajante</td><td>Se puede, pero hay que caminar mucho para tener profundidad. Mástil corto y cuidado al arrancar y al salir.</td></tr>
-          <tr><th scope="row">1,00 – 1,80 m</th><td>Normal</td><td>El rango habitual del río. Profundidad de sobra para un mástil de 75-85 cm a pocos metros de la costa.</td></tr>
-          <tr><th scope="row">1,80 – 2,50 m</th><td>Creciente</td><td>Agua alta con viento del sector este. Entra más ola y más basura flotante. Se navega, pero mirando el agua y con alguien en la costa.</td></tr>
-          <tr><th scope="row">2,50 – 3,20 m</th><td>Sudestada</td><td>Crecida. El agua tapa muelles y bajadas, la corriente corre paralela a la costa y arrastra troncos. No es día de navegar.</td></tr>
-          <tr><th scope="row">sobre 3,20 m</th><td>Sudestada fuerte</td><td>Del orden de la del <b>19 de diciembre de 2023</b> (San Fernando 3,60 m, Buenos Aires 3,62 m). Emergencia: SHN y Defensa Civil.</td></tr>
+          <tr><th scope="row">🔴 bajo 0,60 m</th><td data-en="Strong low water: do not go out.">Bajante fuerte: no se sale.</td></tr>
+          <tr><th scope="row">🟡 0,60 – 1,00 m</th><td data-en="Low: walk out to find depth.">Bajo: caminá hasta tener profundidad.</td></tr>
+          <tr><th scope="row">🟢 1,00 – 1,80 m</th><td data-en="Normal: good to ride.">Normal: ideal para navegar.</td></tr>
+          <tr><th scope="row">🟡 1,80 – 2,50 m</th><td data-en="High: more waves, ride with someone on shore.">Alto: más ola, navegá con alguien en la costa.</td></tr>
+          <tr><th scope="row">🔴 sobre 2,50 m</th><td data-en="Sudestada: not a day to ride.">Sudestada: no es día de navegar.</td></tr>
         </tbody>
       </table>
     </div>
 
-    <h3 class="section-title" style="font-size:clamp(20px,2.4vw,26px);margin-top:34px" data-en="What to check before going out">Qué mirar antes de salir</h3>
-    <ol class="sud__lista">
-      <li><b>La dirección del viento, antes que la intensidad.</b> Del SE con más de 15 kn sostenidos, el agua sube. Del NO con más de 15 kn sostenidos, el agua baja. Los dos casos cambian el spot aunque el pronóstico diga «buen viento».</li>
-      <li><b>La presión.</b> Cada hectopascal que falta es aproximadamente un centímetro más de agua. Una baja de 990 hPa suma sola unos 23 cm sobre la marea prevista.</li>
-      <li><b>Cuántas horas lleva soplando.</b> Una sudestada de tres horas casi no mueve la aguja; una de treinta horas es la que inunda. La sobreelevación se acumula.</li>
-      <li><b>La marea prevista del SHN para esa hora.</b> Una sudestada que pega en pleamar es otra cosa que la misma sudestada en bajamar.</li>
-      <li><b>El aviso oficial.</b> Cuando el SHN emite alerta de crecida, no se sale. Ninguna sesión vale eso.</li>
-    </ol>
-
     <div class="sud__cta">
-      <a class="primaria" href="/costa-san-isidro">🌊 Ver el nivel del río por rango de fechas</a>
-      <a href="#salgo-hoy">🌬️ ¿Se puede navegar hoy?</a>
-      <a href="#spots">📍 Spots del Río de la Plata</a>
-      <a href="https://www.hidro.gov.ar/" target="_blank" rel="noopener">Servicio de Hidrografía Naval ↗</a>
+      <a class="primaria" href="/costa-san-isidro" data-en="🌊 See the river level">🌊 Ver el nivel del río</a>
+      <a href="#salgo-hoy" data-en="🌬️ Can I ride today?">🌬️ ¿Se puede navegar hoy?</a>
+      <a href="https://www.hidro.gov.ar/" target="_blank" rel="noopener">Hidrografía Naval ↗</a>
     </div>
-
-    <p class="section-sub" style="margin-top:24px;font-size:14px">En <a href="/costa-san-isidro">la costa de San Isidro en 3D</a> podés elegir un rango de fechas y ver, hora por hora, la marea real del SHN, el viento y la presión de esos días, la altura que midió el mareógrafo Pilote Norden y cuánto levanta el agua la componente de sudestada. Anda para atrás con datos medidos y para adelante con pronóstico.</p>
   </div>
 </section>
 
 <!-- ============================================================ CALCULADORA ============================================================ -->
-<section class="nx-intro nx-intro--foto" data-pg="herramientas" id="pagina-herramientas">
-  <img class="nx-intro__bg" src="/assets/img/wf-40076942.jpg" alt="" loading="lazy"/>
-  <div class="nx-wrap nx-intro__grid">
-    <div class="nx-stack">
-    <span class="nx-m" data-en="Tools">Herramientas</span>
-    <h1 class="nx-d nx-intro__t" data-en="Decide with data, not doubts.">Decidí con datos, no con dudas.</h1>
-    <p class="nx-lead" data-en="Gear calculator and brand comparison, to choose wisely.">Calculadora de equipo y comparador de marcas, para elegir con criterio.</p>
-    <nav class="nx-chips" aria-label="En esta página"><a class="nx-chip" href="#calculadora" data-en="01 Calculator">01 Calculadora</a><a class="nx-chip" href="#comparador" data-en="02 Comparison">02 Comparador</a><a class="nx-chip" href="#participa" data-en="03 Take part">03 Participá</a></nav>
-    </div>
-    <figure class="nx-intro__fig"><img src="/assets/img/wf-39731095-800.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
-  </div>
-</section>
 
-<section class="section calc-section" id="calculadora" data-pg="herramientas">
-  <div class="container">
-    <span class="eyebrow">Herramienta</span>
-    <h2 class="section-title" data-en="Gear Calculator">Calculadora de Equipo</h2>
-    <p class="section-sub">Ingresá tu peso, nivel y spot favorito. Te recomendamos el tamaño de ala, volumen de tabla y mástil ideal para empezar.</p>
-    <div class="calc-wrap">
-      <div class="calc-row">
-        <div class="calc-field">
-          <label for="calc-peso">Tu peso (kg)</label>
-          <input type="number" id="calc-peso" min="40" max="150" step="1" placeholder="Ej: 75" />
-        </div>
-        <div class="calc-field">
-          <label for="calc-nivel">Tu nivel</label>
-          <select id="calc-nivel">
-            <option value="">Seleccioná...</option>
-            <option value="b">Principiante</option>
-            <option value="i">Intermedio</option>
-            <option value="a">Avanzado</option>
-          </select>
-        </div>
-        <div class="calc-field">
-          <label for="calc-condiciones">Condiciones</label>
-          <select id="calc-condiciones">
-            <option value="">Seleccioná...</option>
-            <option value="light">Viento ligero (8-15 kn)</option>
-            <option value="medium">Viento medio (15-22 kn)</option>
-            <option value="strong">Viento fuerte (22+ kn)</option>
-          </select>
-        </div>
-      </div>
-      <button class="btn btn--primary btn--full" id="calcBtn">Calcular mi equipo →</button>
-      <div class="calc-result" id="calcResult">
-        <div class="calc-result__label">Equipo recomendado para tu perfil</div>
-        <div class="calc-result__grid">
-          <div class="calc-result__item"><div class="calc-result__val" id="calcAla">–</div><div class="calc-result__name">Tamaño Ala</div></div>
-          <div class="calc-result__item"><div class="calc-result__val" id="calcTabla">–</div><div class="calc-result__name">Volumen Tabla</div></div>
-          <div class="calc-result__item"><div class="calc-result__val" id="calcMastil">–</div><div class="calc-result__name">Largo Mástil</div></div>
-        </div>
-        <div class="calc-result__note" id="calcNote"></div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- ============================================================ INSTRUCTORES ============================================================ -->
 <section class="nx-intro nx-intro--foto" data-pg="instructores" id="pagina-instructores">
@@ -3685,194 +3672,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ COMPARADOR DE MARCAS ============================================================ -->
-<section class="section" id="comparador" data-pg="herramientas">
-  <div class="container">
-    <span class="eyebrow" data-en="🏷️ Brands">🏷️ Marcas</span>
-    <h2 class="section-title" data-en="Brand comparison">Comparador de marcas</h2>
-    <p class="section-sub" data-en="The leading wingfoil brands side by side. Expand each one to see ideal level, price and availability in Argentina.">Las principales marcas de wingfoil cara a cara. Expandí cada una para ver nivel ideal, precio y disponibilidad en Argentina.</p>
-
-    <div class="faq-list" style="max-width:860px">
-
-      <details class="faq-item">
-        <summary data-en='🇫🇷 F-One — <span class="comp-level comp-level--all" style="margin-left:6px">All levels</span>'>🇫🇷 F-One — <span class="comp-level comp-level--all" style="margin-left:6px">Todos los niveles</span></summary>
-        <div class="faq-answer">
-          <div style="display:grid;gap:6px">
-            <div data-en='<strong>Country:</strong> France'><strong>País:</strong> Francia</div>
-            <div data-en='<strong>Ideal level:</strong> All levels — accessible line for beginners and a race range for advanced riders'><strong>Nivel ideal:</strong> Todos los niveles — línea accesible para principiantes y gama race para avanzados</div>
-            <div data-en='<strong>Reference price:</strong> USD 2,800 – 4,200 (full kit)'><strong>Precio referencia:</strong> USD 2.800 – 4.200 (kit completo)</div>
-            <div data-en='<strong>Strength:</strong> Very stable wings that are easy to relaunch; innovative design with excellent value for money'><strong>Punto fuerte:</strong> Alas muy estables y fáciles de relanzar; diseño innovador con excelente relación precio/calidad</div>
-            <div data-en='<strong>In Argentina:</strong> <span class="comp-arg comp-arg--si">✔ Official distributor</span>'><strong>En Argentina:</strong> <span class="comp-arg comp-arg--si">✔ Distribuidor oficial</span></div>
-            <div style="margin-top:8px;font-size:12px;color:var(--text-muted)" data-en='Source: <a href="https://www.f-one.world" target="_blank" rel="noopener" style="color:var(--primary)">f-one.world</a> · official 2024–2025 catalogue'>Fuente: <a href="https://www.f-one.world" target="_blank" rel="noopener" style="color:var(--primary)">f-one.world</a> · catálogo oficial 2024–2025</div>
-          </div>
-        </div>
-      </details>
-
-      <details class="faq-item">
-        <summary data-en='🇩🇪 Duotone — <span class="comp-level comp-level--all" style="margin-left:6px">All levels</span>'>🇩🇪 Duotone — <span class="comp-level comp-level--all" style="margin-left:6px">Todos los niveles</span></summary>
-        <div class="faq-answer">
-          <div style="display:grid;gap:6px">
-            <div data-en='<strong>Country:</strong> Germany'><strong>País:</strong> Alemania</div>
-            <div data-en='<strong>Ideal level:</strong> All levels — from the Echo line (beginners) to the Slick SLS (competition)'><strong>Nivel ideal:</strong> Todos los niveles — desde la línea Echo (principiantes) hasta la Slick SLS (competición)</div>
-            <div data-en='<strong>Reference price:</strong> USD 3,000 – 5,000 (full kit)'><strong>Precio referencia:</strong> USD 3.000 – 5.000 (kit completo)</div>
-            <div data-en='<strong>Strength:</strong> Premium build with Aluula and SLS materials; fast, reliable connection system'><strong>Punto fuerte:</strong> Construcción premium con materiales Aluula y SLS; sistema de conexión rápido y confiable</div>
-            <div data-en='<strong>In Argentina:</strong> <span class="comp-arg comp-arg--si">✔ Official distributor</span>'><strong>En Argentina:</strong> <span class="comp-arg comp-arg--si">✔ Distribuidor oficial</span></div>
-            <div style="margin-top:8px;font-size:12px;color:var(--text-muted)" data-en='Source: <a href="https://www.duotonesports.com" target="_blank" rel="noopener" style="color:var(--primary)">duotonesports.com</a> · official 2024–2025 catalogue'>Fuente: <a href="https://www.duotonesports.com" target="_blank" rel="noopener" style="color:var(--primary)">duotonesports.com</a> · catálogo oficial 2024–2025</div>
-          </div>
-        </div>
-      </details>
-
-      <details class="faq-item">
-        <summary data-en='🌺 Naish — <span class="comp-level comp-level--int" style="margin-left:6px">Intermediate / Advanced</span>'>🌺 Naish — <span class="comp-level comp-level--int" style="margin-left:6px">Intermedio / Avanzado</span></summary>
-        <div class="faq-answer">
-          <div style="display:grid;gap:6px">
-            <div data-en='<strong>Country:</strong> Hawaii, USA'><strong>País:</strong> Hawaii, USA</div>
-            <div data-en='<strong>Ideal level:</strong> Intermediate to advanced; foils especially prized for waves and freeride'><strong>Nivel ideal:</strong> Intermedio a avanzado; foils especialmente apreciados para ondas y freeride</div>
-            <div data-en='<strong>Reference price:</strong> USD 2,600 – 4,000 (full kit)'><strong>Precio referencia:</strong> USD 2.600 – 4.000 (kit completo)</div>
-            <div data-en='<strong>Strength:</strong> High-performance Jet and Thrust foils; a brand with decades of history in wind sports'><strong>Punto fuerte:</strong> Foils Jet y Thrust de alta performance; marca con décadas de historia en deportes de viento</div>
-            <div data-en='<strong>In Argentina:</strong> <span class="comp-arg comp-arg--si">✔ Official distributor</span>'><strong>En Argentina:</strong> <span class="comp-arg comp-arg--si">✔ Distribuidor oficial</span></div>
-            <div style="margin-top:8px;font-size:12px;color:var(--text-muted)" data-en='Source: <a href="https://www.naishsports.com" target="_blank" rel="noopener" style="color:var(--primary)">naishsports.com</a> · official 2024–2025 catalogue'>Fuente: <a href="https://www.naishsports.com" target="_blank" rel="noopener" style="color:var(--primary)">naishsports.com</a> · catálogo oficial 2024–2025</div>
-          </div>
-        </div>
-      </details>
-
-      <details class="faq-item">
-        <summary data-en='🇺🇸 Cabrinha — <span class="comp-level comp-level--all" style="margin-left:6px">All levels</span>'>🇺🇸 Cabrinha — <span class="comp-level comp-level--all" style="margin-left:6px">Todos los niveles</span></summary>
-        <div class="faq-answer">
-          <div style="display:grid;gap:6px">
-            <div data-en='<strong>Country:</strong> USA'><strong>País:</strong> USA</div>
-            <div data-en='<strong>Ideal level:</strong> All levels; especially popular among kitesurfers moving into wingfoil'><strong>Nivel ideal:</strong> Todos los niveles; especialmente popular entre kitesurfers que migran al wingfoil</div>
-            <div data-en='<strong>Reference price:</strong> USD 2,500 – 4,500 (full kit)'><strong>Precio referencia:</strong> USD 2.500 – 4.500 (kit completo)</div>
-            <div data-en='<strong>Strength:</strong> Kite + wing versatility; boards like the Cutlass (dual kite/wing) very popular in Argentina'><strong>Punto fuerte:</strong> Versatilidad kite + wing; tablas como la Cutlass (dual kite/wing) muy populares en Argentina</div>
-            <div data-en='<strong>In Argentina:</strong> <span class="comp-arg comp-arg--si">✔ Official distributor</span>'><strong>En Argentina:</strong> <span class="comp-arg comp-arg--si">✔ Distribuidor oficial</span></div>
-            <div style="margin-top:8px;font-size:12px;color:var(--text-muted)" data-en='Source: <a href="https://www.cabrinha.com" target="_blank" rel="noopener" style="color:var(--primary)">cabrinha.com</a> · official 2024–2025 catalogue'>Fuente: <a href="https://www.cabrinha.com" target="_blank" rel="noopener" style="color:var(--primary)">cabrinha.com</a> · catálogo oficial 2024–2025</div>
-          </div>
-        </div>
-      </details>
-
-      <details class="faq-item">
-        <summary data-en='🇬🇧 Ozone — <span class="comp-level comp-level--int" style="margin-left:6px">Intermediate / Advanced</span>'>🇬🇧 Ozone — <span class="comp-level comp-level--int" style="margin-left:6px">Intermedio / Avanzado</span></summary>
-        <div class="faq-answer">
-          <div style="display:grid;gap:6px">
-            <div data-en='<strong>Country:</strong> United Kingdom'><strong>País:</strong> Reino Unido</div>
-            <div data-en='<strong>Ideal level:</strong> Intermediate to advanced; wings with great aerodynamic efficiency'><strong>Nivel ideal:</strong> Intermedio a avanzado; velas con gran eficiencia aerodinámica</div>
-            <div data-en='<strong>Reference price:</strong> USD 2,800 – 4,000 (full kit)'><strong>Precio referencia:</strong> USD 2.800 – 4.000 (kit completo)</div>
-            <div data-en='<strong>Strength:</strong> Lightweight wings with an excellent wind range; Aluula build on the high-end range'><strong>Punto fuerte:</strong> Velas ligeras con excelente rango de viento; construcción Aluula en gama alta</div>
-            <div data-en='<strong>In Argentina:</strong> <span class="comp-arg comp-arg--parcial">〜 Private import (no official distributor)</span>'><strong>En Argentina:</strong> <span class="comp-arg comp-arg--parcial">〜 Importación particular (sin distribuidor oficial)</span></div>
-            <div style="margin-top:8px;font-size:12px;color:var(--text-muted)" data-en='Source: <a href="https://www.ozonekites.com" target="_blank" rel="noopener" style="color:var(--primary)">ozonekites.com</a> · official 2024–2025 catalogue'>Fuente: <a href="https://www.ozonekites.com" target="_blank" rel="noopener" style="color:var(--primary)">ozonekites.com</a> · catálogo oficial 2024–2025</div>
-          </div>
-        </div>
-      </details>
-
-      <details class="faq-item">
-        <summary data-en='🌐 North — <span class="comp-level comp-level--adv" style="margin-left:6px">Advanced</span>'>🌐 North — <span class="comp-level comp-level--adv" style="margin-left:6px">Avanzado</span></summary>
-        <div class="faq-answer">
-          <div style="display:grid;gap:6px">
-            <div data-en='<strong>Country:</strong> International (based in Germany)'><strong>País:</strong> Internacional (sede en Alemania)</div>
-            <div data-en='<strong>Ideal level:</strong> Advanced; materials and geometries aimed at competition'><strong>Nivel ideal:</strong> Avanzado; materiales y geometrías orientados a la competición</div>
-            <div data-en='<strong>Reference price:</strong> USD 3,200 – 5,500 (full kit)'><strong>Precio referencia:</strong> USD 3.200 – 5.500 (kit completo)</div>
-            <div data-en='<strong>Strength:</strong> Latest-generation carbon foils; cutting-edge technology on the Seek and Sonar wings'><strong>Punto fuerte:</strong> Foils de carbono de última generación; tecnología punta en alas Seek y Sonar</div>
-            <div data-en='<strong>In Argentina:</strong> <span class="comp-arg comp-arg--parcial">〜 Private import (no official distributor)</span>'><strong>En Argentina:</strong> <span class="comp-arg comp-arg--parcial">〜 Importación particular (sin distribuidor oficial)</span></div>
-            <div style="margin-top:8px;font-size:12px;color:var(--text-muted)" data-en='Source: <a href="https://www.northkb.com" target="_blank" rel="noopener" style="color:var(--primary)">northkb.com</a> · official 2024–2025 catalogue'>Fuente: <a href="https://www.northkb.com" target="_blank" rel="noopener" style="color:var(--primary)">northkb.com</a> · catálogo oficial 2024–2025</div>
-          </div>
-        </div>
-      </details>
-
-      <details class="faq-item">
-        <summary data-en='🇳🇿 Armstrong — <span class="comp-level comp-level--adv" style="margin-left:6px">Advanced</span>'>🇳🇿 Armstrong — <span class="comp-level comp-level--adv" style="margin-left:6px">Avanzado</span></summary>
-        <div class="faq-answer">
-          <div style="display:grid;gap:6px">
-            <div data-en='<strong>Country:</strong> New Zealand'><strong>País:</strong> Nueva Zelanda</div>
-            <div data-en='<strong>Ideal level:</strong> Advanced; world reference in downwind and race'><strong>Nivel ideal:</strong> Avanzado; referencia mundial en downwind y race</div>
-            <div data-en='<strong>Reference price:</strong> USD 2,000 – 3,800 (foil only; boards sold separately)'><strong>Precio referencia:</strong> USD 2.000 – 3.800 (solo foil; tablas aparte)</div>
-            <div data-en='<strong>Strength:</strong> Extremely high-performance carbon foils; HA (High Aspect) systems highly valued for long downwind runs'><strong>Punto fuerte:</strong> Foils de carbono de altísimo rendimiento; sistemas HA (High Aspect) muy valorados para downwind largo</div>
-            <div data-en='<strong>In Argentina:</strong> <span class="comp-arg comp-arg--parcial">〜 Private import (no official distributor)</span>'><strong>En Argentina:</strong> <span class="comp-arg comp-arg--parcial">〜 Importación particular (sin distribuidor oficial)</span></div>
-            <div style="margin-top:8px;font-size:12px;color:var(--text-muted)" data-en='Source: <a href="https://www.armstrongfoils.com" target="_blank" rel="noopener" style="color:var(--primary)">armstrongfoils.com</a> · official 2024–2025 catalogue'>Fuente: <a href="https://www.armstrongfoils.com" target="_blank" rel="noopener" style="color:var(--primary)">armstrongfoils.com</a> · catálogo oficial 2024–2025</div>
-          </div>
-        </div>
-      </details>
-
-      <details class="faq-item">
-        <summary data-en='🇹🇭 Starboard — <span class="comp-level comp-level--beg" style="margin-left:6px">Beginner</span>'>🇹🇭 Starboard — <span class="comp-level comp-level--beg" style="margin-left:6px">Principiante</span></summary>
-        <div class="faq-answer">
-          <div style="display:grid;gap:6px">
-            <div data-en='<strong>Country:</strong> Thailand'><strong>País:</strong> Tailandia</div>
-            <div data-en='<strong>Ideal level:</strong> Beginner; learning boards with a lot of stability'><strong>Nivel ideal:</strong> Principiante; tablas de aprendizaje con mucha estabilidad</div>
-            <div data-en='<strong>Reference price:</strong> USD 2,400 – 4,000 (full kit)'><strong>Precio referencia:</strong> USD 2.400 – 4.000 (kit completo)</div>
-            <div data-en='<strong>Strength:</strong> Wide inflatable line (Freewing Air) ideal for travellers; very accessible boards for those starting out'><strong>Punto fuerte:</strong> Amplia línea inflable (Freewing Air) ideal para viajeros; tablas muy accesibles para quienes arrancan</div>
-            <div data-en='<strong>In Argentina:</strong> <span class="comp-arg comp-arg--si">✔ Official distributor</span>'><strong>En Argentina:</strong> <span class="comp-arg comp-arg--si">✔ Distribuidor oficial</span></div>
-            <div style="margin-top:8px;font-size:12px;color:var(--text-muted)" data-en='Source: <a href="https://www.star-board.com" target="_blank" rel="noopener" style="color:var(--primary)">star-board.com</a> · official 2024–2025 catalogue'>Fuente: <a href="https://www.star-board.com" target="_blank" rel="noopener" style="color:var(--primary)">star-board.com</a> · catálogo oficial 2024–2025</div>
-          </div>
-        </div>
-      </details>
-
-    </div>
-
-    <p style="font-size:12px;color:var(--text-muted);margin-top:20px;text-align:center;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;box-sizing:border-box;max-width:100%;overflow-wrap:break-word;word-break:break-word" data-en='⚠️ <strong>Notice:</strong> Prices are approximate, in USD, for a full kit (wing + foil + board) unless noted otherwise. Values can vary with the exchange rate, stock and point of sale. Always check with a distributor or instructor before buying. Escuela de Wingfoil has no commercial relationship with any of these brands.'>
-      ⚠️ <strong>Aviso:</strong> Los precios son orientativos en USD para kit completo (ala + foil + tabla) salvo indicación. Los valores pueden variar según el tipo de cambio, stock y punto de venta. Consultá siempre con un distribuidor o instructor antes de comprar. La Escuela de Wingfoil no tiene relación comercial con ninguna de estas marcas.
-    </p>
-  </div>
-</section>
 
 <!-- ============================================================ ENCUESTA + SPONSORS ============================================================ -->
-<section class="section" id="participa" data-pg="herramientas">
-  <div class="container">
-    <span class="eyebrow">🤝 Participá</span>
-    <h2 class="section-title" data-en="Help us improve & sponsors">Ayudanos a mejorar y sumate como sponsor</h2>
-    <p class="section-sub" data-en="Two minutes of your time to make this platform better, or a way to get in touch if your brand wants to support the community.">Dos minutos de tu tiempo para mejorar esta plataforma, o una forma de contactarnos si tu marca quiere sumarse como sponsor.</p>
-
-    <div class="dual-form-grid">
-      <!-- ENCUESTA -->
-      <div class="form-wrap form-wrap--half">
-        <div class="form-header"><h3>💡 ¿Qué le falta a la web?</h3></div>
-        <p class="form-note">Contanos qué mejorarías, qué información falta o qué funcionalidad te gustaría ver. Es 100% anónimo.</p>
-        <form id="surveyForm" name="survey-form" data-netlify="true" netlify-honeypot="bot-field" novalidate>
-          <input type="hidden" name="form-name" value="survey-form" />
-          <input type="hidden" name="bot-field" />
-          <div class="form-group">
-            <label for="survey-falta">Tu idea o sugerencia <span class="form-required">*</span></label>
-            <textarea id="survey-falta" name="falta" rows="4" placeholder="Ej: me gustaría ver un mapa de spots, más videos de maniobras, precios de clases..." required></textarea>
-          </div>
-          <div class="form-group">
-            <label for="survey-email">Email <span class="form-optional">(opcional, por si querés que te respondamos)</span></label>
-            <input type="email" id="survey-email" name="email" placeholder="tu@email.com"/>
-          </div>
-          <div id="surveyMsg" class="form-msg" hidden></div>
-          <button type="submit" class="btn btn--primary btn--full">Enviar sugerencia →</button>
-        </form>
-      </div>
-
-      <!-- SPONSORS -->
-      <div class="form-wrap form-wrap--half">
-        <div class="form-header"><h3>🚀 ¿Querés ser sponsor?</h3></div>
-        <p class="form-note">Si tu marca o negocio quiere apoyar a la comunidad de wingfoil, dejanos tus datos y te contactamos.</p>
-        <form id="sponsorForm" name="sponsor-form" data-netlify="true" netlify-honeypot="bot-field" novalidate>
-          <input type="hidden" name="form-name" value="sponsor-form" />
-          <input type="hidden" name="bot-field" />
-          <div class="form-group"><label for="sponsor-marca">Marca / Empresa <span class="form-required">*</span></label><input type="text" id="sponsor-marca" name="marca" placeholder="Nombre de tu marca" required/></div>
-          <div class="form-group"><label for="sponsor-contacto">Nombre de contacto <span class="form-required">*</span></label><input type="text" id="sponsor-contacto" name="contacto" placeholder="Tu nombre" required/></div>
-          <div class="form-group"><label for="sponsor-email">Email <span class="form-required">*</span></label><input type="email" id="sponsor-email" name="email" placeholder="tu@email.com" required/></div>
-          <div class="form-group"><label for="sponsor-mensaje">Mensaje <span class="form-required">*</span></label><textarea id="sponsor-mensaje" name="mensaje" rows="4" placeholder="Contanos tu propuesta de sponsoreo..." required></textarea></div>
-          <div id="sponsorMsg" class="form-msg" hidden></div>
-          <button type="submit" class="btn btn--primary btn--full">Enviar propuesta →</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- NEWSLETTER -->
-    <div class="form-wrap" style="max-width:1100px;margin-top:32px">
-      <div class="form-header"><h3>📬 Suscribite a las novedades</h3><span class="badge--free">✓ Gratis</span></div>
-      <p class="form-note" style="margin-bottom:20px">Spots, clínicas, equipos y guías nuevas. Un mail cada tanto, sin spam.</p>
-      <form id="newsletterForm" class="newsletter-form" name="newsletter-form" data-netlify="true" netlify-honeypot="bot-field" novalidate>
-        <input type="hidden" name="form-name" value="newsletter-form" />
-        <input type="hidden" name="bot-field" />
-        <div class="form-group"><label for="nl-nombre">Nombre <span class="form-optional">(opcional)</span></label><input type="text" id="nl-nombre" name="nombre" placeholder="Tu nombre" autocomplete="given-name"/></div>
-        <div class="form-group"><label for="nl-email">Email <span class="form-required">*</span></label><input type="email" id="nl-email" name="email" placeholder="tu@email.com" autocomplete="email" required/></div>
-        <button type="submit" class="btn btn--primary">Suscribirme →</button>
-      </form>
-      <div id="newsletterMsg" class="form-msg" hidden style="margin-top:14px;margin-bottom:0"></div>
-    </div>
-  </div>
-</section>
 
 <!-- ============================================================ DISCLAIMER ============================================================ -->
 <section class="nx-galeria" data-pg="aprender" aria-label="Fotos">
@@ -3903,11 +3704,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <figure class="nx-galeria__b"><img src="/assets/img/wf-1740688244924-4deca73383dc-800.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
   </div>
 </section>
-<section class="nx-galeria" data-pg="herramientas" aria-label="Fotos">
-  <div class="nx-wrap nx-galeria__in">
-    <figure class="nx-galeria__a"><img src="/assets/img/wf-1666175496646-6b5ad13b902f.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
-    <p class="nx-d nx-galeria__t" data-en="Choose well and fly sooner.">Elegí bien y volá antes.</p>
-    <figure class="nx-galeria__b"><img src="/assets/img/wf-1730134427096-c167c128e119-800.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
+<!-- ============================================================ SUMATE: NOVEDADES + SPONSORS (en todas las páginas) ============================================================ -->
+<section class="sumate" id="sponsor" aria-label="Sumate">
+  <div class="nx-wrap sumate__in">
+    <div class="sumate__nl">
+      <h2 class="nx-d sumate__t" data-en="Get the news">Recibí las novedades</h2>
+      <p class="sumate__p" data-en="Spots, clinics, gear and new guides. One email now and then, no spam.">Spots, clínicas, equipos y guías nuevas. Un mail cada tanto, sin spam.</p>
+      <form id="newsletterForm" class="newsletter-form sumate__form" name="newsletter-form" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+        <input type="hidden" name="form-name" value="newsletter-form" />
+        <input type="hidden" name="bot-field" />
+        <div class="form-group"><label for="nl-nombre" class="sr-only">Nombre</label><input type="text" id="nl-nombre" name="nombre" placeholder="Tu nombre (opcional)" autocomplete="given-name"/></div>
+        <div class="form-group"><label for="nl-email" class="sr-only">Email</label><input type="email" id="nl-email" name="email" placeholder="tu@email.com" autocomplete="email" required/></div>
+        <button type="submit" class="btn btn--primary">Suscribirme →</button>
+      </form>
+      <div id="newsletterMsg" class="form-msg" hidden style="margin-top:12px;margin-bottom:0"></div>
+    </div>
+    <details class="sumate__sp">
+      <summary><span class="sumate__sp-ico" aria-hidden="true">🚀</span><span><b data-en="Want to be a sponsor?">¿Querés ser sponsor?</b><small data-en="Put your brand in front of the whole wingfoil community.">Tu marca frente a toda la comunidad de wingfoil.</small></span><span class="sumate__sp-btn" aria-hidden="true">+</span></summary>
+      <form id="sponsorForm" name="sponsor-form" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+        <input type="hidden" name="form-name" value="sponsor-form" />
+        <input type="hidden" name="bot-field" />
+        <div class="form-row">
+          <div class="form-group"><label for="sponsor-marca">Marca / Empresa <span class="form-required">*</span></label><input type="text" id="sponsor-marca" name="marca" placeholder="Nombre de tu marca" required/></div>
+          <div class="form-group"><label for="sponsor-contacto">Nombre de contacto <span class="form-required">*</span></label><input type="text" id="sponsor-contacto" name="contacto" placeholder="Tu nombre" required/></div>
+        </div>
+        <div class="form-group"><label for="sponsor-email">Email <span class="form-required">*</span></label><input type="email" id="sponsor-email" name="email" placeholder="tu@email.com" required/></div>
+        <div class="form-group"><label for="sponsor-mensaje">Mensaje <span class="form-required">*</span></label><textarea id="sponsor-mensaje" name="mensaje" rows="3" placeholder="Contanos tu propuesta de sponsoreo..." required></textarea></div>
+        <div id="sponsorMsg" class="form-msg" hidden></div>
+        <button type="submit" class="btn btn--primary btn--full">Enviar propuesta →</button>
+      </form>
+    </details>
   </div>
 </section>
 <section class="disclaimer-section">
@@ -3936,7 +3762,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="footer__desc" data-en="The most complete free wingfoil learning platform in Argentina. Made by riders, for riders.">La plataforma educativa gratuita de wingfoil más completa de Argentina. Creada por riders, para riders.</p>
       </div>
       <nav class="nx-foot-nav" aria-label="Páginas">
-        <a href="/aprender" data-en="Learn">Aprender</a><a href="/spots">Spots</a><a href="/instructores" data-en="Instructors">Instructores</a><a href="/equipos" data-en="Gear">Equipos</a><a href="/herramientas" data-en="Tools">Herramientas</a><a href="/articulos" data-en="Articles">Artículos</a>
+        <a href="/aprender" data-en="Learn">Aprender</a><a href="/spots">Spots</a><a href="/instructores" data-en="Instructors">Instructores</a><a href="/equipos" data-en="Gear">Equipos</a><a href="/articulos" data-en="Articles">Artículos</a>
       </nav>
       <div class="footer__links">
         <div class="footer__col">
@@ -3945,10 +3771,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <li><a href="#videos">Videos por nivel</a></li>
             <li><a href="#anatomia">Anatomía del foil</a></li>
             <li><a href="#anatomia-ala">Anatomía del ala</a></li>
-            <li><a href="#calculadora">Calculadora equipo</a></li>
             <li><a href="#glosario">Glosario</a></li>
             <li><a href="#faq">Preguntas frecuentes</a></li>
-            <li><a href="#comparador">Comparador de marcas</a></li>
             <li><a href="#riders">Riders & Legends</a></li>
             <li><a href="/articulos">Artículos</a></li>
           </ul>
@@ -3960,7 +3784,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <li><a href="#spots">Spots Argentina</a></li>
             <li><a href="#venta-de-wingfoil">Equipos en venta</a></li>
             <li><a href="#marcas">Marcas</a></li>
-            <li><a href="#participa">Encuesta y Sponsors</a></li>
+            <li><a href="#sponsor">Sumate como sponsor</a></li>
           </ul>
         </div>
         <div class="footer__col">
@@ -4012,7 +3836,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="modal__emoji">🚀</div>
     <h3 class="modal__title" id="sponsorModalTitle" data-en="Want to sponsor us?">¿Querés ser sponsor?</h3>
     <p class="modal__sub" data-en="Your brand in front of the wingfoil community in Argentina. Tell us your proposal.">Tu marca frente a toda la comunidad de wingfoil en Argentina. Contanos tu propuesta.</p>
-    <a href="#participa" class="btn btn--primary" style="width:100%;justify-content:center" id="sponsorModalCta" data-en="I want to sponsor →">Quiero ser sponsor →</a>
+    <a href="#sponsor" class="btn btn--primary" style="width:100%;justify-content:center" id="sponsorModalCta" data-en="I want to sponsor →">Quiero ser sponsor →</a>
   </div>
 </div>
 
@@ -4476,14 +4300,10 @@ if(calcBtn){
               en:'Certified instructors from all over the country, free',                                  ec:'Find an instructor'},
     {i:'🪂', t:'Compará precios de equipo en Mercado Libre y Marketplace',        h:'#venta-de-wingfoil',  c:'Ver equipos',
               en:'Compare gear prices on Mercado Libre and Marketplace',                                    ec:'See the gear'},
-    {i:'🧮', t:'Calculá qué tabla y qué ala te corresponden según tu peso',       h:'#calculadora',        c:'Usar calculadora',
-              en:'Work out which board and wing fit your weight',                                          ec:'Use the calculator'},
     {i:'🎬', t:'Videos ordenados por nivel, de cero hasta foilear',               h:'#videos',             c:'Ver videos',
               en:'Videos sorted by level, from zero to flying',                                            ec:'Watch videos'},
     {i:'🦈', t:'La anatomía del foil explicada pieza por pieza',                  h:'#anatomia',           c:'Aprender',
               en:'The foil\'s anatomy explained piece by piece',                                           ec:'Learn'},
-    {i:'⚖️', t:'Comparador de marcas: nivel, precio y disponibilidad en Argentina', h:'#comparador',       c:'Comparar',
-              en:'Brand comparison: level, price and availability in Argentina',                           ec:'Compare'},
     {i:'💨', t:'Qué es la sudestada y cuándo hace crecer el río',                 h:'#sudestada',          c:'Entender',
               en:'What a sudestada is and when it floods the river',                                       ec:'Learn more'},
     {i:'📷', t:'Cámaras en vivo para ver cómo está el agua ahora',                h:'#camaras',            c:'Mirar',
@@ -4494,8 +4314,6 @@ if(calcBtn){
               en:'The riders who made wingfoil huge worldwide',                                            ec:'Meet them'},
     {i:'❓', t:'Las dudas más comunes antes de arrancar, respondidas',            h:'#faq',                c:'Ver respuestas',
               en:'The most common questions before you start, answered',                                   ec:'See answers'},
-    {i:'💡', t:'¿Qué le falta a la web? Contanos en 30 segundos',                 h:'#participa',          c:'Dejar mi idea',
-              en:'What is missing from the site? Tell us in 30 seconds',                                   ec:"Leave your idea"}
   ];
 
   // Mezcla al azar (Fisher-Yates) para que el orden cambie en cada visita.
@@ -4563,6 +4381,9 @@ var cDecline=document.getElementById('cookieDecline');
 if(cAccept)cAccept.addEventListener('click',hideCookie);
 if(cDecline)cDecline.addEventListener('click',hideCookie);
 
+// Links a #sponsor abren el formulario de sponsors (arriba del footer).
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href$="#sponsor"]');if(!a)return;var d=document.querySelector('#sponsor details');if(d)d.open=true;});
+if(location.hash==='#sponsor'){var spD=document.querySelector('#sponsor details');if(spD)spD.open=true;}
 // ============ CAFECITO / SPONSOR POPUPS (rotan entre sí) ============
 // En cada visita "elegible" se muestra UNO solo de los dos, alternando por turno.
 // Elegible: siempre en la primera visita (arranca con el de cafecito); después
@@ -5104,14 +4925,12 @@ if(mBread && mBreadCurrent && 'IntersectionObserver' in window){
     'spots':'🗺️ Aguas argentinas',
     'camaras':'📡 Cámaras en vivo',
     'sudestada':'🌊 Sudestada y crecidas',
-    'calculadora':'🧮 Calculadora',
     'venta-de-wingfoil':'🛒 Equipos en venta',
     'riders':'🌟 Riders',
     'glosario':'📖 Glosario',
     'blog':'📚 Recursos',
     'marcas':'🏷️ Marcas',
-    'faq':'❓ Preguntas frecuentes',
-    'comparador':'⚖️ Comparador de marcas'
+    'faq':'❓ Preguntas frecuentes'
   };
   var bcObs = new IntersectionObserver(function(entries){
     entries.forEach(function(en){
@@ -5849,7 +5668,6 @@ loadInstructors();
     {id:'anatomia-ala',     t:'Anatomía del Ala', en:'Anatomy of the Wing'},
     {id:'spots',            t:'Aguas argentinas', en:'Argentine waters'},
     {id:'camaras',          t:'Cámaras de San Isidro y Mar del Plata', en:'San Isidro and Mar del Plata live cameras'},
-    {id:'calculadora',      t:'Calculadora de equipo', en:'Gear calculator'},
     {id:'instructores',     t:'Instructores', en:'Instructors'},
     {id:'venta-de-wingfoil',t:'Equipos en venta', en:'Gear for sale'},
     {id:'maniobras',        t:'Maniobras del WingFoil', en:'WingFoil manoeuvres'},
@@ -5857,7 +5675,6 @@ loadInstructors();
     {id:'glosario',         t:'Glosario del WingFoil', en:'WingFoil glossary'},
     {id:'blog',             t:'Guías y artículos', en:'Guides and articles'},
     {id:'marcas',           t:'Marcas que confiamos', en:'Brands we trust'},
-    {id:'comparador',       t:'Comparador de marcas', en:'Brand comparison'},
     {id:'faq',              t:'Preguntas frecuentes', en:'Frequently asked questions'},
     {id:'testimonios',      t:'La gente que ya está volando', en:'People already flying'}
   ];
@@ -6026,7 +5843,7 @@ loadInstructors();
 
     // --- Puteadas / bardo ---
     if(tiene(q,['boludo','pelotudo','forro','la concha','conchuda','mierda','sos un','careta','inutil','no servis','no funciona nada','fuck','shit','stupid','useless','you suck','idiot'])){
-      return {m:'enojado', h:T('¡PARÁ! 😤 Yo soy un robot con dignidad, no un poste de la Costanera.\n\nRespirá, contame bien qué necesitás y te lo resuelvo. Si querés algo concreto: ', 'HEY! 😤 I am a robot with dignity, not a pole on the riverfront.\n\nBreathe. Tell me properly what you need and I will sort it out. Something concrete: ')+ir('calculadora',T('calculadora de equipo','gear calculator'))+', '+ir('spots',T('spots','spots'))+' o '+ir('instructores',T('instructores','instructors'))+'.', s:sugeBase()};
+      return {m:'enojado', h:T('¡PARÁ! 😤 Yo soy un robot con dignidad, no un poste de la Costanera.\n\nRespirá, contame bien qué necesitás y te lo resuelvo. Si querés algo concreto: ', 'HEY! 😤 I am a robot with dignity, not a pole on the riverfront.\n\nBreathe. Tell me properly what you need and I will sort it out. Something concrete: ')+ir('comparador-precios',T('comparador de precios','price comparator'))+', '+ir('spots',T('spots','spots'))+' o '+ir('instructores',T('instructores','instructors'))+'.', s:sugeBase()};
     }
 
     // --- Chistes / humor ---
@@ -6061,7 +5878,7 @@ loadInstructors();
 
     // --- Quién sos ---
     if(tiene(q,['quien sos','quien eres','que sos','como te llamas','tu nombre','bramador','who are you','what are you','your name'])){
-      return {m:'epico', h:T('Soy <strong>Bramador</strong>. 🤩 Me llamo así porque cuando entra el viento fuerte, brama.\n\nNo soy instructor ni pronóstico: soy el que te encuentra rápido lo que ya está en este sitio. Sé de ', 'I am <strong>Bramador</strong>. 🤩 The name means <em>the roaring one</em> — that is what strong wind does here.\n\nI am not an instructor and I am not a forecast: I am the one who finds you fast what is already on this site. I know about ')+ir('spots',T('21 spots', '21 spots'))+', '+ir('maniobras',T('maniobras','manoeuvres'))+', '+ir('glosario',T('30 términos del glosario', '30 glossary terms'))+', '+ir('calculadora',T('medidas de equipo', 'gear sizing'))+' y '+ir('faq',T('las dudas frecuentes', 'the common questions'))+'.', s:sugeBase()};
+      return {m:'epico', h:T('Soy <strong>Bramador</strong>. 🤩 Me llamo así porque cuando entra el viento fuerte, brama.\n\nNo soy instructor ni pronóstico: soy el que te encuentra rápido lo que ya está en este sitio. Sé de ', 'I am <strong>Bramador</strong>. 🤩 The name means <em>the roaring one</em> — that is what strong wind does here.\n\nI am not an instructor and I am not a forecast: I am the one who finds you fast what is already on this site. I know about ')+ir('spots',T('21 spots', '21 spots'))+', '+ir('maniobras',T('maniobras','manoeuvres'))+', '+ir('glosario',T('30 términos del glosario', '30 glossary terms'))+', '+ir('comparador-precios',T('precios de equipo', 'gear prices'))+' y '+ir('faq',T('las dudas frecuentes', 'the common questions'))+'.', s:sugeBase()};
     }
 
     // --- Gracias / despedida ---
@@ -6086,14 +5903,14 @@ loadInstructors();
       var nivLbl = T({b:'principiante',i:'intermedio',a:'avanzado'}[nivel], {b:'beginner',i:'intermediate',a:'advanced'}[nivel]);
       var conLbl = T({light:'viento flojo (10-15 kn)',medium:'viento medio (15-22 kn)',strong:'viento fuerte (22-30 kn)'}[cond],
                      {light:'light wind (10-15 kn)',medium:'moderate wind (15-22 kn)',strong:'strong wind (22-30 kn)'}[cond]);
-      return {m:'epico', h:T('Listo, '+peso+' kg, nivel '+nivLbl+', '+conLbl+': 🤩\n\n<strong>Tabla:</strong> ~'+r.tabla+' L\n<strong>Ala:</strong> ~'+r.ala+' m²\n<strong>Mástil:</strong> ~'+r.mastil+' cm\n\nEs la misma cuenta que hace ',
-                            'Right — '+peso+' kg, '+nivLbl+', '+conLbl+': 🤩\n\n<strong>Board:</strong> ~'+r.tabla+' L\n<strong>Wing:</strong> ~'+r.ala+' m²\n<strong>Mast:</strong> ~'+r.mastil+' cm\n\nSame maths as ')+ir('calculadora',T('la calculadora del sitio','the calculator on the site'))+
-                    T(' — entrá ahí si querés cambiar nivel o condición. Y antes de comprar, charlalo con un ',
-                      ' — go there to change level or conditions. And before buying anything, talk it over with an ')+ir('instructores',T('instructor','instructor'))+'.',
+      return {m:'epico', h:T('Listo, '+peso+' kg, nivel '+nivLbl+', '+conLbl+': 🤩\n\n<strong>Tabla:</strong> ~'+r.tabla+' L\n<strong>Ala:</strong> ~'+r.ala+' m²\n<strong>Mástil:</strong> ~'+r.mastil+' cm\n\nEs una referencia: ',
+                            'Right — '+peso+' kg, '+nivLbl+', '+conLbl+': 🤩\n\n<strong>Board:</strong> ~'+r.tabla+' L\n<strong>Wing:</strong> ~'+r.ala+' m²\n<strong>Mast:</strong> ~'+r.mastil+' cm\n\nIt is a rough guide: ')+
+                    T('antes de comprar, charlalo con un ',
+                      'before buying anything, talk it over with an ')+ir('instructores',T('instructor','instructor'))+'.',
               s: enIngles() ? ['What does gear cost?','New or used?','Where can I sail?'] : ['¿Cuánto sale un equipo?','¿Nuevo o usado?','¿Dónde navego?']};
     }
     if(pideMedida){
-      return {m:'pensando', h:T('Te la calculo acá mismo. 🤔 Decime tu peso y tu nivel, por ejemplo: <em>"peso 80 kg soy principiante"</em>.\n\nO usá directo ', 'I will work it out right here. 🤔 Tell me your weight and level, for example: <em>"80 kg beginner"</em>.\n\nOr go straight to ')+ir('calculadora',T('la calculadora de equipo', 'the gear calculator'))+T(', que además te deja elegir la condición de viento.', ', which also lets you pick the wind conditions.'), s: enIngles() ? ['I weigh 80 kg, beginner','I weigh 95 kg, intermediate','New or used?'] : ['Peso 80 kg soy principiante','Peso 95 kg intermedio','¿Nuevo o usado?']};
+      return {m:'pensando', h:T('Te la calculo acá mismo. 🤔 Decime tu peso y tu nivel, por ejemplo: <em>"peso 80 kg soy principiante"</em>.', 'I will work it out right here. 🤔 Tell me your weight and level, for example: <em>"80 kg beginner"</em>.'), s: enIngles() ? ['I weigh 80 kg, beginner','I weigh 95 kg, intermediate','New or used?'] : ['Peso 80 kg soy principiante','Peso 95 kg intermedio','¿Nuevo o usado?']};
     }
 
     // --- Definiciones: "¿qué es X?" va derecho al glosario, antes que
@@ -6203,7 +6020,7 @@ loadInstructors();
               s: enIngles() ? ['What board suits me?','New or used?','See brands'] : ['¿Qué tabla me conviene?','¿Nuevo o usado?','Ver marcas']};
     }
     if(tiene(q,['marca','marcas','duotone','naish','fone','armstrong','cual marca','comparador','brand','brands','which brand','compare'])){
-      return {m:'feliz', h:T('Las marcas que seguimos están en ', 'The brands we follow are in ')+ir('marcas',T('Marcas que confiamos','Brands we trust'))+T(' 😄, y si querés verlas enfrentadas, está el ', ' 😄, and if you want them side by side there is the ')+ir('comparador',T('comparador de marcas','brand comparison'))+'.', s: enIngles() ? ['What does gear cost?','What board suits me?'] : ['¿Cuánto sale un equipo?','¿Qué tabla me conviene?']};
+      return {m:'feliz', h:T('Las marcas que seguimos están en ', 'The brands we follow are in ')+ir('marcas',T('Marcas que confiamos','Brands we trust'))+T(' 😄, y si querés comparar precios de equipos, está el ', ' 😄, and to compare gear prices there is the ')+ir('comparador-precios',T('comparador de precios','price comparator'))+'.', s: enIngles() ? ['What does gear cost?','What board suits me?'] : ['¿Cuánto sale un equipo?','¿Qué tabla me conviene?']};
     }
     if(tiene(q,['video','videos','tutorial','ver como se hace','watch','how it is done','show me how'])){
       return {m:'feliz', h:'Hay '+ir('videos',T('videos organizados por nivel','videos organised by level'))+' 😄 — principiante, intermedio y avanzado. Y cada maniobra de '+ir('maniobras',T('esta sección','this section'))+' viene con su propio video.', s: enIngles() ? ['Show me manoeuvres','What is pumping?'] : ['Mostrame maniobras','¿Qué es pumpear?']};
@@ -7209,7 +7026,6 @@ if(/^\/venta-de-wingfoil\/?$/.test(location.pathname)){window.addEventListener('
     instructores: { url:'/instructores', t:'Instructores de wingfoil en Argentina | Escuela de Wingfoil', d:'Directorio de instructores de wingfoil en Argentina. Elegí por spot y nivel, y escribiles directo.' },
     equipos:      { url:'/equipos',      t:'Equipos de wingfoil: precios de Mercado Libre y comparador | Escuela de Wingfoil', d:'Precios de alas, tablas y foils de wingfoil en Mercado Libre, relevados todos los días, comparador de precios con Facebook Marketplace.' },
     articulos:    { url:'/articulos',    t:'Artículos de wingfoil: guías, técnica, equipo y spots | Escuela de Wingfoil', d:'27 artículos de wingfoil en español: cómo empezar, técnica, viento, equipo, seguridad y los mejores spots de Argentina y Brasil.' },
-    herramientas: { url:'/herramientas', t:'Calculadora de equipo y comparador de marcas de wingfoil | Escuela de Wingfoil', d:'Calculá qué tamaño de ala, tabla y foil te sirve y compará marcas de wingfoil lado a lado.' }
   };
   var desc = document.querySelector('meta[name="description"]');
   var canon = document.querySelector('link[rel="canonical"]');
