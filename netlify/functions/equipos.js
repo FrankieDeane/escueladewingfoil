@@ -26,6 +26,15 @@ function cleanPhone(value) {
   return (plus + raw.replace(/[^0-9]/g, '')).slice(0, 20);
 }
 
+// Link opcional a la publicación en Facebook Marketplace. Sólo se guardan
+// links de facebook.com/marketplace/item/… o fb.me (el "Compartir" del celu).
+const MARKETPLACE_RE = /^https:\/\/((www|m|web)\.)?(facebook\.com\/marketplace\/item\/\d+|fb\.me\/[\w-]+|facebook\.com\/share\/[\w/-]+)/i;
+function cleanMarketplace(value) {
+  const url = String(value || '').trim().replace(/^http:/i, 'https:');
+  const m = MARKETPLACE_RE.exec(url);
+  return m ? m[0].slice(0, 200) : '';
+}
+
 // Client IP from Netlify-provided headers.
 function clientIp(req) {
   return req.headers.get('x-nf-client-connection-ip')
@@ -132,6 +141,7 @@ export default async function(req) {
       ubicacion: clean(body.get('ubicacion'), 80),
       descripcion: clean(body.get('descripcion'), 1000),
       whatsapp: cleanPhone(body.get('whatsapp')),
+      marketplace: cleanMarketplace(body.get('marketplace')),
       ts: new Date().toISOString(),
     };
 
