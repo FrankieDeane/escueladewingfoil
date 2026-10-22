@@ -97,7 +97,7 @@
   }
 
   // Avisos de Facebook Marketplace: relevamiento a mano en /mp-data.json
-  // (Facebook no se puede leer solo). Sin foto. Cada aviso lleva su link;
+  // (Facebook no se puede leer solo). La foto sale de una captura (assets/mp);
   // los que no lo traen apuntan a la búsqueda de Marketplace.
   function cargarMp() {
     return fetch('/mp-data.json').then(function (r) { return r.json(); }).then(function (d) {
@@ -106,7 +106,7 @@
         if (!ars || ars < 20000) return null;
         var orig = a.original ? (a.moneda === 'USD' ? a.original * st.dolar : a.original) : null;
         return {
-          id: 'mp:' + i, f: 'mp', titulo: a.titulo, img: null, precio: ars,
+          id: 'mp:' + i, f: 'mp', titulo: a.titulo, img: /^\/assets\/mp\/[\w-]+\.jpg$/.test(a.img || '') ? a.img : null, precio: ars,
           original: orig > ars ? orig : null, usd: a.moneda === 'USD' ? a.precio : null,
           ubicacion: a.ubicacion || null,
           url: /^https:\/\/www\.facebook\.com\/marketplace\/item\/\d+\/?$/.test(a.url || '') ? a.url : urlOk(d.fuente) ? d.fuente : null,
