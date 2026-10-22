@@ -386,7 +386,8 @@
    "original": null,
    "moneda": "USD",
    "ubicacion": "Acassuso BA",
-   "tipo": "Tabla"
+   "tipo": "Tabla",
+   "img": "/assets/mp/mp-01.jpg"
   },
   {
    "titulo": "Tabla gong inflable Wingfoil 110L",
@@ -394,7 +395,8 @@
    "original": null,
    "moneda": "USD",
    "ubicacion": "Vicente López BA",
-   "tipo": "Tabla"
+   "tipo": "Tabla",
+   "img": "/assets/mp/mp-11.jpg"
   },
   {
    "titulo": "Outlet de Velas Wingfoil - F-ONE Strike y otras marcas (USADOS)",
@@ -402,7 +404,8 @@
    "original": null,
    "moneda": "USD",
    "ubicacion": "Ciudad de Buenos Aires CF",
-   "tipo": "Vela"
+   "tipo": "Vela",
+   "img": "/assets/mp/mp-03.jpg"
   },
   {
    "titulo": "Tabla de wingfoil manticore 105 litros",
@@ -410,7 +413,8 @@
    "original": null,
    "moneda": "USD",
    "ubicacion": "La Plata BA",
-   "tipo": "Tabla"
+   "tipo": "Tabla",
+   "img": "/assets/mp/mp-05.jpg"
   },
   {
    "titulo": "Tabla Wingfoil F-ONE Rocket Wing S V2 56L",
@@ -418,7 +422,8 @@
    "original": null,
    "moneda": "USD",
    "ubicacion": "Acassuso BA",
-   "tipo": "Tabla"
+   "tipo": "Tabla",
+   "img": "/assets/mp/mp-06.jpg"
   },
   {
    "titulo": "Tabla wingfoil Freedom Foil Boards Nugget 50L",
@@ -426,7 +431,8 @@
    "original": 550,
    "moneda": "USD",
    "ubicacion": "Ciudad de Buenos Aires CF",
-   "tipo": "Tabla"
+   "tipo": "Tabla",
+   "img": "/assets/mp/mp-08.jpg"
   },
   {
    "titulo": "Tabla Wingfoil Midlength Scarless",
@@ -434,7 +440,8 @@
    "original": null,
    "moneda": "USD",
    "ubicacion": "Tigre BA",
-   "tipo": "Tabla"
+   "tipo": "Tabla",
+   "img": "/assets/mp/mp-10.jpg"
   },
   {
    "titulo": "Combo WingFoil F-One (vela+Tabla+Foil completo)",
@@ -442,7 +449,8 @@
    "original": null,
    "moneda": "USD",
    "ubicacion": "Ciudad de Buenos Aires CF",
-   "tipo": "Combo"
+   "tipo": "Combo",
+   "img": "/assets/mp/mp-07.jpg"
   },
   {
    "titulo": "OPORTUNIDAD Kit Wingfoil F-ONE COMPLETO",
@@ -450,7 +458,8 @@
    "original": null,
    "moneda": "USD",
    "ubicacion": "La Plata BA",
-   "tipo": "Combo"
+   "tipo": "Combo",
+   "img": "/assets/mp/mp-09.jpg"
   },
   {
    "titulo": "Combo Wingfoil: Tabla F-ONE 130L + Foil Gong XL + Vela F-one",
@@ -482,7 +491,8 @@
    "original": null,
    "moneda": "USD",
    "ubicacion": "Tigre BA",
-   "tipo": "Tabla+Foil"
+   "tipo": "Tabla+Foil",
+   "img": "/assets/mp/mp-12.jpg"
   },
   {
    "titulo": "Tabla Wingfoil F-One Rocket Air inflable 140L",
@@ -490,7 +500,8 @@
    "original": null,
    "moneda": "USD",
    "ubicacion": "Ciudad de Buenos Aires CF",
-   "tipo": "Tabla"
+   "tipo": "Tabla",
+   "img": "/assets/mp/mp-15.jpg"
   },
   {
    "titulo": "Tabla Wingfoil North Seek 98L 2024",
@@ -498,7 +509,8 @@
    "original": null,
    "moneda": "USD",
    "ubicacion": "Ciudad de Buenos Aires CF",
-   "tipo": "Tabla"
+   "tipo": "Tabla",
+   "img": "/assets/mp/mp-16.jpg"
   },
   {
    "titulo": "Tabla y foils Wingfoil",
@@ -506,7 +518,8 @@
    "original": 2800,
    "moneda": "USD",
    "ubicacion": "Ciudad de Buenos Aires CF",
-   "tipo": "Tabla+Foil"
+   "tipo": "Tabla+Foil",
+   "img": "/assets/mp/mp-17.jpg"
   },
   {
    "titulo": "Wing Cabrinha 5 Metros",
@@ -538,7 +551,8 @@
    "original": 650,
    "moneda": "USD",
    "ubicacion": "Martínez BA",
-   "tipo": "Vela"
+   "tipo": "Vela",
+   "img": "/assets/mp/mp-18.jpg"
   },
   {
    "titulo": "Tabla WING FOIL + Wing F-ONE",
@@ -546,7 +560,8 @@
    "original": null,
    "moneda": "USD",
    "ubicacion": "Béccar BA",
-   "tipo": "Combo"
+   "tipo": "Combo",
+   "img": "/assets/mp/mp-20.jpg"
   },
   {
    "titulo": "Tabla Wing FOIL+ FOIL 75L",
@@ -554,7 +569,8 @@
    "original": null,
    "moneda": "USD",
    "ubicacion": "Béccar BA",
-   "tipo": "Tabla+Foil"
+   "tipo": "Tabla+Foil",
+   "img": "/assets/mp/mp-00.jpg"
   },
   {
    "titulo": "Hydrofoil Cabrinha completo para Wing Foil / Kite Foil",
@@ -570,7 +586,8 @@
    "original": null,
    "moneda": "USD",
    "ubicacion": "Vicente López BA",
-   "tipo": "Foil"
+   "tipo": "Foil",
+   "img": "/assets/mp/mp-22.jpg"
   },
   {
    "titulo": "Ala Wing Foil BRM 5.5m Ultra Liviana",
@@ -586,7 +603,8 @@
    "original": null,
    "moneda": "USD",
    "ubicacion": "San Isidro BA",
-   "tipo": "Foil"
+   "tipo": "Foil",
+   "img": "/assets/mp/mp-30.jpg"
   },
   {
    "titulo": "Equipo de wingfoil completo Fone",
@@ -594,7 +612,8 @@
    "original": null,
    "moneda": "USD",
    "ubicacion": "La Plata BA",
-   "tipo": "Combo"
+   "tipo": "Combo",
+   "img": "/assets/mp/mp-23.jpg"
   },
   {
    "titulo": "Kit foil Cabrinha",
@@ -602,7 +621,8 @@
    "original": null,
    "moneda": "USD",
    "ubicacion": "Ciudad de Buenos Aires CF",
-   "tipo": "Foil"
+   "tipo": "Foil",
+   "img": "/assets/mp/mp-31.jpg"
   },
   {
    "titulo": "Wing F-One Strike 5m",
@@ -610,7 +630,8 @@
    "original": null,
    "moneda": "USD",
    "ubicacion": "Ciudad de Buenos Aires CF",
-   "tipo": "Vela"
+   "tipo": "Vela",
+   "img": "/assets/mp/mp-25.jpg"
   },
   {
    "titulo": "TABLA DE WING FANATIC SKY WIN 105L",
@@ -618,7 +639,8 @@
    "original": null,
    "moneda": "USD",
    "ubicacion": "Ciudad de Buenos Aires CF",
-   "tipo": "Tabla"
+   "tipo": "Tabla",
+   "img": "/assets/mp/mp-24.jpg"
   },
   {
    "titulo": "Tabla 90L con foil 1500 para surfear",
@@ -642,7 +664,8 @@
    "original": null,
    "moneda": "USD",
    "ubicacion": "Ciudad de Buenos Aires CF",
-   "tipo": "Combo"
+   "tipo": "Combo",
+   "img": "/assets/mp/mp-27.jpg"
   },
   {
    "titulo": "Foils para windfoil Phantom Iris X",
@@ -658,7 +681,8 @@
    "original": null,
    "moneda": "USD",
    "ubicacion": "Ciudad de Buenos Aires CF",
-   "tipo": "Combo"
+   "tipo": "Combo",
+   "img": "/assets/mp/mp-34.jpg"
   }
  ]
 }
