@@ -32,7 +32,7 @@
   var POR_PAGINA = 12;
   var MAX_VS = 3;
 
-  var st = { ml: [], com: [], fecha: null, fija: false, cat: 'wing', fuentes: { ml: true, mp: true, rd: true }, orden: 'barato', presu: null, limite: POR_PAGINA, sel: [], dolar: DOLAR_DEF };
+  var st = { ml: [], com: [], mp: [], fecha: null, fija: false, cat: 'wing', fuentes: { ml: true, mp: true, rd: true }, orden: 'barato', presu: null, limite: POR_PAGINA, sel: [], dolar: DOLAR_DEF };
 
   // ── Utilidades ───────────────────────────────────────────────────────
   function $(id) { return document.getElementById(id); }
@@ -67,10 +67,11 @@
   }
   function catDeTipo(tipo) {
     var t = String(tipo || '');
-    if (/ala|wing/i.test(t)) return 'wing';
+    if (/\+/.test(t)) return 'kit'; // "Tabla+Foil"
+    if (/ala|wing|vela/i.test(t)) return 'wing';
     if (/tabla/i.test(t)) return 'tabla';
     if (/foil|m[aá]stil|fuselaje|plano|estabilizador/i.test(t)) return 'foil';
-    if (/kit/i.test(t)) return 'kit';
+    if (/kit|combo/i.test(t)) return 'kit';
     if (/neopren|traje/i.test(t)) return 'neo';
     return 'acc';
   }
@@ -114,6 +115,25 @@
         url: mp ? d.marketplace : wa ? 'https://wa.me/' + wa : null, cat: catDeTipo(d.tipo), usado: true,
       };
     }).filter(Boolean);
+  }
+
+  // Avisos de Facebook Marketplace: relevamiento a mano en /mp-data.json
+  // (Facebook no se puede leer solo). Sin foto ni link por aviso: el link
+  // lleva a la búsqueda de Marketplace.
+  function cargarMp() {
+    return fetch('/mp-data.json').then(function (r) { return r.json(); }).then(function (d) {
+      return (d.avisos || []).map(function (a, i) {
+        var ars = a.moneda === 'USD' ? a.precio * st.dolar : a.precio;
+        if (!ars || ars < 20000) return null;
+        var orig = a.original ? (a.moneda === 'USD' ? a.original * st.dolar : a.original) : null;
+        return {
+          id: 'mp:' + i, f: 'mp', titulo: a.titulo, img: null, precio: ars,
+          original: orig > ars ? orig : null, usd: a.moneda === 'USD' ? a.precio : null,
+          ubicacion: a.ubicacion || null, url: urlOk(d.fuente) ? d.fuente : null,
+          cat: catDeTipo(a.tipo), usado: true,
+        };
+      }).filter(Boolean);
+    }).catch(function () { return []; });
   }
 
   function cargarMl() {
@@ -202,7 +222,7 @@
   }
 
   // ── Comparador ───────────────────────────────────────────────────────
-  function todos() { return st.ml.concat(st.com); }
+  function todos() { return st.ml.concat(st.mp, st.com); }
   function enCat() {
     return todos().filter(function (p) { return p.cat === st.cat && st.fuentes[p.f]; });
   }
@@ -408,6 +428,9 @@
   listo(function () {
     Promise.all([cargarMl().catch(function () { return []; }), cargarDolar()]).then(function (r) {
       st.ml = r[0];
+      return cargarMp();
+    }).then(function (mp) {
+      st.mp = mp;
       vidriera();
       return Promise.resolve(window.EQ_COMUNIDAD).catch(function () { return []; });
     }).then(function (list) {
