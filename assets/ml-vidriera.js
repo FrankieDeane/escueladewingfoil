@@ -3,9 +3,8 @@
  * Mercado Libre: /api/ml-dashboard (relevamiento diario por la API, ver
  * netlify/functions/ml-dashboard.js). Si no responde o viene vacío, usa la
  * foto fija de /ml-data.json.
- * Comparador: suma los avisos de la comunidad (/api/equipos, ya pedido en
- * window.EQ_COMUNIDAD); los que traen link de Facebook Marketplace se
- * muestran como Marketplace y el resto como riders.
+ * Comparador: junta Mercado Libre y los avisos de Facebook Marketplace
+ * (/mp-data.json).
  * Categoría y marca salen del título con window.EquipoNormalizer.
  */
 (function () {
@@ -26,13 +25,12 @@
   var FUENTES = {
     ml: { n: 'Mercado Libre', i: 'ML', sw: '#FFE600', link: 'Ver en Mercado Libre ↗' },
     mp: { n: 'Marketplace', i: 'f', sw: '#1464D2', link: 'Ver en Marketplace ↗' },
-    rd: { n: 'Riders', i: 'R', sw: '#FF5A2C', link: 'Escribir por WhatsApp ↗' },
   };
   var DOLAR_DEF = 1450; // si no responde la cotización del día
   var POR_PAGINA = 12;
   var MAX_VS = 3;
 
-  var st = { ml: [], com: [], mp: [], fecha: null, fija: false, cat: 'wing', fuentes: { ml: true, mp: true, rd: true }, orden: 'barato', presu: null, limite: POR_PAGINA, sel: [], dolar: DOLAR_DEF };
+  var st = { ml: [], mp: [], fecha: null, fija: false, cat: 'wing', fuentes: { ml: true, mp: true }, orden: 'barato', presu: null, limite: POR_PAGINA, sel: [], dolar: DOLAR_DEF };
 
   // ── Utilidades ───────────────────────────────────────────────────────
   function $(id) { return document.getElementById(id); }
@@ -96,25 +94,6 @@
       };
     }).sort(function (a, b) { return a.puesto - b.puesto; })
       .map(function (p, i) { p.puesto = i + 1; return p; });
-  }
-
-  function deComunidad(list) {
-    return (Array.isArray(list) ? list : []).map(function (d) {
-      var pr = N() ? N().parsePrecio(d.precio, d.moneda) : null;
-      if (!pr) return null;
-      var ars = pr.moneda === 'USD' ? pr.valor * st.dolar : pr.moneda === 'ARS' ? pr.valor : null;
-      if (!ars || ars < 20000) return null; // precio poco claro ("350 y 230"): no entra a comparar
-      var mp = d.marketplace && window.mpLinkOk && window.mpLinkOk(d.marketplace);
-      var wa = String(d.whatsapp || '').replace(/[^0-9]/g, '');
-      var tipo = String(d.tipo || '').replace(/^[^\wÁÉÍÓÚáéíóúñÑ]+/, '').split('/')[0].trim();
-      return {
-        id: 'c:' + (d.id || d.ts || Math.random()), f: mp ? 'mp' : 'rd',
-        titulo: (tipo ? tipo + ' ' : '') + (d.marca || ''),
-        img: Array.isArray(d.fotos) && d.fotos.length ? '/api/equipos-foto/' + encodeURIComponent(d.fotos[0]) : null,
-        precio: ars, usd: pr.moneda === 'USD' ? pr.valor : null, ubicacion: d.ubicacion || null,
-        url: mp ? d.marketplace : wa ? 'https://wa.me/' + wa : null, cat: catDeTipo(d.tipo), usado: true,
-      };
-    }).filter(Boolean);
   }
 
   // Avisos de Facebook Marketplace: relevamiento a mano en /mp-data.json
@@ -223,7 +202,7 @@
   }
 
   // ── Comparador ───────────────────────────────────────────────────────
-  function todos() { return st.ml.concat(st.mp, st.com); }
+  function todos() { return st.ml.concat(st.mp); }
   function enCat() {
     return todos().filter(function (p) { return p.cat === st.cat && st.fuentes[p.f]; });
   }
@@ -405,7 +384,7 @@
     if (b.dataset.cat) { st.cat = b.dataset.cat; st.limite = POR_PAGINA; dibujarCats(); comparar(true); }
     else if (b.dataset.f && b.classList.contains('cmp__fuente')) {
       st.fuentes[b.dataset.f] = !st.fuentes[b.dataset.f];
-      if (!st.fuentes.ml && !st.fuentes.mp && !st.fuentes.rd) st.fuentes[b.dataset.f] = true;
+      if (!st.fuentes.ml && !st.fuentes.mp) st.fuentes[b.dataset.f] = true;
       dibujarCats(); comparar();
     }
     else if (b.dataset.orden) {
@@ -419,10 +398,6 @@
     else if (b.id === 'cmpBandejaX') { st.sel = []; bandeja(); comparar(); $('cmpVs').hidden = true; }
   });
   $('cmpPresu').addEventListener('input', function (e) { st.presu = +e.target.value; presupuesto(); });
-  window.addEventListener('ewf:equipo', function (e) {
-    st.com = st.com.concat(deComunidad([e.detail]));
-    dibujarCats(); comparar();
-  });
 
   // ── Arranque ─────────────────────────────────────────────────────────
   function listo(fn) { if (window.EquipoNormalizer) fn(); else window.addEventListener('load', fn); }
@@ -433,9 +408,6 @@
     }).then(function (mp) {
       st.mp = mp;
       vidriera();
-      return Promise.resolve(window.EQ_COMUNIDAD).catch(function () { return []; });
-    }).then(function (list) {
-      st.com = deComunidad(list || []);
       var all = todos();
       if (!all.some(function (p) { return p.cat === st.cat; })) {
         var c = CATS.filter(function (x) { return all.some(function (p) { return p.cat === x.k; }); })[0];

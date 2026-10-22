@@ -2738,7 +2738,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="nx-stack">
     <span class="nx-m" data-en="Gear · Used and new">Equipos · Usados y nuevos</span>
     <h1 class="nx-d nx-intro__t" data-en="Gear with a story.">Equipo con historia.</h1>
-    <p class="nx-lead" data-en="Mercado Libre prices updated every day, a price comparator, Marketplace and used gear from riders.">Precios de Mercado Libre al día, un comparador de precios, Marketplace y usados de riders.</p>
+    <p class="nx-lead" data-en="Mercado Libre prices updated every day, a price comparator and Marketplace listings.">Precios de Mercado Libre al día, un comparador de precios y avisos de Marketplace.</p>
     
     </div>
     <figure class="nx-intro__fig"><img src="/assets/img/wf-18388700-800.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
@@ -2820,7 +2820,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="cmp__vs-grid" id="cmpVsGrid"></div>
     </div>
 
-    <p class="cmp__nota">⚠️ Precios publicados por vendedores de Mercado Libre y por particulares (Marketplace y comunidad) el día que se relevaron. No tenemos relación comercial con ellos: verificá precio, stock y estado en la publicación antes de comprar. Los precios en dólares se pasan a pesos con el dólar oficial del día.</p>
+    <p class="cmp__nota">⚠️ Precios publicados por vendedores de Mercado Libre y por particulares (Marketplace) el día que se relevaron. No tenemos relación comercial con ellos: verificá precio, stock y estado en la publicación antes de comprar. Los precios en dólares se pasan a pesos con el dólar oficial del día.</p>
   </div>
 
   <div class="cmp__bandeja" id="cmpBandeja" hidden>
@@ -2832,50 +2832,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <section class="section" id="venta-de-wingfoil" data-pg="equipos">
   <div class="container">
-    <span class="eyebrow">Publicar</span>
-    <h2 class="section-title" data-en="Sell your gear">Publicá tu equipo</h2>
-    <p class="section-sub">Tu aviso aparece en el comparador de arriba, junto con Mercado Libre y Marketplace. Publicalo gratis.</p>
-
-    <!-- COMUNIDAD -->
-    <div id="eqPanelComunidad">
-
-      <p class="equipos-disclaimer">⚠️ La Escuela de Wingfoil no es responsable de la venta de productos publicados. Las transacciones son entre particulares, bajo exclusiva responsabilidad de las partes.</p>
-    <div class="form-wrap">
-      <div class="form-header"><h3>Publicar mi equipo</h3><span class="badge--free">✓ Gratis</span></div>
-      <p class="form-note">Tu publicación aparece inmediatamente. Incluí WhatsApp para que te contacten directo.</p>
-      <form id="equipoForm" name="equipo-form" data-netlify="true" netlify-honeypot="bot-field" novalidate>
-        <input type="hidden" name="form-name" value="equipo-form" />
-        <input type="hidden" name="bot-field" />
-        <div class="form-row">
-          <div class="form-group"><label for="eq-tipo">Tipo <span class="form-required">*</span></label>
-            <select id="eq-tipo" name="tipo" required><option value="">Seleccioná...</option><option>🪂 Ala / Wing</option><option>🏄 Tabla</option><option>🦈 Foil completo</option><option>🦈 Mástil</option><option>🦈 Fuselaje</option><option>🦈 Plano delantero</option><option>🦈 Estabilizador</option><option>🪁 Kite</option><option>🎒 Accesorios</option><option>📦 Kit completo</option></select>
-          </div>
-          <div class="form-group"><label for="eq-marca">Marca <span class="form-required">*</span></label><input type="text" id="eq-marca" name="marca" placeholder="Duotone, Naish, F-One..." required/></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label for="eq-precio">Precio <span class="form-required">*</span></label><div class="precio-input"><select id="eq-moneda" name="moneda" aria-label="Moneda"><option value="ARS">$ ARS</option><option value="USD">US$ USD</option></select><input type="text" id="eq-precio" name="precio" inputmode="decimal" placeholder="850000" required/></div></div>
-          <div class="form-group"><label for="eq-ubicacion">Ubicación <span class="form-required">*</span></label>
-            <select id="eq-ubicacion" name="ubicacion" required><option value="">Seleccioná...</option><optgroup label="Buenos Aires"><option>San Isidro</option><option>Mar del Plata</option><option>Pinamar</option></optgroup><optgroup label="Otras"><option>CABA</option><option>Córdoba</option><option>Rosario</option><option>Mendoza</option><option>Bariloche</option><option>Neuquén</option><option>Corrientes</option><option>Entre Ríos</option><option>Chubut</option><option>Otro</option></optgroup></select>
-          </div>
-        </div>
-        <div class="form-group"><label for="eq-desc">Descripción <span class="form-required">*</span></label><textarea id="eq-desc" name="descripcion" rows="3" placeholder="Estado, medidas, accesorios, año..." required></textarea></div>
-        <div class="form-group"><label for="eq-wa">WhatsApp <span class="form-required">*</span></label><input type="tel" id="eq-wa" name="whatsapp" placeholder="541155556666" required/></div>
-        <div class="form-group"><label for="eq-mp"><span class="mp-ico" aria-hidden="true">f</span> ¿Ya lo publicaste en Facebook Marketplace? <span class="form-optional">(opcional)</span></label><input type="url" id="eq-mp" name="marketplace" inputmode="url" placeholder="Pegá el link: facebook.com/marketplace/item/…" autocomplete="off"/></div>
-        <div class="form-group">
-          <label>Fotos del equipo <span class="form-optional">(hasta 4)</span></label>
-          <div class="foto-upload" id="fotoUploadArea">
-            <input type="file" id="eq-fotos" accept="image/*" multiple>
-            <div class="foto-upload__icon">📷</div>
-            <div class="foto-upload__text">Hacé click o arrastrá tus fotos</div>
-            <div class="foto-upload__hint">JPG, PNG o WEBP · Máx 4 fotos</div>
-          </div>
-          <div class="foto-preview" id="fotoPreview"></div>
-        </div>
-        <div id="equipoMsg"></div>
-        <button type="submit" class="btn btn--primary btn--full">Publicar equipo →</button>
-      </form>
-    </div>
-
     <!-- FAQ -->
     <div class="faq-wrap">
       <span class="eyebrow">Preguntas frecuentes</span>
@@ -2893,7 +2849,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <details class="faq-item"><summary>¿La Escuela de Wingfoil ofrece clases?</summary><div class="faq-answer"><p>Nosotros no — sí los instructores que se sumaron a la página. Los perfiles los publican los propios usuarios. Verificá credenciales antes de contratar.</p></div></details>
       </div>
     </div>
-    </div><!-- /eqPanelComunidad -->
 
   </div>
 </section>
@@ -4519,8 +4474,8 @@ if(calcBtn){
               en:'Check the Río de la Plata water level hour by hour, with SHN tide data',                 ec:'See the 3D coast'},
     {i:'🏄', t:'Instructores certificados de todo el país, gratis',               h:'#instructores',       c:'Buscar profe',
               en:'Certified instructors from all over the country, free',                                  ec:'Find an instructor'},
-    {i:'🪂', t:'Comprá y vendé equipo usado entre riders de la comunidad',        h:'#venta-de-wingfoil',  c:'Ver equipos',
-              en:'Buy and sell used gear with riders in the community',                                    ec:'See the gear'},
+    {i:'🪂', t:'Compará precios de equipo en Mercado Libre y Marketplace',        h:'#venta-de-wingfoil',  c:'Ver equipos',
+              en:'Compare gear prices on Mercado Libre and Marketplace',                                    ec:'See the gear'},
     {i:'🧮', t:'Calculá qué tabla y qué ala te corresponden según tu peso',       h:'#calculadora',        c:'Usar calculadora',
               en:'Work out which board and wing fit your weight',                                          ec:'Use the calculator'},
     {i:'🎬', t:'Videos ordenados por nivel, de cero hasta foilear',               h:'#videos',             c:'Ver videos',
@@ -4844,69 +4799,6 @@ if(newsletterForm){
     }).catch(function(err){
       formShowMsg(msg,false,formErrText(err));
     }).then(function(){formBusy(newsletterForm,false)});
-  });
-}
-
-// ============ EQUIPO FORM + FOTOS ============
-var fotosInput=document.getElementById('eq-fotos');
-var fotoPreview=document.getElementById('fotoPreview');
-var fotosData=[];
-var fotosPending=[];
-if(fotosInput){
-  fotosInput.addEventListener('change',function(){
-    var files=Array.from(this.files).slice(0,4);
-    fotosData=[];
-    fotoPreview.innerHTML='';
-    fotosPending=files.map(function(file,i){
-      return resizeImageFile(file,1280,0.82).then(function(dataUrl){
-        fotosData[i]=dataUrl;
-        var item=document.createElement('div');
-        item.className='foto-preview__item';
-        item.innerHTML='<img src="'+dataUrl+'" alt=""><button type="button" class="foto-preview__remove">✕</button>';
-        fotoPreview.appendChild(item);
-        item.querySelector('.foto-preview__remove').addEventListener('click',function(){fotosData[i]=null;item.remove()});
-      }).catch(function(){});
-    });
-  });
-}
-
-var equipoForm=document.getElementById('equipoForm');
-if(equipoForm){
-  equipoForm.addEventListener('submit',function(e){
-    e.preventDefault();
-    var tipo=document.getElementById('eq-tipo').value;
-    var marca=document.getElementById('eq-marca').value.trim();
-    var precio=document.getElementById('eq-precio').value.trim();
-    var monedaEl=document.getElementById('eq-moneda');
-    var moneda=monedaEl?monedaEl.value:'ARS';
-    var ub=document.getElementById('eq-ubicacion').value;
-    var desc=document.getElementById('eq-desc').value.trim();
-    var wa=document.getElementById('eq-wa').value.trim();
-    var mpEl=document.getElementById('eq-mp');var mp=mpEl?mpEl.value.trim():'';
-    var msg=document.getElementById('equipoMsg');
-    function showEqMsg(ok,text){msg.innerHTML='<div class="form-msg '+(ok?'form-msg--ok':'form-msg--err')+'">'+formEsc(text)+'</div>';if(ok)setTimeout(function(){msg.innerHTML=''},5000)}
-    if(!tipo||!marca||!precio||!ub||!desc||!wa){showEqMsg(false,'Completá todos los campos.');return}
-    if(!/[0-9]/.test(precio)){showEqMsg(false,'Poné el precio en números (ej: 850000).');return}
-    if(mp&&!window.mpLinkOk(mp)){showEqMsg(false,'El link de Marketplace tiene que ser de facebook.com/marketplace o fb.me. Si no lo tenés, dejalo vacío.');return}
-    var eqBot=(equipoForm.querySelector('[name="bot-field"]')||{}).value||'';
-    var fields={tipo:tipo,marca:marca,precio:precio,moneda:moneda,ubicacion:ub,descripcion:desc,whatsapp:wa,marketplace:mp,'bot-field':eqBot};
-    formBusy(equipoForm,true);
-    // Espera a que terminen de reducirse las fotos: antes, si se enviaba
-    // rápido, las fotos todavía no estaban listas y se perdían.
-    Promise.all(fotosPending).then(function(){
-      var eqParams=new URLSearchParams(fields);
-      eqParams.set('fotos',JSON.stringify(fotosData.filter(Boolean)));
-      return formPost('/api/equipos',eqParams);
-    }).then(function(r){return r.json().catch(function(){return {}})}).then(function(res){
-      netlifyPost('equipo-form',fields).catch(function(){});
-      formTrack('equipo-form');
-      var fotosIds=Array.isArray(res.fotos)?res.fotos:[];
-      try{window.dispatchEvent(new CustomEvent('ewf:equipo',{detail:{tipo:tipo,marca:marca,precio:precio,moneda:moneda,ubicacion:ub,descripcion:desc,whatsapp:wa,marketplace:mp,fotos:fotosIds,ts:new Date().toISOString()}}))}catch(e){}
-      showEqMsg(true,'✓ Equipo publicado.');
-      equipoForm.reset();fotosData=[];fotosPending=[];if(fotoPreview)fotoPreview.innerHTML='';
-    }).catch(function(err){
-      showEqMsg(false,formErrText(err));
-    }).then(function(){formBusy(equipoForm,false)});
   });
 }
 
@@ -5555,10 +5447,6 @@ function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt
 // "$ 800" y "1.500,50" salía "$ 150.050". Ahora se usa el mismo parser del
 // buscador (entiende USD, miles con punto y decimales con coma) y la moneda
 // que elige quien publica.
-// Facebook Marketplace: el aviso puede traer el link de su publicación.
-window.mpLinkOk=function(u){return /^https:\/\/((www|m|web)\.)?(facebook\.com\/marketplace\/item\/\d+|fb\.me\/[\w-]+|facebook\.com\/share\/[\w/-]+)/i.test(String(u||'').trim())};
-window.mpBadge=function(){return '<span class="mp-badge"><span class="mp-ico" aria-hidden="true">f</span> Marketplace</span>'};
-window.mpBoton=function(u){return '<a class="mp-btn" href="'+String(u).replace(/"/g,'%22')+'" target="_blank" rel="noopener nofollow">Ver en Marketplace ↗</a>'};
 window.formatPrecioEquipo=function(raw,moneda){
   var N=window.EquipoNormalizer;
   var p=N?N.parsePrecio(raw,moneda):null;
@@ -5610,9 +5498,7 @@ async function loadInstructors(){
 }
 
 loadInstructors();
-// Avisos de la comunidad (/api/equipos).
-window.EQ_COMUNIDAD=fetch('/api/equipos').then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()});
-window.EQ_COMUNIDAD.catch(function(){});
+
 
 })();
 </script>
@@ -7321,7 +7207,7 @@ if(/^\/venta-de-wingfoil\/?$/.test(location.pathname)){window.addEventListener('
     aprender:     { url:'/aprender',     t:'Aprender wingfoil: videos por nivel, maniobras y guías | Escuela de Wingfoil', d:'Videos de wingfoil por nivel en español, anatomía del equipo, maniobras, glosario y guías para pasar de la orilla al primer vuelo.' },
     spots:        { url:'/spots',        t:'Spots de wingfoil en Argentina, cámaras y sudestada | Escuela de Wingfoil', d:'Dónde navegar wingfoil en Argentina: mapa de spots, pronóstico por spot, cámaras en vivo y estado del Río de la Plata.' },
     instructores: { url:'/instructores', t:'Instructores de wingfoil en Argentina | Escuela de Wingfoil', d:'Directorio de instructores de wingfoil en Argentina. Elegí por spot y nivel, y escribiles directo.' },
-    equipos:      { url:'/equipos',      t:'Equipos de wingfoil: precios de Mercado Libre y comparador | Escuela de Wingfoil', d:'Precios de alas, tablas y foils de wingfoil en Mercado Libre, relevados todos los días, comparador de precios con Facebook Marketplace y usados de riders.' },
+    equipos:      { url:'/equipos',      t:'Equipos de wingfoil: precios de Mercado Libre y comparador | Escuela de Wingfoil', d:'Precios de alas, tablas y foils de wingfoil en Mercado Libre, relevados todos los días, comparador de precios con Facebook Marketplace.' },
     articulos:    { url:'/articulos',    t:'Artículos de wingfoil: guías, técnica, equipo y spots | Escuela de Wingfoil', d:'27 artículos de wingfoil en español: cómo empezar, técnica, viento, equipo, seguridad y los mejores spots de Argentina y Brasil.' },
     herramientas: { url:'/herramientas', t:'Calculadora de equipo y comparador de marcas de wingfoil | Escuela de Wingfoil', d:'Calculá qué tamaño de ala, tabla y foil te sirve y compará marcas de wingfoil lado a lado.' }
   };
