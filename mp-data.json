@@ -2,40 +2,663 @@
  "actualizado": "2026-10-22",
  "fuente": "https://www.facebook.com/marketplace/106073429424644/search/?query=wingfoil",
  "avisos": [
-  {"titulo":"Tabla Wingfoil Scarless","precio":430,"original":null,"moneda":"USD","ubicacion":"Acassuso BA","tipo":"Tabla"},
-  {"titulo":"Tabla gong inflable Wingfoil 110L","precio":900,"original":null,"moneda":"USD","ubicacion":"Vicente López BA","tipo":"Tabla"},
-  {"titulo":"Outlet de Velas Wingfoil - F-ONE Strike y otras marcas (USADOS)","precio":200,"original":null,"moneda":"USD","ubicacion":"Ciudad de Buenos Aires CF","tipo":"Vela"},
-  {"titulo":"Tabla de wingfoil manticore 105 litros","precio":850,"original":null,"moneda":"USD","ubicacion":"La Plata BA","tipo":"Tabla"},
-  {"titulo":"Tabla Wingfoil F-ONE Rocket Wing S V2 56L","precio":1000,"original":null,"moneda":"USD","ubicacion":"Acassuso BA","tipo":"Tabla"},
-  {"titulo":"Tabla wingfoil Freedom Foil Boards Nugget 50L","precio":290,"original":550,"moneda":"USD","ubicacion":"Ciudad de Buenos Aires CF","tipo":"Tabla"},
-  {"titulo":"Tabla Wingfoil Midlength Scarless","precio":1050,"original":null,"moneda":"USD","ubicacion":"Tigre BA","tipo":"Tabla"},
-  {"titulo":"Combo WingFoil F-One (vela+Tabla+Foil completo)","precio":3300,"original":null,"moneda":"USD","ubicacion":"Ciudad de Buenos Aires CF","tipo":"Combo"},
-  {"titulo":"OPORTUNIDAD Kit Wingfoil F-ONE COMPLETO","precio":2000,"original":null,"moneda":"USD","ubicacion":"La Plata BA","tipo":"Combo"},
-  {"titulo":"Combo Wingfoil: Tabla F-ONE 130L + Foil Gong XL + Vela F-one","precio":1600,"original":null,"moneda":"USD","ubicacion":"Ciudad de Buenos Aires CF","tipo":"Combo"},
-  {"titulo":"Strap wingfoil gong kitesurf nuevo","precio":45000,"original":null,"moneda":"ARS","ubicacion":"Olivos BA","tipo":"Accesorio"},
-  {"titulo":"Vendo equipo de wingfoil F-one tabla Rocket wing","precio":2300,"original":2500,"moneda":"USD","ubicacion":"Tigre BA","tipo":"Combo"},
-  {"titulo":"Tabla de wingfoil F one Rocket wing con foil Phantom 1280","precio":2300,"original":null,"moneda":"USD","ubicacion":"Tigre BA","tipo":"Tabla+Foil"},
-  {"titulo":"Tabla Wingfoil F-One Rocket Air inflable 140L","precio":650,"original":null,"moneda":"USD","ubicacion":"Ciudad de Buenos Aires CF","tipo":"Tabla"},
-  {"titulo":"Tabla Wingfoil North Seek 98L 2024","precio":1400,"original":null,"moneda":"USD","ubicacion":"Ciudad de Buenos Aires CF","tipo":"Tabla"},
-  {"titulo":"Tabla y foils Wingfoil","precio":2200,"original":2800,"moneda":"USD","ubicacion":"Ciudad de Buenos Aires CF","tipo":"Tabla+Foil"},
-  {"titulo":"Wing Cabrinha 5 Metros","precio":248,"original":280,"moneda":"USD","ubicacion":"Vicente López BA","tipo":"Vela"},
-  {"titulo":"Wing Vela WINGFOIL CABRINHAx3 4 metros","precio":349,"original":420,"moneda":"USD","ubicacion":"Vicente López BA","tipo":"Vela"},
-  {"titulo":"Tabla de wingfoil 85 litros","precio":699,"original":null,"moneda":"USD","ubicacion":"Olivos BA","tipo":"Tabla"},
-  {"titulo":"Wing Duotone Unit 4m 2025","precio":600,"original":650,"moneda":"USD","ubicacion":"Martínez BA","tipo":"Vela"},
-  {"titulo":"Tabla WING FOIL + Wing F-ONE","precio":1299,"original":null,"moneda":"USD","ubicacion":"Béccar BA","tipo":"Combo"},
-  {"titulo":"Tabla Wing FOIL+ FOIL 75L","precio":999,"original":null,"moneda":"USD","ubicacion":"Béccar BA","tipo":"Tabla+Foil"},
-  {"titulo":"Hydrofoil Cabrinha completo para Wing Foil / Kite Foil","precio":1220000,"original":null,"moneda":"ARS","ubicacion":"Ciudad de Buenos Aires CF","tipo":"Foil"},
-  {"titulo":"Foil F-ONE GRAVITY FCT 1800","precio":1100,"original":null,"moneda":"USD","ubicacion":"Vicente López BA","tipo":"Foil"},
-  {"titulo":"Ala Wing Foil BRM 5.5m Ultra Liviana","precio":300,"original":null,"moneda":"USD","ubicacion":"San Isidro BA","tipo":"Vela"},
-  {"titulo":"FOIL FONE PHANTOM 940","precio":550,"original":null,"moneda":"USD","ubicacion":"San Isidro BA","tipo":"Foil"},
-  {"titulo":"Equipo de wingfoil completo Fone","precio":1750,"original":null,"moneda":"USD","ubicacion":"La Plata BA","tipo":"Combo"},
-  {"titulo":"Kit foil Cabrinha","precio":500,"original":null,"moneda":"USD","ubicacion":"Ciudad de Buenos Aires CF","tipo":"Foil"},
-  {"titulo":"Wing F-One Strike 5m","precio":350,"original":null,"moneda":"USD","ubicacion":"Ciudad de Buenos Aires CF","tipo":"Vela"},
-  {"titulo":"TABLA DE WING FANATIC SKY WIN 105L","precio":1000,"original":null,"moneda":"USD","ubicacion":"Ciudad de Buenos Aires CF","tipo":"Tabla"},
-  {"titulo":"Tabla 90L con foil 1500 para surfear","precio":1000,"original":null,"moneda":"USD","ubicacion":"Ciudad de Buenos Aires CF","tipo":"Tabla+Foil"},
-  {"titulo":"Tabla Wing y Surf Foil 5.0 / 54 Litros","precio":700,"original":750,"moneda":"USD","ubicacion":"Tigre BA","tipo":"Tabla+Foil"},
-  {"titulo":"Set completo de Wing Foil ideal para arrancar surf","precio":1200,"original":null,"moneda":"USD","ubicacion":"Ciudad de Buenos Aires CF","tipo":"Combo"},
-  {"titulo":"Foils para windfoil Phantom Iris X","precio":2820000,"original":null,"moneda":"ARS","ubicacion":"Benavídez BA","tipo":"Foil"},
-  {"titulo":"EQUIPO COMPLETO WING RRD TABLA INF 120LT + FOIL + VELA 6.5M","precio":2000,"original":null,"moneda":"USD","ubicacion":"Ciudad de Buenos Aires CF","tipo":"Combo"}
+  {
+   "titulo": "Tabla de wingfoil F-One Rocket Air 90 y 140l. Fácil de transportar, fácil para aprender y progresar",
+   "precio": 700.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Santa Fe, SF",
+   "tipo": "Tabla",
+   "url": "https://www.facebook.com/marketplace/item/1051937073899337/"
+  },
+  {
+   "titulo": "F-ONE Rocket Air V3 185L – ¡Ideal Escuelas y Principiantes! 🏄‍♂️",
+   "precio": 720.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Tabla",
+   "url": "https://www.facebook.com/marketplace/item/1416688417186577/"
+  },
+  {
+   "titulo": "CAVOK - Tabla de Wingfoil - Alfie - 60 Lts. - USD 400 (efectivo o transf)",
+   "precio": 400.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Tabla",
+   "url": "https://www.facebook.com/marketplace/item/1020713557610160/"
+  },
+  {
+   "titulo": "Wingfoil: Equipos completos f-one, tabla, foil. wing. Todos los modelos y medidas",
+   "precio": 3400.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Santa Fe, SF",
+   "tipo": "Combo",
+   "url": "https://www.facebook.com/marketplace/item/918527061309874/"
+  },
+  {
+   "titulo": "Foil Eagle X (AR 12) Carbono UHM Downwind / Wingfoil",
+   "precio": 123.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Mar del Plata, BA",
+   "tipo": "Foil",
+   "url": "https://www.facebook.com/marketplace/item/1357537102758301/"
+  },
+  {
+   "titulo": "Vela de wingfoil F-One swing 6.0m. usada",
+   "precio": 250.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Vela",
+   "url": "https://www.facebook.com/marketplace/item/3305714966278903/"
+  },
+  {
+   "titulo": "F-One Gravity Carbon 1200 – Kite/wing/Wake FOIL (USADO IMPECABLE)",
+   "precio": 700.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Foil",
+   "url": "https://www.facebook.com/marketplace/item/2141374630060509/"
+  },
+  {
+   "titulo": "F-ONE Swing V4 - Vela de Wingfoil (4.5/5.0/5.5m2) ¡OFERTA!",
+   "precio": 1001.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Vela",
+   "url": "https://www.facebook.com/marketplace/item/27806177995708357/"
+  },
+  {
+   "titulo": "Oportunidad: Wing F-ONE Strike V3. Nuevos!",
+   "precio": 505.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Vela",
+   "url": "https://www.facebook.com/marketplace/item/1061085119615645/"
+  },
+  {
+   "titulo": "Wing vela ala – Ideal para Principiantes | Estable y Fácil de Usar",
+   "precio": 399.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Vela",
+   "url": "https://www.facebook.com/marketplace/item/942825008851105/"
+  },
+  {
+   "titulo": "Combo WingFoil F-One (vela+Tabla+Foil completo)",
+   "precio": 3200.0,
+   "original": 3900.0,
+   "moneda": "USD",
+   "ubicacion": "Santa Fe, SF",
+   "tipo": "Combo",
+   "url": "https://www.facebook.com/marketplace/item/1042668635404409/"
+  },
+  {
+   "titulo": "¡OFERTA ÚNICA! Equipo Completo de Wingfoil F-One y Gaastra - ¡Listo para Navegar!",
+   "precio": 1550.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Combo",
+   "url": "https://www.facebook.com/marketplace/item/1417344916983475/"
+  },
+  {
+   "titulo": "Foil Completo F-ONE Gravity Carbon V3 (L + C275 SURF) 1800 Cm2",
+   "precio": 1207.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Foil",
+   "url": "https://www.facebook.com/marketplace/item/1717145399326239/"
+  },
+  {
+   "titulo": "Tabla Wing Foil F-One Rocket Wing ASC - NUEVA (75, 90, 110, 130L)",
+   "precio": 1350.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "San Pedro, BA",
+   "tipo": "Tabla",
+   "url": "https://www.facebook.com/marketplace/item/1579392840343109/"
+  },
+  {
+   "titulo": "¡OFERTA! Combo Wingfoil/Gaastra/F-One",
+   "precio": 1800.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Combo",
+   "url": "https://www.facebook.com/marketplace/item/2108696873384487/"
+  },
+  {
+   "titulo": "Casco kite foil wingfoil nautico",
+   "precio": 80.0,
+   "original": 100.0,
+   "moneda": "USD",
+   "ubicacion": "Mar del Plata, BA",
+   "tipo": "Accesorio",
+   "url": "https://www.facebook.com/marketplace/item/1310902780794281/"
+  },
+  {
+   "titulo": "F-ONE FRIGATE - POCKET WING 4 MTS PARAWING 2026",
+   "precio": 1000.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Villa Maria, CB",
+   "tipo": "Vela",
+   "url": "https://www.facebook.com/marketplace/item/1351053670562078/"
+  },
+  {
+   "titulo": "Combo Wingfoil Completo – tabla 120L + Foil 1900 + wing vela F-One (USD 1600)",
+   "precio": 1600.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Combo",
+   "url": "https://www.facebook.com/marketplace/item/2034671093837443/"
+  },
+  {
+   "titulo": "💥 kit completo de WINGFOIL, usados y nuevos!",
+   "precio": 2300.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Combo",
+   "url": "https://www.facebook.com/marketplace/item/1636163204567960/"
+  },
+  {
+   "titulo": "Wing Foil F-One Strike V4 4.5 / 5 / 5.5m Nueva velas Wingfoil",
+   "precio": 1017.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Vela",
+   "url": "https://www.facebook.com/marketplace/item/4820400581579627/"
+  },
+  {
+   "titulo": "Tablas de wing F-ONE Rocket Wing ASC V2 110l 2025! 🏄‍♀️",
+   "precio": 1332.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Tabla",
+   "url": "https://www.facebook.com/marketplace/item/1770737954103139/"
+  },
+  {
+   "titulo": "Foil surf KT",
+   "precio": 1100.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Mar del Plata, BA",
+   "tipo": "Foil",
+   "url": "https://www.facebook.com/marketplace/item/1636671317818927/"
+  },
+  {
+   "titulo": "Pack Foil GA 1500 o 1800 + Wing F-One 4.5/5/5.5",
+   "precio": 1100.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Combo",
+   "url": "https://www.facebook.com/marketplace/item/1436901451601235/"
+  },
+  {
+   "titulo": "Tabla Mid Length 75 lts y 85 lts",
+   "precio": 1680000.0,
+   "original": null,
+   "moneda": "ARS",
+   "ubicacion": "Gualeguaychú, ER",
+   "tipo": "Tabla",
+   "url": "https://www.facebook.com/marketplace/item/1526275225445611/"
+  },
+  {
+   "titulo": "Boardbag wingfoil c/ruedas 6'0'' (182 cm)",
+   "precio": 300000.0,
+   "original": null,
+   "moneda": "ARS",
+   "ubicacion": "Mar del Plata, BA",
+   "tipo": "Accesorio",
+   "url": "https://www.facebook.com/marketplace/item/1355487099754708/"
+  },
+  {
+   "titulo": "COMBO WINGFOIL: Tabou Magic Carpet 120L + Gaastra Poison 5.2 + Foil Completo | ¡Listo para Volar!",
+   "precio": 2100.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Combo",
+   "url": "https://www.facebook.com/marketplace/item/28047892544834800/"
+  },
+  {
+   "titulo": "F-One Strike 6m – Wingfoil (usada)",
+   "precio": 500.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Vela",
+   "url": "https://www.facebook.com/marketplace/item/3101824683356153/"
+  },
+  {
+   "titulo": "Tabla wing 120L",
+   "precio": 1200.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Tabla",
+   "url": "https://www.facebook.com/marketplace/item/1682959359485184/"
+  },
+  {
+   "titulo": "Tabla de wing F-ONE Rocket Wing ASC V2 - Modelos en 90, 110, 130ltrs 🏄‍♀️",
+   "precio": 1332.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Tabla",
+   "url": "https://www.facebook.com/marketplace/item/1026727983481687/"
+  },
+  {
+   "titulo": "F-ONE Front Wing - SK8 HM Carbon (desde 650cm2 hasta 1150cm2)",
+   "precio": 1058.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Foil",
+   "url": "https://www.facebook.com/marketplace/item/1628945028797597/"
+  },
+  {
+   "titulo": "🏄‍♂️💨🎁 COMBO WINGFOIL - TABLA + FOIL -",
+   "precio": 2288.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Combo",
+   "url": "https://www.facebook.com/marketplace/item/1702175001060366/"
+  },
+  {
+   "titulo": "Querés iniciarte en Wingfoil? Kit Completo listo para la aventura.. de la Mochila al Agua!",
+   "precio": 2300.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Combo",
+   "url": "https://www.facebook.com/marketplace/item/1468370565314414/"
+  },
+  {
+   "titulo": "Tabla Sup Coralsea Wing 12'6 380 Cm",
+   "precio": 650000.0,
+   "original": 750000.0,
+   "moneda": "ARS",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Tabla",
+   "url": "https://www.facebook.com/marketplace/item/1388477139931262/"
+  },
+  {
+   "titulo": "¡Wingfoil F-ONE: Combo completo Nuevos! !",
+   "precio": 3810.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Combo",
+   "url": "https://www.facebook.com/marketplace/item/1290945742947038/"
+  },
+  {
+   "titulo": "🪂 Combo Starter Wingfoil - Ideal Principiantes / Intermedios 🏄‍♂️ (tabla convertible)",
+   "precio": 3650000.0,
+   "original": null,
+   "moneda": "ARS",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Combo",
+   "url": "https://www.facebook.com/marketplace/item/4224112484400404/"
+  },
+  {
+   "titulo": "Buzo Neoprene Brunotti Neo Hooded Sweat para Kitesurf / Wingfoil / yachting / laser / jetski",
+   "precio": 124.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Neopreno",
+   "url": "https://www.facebook.com/marketplace/item/1286727050059838/"
+  },
+  {
+   "titulo": "Tabla de Wing FoilGONG Hipe inflable 95 litros para principiante",
+   "precio": 550.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Tabla",
+   "url": "https://www.facebook.com/marketplace/item/1628717825555400/"
+  },
+  {
+   "titulo": "F-ONE Strike CWC V3 - Vela de Wing 7 m².usada",
+   "precio": 700.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Vela",
+   "url": "https://www.facebook.com/marketplace/item/2050120825864384/"
+  },
+  {
+   "titulo": "🚀 Wakefoil Pack  Tabla F-ONE + Foil Phantom ¡Listo para volar!",
+   "precio": 2330.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Combo",
+   "url": "https://www.facebook.com/marketplace/item/1034624196200773/"
+  },
+  {
+   "titulo": "Accesorios térmicos MANERA Neoprene – Capucha, Cap, Baselayer y Guantes – Nuevos",
+   "precio": 60.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Neopreno",
+   "url": "https://www.facebook.com/marketplace/item/1705685480502466/"
+  },
+  {
+   "titulo": "Remera Lycra UV 50+ con Capucha – Sunshield Kite / Wind / Wing / deportes náuticos",
+   "precio": 55000.0,
+   "original": null,
+   "moneda": "ARS",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Neopreno",
+   "url": "https://www.facebook.com/marketplace/item/1038190262281842/"
+  },
+  {
+   "titulo": "Traje Neoprene Prolimit Shield 5/3 mm Nuevo - Manta Térmica - Todos los Talles",
+   "precio": 380.0,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Rosario, SF",
+   "tipo": "Neopreno",
+   "url": "https://www.facebook.com/marketplace/item/2791910494529279/"
+  },
+  {
+   "titulo": "Tabla Wingfoil Scarless",
+   "precio": 430,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Acassuso BA",
+   "tipo": "Tabla"
+  },
+  {
+   "titulo": "Tabla gong inflable Wingfoil 110L",
+   "precio": 900,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Vicente López BA",
+   "tipo": "Tabla"
+  },
+  {
+   "titulo": "Outlet de Velas Wingfoil - F-ONE Strike y otras marcas (USADOS)",
+   "precio": 200,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Ciudad de Buenos Aires CF",
+   "tipo": "Vela"
+  },
+  {
+   "titulo": "Tabla de wingfoil manticore 105 litros",
+   "precio": 850,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "La Plata BA",
+   "tipo": "Tabla"
+  },
+  {
+   "titulo": "Tabla Wingfoil F-ONE Rocket Wing S V2 56L",
+   "precio": 1000,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Acassuso BA",
+   "tipo": "Tabla"
+  },
+  {
+   "titulo": "Tabla wingfoil Freedom Foil Boards Nugget 50L",
+   "precio": 290,
+   "original": 550,
+   "moneda": "USD",
+   "ubicacion": "Ciudad de Buenos Aires CF",
+   "tipo": "Tabla"
+  },
+  {
+   "titulo": "Tabla Wingfoil Midlength Scarless",
+   "precio": 1050,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Tigre BA",
+   "tipo": "Tabla"
+  },
+  {
+   "titulo": "Combo WingFoil F-One (vela+Tabla+Foil completo)",
+   "precio": 3300,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Ciudad de Buenos Aires CF",
+   "tipo": "Combo"
+  },
+  {
+   "titulo": "OPORTUNIDAD Kit Wingfoil F-ONE COMPLETO",
+   "precio": 2000,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "La Plata BA",
+   "tipo": "Combo"
+  },
+  {
+   "titulo": "Combo Wingfoil: Tabla F-ONE 130L + Foil Gong XL + Vela F-one",
+   "precio": 1600,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Ciudad de Buenos Aires CF",
+   "tipo": "Combo"
+  },
+  {
+   "titulo": "Strap wingfoil gong kitesurf nuevo",
+   "precio": 45000,
+   "original": null,
+   "moneda": "ARS",
+   "ubicacion": "Olivos BA",
+   "tipo": "Accesorio"
+  },
+  {
+   "titulo": "Vendo equipo de wingfoil F-one tabla Rocket wing",
+   "precio": 2300,
+   "original": 2500,
+   "moneda": "USD",
+   "ubicacion": "Tigre BA",
+   "tipo": "Combo"
+  },
+  {
+   "titulo": "Tabla de wingfoil F one Rocket wing con foil Phantom 1280",
+   "precio": 2300,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Tigre BA",
+   "tipo": "Tabla+Foil"
+  },
+  {
+   "titulo": "Tabla Wingfoil F-One Rocket Air inflable 140L",
+   "precio": 650,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Ciudad de Buenos Aires CF",
+   "tipo": "Tabla"
+  },
+  {
+   "titulo": "Tabla Wingfoil North Seek 98L 2024",
+   "precio": 1400,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Ciudad de Buenos Aires CF",
+   "tipo": "Tabla"
+  },
+  {
+   "titulo": "Tabla y foils Wingfoil",
+   "precio": 2200,
+   "original": 2800,
+   "moneda": "USD",
+   "ubicacion": "Ciudad de Buenos Aires CF",
+   "tipo": "Tabla+Foil"
+  },
+  {
+   "titulo": "Wing Cabrinha 5 Metros",
+   "precio": 248,
+   "original": 280,
+   "moneda": "USD",
+   "ubicacion": "Vicente López BA",
+   "tipo": "Vela"
+  },
+  {
+   "titulo": "Wing Vela WINGFOIL CABRINHAx3 4 metros",
+   "precio": 349,
+   "original": 420,
+   "moneda": "USD",
+   "ubicacion": "Vicente López BA",
+   "tipo": "Vela"
+  },
+  {
+   "titulo": "Tabla de wingfoil 85 litros",
+   "precio": 699,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Olivos BA",
+   "tipo": "Tabla"
+  },
+  {
+   "titulo": "Wing Duotone Unit 4m 2025",
+   "precio": 600,
+   "original": 650,
+   "moneda": "USD",
+   "ubicacion": "Martínez BA",
+   "tipo": "Vela"
+  },
+  {
+   "titulo": "Tabla WING FOIL + Wing F-ONE",
+   "precio": 1299,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Béccar BA",
+   "tipo": "Combo"
+  },
+  {
+   "titulo": "Tabla Wing FOIL+ FOIL 75L",
+   "precio": 999,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Béccar BA",
+   "tipo": "Tabla+Foil"
+  },
+  {
+   "titulo": "Hydrofoil Cabrinha completo para Wing Foil / Kite Foil",
+   "precio": 1220000,
+   "original": null,
+   "moneda": "ARS",
+   "ubicacion": "Ciudad de Buenos Aires CF",
+   "tipo": "Foil"
+  },
+  {
+   "titulo": "Foil F-ONE GRAVITY FCT 1800",
+   "precio": 1100,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Vicente López BA",
+   "tipo": "Foil"
+  },
+  {
+   "titulo": "Ala Wing Foil BRM 5.5m Ultra Liviana",
+   "precio": 300,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "San Isidro BA",
+   "tipo": "Vela"
+  },
+  {
+   "titulo": "FOIL FONE PHANTOM 940",
+   "precio": 550,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "San Isidro BA",
+   "tipo": "Foil"
+  },
+  {
+   "titulo": "Equipo de wingfoil completo Fone",
+   "precio": 1750,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "La Plata BA",
+   "tipo": "Combo"
+  },
+  {
+   "titulo": "Kit foil Cabrinha",
+   "precio": 500,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Ciudad de Buenos Aires CF",
+   "tipo": "Foil"
+  },
+  {
+   "titulo": "Wing F-One Strike 5m",
+   "precio": 350,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Ciudad de Buenos Aires CF",
+   "tipo": "Vela"
+  },
+  {
+   "titulo": "TABLA DE WING FANATIC SKY WIN 105L",
+   "precio": 1000,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Ciudad de Buenos Aires CF",
+   "tipo": "Tabla"
+  },
+  {
+   "titulo": "Tabla 90L con foil 1500 para surfear",
+   "precio": 1000,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Ciudad de Buenos Aires CF",
+   "tipo": "Tabla+Foil"
+  },
+  {
+   "titulo": "Tabla Wing y Surf Foil 5.0 / 54 Litros",
+   "precio": 700,
+   "original": 750,
+   "moneda": "USD",
+   "ubicacion": "Tigre BA",
+   "tipo": "Tabla+Foil"
+  },
+  {
+   "titulo": "Set completo de Wing Foil ideal para arrancar surf",
+   "precio": 1200,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Ciudad de Buenos Aires CF",
+   "tipo": "Combo"
+  },
+  {
+   "titulo": "Foils para windfoil Phantom Iris X",
+   "precio": 2820000,
+   "original": null,
+   "moneda": "ARS",
+   "ubicacion": "Benavídez BA",
+   "tipo": "Foil"
+  },
+  {
+   "titulo": "EQUIPO COMPLETO WING RRD TABLA INF 120LT + FOIL + VELA 6.5M",
+   "precio": 2000,
+   "original": null,
+   "moneda": "USD",
+   "ubicacion": "Ciudad de Buenos Aires CF",
+   "tipo": "Combo"
+  }
  ]
 }
