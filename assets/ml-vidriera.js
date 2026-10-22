@@ -399,6 +399,38 @@
   });
   $('cmpPresu').addEventListener('input', function (e) { st.presu = +e.target.value; presupuesto(); });
 
+  // ── Home: Mercado Libre vs Marketplace ──────────────────────────────
+  // Por categoría, el más barato de cada lado y la mediana de cada uno.
+  function duelo() {
+    var box = $('homeDuelo');
+    if (!box) return;
+    var html = ['wing', 'tabla', 'foil'].map(function (k) {
+      var ml = st.ml.filter(function (p) { return p.cat === k; });
+      var mp = st.mp.filter(function (p) { return p.cat === k; });
+      if (ml.length < 2 || mp.length < 2) return '';
+      var c = CATS.filter(function (x) { return x.k === k; })[0];
+      var a = ml.slice().sort(function (x, y) { return x.precio - y.precio; })[0];
+      var b = mp.slice().sort(function (x, y) { return x.precio - y.precio; })[0];
+      var gana = a.precio <= b.precio ? 'ml' : 'mp';
+      // El veredicto compara lo normal (mediana), no los dos extremos
+      var mA = stats(ml).med, mB = stats(mp).med;
+      var ganaMed = mA <= mB ? 'ml' : 'mp';
+      var dif = Math.abs(mA - mB), pct = Math.round(dif / Math.max(mA, mB) * 100);
+      function lado(p, f) {
+        return '<a class="duelo__lado duelo__lado--' + f + (gana === f ? ' is-win' : '') + '" href="' + esc(p.url || '/equipos#comparador-precios') + '" target="_blank" rel="noopener nofollow">' +
+          '<span class="duelo__img">' + imgTag(p) + '</span>' + srcTag(f) +
+          '<span class="duelo__tit">' + esc(p.titulo) + '</span>' +
+          '<b class="duelo__precio">' + plata(p.precio) + '</b>' +
+          (gana === f ? '<span class="duelo__win">🏆 Más barato</span>' : '') + '</a>';
+      }
+      return '<article class="duelo__card"><h3 class="duelo__cat">' + c.e + ' ' + c.n + '</h3>' +
+        '<div class="duelo__pelea">' + lado(a, 'ml') + '<span class="duelo__x" aria-hidden="true">VS</span>' + lado(b, 'mp') + '</div>' +
+        '<p class="duelo__veredicto">' + (pct >= 3 ? 'En <b>' + FUENTES[ganaMed].n + '</b> lo normal sale <b>' + pct + '% menos</b>' : 'Lo normal sale parecido en los dos') + '</p>' +
+        '<p class="duelo__medias">Lo normal: Mercado Libre ' + plataCorta(mA) + ' · Marketplace ' + plataCorta(mB) + ' · ' + ml.length + ' y ' + mp.length + ' publicaciones</p></article>';
+    }).join('');
+    box.innerHTML = html || '<p class="duelo__lead">Estamos cargando los precios de hoy.</p>';
+  }
+
   // ── Arranque ─────────────────────────────────────────────────────────
   function listo(fn) { if (window.EquipoNormalizer) fn(); else window.addEventListener('load', fn); }
   listo(function () {
@@ -415,6 +447,7 @@
       }
       dibujarCats();
       comparar(true);
+      duelo();
     });
   });
 })();

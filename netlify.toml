@@ -54,8 +54,8 @@
 
 [[redirects]]
   from = "/herramientas"
-  to = "/index.html"
-  status = 200
+  to = "/equipos"
+  status = 301
 
 [[redirects]]
   from = "/articulos"

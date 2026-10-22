@@ -236,3 +236,33 @@
 [data-theme='dark'] .pod .tag{background:#E6EEEA;color:#0B4450}
 [data-theme='dark'] .pod .tag--envio,[data-theme='dark'] .pod .tag--baja{background:#D8F3E3;color:#0A6B3A}
 [data-theme='dark'] .pod .tag--sube{background:#FDE3DA;color:#A2300E}
+
+/* ===== Home: Mercado Libre vs Marketplace ===== */
+.duelo{position:relative;overflow:hidden;background:#0B1A22;color:#F7F4EC;padding:clamp(56px,7vw,100px) 0}
+.duelo::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(40% 60% at 0% 20%,rgba(255,230,0,.18),transparent 70%),radial-gradient(40% 60% at 100% 80%,rgba(20,100,210,.32),transparent 70%)}
+.duelo .nx-wrap{position:relative}
+.duelo__eyebrow{color:rgba(247,244,236,.75)}
+.duelo__t{font-size:clamp(38px,7vw,92px);line-height:.95;letter-spacing:-.045em;margin:10px 0 12px}
+.duelo__ml{color:var(--ml)}.duelo__mp{color:#5EA2FF}
+.duelo__vs{font-size:.45em;vertical-align:middle;padding:.15em .4em;border-radius:99px;border:2px solid rgba(247,244,236,.5);color:#F7F4EC}
+.duelo__lead{color:rgba(247,244,236,.82);font-size:clamp(16px,1.5vw,19px);margin-bottom:28px}
+.duelo__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr));gap:16px}
+.duelo__card{padding:18px;border-radius:24px;background:rgba(247,244,236,.06);border:1px solid rgba(247,244,236,.14)}
+.duelo__cat{font:700 18px/1 'Bricolage Grotesque',sans-serif;margin-bottom:14px;color:#F7F4EC}
+.duelo__pelea{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.duelo__x{position:absolute;left:50%;top:34%;transform:translate(-50%,-50%);z-index:2;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:#F7F4EC;color:#0B1A22;font:800 14px/1 'Bricolage Grotesque',sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.duelo__lado{position:relative;display:flex;flex-direction:column;gap:8px;padding:10px;border-radius:18px;background:#F7F4EC;color:#0B1A22;text-decoration:none;border:3px solid transparent;min-width:0;transition:transform .2s}
+.duelo__lado:hover{transform:translateY(-3px)}
+.duelo__lado--ml.is-win,.duelo__lado--mp.is-win{border-color:#13A05A}
+.duelo__img{aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:#fff;display:grid;place-items:center}
+.duelo__img img{width:100%;height:100%;object-fit:cover}
+.duelo__lado--ml .duelo__img img{object-fit:contain;padding:6%}
+.duelo__tit{font-size:13px;line-height:1.3;font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em}
+.duelo__precio{font:800 clamp(18px,2vw,24px)/1 'Bricolage Grotesque',sans-serif;letter-spacing:-.03em;white-space:nowrap}
+.duelo__win{position:absolute;top:16px;left:16px;padding:4px 8px;border-radius:8px;background:#13A05A;color:#fff;font:800 11px/1 'DM Sans',sans-serif}
+.duelo__lado .src{align-self:flex-start;font-size:10.5px}
+.duelo__veredicto{margin-top:14px;font:700 17px/1.3 'DM Sans',sans-serif;color:#F7F4EC}
+.duelo__veredicto b{color:#4BE08F}
+.duelo__medias{margin-top:4px;font-size:13px;color:rgba(247,244,236,.72)}
+.duelo__cta{display:inline-flex;margin-top:26px;padding:15px 24px;border-radius:99px;background:var(--ml);color:#14183D;font-weight:800;text-decoration:none}
+.duelo__cta:hover{background:#fff}
