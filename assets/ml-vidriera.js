@@ -402,6 +402,7 @@
   // ── Home: Mercado Libre vs Marketplace ──────────────────────────────
   // Por categoría, el más barato de cada lado y la mediana de cada uno.
   function duelo() {
+    try { window.dispatchEvent(new CustomEvent('ewf:avisos', { detail: todos().length })); } catch (e) { }
     var box = $('homeDuelo');
     if (!box) return;
     var html = ['wing', 'tabla', 'foil'].map(function (k) {

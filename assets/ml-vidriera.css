@@ -266,3 +266,9 @@
 .duelo__medias{margin-top:4px;font-size:13px;color:rgba(247,244,236,.72)}
 .duelo__cta{display:inline-flex;margin-top:26px;padding:15px 24px;border-radius:99px;background:var(--ml);color:#14183D;font-weight:800;text-decoration:none}
 .duelo__cta:hover{background:#fff}
+/* Celu: el duelo se desliza de costado en vez de apilar tres tarjetas */
+@media (max-width:700px){
+  .duelo__grid{display:grid;grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:88%;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:-16px;padding:0 16px 8px;scroll-padding-inline:16px;scrollbar-width:none}
+  .duelo__grid::-webkit-scrollbar{display:none}
+  .duelo__card{scroll-snap-align:start}
+}
