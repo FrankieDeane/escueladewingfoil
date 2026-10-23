@@ -1,0 +1,428 @@
+{
+ "aprender": [
+  {
+   "@context": "https://schema.org",
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "¿En qué momento del año me conviene arrancar con el wingfoil?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "La época ideal en el Río de la Plata arranca a fin de septiembre hasta marzo. Si arrancás en invierno los vientos son más de tierra, igualmente las clases vienen con un gomón."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Qué necesito para arrancar con el wingfoil?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Si tomás clases la escuela te da todo: neoprene, tabla, vela, casco y salvavidas. Si tenés base en kitesurf, windsurf, surf o vela necesitás: tabla grande +100L, ala 6-7m para viento moderado, neoprene, botitas, casco y chaleco, y un spot seguro."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Qué tabla de wingfoil necesito para empezar?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Principiante: 100-115L. Intermedio (85kg+): 85-90L. Avanzado: 40-75L. La regla es peso corporal + 30-40L para empezar. Cuanta más flotación, más fácil aprender."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Conviene comprar equipo de wingfoil nuevo o usado?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Nuevo es mejor para reventa futura. Si comprás usado: revisá costuras del ala, que los tubos inflen bien y que el foil no tenga corrosión. Hablá siempre con tu instructor antes de comprar."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Cuánto tiempo me lleva foilear en wingfoil?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Depende del tiempo en el agua. Con clases regulares (2-3 veces por semana), la mayoría logra su primer foileo en 5-10 sesiones. Con experiencia previa en deportes de viento, mucho más rápido."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Cuánto cuesta el equipo de wingfoil en Argentina?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Los equipos están dolarizados. Nuevo: USD 2.500-3.000. Usado en buen estado: USD 1.000-1.500. Las clases varían por zona e instructor — consultá con los instructores listados en la plataforma."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Qué foil es mejor para principiante en Argentina?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Para el Río de la Plata: mástil 75-85 cm. Ala delantera grande (1.800-2.500 cm²) para arrancar con poco viento. Fuselaje largo para más estabilidad. Aluminio antes que carbono — más barato y tolerante a golpes."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Hay competencias de wingfoil en Argentina?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Sí, hay regatas y competencias todo el año organizadas por distintos clubes. Hablá con tu instructor para sumarte al circuito argentino."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Qué es la sudestada en el Río de la Plata?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Es un viento persistente del sudeste sobre el estuario, muchas veces con baja presión y lluvia. El Río de la Plata es un embudo orientado al sudeste: ese viento empuja agua del océano hacia adentro y la apila contra la costa bonaerense. La marea astronómica del río rara vez pasa el metro; lo que produce la crecida es la sobreelevación por viento, que en un episodio fuerte suma dos metros o más sobre la marea prevista."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Cuándo hay sudestadas y crecidas en el Río de la Plata?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Las sudestadas se concentran entre septiembre y marzo, la misma ventana en la que el viento termal del S/SO hace navegable el río. En esa franja pasan los sistemas frontales que giran el viento al sudeste y lo sostienen 12, 24 o 48 horas. La sobreelevación se acumula con las horas: una sudestada de tres horas casi no mueve la aguja, una de treinta horas es la que inunda."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿A qué altura del Río de la Plata no conviene navegar?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Por debajo de 0,60 m sobre el plano de reducción del SHN el foil toca fondo cerca de la orilla y se rompe equipo. Entre 1,00 y 1,80 m es el rango normal. Arriba de 2,50 m ya es crecida: el agua tapa muelles y bajadas, la corriente corre paralela a la costa y arrastra troncos. Arriba de 3,20 m es una sudestada del orden de la del 19 de diciembre de 2023 y es una emergencia, no un día de navegar."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Qué es la bajante del Río de la Plata y por qué es peligrosa para el wingfoil?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Cuando el viento sopla sostenido del noroeste o del oeste empuja el agua hacia afuera del estuario y el río se retira; en San Isidro una bajante fuerte deja el fondo a la vista cientos de metros mar adentro. Con menos de 60 cm el mástil y el ala tocan fondo, y un foil clavado a velocidad rompe el equipo y lastima. Es la causa número uno de roturas en el río."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Dónde veo la altura y la marea del Río de la Plata por fecha?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "En escueladewingfoil.com.ar/costa-san-isidro se elige un rango de fechas y se ve, hora por hora, el pronóstico de marea del Servicio de Hidrografía Naval, el viento y la presión de esos días, la altura medida por el mareógrafo Pilote Norden de la CARP y cuánto levanta el agua la componente de sudestada. Anda para atrás con datos medidos y hasta unos 16 días para adelante con pronóstico."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿La Escuela de Wingfoil ofrece clases directas?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "La plataforma en sí no dicta clases — sí los instructores certificados que se sumaron. Los perfiles los publican los propios instructores. Verificá credenciales antes de contratar."
+     }
+    }
+   ]
+  },
+  {
+   "@context": "https://schema.org",
+   "@type": "HowTo",
+   "name": "Cómo aprender wingfoil en Argentina desde cero",
+   "description": "Guía paso a paso para aprender wingfoil en Argentina: desde elegir el spot hasta tu primer vuelo.",
+   "totalTime": "PT10H",
+   "estimatedCost": {
+    "@type": "MonetaryAmount",
+    "currency": "USD",
+    "value": "1000"
+   },
+   "image": "https://www.escueladewingfoil.com.ar/assets/video/portada.jpg",
+   "step": [
+    {
+     "@type": "HowToStep",
+     "name": "Elegí tu spot",
+     "text": "Buscá un spot con agua plana y viento suave y constante. Para principiantes, el Río de la Plata (San Isidro, Chascomús) y las lagunas patagónicas son ideales. Revisá los 18+ spots en el mapa de la plataforma.",
+     "url": "https://www.escueladewingfoil.com.ar/#spots",
+     "image": "https://images.unsplash.com/photo-1730134427096-c167c128e119?w=600&fit=crop&auto=format&q=80"
+    },
+    {
+     "@type": "HowToStep",
+     "name": "Tomá clases con un instructor certificado",
+     "text": "Encontrá un instructor certificado en tu zona. Con 3-5 clases ya vas a poder controlar el ala y mantenerte en la tabla. Los instructores de la plataforma están verificados.",
+     "url": "https://www.escueladewingfoil.com.ar/#instructores",
+     "image": "https://images.unsplash.com/photo-1666175497141-ef62a9c65558?w=600&fit=crop&auto=format&q=80"
+    },
+    {
+     "@type": "HowToStep",
+     "name": "Mirá los videos por nivel",
+     "text": "La plataforma tiene videos en español ordenados por nivel: control del ala, primeros pasos en el agua, cómo pararse en la tabla y las primeras maniobras. Seguí la progresión recomendada.",
+     "url": "https://www.escueladewingfoil.com.ar/#videos",
+     "image": "https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=600&fit=crop&auto=format&q=80"
+    },
+    {
+     "@type": "HowToStep",
+     "name": "Elegí tu equipo",
+     "text": "Para principiante: tabla 100-115L, ala 5-7m según tu peso, foil con ala delantera grande (1.800-2.500 cm²). Nuevo sale USD 2.500-3.000; usado en buen estado USD 1.000-1.500. Consultá el mercado de la plataforma.",
+     "url": "https://www.escueladewingfoil.com.ar/#venta-de-wingfoil",
+     "image": "https://images.unsplash.com/photo-1666175497562-ccb66e6c373b?w=600&fit=crop&auto=format&q=80"
+    }
+   ]
+  },
+  {
+   "@context": "https://schema.org",
+   "@type": "DefinedTermSet",
+   "name": "Glosario de Wingfoil en Argentina",
+   "description": "Términos técnicos del wingfoil en español: maniobras, equipamiento, condiciones meteorológicas y conceptos clave.",
+   "url": "https://www.escueladewingfoil.com.ar/#glosario",
+   "inLanguage": "es",
+   "hasDefinedTerm": [
+    {
+     "@type": "DefinedTerm",
+     "name": "Pumpear",
+     "description": "Bombear el ala y/o las piernas para generar velocidad y despegar el foil del agua.",
+     "termCode": "tecnica"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Touch down",
+     "description": "Cuando la tabla vuelve a tocar el agua después de estar foileando. Suele cortar la velocidad.",
+     "termCode": "maniobra"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Trasluchada (Gybe)",
+     "description": "Giro hacia el viento de cola. Cambiás de dirección sin perder el foil. Maniobra clave del intermedio.",
+     "termCode": "maniobra"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Virada (Tack)",
+     "description": "Giro contra el viento. Más difícil que la trasluchada, requiere coordinación de pies y ala.",
+     "termCode": "maniobra"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Downwind",
+     "description": "Navegar con el viento atrás recorriendo distancia. Suelen hacerse rutas largas en olas o lagos.",
+     "termCode": "modalidad"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Upwind",
+     "description": "Volver al punto de origen contra el viento. Es lo primero que hay que dominar para no terminar lejos.",
+     "termCode": "maniobra"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Foilear",
+     "description": "Estar elevado sobre el agua gracias al foil. El objetivo final del deporte.",
+     "termCode": "verbo"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Ventana de viento",
+     "description": "Rango de viento en el que es navegable. Por debajo no levantás, por arriba es peligroso.",
+     "termCode": "concepto"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Ala (Wing)",
+     "description": "La vela inflable que sostenés con las manos. Genera la fuerza para avanzar.",
+     "termCode": "equipo"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Mástil (Mast)",
+     "description": "Vara vertical que conecta la tabla con el foil. Cuanto más largo, más altura podés volar.",
+     "termCode": "equipo"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Fuselaje",
+     "description": "Tubo horizontal que conecta el mástil con las alas del foil. Define el balance del foil.",
+     "termCode": "equipo"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Ala delantera (Front wing)",
+     "description": "El ala grande del foil que genera la mayor parte del lift. Más grande = más fácil despegar.",
+     "termCode": "equipo"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Estabilizador (Stab)",
+     "description": "El ala chica de atrás del foil. Estabiliza la dirección y altura. Más chico = más maniobrable.",
+     "termCode": "equipo"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Lift",
+     "description": "Fuerza vertical que genera el foil al moverse en el agua. Lo que te eleva.",
+     "termCode": "concepto"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Pitch",
+     "description": "Inclinación del foil hacia adelante o atrás. Controla la altura de vuelo.",
+     "termCode": "concepto"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Stall",
+     "description": "Pérdida de sustentación del foil. Te caés porque el agua deja de generar lift.",
+     "termCode": "concepto"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Rail",
+     "description": "Inclinar la tabla sobre uno de los costados. Permite girar y mantener la presión sobre el foil.",
+     "termCode": "maniobra"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Switch",
+     "description": "Cambiar la posición de los pies y manos para navegar en la otra dirección. Avanzado.",
+     "termCode": "maniobra"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Strap",
+     "description": "Las correas de la tabla donde van los pies. No todas las tablas las traen.",
+     "termCode": "equipo"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Boom",
+     "description": "Mango duro de algunas alas en lugar de strut inflable. Sensación más windsurf.",
+     "termCode": "equipo"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Strut",
+     "description": "Tubo inflable central del ala que le da rigidez. Lo que agarrás con las manos.",
+     "termCode": "equipo"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Leading edge (LE)",
+     "description": "Borde de ataque del ala. Tubo principal inflable que enfrenta al viento.",
+     "termCode": "equipo"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Leash",
+     "description": "Cuerda que une el ala a tu muñeca. Si la soltás no se va volando.",
+     "termCode": "equipo"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Drift",
+     "description": "Soltar el ala y dejarla flamear mientras hacés otra cosa (entrar a una ola, recuperar equilibrio).",
+     "termCode": "maniobra"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Choppy",
+     "description": "Agua picada con olas chiquitas y desordenadas. Difícil para principiantes.",
+     "termCode": "condicion"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Flat",
+     "description": "Agua plana sin olas. Ideal para aprender. El Río de la Plata suele estar así.",
+     "termCode": "condicion"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Onshore",
+     "description": "Viento que sopla de mar/río hacia la costa. Más seguro para arrancar.",
+     "termCode": "condicion"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Offshore",
+     "description": "Viento que sopla de la costa hacia adentro. Te puede alejar — peligroso si no tenés experiencia.",
+     "termCode": "condicion"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Cross-shore",
+     "description": "Viento paralelo a la costa. Condición ideal para wingfoil intermedio/avanzado.",
+     "termCode": "condicion"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Knots (kn)",
+     "description": "Nudos. Unidad de velocidad del viento. 1 nudo ≈ 1.85 km/h. Wingfoil arranca a partir de 12-15 kn.",
+     "termCode": "unidad"
+    }
+   ]
+  }
+ ],
+ "spots": [
+  {
+   "@context": "https://schema.org",
+   "@type": "Article",
+   "headline": "Sudestada, crecidas y bajantes del Río de la Plata: la temporada de septiembre a marzo",
+   "description": "Qué es la sudestada, por qué las crecidas del Río de la Plata se concentran entre septiembre y marzo, cómo leer la altura del río antes de salir a navegar y qué pasa con la bajante.",
+   "inLanguage": "es-AR",
+   "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.escueladewingfoil.com.ar/#sudestada"
+   },
+   "image": "https://www.escueladewingfoil.com.ar/assets/video/portada.jpg",
+   "datePublished": "2026-09-05",
+   "dateModified": "2026-09-05",
+   "author": {
+    "@id": "https://www.escueladewingfoil.com.ar/#organization"
+   },
+   "publisher": {
+    "@id": "https://www.escueladewingfoil.com.ar/#organization"
+   },
+   "about": [
+    {
+     "@type": "Thing",
+     "name": "Sudestada"
+    },
+    {
+     "@type": "Thing",
+     "name": "Crecida del Río de la Plata"
+    },
+    {
+     "@type": "BodyOfWater",
+     "name": "Río de la Plata"
+    }
+   ],
+   "spatialCoverage": {
+    "@type": "Place",
+    "name": "Río de la Plata",
+    "geo": {
+     "@type": "GeoCoordinates",
+     "latitude": -34.4738,
+     "longitude": -58.5054
+    }
+   },
+   "temporalCoverage": "Septiembre a marzo",
+   "keywords": "sudestada, crecida del Río de la Plata, bajante, marea SHN, altura del río, wingfoil San Isidro",
+   "isAccessibleForFree": true
+  },
+  {
+   "@context": "https://schema.org",
+   "@type": "WebApplication",
+   "name": "Nivel del Río de la Plata por rango de fechas — San Isidro en 3D",
+   "url": "https://www.escueladewingfoil.com.ar/costa-san-isidro",
+   "applicationCategory": "https://schema.org/UtilitiesApplication",
+   "operatingSystem": "Navegador web",
+   "browserRequirements": "Requiere WebGL",
+   "inLanguage": "es-AR",
+   "isAccessibleForFree": true,
+   "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "ARS"
+   },
+   "description": "Elegí un rango de fechas y mirá hora por hora la marea del Servicio de Hidrografía Naval, el viento y la presión medidos y pronosticados para San Isidro, y la altura medida por el mareógrafo Pilote Norden de la CARP, sobre la costa real en 3D.",
+   "featureList": [
+    "Rango de fechas hacia atrás con datos medidos y hacia adelante con pronóstico",
+    "Pronóstico de marea del SHN interpolado hora a hora",
+    "Viento, ráfaga y presión de Open-Meteo para el punto de la costa",
+    "Alturas medidas por el mareógrafo Pilote Norden (CARP)",
+    "Estimación de sobreelevación por sudestada y por presión",
+    "Costa de San Isidro en 3D con imagen satelital y relieve real"
+   ]
+  }
+ ]
+}

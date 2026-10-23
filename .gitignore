@@ -2,3 +2,10 @@ node_modules/
 package-lock.json
 ml-data.json
 scrape-debug/
+
+# Copias de index.html con SEO propio: las genera scripts/gen-seo.mjs en cada deploy
+/aprender.html
+/spots.html
+/instructores.html
+/equipos.html
+/articulos.html
