@@ -2050,6 +2050,48 @@ footer.footer{padding-top:clamp(32px,4vw,52px)}
   .hb-card:not(.hb-card--xl) .hb-card__t{font-size:17px}
   .hb-card__txt{padding:14px}
 }
+/* Aprender en el celu: menos texto, filas deslizables y nada de tarjetas eternas */
+.about__card p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rider-card__bio{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.man-card__desc{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@media(max-width:700px){
+  .nx-intro__grid>*{min-width:0}
+  .nx-intro--foto .nx-chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding-inline:16px}
+  .nx-intro--foto .nx-chips::-webkit-scrollbar{display:none}
+  .nx-intro--foto .nx-chip{flex:none;min-height:40px;padding:0 14px}
+  /* 3 pasos: filas cortas */
+  .quickstart-grid{grid-template-columns:1fr;gap:8px;margin-top:12px}
+  .qs-step{flex-direction:row;align-items:center;gap:12px;padding:14px 16px;border-radius:18px}
+  .qs-step__num{font-size:20px;margin:0;min-width:28px}
+  .qs-step__icon{font-size:24px;margin:0}
+  .qs-step__title{font-size:16px;margin:0;flex:1}
+  .qs-step__desc{display:none}
+  .qs-step__cta{font-size:0;margin:0}.qs-step__cta::after{font-size:18px}
+  /* Qué es: tarjetitas de a dos, sin la foto grande */
+  .about__split{grid-template-columns:1fr;gap:0}
+  .about__media{display:none}
+  .about__grid{grid-template-columns:1fr 1fr;gap:8px}
+  .about__card{padding:14px;border-radius:18px}
+  .about__card-icon{font-size:22px;margin-bottom:6px}
+  .about__card h3{font-size:15px;margin:0}
+  .about__card p{display:none}
+  /* Anatomía: sólo se lee la parte elegida */
+  .foil-part:not(.active) .foil-part__desc{display:none}
+  .foil-part{padding:10px 14px}
+  .anatomy__visual{max-height:340px}
+  /* Maniobras y riders: filas que se deslizan */
+  .man-filters{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;scrollbar-width:none;margin:12px -16px 14px;padding:0 16px}
+  .man-filters::-webkit-scrollbar{display:none}
+  .man-filter{flex:none}
+  .man-grid,.riders-grid{display:grid;grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:72%;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin-inline:-16px;padding:0 16px 8px;scroll-padding-inline:16px;scrollbar-width:none}
+  .man-grid::-webkit-scrollbar,.riders-grid::-webkit-scrollbar{display:none}
+  .man-card,.rider-card{scroll-snap-align:start}
+  .man-card__visual{aspect-ratio:4/3}
+  .man-card__body{padding:12px 14px;gap:4px}
+  .man-card__desc,.man-card__meta{display:none}
+  .rider-card__bio{display:none}
+  .section-sub{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+}
 /* Artículos: en el celu, filas compactas con foto al costado */
 .blog-card__excerpt{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 @media(max-width:600px){
@@ -2426,7 +2468,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <span class="eyebrow" data-en="🚀 Start now">🚀 Empezar ahora</span>
     <h2 class="section-title" data-en="Want to start? <em>3 steps</em>.">¿Querés arrancar? <em>3 pasos</em>.</h2>
-    <p class="section-sub">La ruta rápida para sumarte al wingfoil. Elegí por dónde te conviene empezar según tu situación.</p>
+    <p class="section-sub" data-en="The fast track into wingfoil.">La ruta rápida para sumarte al wingfoil.</p>
     <div class="quickstart-grid">
 
       <a href="#instructores" class="qs-step">
@@ -2464,7 +2506,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div>
         <span class="eyebrow" data-en="New to the sport?">¿Nuevo en el deporte?</span>
         <h2 class="section-title" data-en="What is WingFoil?">¿Qué es el WingFoil?</h2>
-        <p class="section-sub">Combina un ala inflable de mano con una tabla con foil hidrodinámico. El viento impulsa el ala, el foil eleva al rider sobre el agua. La sensación: volar.</p>
+        <p class="section-sub" data-en="A handheld wing, a board with a foil, and the wind lifts you over the water.">Un ala en la mano, una tabla con foil y el viento te levanta sobre el agua.</p>
         <div class="about__grid">
           <div class="about__card"><span class="about__card-icon">🏄</span><h3>Fácil de aprender</h3><p>Con la guía correcta podés estar volando en tus primeras sesiones. El Río de la Plata tiene condiciones ideales.</p></div>
           <div class="about__card"><span class="about__card-icon">💨</span><h3>Poco viento</h3><p>Desde 12-15 nudos ya podés disfrutar. El equipo moderno es cada vez más eficiente.</p></div>
@@ -2529,7 +2571,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <span class="eyebrow">Guía visual interactiva</span>
     <h2 class="section-title" data-en="Anatomy of the <span style=&quot;color:var(--primary)&quot;>Foil</span>">Anatomía del <span style="color:var(--primary)">Foil</span></h2>
-    <p class="section-sub">Tocá cada parte para entender qué hace y por qué importa. Antes de comprar equipo, es clave saber de qué hablan los riders.</p>
+    <p class="section-sub" data-en="Tap each part to see what it does.">Tocá cada parte para ver qué hace.</p>
     <div class="anatomy__body">
       <div class="anatomy__visual" style="padding:0;cursor:grab">
         <canvas id="foilCanvas" style="width:100%;display:block;cursor:inherit;touch-action:none;background:#040e1a" aria-label="Foil 3D interactivo"></canvas>
@@ -2558,7 +2600,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <span class="eyebrow">Guía visual interactiva</span>
     <h2 class="section-title" data-en="Anatomy of the <span style=&quot;color:var(--primary)&quot;>Wing</span>">Anatomía del <span style="color:var(--primary)">Ala de Wing</span></h2>
-    <p class="section-sub">El ala es lo que te propulsa. Entendé sus partes antes de comprar o alquilar: cada componente tiene un rol clave en tu control y seguridad.</p>
+    <p class="section-sub" data-en="Tap each number to see what each part does.">Tocá cada número para ver qué hace cada parte.</p>
     <div class="anatomy__body">
       <div class="anatomy__visual" style="padding:0;cursor:default;overflow:hidden">
         <div style="position:relative;width:100%">
@@ -3065,7 +3107,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <span class="eyebrow">🎯 Catálogo</span>
     <h2 class="section-title" data-en="WingFoil Manoeuvres">Maniobras del WingFoil</h2>
-    <p class="section-sub">Las maniobras del deporte ordenadas por dificultad. Desde la primera vez que despegás hasta los trucos más avanzados.</p>
+    <p class="section-sub" data-en="From your first flight to pro tricks, by difficulty.">De tu primer vuelo a los trucos pro, por dificultad.</p>
 
     <div class="man-filters" id="manFilters">
       <button class="man-filter active" data-mf="all">Todas</button>
@@ -3084,7 +3126,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <span class="eyebrow" data-en="🌟 Inspiration">🌟 Inspiración</span>
     <h2 class="section-title" data-en="Riders &amp; Legends">Riders &amp; Legends</h2>
-    <p class="section-sub" data-en="The world references of wingfoil. Click any video to watch it without leaving the site.">Los referentes mundiales del wingfoil. Hacé click en cualquier video para verlo sin salir del sitio.</p>
+    <p class="section-sub" data-en="The world's wingfoil icons. Tap and watch here.">Los referentes del mundo. Tocá y miralo acá.</p>
     <div class="riders-grid">
 
       <article class="rider-card">

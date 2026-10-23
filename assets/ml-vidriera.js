@@ -418,7 +418,8 @@
       var ganaMed = mA <= mB ? 'ml' : 'mp';
       var dif = Math.abs(mA - mB), pct = Math.round(dif / Math.max(mA, mB) * 100);
       function lado(p, f) {
-        return '<a class="duelo__lado duelo__lado--' + f + (gana === f ? ' is-win' : '') + '" href="' + esc(p.url || '/equipos#comparador-precios') + '" target="_blank" rel="noopener nofollow">' +
+        // En la portada el producto lleva a Equipos, al comparador de esa categoría.
+        return '<a class="duelo__lado duelo__lado--' + f + (gana === f ? ' is-win' : '') + '" href="/equipos?cat=' + k + '#comparador-precios" data-cat="' + k + '">' +
           '<span class="duelo__img">' + imgTag(p) + '</span>' + srcTag(f) +
           '<span class="duelo__tit">' + esc(p.titulo) + '</span>' +
           '<b class="duelo__precio">' + plata(p.precio) + '</b>' +
@@ -430,6 +431,16 @@
         '<p class="duelo__medias">Lo normal: Mercado Libre ' + plataCorta(mA) + ' · Marketplace ' + plataCorta(mB) + ' · ' + ml.length + ' y ' + mp.length + ' publicaciones</p></article>';
     }).join('');
     box.innerHTML = html || '<p class="duelo__lead">Estamos cargando los precios de hoy.</p>';
+    // La portada y Equipos son la misma página: se elige la categoría antes de navegar.
+    if (!box.dataset.oido) {
+      box.dataset.oido = '1';
+      box.addEventListener('click', function (e) {
+        var a = e.target.closest('a[data-cat]');
+        if (!a) return;
+        st.cat = a.dataset.cat; st.limite = POR_PAGINA;
+        dibujarCats(); comparar(true);
+      });
+    }
   }
 
   // ── Arranque ─────────────────────────────────────────────────────────
@@ -442,6 +453,9 @@
       st.mp = mp;
       vidriera();
       var all = todos();
+      // /equipos?cat=foil abre el comparador en esa categoría (viene de la portada).
+      var pedida = (location.search.match(/[?&]cat=(\w+)/) || [])[1];
+      if (pedida && CATS.some(function (x) { return x.k === pedida; })) st.cat = pedida;
       if (!all.some(function (p) { return p.cat === st.cat; })) {
         var c = CATS.filter(function (x) { return all.some(function (p) { return p.cat === x.k; }); })[0];
         if (c) st.cat = c.k;
