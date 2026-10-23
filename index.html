@@ -1825,6 +1825,284 @@ html,body{overflow-x:clip}
 .equipo-card__wa:hover{background:#0B6633;color:#fff}
 html:not([data-theme="dark"]) .equipo-card__badge{color:#B93A10}
 html[data-theme="dark"] .eyebrow,html[data-theme="dark"] .nx-c-mar{color:#6FC3D1}
+
+/* ===== Premium y compacto (oct 2026): menos aire, más dato por pantalla ===== */
+::selection{background:#FF5A2C;color:#0B1A22}
+.section{padding-block:clamp(40px,5vw,72px)}
+.nx-sec{padding:clamp(40px,5vw,72px) 0}
+.section-title{font-size:clamp(32px,4.4vw,56px);margin-bottom:10px}
+.section-sub{font-size:16px;line-height:1.5;margin-bottom:18px}
+.eyebrow{margin-bottom:8px}
+section.duelo{padding:clamp(40px,5vw,72px) 0}
+/* Portadas de cada página: la mitad de alto */
+.nx-intro--foto{padding:clamp(104px,10vw,132px) 0 clamp(28px,3vw,44px)}
+.nx-intro--foto .nx-intro__t{font-size:clamp(40px,6.2vw,88px)}
+.nx-intro__fig{aspect-ratio:4/3;width:100%;max-width:380px;justify-self:end;border-radius:24px 24px 24px 90px}
+@media(max-width:860px){.nx-intro__fig{display:none}}
+/* Pie y aviso legal, más chicos */
+footer.footer{padding-top:clamp(32px,4vw,52px)}
+.footer__inner{gap:24px 48px;padding-bottom:24px}
+.nx-foot-nav{padding-bottom:16px}
+.nx-wordmark{font-size:clamp(60px,13vw,190px);margin-top:4px}
+.disclaimer-section{padding:18px 0}
+.disclaimer-box{max-width:1180px;padding:16px 20px;gap:14px;border-radius:16px}
+.disclaimer-box__icon{font-size:20px}
+.disclaimer-box__content{columns:2 320px;column-gap:32px}
+.disclaimer-box__content h3{font-size:14px;margin-bottom:4px;column-span:all}
+.disclaimer-box__content p{font-size:12px;line-height:1.55;margin-bottom:4px;break-inside:avoid}
+@media(max-width:520px){.disclaimer-box{flex-direction:row;padding:14px 16px}}
+
+/* Portada: números de la comunidad sobre el video */
+.nx-stats{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,auto);border-radius:20px;background:rgba(11,26,34,.45);border:1px solid rgba(247,244,236,.2);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);overflow:hidden}
+.nx-stats li{display:flex;flex-direction:column;gap:4px;padding:14px clamp(14px,1.6vw,22px);border-left:1px solid rgba(247,244,236,.16)}
+.nx-stats li:first-child{border-left:0}
+.nx-stats b{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(26px,2.4vw,36px);line-height:1;letter-spacing:-.03em}
+.nx-stats li:nth-child(2) b{color:#7ED9A1}.nx-stats li:nth-child(4) b{color:#FFD84A}
+.nx-stats span{font:500 11px/1.2 'DM Mono',monospace;text-transform:uppercase;letter-spacing:.06em;color:rgba(247,244,236,.82)}
+@media(max-width:600px){
+  .nx-stats{grid-template-columns:repeat(4,1fr)}
+  .nx-stats li{padding:10px 8px;gap:3px}
+  .nx-stats b{font-size:22px}
+  .nx-stats span{font-size:9px;letter-spacing:.02em}
+}
+
+/* Portada: viento ahora, grande */
+.vivo{background:#0B1A22;color:#F7F4EC;padding:clamp(16px,2.4vw,32px) 0}
+[data-pg] + .vivo{border-top:0}
+[data-theme='dark'] .vivo{background:#05101A}
+.vivo__in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:clamp(12px,1.6vw,20px)}
+.vivo__main{position:relative;isolation:isolate;overflow:hidden;border-radius:28px;padding:clamp(20px,2.6vw,32px);display:flex;flex-direction:column;justify-content:flex-end;min-height:clamp(300px,28vw,380px);color:#F7F4EC;text-decoration:none;background:#0F5C6B}
+.vivo__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.vivo__main::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(11,26,34,.2) 0%,rgba(11,26,34,.45) 40%,rgba(11,26,34,.9) 100%)}
+.vivo__main:hover .vivo__bg{transform:scale(1.04)}
+.vivo__eye{position:absolute;top:clamp(18px,2.2vw,26px);left:clamp(20px,2.6vw,32px);display:flex;align-items:center;gap:8px;color:#F7F4EC;background:rgba(11,26,34,.55);padding:6px 12px;border-radius:99px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.vivo__spot{margin:0;font-size:clamp(26px,2.8vw,38px);letter-spacing:-.03em;line-height:1}
+.vivo__num{display:flex;align-items:flex-end;gap:10px;line-height:.82;margin-top:4px}
+.vivo__num b{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(104px,12vw,172px);letter-spacing:-.06em}
+.vivo__num>span:not(.vivo__fl){font:800 clamp(24px,2.2vw,32px)/1 'Bricolage Grotesque',sans-serif;padding-bottom:.25em}
+.vivo__fl{display:inline-flex;padding-bottom:.35em}
+.vivo__fl svg{width:clamp(30px,3vw,42px);height:clamp(30px,3vw,42px);color:#FF5A2C}
+.vivo__ver{margin:14px 0 4px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(20px,1.8vw,26px);letter-spacing:-.02em}
+.vivo--ok .vivo__ver{color:#7ED9A1}
+.vivo__det{margin:0;font-size:12px;color:rgba(247,244,236,.8)}
+.vivo__side{display:flex;flex-direction:column;gap:12px;min-width:0}
+.vivo__head{display:flex;justify-content:space-between;align-items:baseline;gap:6px 16px;flex-wrap:wrap}
+.vivo__res{margin:0;font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(19px,1.7vw,24px);letter-spacing:-.02em;line-height:1.2}
+.vivo__res b{color:#FFD84A}
+.vivo__todos{color:#F7F4EC;font-weight:800;text-decoration:none;border-bottom:2px solid #FF5A2C;white-space:nowrap}
+.vivo__lista{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr;gap:10px;flex:1}
+.vivo__fila{display:flex;align-items:center;gap:12px;padding:10px;border-radius:18px;background:rgba(247,244,236,.06);border:1px solid rgba(247,244,236,.12);color:#F7F4EC;text-decoration:none;min-width:0;transition:background .2s,border-color .2s,transform .2s}
+.vivo__fila:hover{background:rgba(247,244,236,.12);border-color:rgba(247,244,236,.3);transform:translateY(-2px)}
+.vivo__fila img{width:58px;height:58px;border-radius:13px;object-fit:cover;flex:none;background:#0F5C6B}
+.vivo__fn{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.vivo__fn b{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vivo__fn small{font-size:12px;color:rgba(247,244,236,.62)}
+.vivo__fila--ok .vivo__fn small{color:#7ED9A1;font-weight:700}
+.vivo__kn{display:flex;align-items:center;gap:4px;font:800 24px/1 'Bricolage Grotesque',sans-serif;white-space:nowrap}
+.vivo__kn small{font-size:11px;font-weight:600;opacity:.65}
+.vivo__kn svg{width:14px;height:14px;color:#FF5A2C}
+.vivo__sk{border-radius:18px;background:rgba(247,244,236,.07);min-height:80px;animation:hoyLatir 1.3s ease-in-out infinite}
+@media(max-width:860px){.vivo__in{grid-template-columns:1fr}.vivo__main{min-height:290px}}
+@media(max-width:600px){.vivo__lista{grid-template-columns:1fr;grid-auto-rows:auto;gap:8px}.vivo__fila:nth-child(n+5),.vivo__sk:nth-child(n+5){display:none}.vivo__fila{padding:8px}.vivo__fila img{width:46px;height:46px}.vivo__sk{min-height:64px}}
+@media(prefers-reduced-motion:reduce){.vivo__bg,.vivo__fila{transition:none}.vivo__sk{animation:none}}
+
+/* Portada: las cinco páginas, más bajas */
+.nx-foto{aspect-ratio:1/1}
+.nx-foto--xl{aspect-ratio:16/8.5}
+@media(max-width:860px){.nx-foto{aspect-ratio:1/1}.nx-foto--xl{aspect-ratio:16/9}.nx-foto:last-child{aspect-ratio:16/8}}
+
+/* Comunidad: tira de fotos en todas las páginas */
+.tribu{background:var(--bg);padding-top:clamp(40px,5vw,72px);overflow:hidden;border-top:1px solid var(--divider)}
+.tribu__head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px 40px;align-items:end;margin-bottom:clamp(20px,2.6vw,32px)}
+.tribu__eye{color:#B93A10}[data-theme='dark'] .tribu__eye{color:var(--accent)}
+.tribu__t{margin:6px 0 0;font-size:clamp(34px,5vw,68px);line-height:.95;letter-spacing:-.045em;color:var(--text)}
+.tribu__p{margin:0;color:var(--text-muted);font-size:16px;line-height:1.5;max-width:44ch}
+.tribu__ig{font-weight:800;color:var(--text);text-decoration:none;border-bottom:2px solid #FF5A2C;padding-bottom:2px;white-space:nowrap}
+.tribu__ig:hover{color:#FF5A2C}
+.tribu__cinta{overflow:hidden;padding-bottom:clamp(40px,5vw,72px)}
+.tribu__in{display:flex;gap:12px;width:max-content;animation:tribuCorre 110s linear infinite}
+.tribu__in:hover{animation-play-state:paused}
+.tribu__dup{display:contents}
+.tribu__in img{flex:none;height:clamp(170px,19vw,270px);width:auto;aspect-ratio:4/3;object-fit:cover;border-radius:22px;background:var(--mist)}
+.tribu__in img:nth-child(3n+2){aspect-ratio:3/4;border-radius:22px 22px 22px 70px}
+@keyframes tribuCorre{to{transform:translateX(calc(-50% - 6px))}}
+@media(prefers-reduced-motion:reduce){.tribu__in{animation:none}.tribu__cinta{overflow-x:auto}.tribu__dup{display:none}}
+@media(max-width:760px){.tribu__head{grid-template-columns:1fr;gap:10px}}
+
+/* Spots: el mapa en una barra */
+.spots-bar{padding-block:clamp(28px,3vw,44px)}
+.spots-bar__in{display:flex;align-items:center;justify-content:space-between;gap:16px 32px;flex-wrap:wrap}
+.spots-bar .section-sub{margin-bottom:0}
+.spots-bar .spots-cta-btn{flex:0 1 400px;padding:18px 22px}
+
+/* ¿Salgo hoy?: banda oscura siempre (en modo claro no se leía) y tarjetas con foto */
+.section.hoy{background:linear-gradient(180deg,#0B1A22 0%,#0F2A35 100%);padding-block:clamp(36px,4vw,56px)}
+.hoy__grid{grid-template-columns:repeat(auto-fill,minmax(min(230px,100%),1fr));gap:12px}
+.hoy__card{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;min-height:210px;padding:16px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.14);background:#0B1A22;-webkit-backdrop-filter:none;backdrop-filter:none;transition:transform .25s,border-color .25s}
+.hoy__card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.35)}
+.hoy__foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.hoy__card::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(6,18,32,.15) 0%,rgba(6,18,32,.6) 40%,rgba(6,18,32,.94) 100%)}
+.hoy__top{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.hoy__prov{color:#F7F4EC;background:rgba(11,26,34,.6);padding:4px 9px;border-radius:99px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);font-weight:700}
+.hoy__pill{font:800 12px/1 'DM Sans',sans-serif;padding:6px 10px;border-radius:99px;background:#7ED9A1;color:#0B1A22;white-space:nowrap}
+.hoy__card h3{font-size:18px;line-height:1.15;color:#fff;margin:0}
+.hoy__kn{margin:6px 0 0;font-size:12.5px;color:#dceaf3}
+.hoy__kn b{font:800 36px/1 'Bricolage Grotesque',sans-serif;color:#fff;letter-spacing:-.03em}
+.hoy__kn span{display:block;margin-top:3px;color:rgba(220,234,243,.85)}
+.hoy__horas{color:#7ED9A1;margin-top:6px}
+.hoy__motivo{color:#c2d6e2}
+.hoy__regla{color:#9fbccd}
+.hoy__card--no{opacity:1}
+.hoy__card--no .hoy__foto{filter:grayscale(.75) brightness(.75)}
+.hoy__card--no .hoy__pill{background:rgba(247,244,236,.22);color:#F7F4EC}
+@media(max-width:680px){.hoy__grid{grid-template-columns:1fr 1fr;gap:10px}.hoy__card{min-height:200px;padding:12px}.hoy__card h3{font-size:15px}.hoy__kn b{font-size:30px}.hoy__regla{display:none}}
+@media(max-width:360px){.hoy__grid{grid-template-columns:1fr}}
+
+/* Cámaras: más chicas, y en el celu en carrusel en vez de once pantallas */
+.cameras-grid{grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:14px;margin-top:18px}
+.cam-card{min-height:0}
+@media(max-width:700px){
+  .cameras-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin-inline:-16px;padding:0 16px 8px;scrollbar-width:none}
+  .cameras-grid::-webkit-scrollbar{display:none}
+  .cam-card{flex:0 0 84%;scroll-snap-align:center}
+}
+
+/* Instructores: perfiles con portada, avatar y WhatsApp */
+.instr-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:8px 32px;margin-bottom:22px}
+.instr-head .section-sub{margin:0;max-width:52ch}
+.instr-head .section-sub b{color:var(--text)}
+.instructors-grid{grid-template-columns:repeat(auto-fill,minmax(min(270px,100%),1fr));gap:16px;margin-bottom:28px}
+.instructor-card{display:flex;flex-direction:column;padding:0 20px 20px;border-radius:24px;text-align:left;overflow:hidden;background:var(--surface);perspective:none}
+.instructor-card:hover{transform:translateY(-4px)}
+.instructor-card__cover{position:relative;margin:0 -20px;height:118px;background:#0F5C6B}
+.instructor-card__cover img{width:100%;height:100%;object-fit:cover;display:block}
+.instructor-card__cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,26,34,0) 40%,rgba(11,26,34,.35))}
+.instructor-card__photo{position:relative;z-index:1;width:88px;height:88px;margin:-46px 0 10px;border:4px solid var(--surface);box-shadow:0 10px 24px rgba(0,0,0,.22)}
+.instructor-card__photo--ini{display:flex;align-items:center;justify-content:center;font:800 30px/1 'Bricolage Grotesque',sans-serif;letter-spacing:-.03em;color:#F7F4EC;background:linear-gradient(135deg,hsl(var(--h) 55% 34%),hsl(calc(var(--h) + 50) 60% 20%))}
+.instructor-card__name{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-bottom:4px;color:var(--text)}
+.instructor-card__loc{margin-bottom:10px;color:var(--text-muted)}
+.instructor-card__sports{justify-content:flex-start;margin-bottom:10px}
+.instructor-card__bio{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:6px;font-size:14px;line-height:1.5;color:var(--text-muted)}
+.instructor-card.is-open .instructor-card__bio{display:block}
+.instructor-card__mas{align-self:flex-start;background:none;border:0;padding:2px 0;color:var(--primary);font:700 13px 'DM Sans',sans-serif;cursor:pointer;margin-bottom:10px}
+.instructor-card__wa{margin-top:auto;justify-content:center;min-height:48px;font-size:15px;border-radius:14px;background:#0E7A3E;color:#fff}
+.instructor-card__wa:hover{background:#0B6633;transform:none}
+.instr-sk{height:340px;border-radius:24px;background:var(--surface-2);animation:hoyLatir 1.3s ease-in-out infinite}
+.instr-alta{max-width:760px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden}
+.instr-alta summary{display:flex;align-items:center;gap:14px;padding:18px 20px;cursor:pointer;list-style:none}
+.instr-alta summary::-webkit-details-marker{display:none}
+.instr-alta__ico{font-size:28px}
+.instr-alta summary b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:19px;color:var(--text)}
+.instr-alta summary small{display:block;font-size:13.5px;color:var(--text-muted);margin-top:2px}
+.instr-alta__btn{margin-left:auto;flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--text);color:var(--bg);font-size:22px;font-weight:700;transition:transform .2s}
+.instr-alta[open] .instr-alta__btn{transform:rotate(45deg)}
+.instr-alta .form-wrap{border:0;border-radius:0;max-width:none;padding-top:0;background:transparent}
+
+/* Aprender: videos por nivel, en filas como Netflix */
+.nf__head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:8px 32px;margin-bottom:4px}
+.nf__head .section-sub{margin:0;max-width:48ch}
+.nf-row{margin-top:clamp(22px,2.6vw,34px)}
+.nf-row__head{display:flex;align-items:center;gap:12px 14px;flex-wrap:wrap;margin-bottom:12px}
+.nf-row__lvl{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;flex:none;background:#FF5A2C;color:#0B1A22;font:800 24px/1 'Bricolage Grotesque',sans-serif}
+#nivel-2 .nf-row__lvl{background:#0F5C6B;color:#F7F4EC}
+#nivel-3 .nf-row__lvl{background:#0B1A22;color:#FFD84A}
+[data-theme='dark'] #nivel-3 .nf-row__lvl{background:#FFD84A;color:#0B1A22}
+.nf-row__t{margin:0;font-size:clamp(22px,2.2vw,30px);line-height:1;letter-spacing:-.03em;color:var(--text)}
+.nf-row__sub{font-size:12px;color:var(--text-muted)}
+.nf-pasos{list-style:none;display:flex;gap:6px;margin:0 0 0 auto;padding:0;overflow-x:auto;scrollbar-width:none;max-width:100%}
+.nf-pasos::-webkit-scrollbar{display:none}
+.nf-pasos li{flex:none;display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;padding:5px 11px 5px 5px;border-radius:99px;background:var(--surface);border:1px solid var(--border);color:var(--text);white-space:nowrap}
+.nf-pasos b{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--text);color:var(--bg);font-size:11px}
+.nf-rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(250px,calc((100% - 36px) / 4));gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;scrollbar-width:thin}
+.nf-card{display:flex;flex-direction:column;text-align:left;padding:0;border:0;background:none;cursor:pointer;scroll-snap-align:start;color:var(--text);font:inherit;min-width:0}
+.nf-card__img{position:relative;display:block;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#0B1A22}
+.nf-card__img img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.02);transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.nf-card__img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,26,34,0) 45%,rgba(11,26,34,.7))}
+.nf-card:hover .nf-card__img img{transform:scale(1.08)}
+.nf-card__play{position:absolute;inset:0;margin:auto;width:54px;height:54px;border-radius:50%;background:rgba(247,244,236,.94);z-index:1;box-shadow:0 8px 24px rgba(0,0,0,.35);transition:background .2s,transform .2s}
+.nf-card__play::before{content:"";position:absolute;left:21px;top:16px;border-left:17px solid #0B1A22;border-block:11px solid transparent}
+.nf-card:hover .nf-card__play{background:#FF5A2C;transform:scale(1.08)}
+.nf-card__n{position:absolute;left:12px;bottom:2px;z-index:1;font:800 56px/1 'Bricolage Grotesque',sans-serif;letter-spacing:-.05em;color:#F7F4EC;text-shadow:0 4px 18px rgba(0,0,0,.45)}
+.nf-card__txt{display:flex;flex-direction:column;gap:3px;padding:10px 2px 0}
+.nf-card__txt b{font-family:'Bricolage Grotesque',sans-serif;font-size:17px;letter-spacing:-.01em;line-height:1.2}
+.nf-card__txt span{font-size:13.5px;color:var(--text-muted);line-height:1.4}
+.nf-card__txt small{font-size:11.5px;color:var(--text-muted);margin-top:2px}
+.nf-card:focus-visible{outline:none}.nf-card:focus-visible .nf-card__img{outline:3px solid #FF5A2C;outline-offset:2px}
+@media(max-width:700px){.nf-rail{grid-auto-columns:80%;margin-inline:-16px;padding-inline:16px;scroll-padding-inline:16px}.nf-pasos{margin-left:0}}
+.nf-modal{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:16px;background:rgba(5,12,18,.9);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.nf-modal[hidden]{display:none}
+.nf-modal__box{position:relative;width:min(1040px,100%);max-height:92vh;overflow:auto;border-radius:20px;background:#0B1A22;color:#F7F4EC;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.nf-modal__vid{aspect-ratio:16/9;background:#000}
+.nf-modal__vid iframe{width:100%;height:100%;border:0;display:block}
+.nf-modal__x{position:absolute;top:10px;right:10px;z-index:2;width:40px;height:40px;border-radius:50%;border:0;background:rgba(247,244,236,.92);color:#0B1A22;font-size:17px;font-weight:800;cursor:pointer}
+.nf-modal__info{padding:14px 18px 18px}
+.nf-modal__info b{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;letter-spacing:-.02em}
+.nf-modal__info summary{cursor:pointer;margin-top:8px;font-size:13px;color:rgba(247,244,236,.8)}
+.nf-modal__info p{margin:8px 0 0;font-size:14px;line-height:1.6;color:rgba(247,244,236,.85)}
+
+/* Celu: pie y artículos de la portada más compactos */
+@media(max-width:520px){
+  .footer__links{grid-template-columns:1fr 1fr;gap:20px 16px}
+  .home-blog__grid{grid-template-columns:1fr 1fr;gap:10px}
+  .hb-card{min-height:190px}
+  .hb-card--xl{grid-column:1 / -1;min-height:300px}
+  .home-blog__grid .hb-card:nth-child(4){grid-column:1 / -1;min-height:160px}
+  .hb-card:not(.hb-card--xl) .hb-card__t{font-size:17px}
+  .hb-card__txt{padding:14px}
+}
+/* Aprender en el celu: menos texto, filas deslizables y nada de tarjetas eternas */
+.about__card p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rider-card__bio{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.man-card__desc{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@media(max-width:700px){
+  .nx-intro__grid>*{min-width:0}
+  .nx-intro--foto .nx-chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding-inline:16px}
+  .nx-intro--foto .nx-chips::-webkit-scrollbar{display:none}
+  .nx-intro--foto .nx-chip{flex:none;min-height:40px;padding:0 14px}
+  /* 3 pasos: filas cortas */
+  .quickstart-grid{grid-template-columns:1fr;gap:8px;margin-top:12px}
+  .qs-step{flex-direction:row;align-items:center;gap:12px;padding:14px 16px;border-radius:18px}
+  .qs-step__num{font-size:20px;margin:0;min-width:28px}
+  .qs-step__icon{font-size:24px;margin:0}
+  .qs-step__title{font-size:16px;margin:0;flex:1}
+  .qs-step__desc{display:none}
+  .qs-step__cta{font-size:0;margin:0}.qs-step__cta::after{font-size:18px}
+  /* Qué es: tarjetitas de a dos, sin la foto grande */
+  .about__split{grid-template-columns:1fr;gap:0}
+  .about__media{display:none}
+  .about__grid{grid-template-columns:1fr 1fr;gap:8px}
+  .about__card{padding:14px;border-radius:18px}
+  .about__card-icon{font-size:22px;margin-bottom:6px}
+  .about__card h3{font-size:15px;margin:0}
+  .about__card p{display:none}
+  /* Anatomía: sólo se lee la parte elegida */
+  .foil-part:not(.active) .foil-part__desc{display:none}
+  .foil-part{padding:10px 14px}
+  .anatomy__visual{max-height:340px}
+  /* Maniobras y riders: filas que se deslizan */
+  .man-filters{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;scrollbar-width:none;margin:12px -16px 14px;padding:0 16px}
+  .man-filters::-webkit-scrollbar{display:none}
+  .man-filter{flex:none}
+  .man-grid,.riders-grid{display:grid;grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:72%;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin-inline:-16px;padding:0 16px 8px;scroll-padding-inline:16px;scrollbar-width:none}
+  .man-grid::-webkit-scrollbar,.riders-grid::-webkit-scrollbar{display:none}
+  .man-card,.rider-card{scroll-snap-align:start}
+  .man-card__visual{aspect-ratio:4/3}
+  .man-card__body{padding:12px 14px;gap:4px}
+  .man-card__desc,.man-card__meta{display:none}
+  .rider-card__bio{display:none}
+  .section-sub{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+}
+/* Artículos: en el celu, filas compactas con foto al costado */
+.blog-card__excerpt{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+@media(max-width:600px){
+  .blog-grid{gap:10px}
+  .blog-card{flex-direction:row;align-items:stretch;min-height:118px}
+  .blog-card__cover{flex:0 0 112px;aspect-ratio:auto}
+  .blog-card__body{padding:12px 14px;gap:4px}
+  .blog-card__excerpt{display:none}
+  .blog-card__title{font-size:16px}
+  .blog-card__meta{padding-top:4px;border-top:0}
+}
 </style>
 
   <!-- Leaflet -->
@@ -1953,12 +2231,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <a class="nx-btn nx-btn--signal" href="/aprender" data-en="Start learning">Empezar a aprender</a>
         <a class="nx-btn nx-btn--glass" href="/spots" data-en="Where to ride today">Dónde volar hoy</a>
       </div>
-      <a class="nx-viento" id="vientoHome" href="/spots#salgo-hoy" hidden>
-        <span class="nx-m nx-viento__eye"><i class="nx-viento__dot"></i><span data-en="Wind now">Viento ahora</span></span>
-        <strong class="nx-viento__t" id="vientoTit"></strong>
-        <span class="nx-viento__lista" id="vientoLista"></span>
-        <span class="nx-m nx-viento__mas" data-en="See all spots →">Ver todos los spots →</span>
-      </a>
+      <ul class="nx-stats" id="homeStats" aria-label="La comunidad en números">
+        <li><b data-stat="guias">27</b><span data-en="free guides">guías gratis</span></li>
+        <li><b data-stat="spots">17</b><span data-en="spots with live wind">spots con viento</span></li>
+        <li><b data-stat="instr">9</b><span data-en="instructors">instructores</span></li>
+        <li><b data-stat="avisos">+100</b><span data-en="listings compared">avisos comparados</span></li>
+      </ul>
     </div>
   </div>
   <button class="nx-hv__pausa" id="heroPausa" type="button" aria-label="Pausar video" data-en-aria-label="Pause video" hidden>
@@ -1966,17 +2244,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </button>
 </section>
 
-<!-- Frase grande con fotos metidas en el texto -->
-<section class="nx-frase nx-frase--foto" data-pg="inicio" aria-label="Escuela de Wingfoil">
-  <img class="nx-frase__bg" src="/assets/img/wf-1666175496147-9faf7d295503.jpg" alt="" loading="lazy"/>
-  <div class="nx-wrap">
-    <p class="nx-d nx-frase__t">
-      <span data-en="From the shore">De la orilla</span>
-      <span class="nx-frase__img"><img src="/assets/img/wf-14740931-800.jpg" alt="" loading="lazy"/></span>
-      <span data-en="to your first">al primer</span>
-      <span class="nx-frase__img nx-frase__img--l"><img src="/assets/img/wf-33834659-800.jpg" alt="" loading="lazy"/></span>
-      <span data-en="flight, free.">vuelo, gratis.</span>
-    </p>
+<!-- Viento ahora, grande: lo pinta el script de la portada con el pronóstico de "¿Salgo hoy?" -->
+<section class="vivo" id="vivo" data-pg="inicio" aria-labelledby="vivoSpot">
+  <div class="nx-wrap vivo__in">
+    <a class="vivo__main" href="/spots#salgo-hoy">
+      <img class="vivo__bg" src="/assets/img/wf-14740926-800.jpg" alt="" loading="lazy"/>
+      <span class="nx-m vivo__eye"><i class="nx-viento__dot"></i><span data-en="Wind now">Viento ahora</span></span>
+      <h2 class="nx-d vivo__spot" id="vivoSpot">San Isidro</h2>
+      <div class="vivo__num"><b id="vivoKn">··</b><span>kn</span><span class="vivo__fl" id="vivoFl"></span></div>
+      <p class="vivo__ver" id="vivoVer" data-en="Measuring the wind…">Midiendo el viento…</p>
+      <p class="nx-m vivo__det" id="vivoDet"></p>
+    </a>
+    <div class="vivo__side">
+      <div class="vivo__head">
+        <p class="vivo__res" id="vivoRes" data-en="Wind in the spots around the country">El viento en los spots del país</p>
+        <a class="vivo__todos" href="/spots#salgo-hoy" data-en="All spots →">Todos los spots →</a>
+      </div>
+      <div class="vivo__lista" id="vivoLista">
+        <span class="vivo__sk"></span><span class="vivo__sk"></span><span class="vivo__sk"></span><span class="vivo__sk"></span><span class="vivo__sk"></span><span class="vivo__sk"></span>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -2181,7 +2468,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <span class="eyebrow" data-en="🚀 Start now">🚀 Empezar ahora</span>
     <h2 class="section-title" data-en="Want to start? <em>3 steps</em>.">¿Querés arrancar? <em>3 pasos</em>.</h2>
-    <p class="section-sub">La ruta rápida para sumarte al wingfoil. Elegí por dónde te conviene empezar según tu situación.</p>
+    <p class="section-sub" data-en="The fast track into wingfoil.">La ruta rápida para sumarte al wingfoil.</p>
     <div class="quickstart-grid">
 
       <a href="#instructores" class="qs-step">
@@ -2219,7 +2506,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div>
         <span class="eyebrow" data-en="New to the sport?">¿Nuevo en el deporte?</span>
         <h2 class="section-title" data-en="What is WingFoil?">¿Qué es el WingFoil?</h2>
-        <p class="section-sub">Combina un ala inflable de mano con una tabla con foil hidrodinámico. El viento impulsa el ala, el foil eleva al rider sobre el agua. La sensación: volar.</p>
+        <p class="section-sub" data-en="A handheld wing, a board with a foil, and the wind lifts you over the water.">Un ala en la mano, una tabla con foil y el viento te levanta sobre el agua.</p>
         <div class="about__grid">
           <div class="about__card"><span class="about__card-icon">🏄</span><h3>Fácil de aprender</h3><p>Con la guía correcta podés estar volando en tus primeras sesiones. El Río de la Plata tiene condiciones ideales.</p></div>
           <div class="about__card"><span class="about__card-icon">💨</span><h3>Poco viento</h3><p>Desde 12-15 nudos ya podés disfrutar. El equipo moderno es cada vez más eficiente.</p></div>
@@ -2238,75 +2525,43 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ VIDEOS ============================================================ -->
-<section class="section" id="videos" data-pg="aprender">
+<section class="section nf" id="videos" data-pg="aprender">
   <div class="container">
-    <span class="eyebrow">Aprendizaje</span>
-    <h2 class="section-title" data-en="Videos by Level">Videos por Nivel</h2>
-    <p class="section-sub">Pasos ilustrados + videos en español. Todos los niveles con progresión clara desde tu primera vez en el agua hasta freestyle avanzado.</p>
-
-    <div class="video-tabs" role="tablist">
-      <button class="video-tab active" role="tab" aria-selected="true" data-tab="n1"><span class="video-tab__num">1</span><span class="video-tab__label">Principiante<small>Primeros pasos</small></span></button>
-      <button class="video-tab" role="tab" aria-selected="false" data-tab="n2"><span class="video-tab__num">2</span><span class="video-tab__label">Intermedio<small>Aprendé a foilear</small></span></button>
-      <button class="video-tab" role="tab" aria-selected="false" data-tab="n3"><span class="video-tab__num">3</span><span class="video-tab__label">Avanzado<small>Maniobras y trucos</small></span></button>
+    <div class="nf__head">
+      <div><span class="eyebrow" data-en="Learning">Aprendizaje</span>
+      <h2 class="section-title" data-en="Videos by level">Videos por nivel</h2></div>
+      <p class="section-sub" data-en="Pick your level and press play. In Spanish, from your first time on the water to freestyle.">Elegí tu nivel y dale play. En español, desde tu primera vez en el agua hasta freestyle.</p>
     </div>
-
-    <!-- NIVEL 1 -->
-    <div class="video-panel active" id="panel-n1">
-      <div class="nivel-steps">
-        <h3 class="nivel-steps__title">Pasos del Nivel 1 — Principiante 🌊</h3>
-        <div class="steps-grid">
-          <div class="step-card"><span class="step-card__num">Paso 1</span><span class="step-card__icon">🌊</span><div class="step-card__title">Conocé el agua y el equipo</div><p class="step-card__desc">Antes de entrar al agua, revisá cada parte del equipo. Aprendé a inflar el ala y cómo se conecta al arnés.</p></div>
-          <div class="step-card"><span class="step-card__num">Paso 2</span><span class="step-card__icon">💨</span><div class="step-card__title">Control del ala en el agua</div><p class="step-card__desc">Inflala, sostela y aprendé a moverla en la ventana de viento. Este es el skill más importante del nivel 1.</p></div>
-          <div class="step-card"><span class="step-card__num">Paso 3</span><span class="step-card__icon">🏄</span><div class="step-card__title">Subirse a la tabla</div><p class="step-card__desc">Con el ala controlada, subí a la tabla flotando. Encontrá tu postura y equilibrio. El foil sigue bajo el agua.</p></div>
-          <div class="step-card"><span class="step-card__num">Paso 4</span><span class="step-card__icon">➡️</span><div class="step-card__title">Primer desplazamiento</div><p class="step-card__desc">Usá el ala para ir en línea recta y volvé. Aprendé rumbos básicos. ¡Tu primer ride real!</p></div>
-        </div>
+    <div class="nf-row" id="nivel-1">
+      <div class="nf-row__head">
+        <span class="nf-row__lvl">1</span>
+        <div><h3 class="nx-d nf-row__t" data-en="Beginner">Principiante</h3><span class="nx-m nf-row__sub" data-en="First steps">Primeros pasos</span></div>
+        <ol class="nf-pasos" aria-label="Pasos del nivel 1"><li><b>1</b>Conocé el agua y el equipo</li><li><b>2</b>Control del ala en el agua</li><li><b>3</b>Subirse a la tabla</li><li><b>4</b>Primer desplazamiento</li></ol>
       </div>
-      <div class="nivel-divider">Videos · Nivel 1</div>
-      <div class="videos-grid">
-        <div class="video-card"><div class="video-wrap"><iframe src="https://www.youtube.com/embed/EThzuUA7ShQ" title="Wing Foil para principiantes" loading="lazy" allowfullscreen></iframe></div><div class="video-info"><span class="video-badge">🇪🇸 Español</span><h4>Paso 1: Control del ala</h4><p>Aprendé a manejar el ala y a navegar sin foil.</p></div><details class="video-transcript"><summary>📄 Transcripción del video</summary><div class="video-transcript__body">El primer paso del wingfoil es dominar el ala en tierra antes de entrar al agua. El ala (wing) es la vela inflable que sostenes con las manos por el strut central. Posición neutra: el ala perpendicular al viento sin jalarte. Ventana de potencia: inclinás el ala hacia adelante para ganar velocidad, hacia atrás para frenar. Lo primero es practicar en tierra con viento, sosteniendo el ala con ambas manos en el strut y manteniendo los brazos relajados. En el agua, el objetivo de la primera sesión es navegar sin foil, solo sobre la tabla, aprendiendo los rumbos básicos: través (viento de costado), upwind (contra el viento), downwind (con el viento). Una vez que podés avanzar y volver al punto de origen, completaste el Paso 1.</div></details></div>
-        <div class="video-card"><div class="video-wrap"><iframe src="https://www.youtube.com/embed/cDCOfbP2hvY" title="Aprende Wingfoil" loading="lazy" allowfullscreen></iframe></div><div class="video-info"><span class="video-badge">🇪🇸 Español</span><h4>Paso 2: Al agua</h4><p>Rumbos, giros y cómo volver con seguridad.</p></div><details class="video-transcript"><summary>📄 Transcripción del video</summary><div class="video-transcript__body">En la segunda fase ya estás cómodo con el ala y empezás a trabajar rumbos y giros. El rumbo de través (90° al viento) es el más fácil para avanzar. El upwind (contra el viento) te permite volver al punto de origen — fundamental para no terminar alejado de la costa. Los giros básicos son la virada (tack), donde cruzás con la proa al viento, y la trasluchada (gybe), donde girás de popa. La trasluchada es más natural al principio porque no perdés velocidad. Reglas de seguridad en el agua: siempre sabé dónde está la costa, cuál es la dirección del viento, y mantené distancia con otros riders. Con viento offshore (que te aleja de la costa) nunca salgas solo. El objetivo de esta sesión es poder hacer un recorrido completo de ida y vuelta.</div></details></div>
-        <div class="video-card"><div class="video-wrap"><iframe src="https://www.youtube.com/embed/EyNfWdt1JiM" title="Subirse a la tabla" loading="lazy" allowfullscreen></iframe></div><div class="video-info"><span class="video-badge">🇪🇸 Español</span><h4>Paso 3: Subirse y pararse</h4><p>Técnicas para mantener el equilibrio en la tabla.</p></div><details class="video-transcript"><summary>📄 Transcripción del video</summary><div class="video-transcript__body">El Paso 3 es el desafío más técnico antes del primer foileo: ponerse de pie sobre la tabla con el foil instalado. El proceso es: 1) Estar en el agua con el foil instalado, tumbado boca abajo sobre la tabla. 2) Agarrar el ala y generar velocidad. 3) Arrodillarse cuando la tabla toma velocidad. 4) Pararse con los pies en posición de surf — pie trasero sobre la caja del mástil, pie delantero al frente. La posición de los pies es clave: el centro de gravedad debe estar sobre el mástil del foil. Al principio el foil va a querer salir volando — mantené el peso hacia adelante para controlarlo. Una vez que podés pararte consistentemente sin que el foil despegue, estás listo para el Paso 4: tu primer vuelo real.</div></details></div>
-        <div class="video-card"><div class="video-wrap"><iframe src="https://www.youtube.com/embed/LXvkIXNOjy0" title="Avanzar y volver" loading="lazy" allowfullscreen></iframe></div><div class="video-info"><span class="video-badge">🇪🇸 Español</span><h4>Paso 4: Ir, girar y volver</h4><p>Tu primer ride completo de forma segura.</p></div></div>
-      </div>
+      <div class="nf-rail"><button class="nf-card" type="button" data-yt="EThzuUA7ShQ" aria-label="Ver video: Paso 1: Control del ala"><span class="nf-card__img"><img src="https://i.ytimg.com/vi/EThzuUA7ShQ/hqdefault.jpg" alt="" loading="lazy"/><span class="nf-card__play" aria-hidden="true"></span><span class="nf-card__n">1</span></span><span class="nf-card__txt"><b>Paso 1: Control del ala</b><span>Aprendé a manejar el ala y a navegar sin foil.</span><small>🇪🇸 Español</small></span><span class="nf-card__tr" hidden>El primer paso del wingfoil es dominar el ala en tierra antes de entrar al agua. El ala (wing) es la vela inflable que sostenes con las manos por el strut central. Posición neutra: el ala perpendicular al viento sin jalarte. Ventana de potencia: inclinás el ala hacia adelante para ganar velocidad, hacia atrás para frenar. Lo primero es practicar en tierra con viento, sosteniendo el ala con ambas manos en el strut y manteniendo los brazos relajados. En el agua, el objetivo de la primera sesión es navegar sin foil, solo sobre la tabla, aprendiendo los rumbos básicos: través (viento de costado), upwind (contra el viento), downwind (con el viento). Una vez que podés avanzar y volver al punto de origen, completaste el Paso 1.</span></button><button class="nf-card" type="button" data-yt="cDCOfbP2hvY" aria-label="Ver video: Paso 2: Al agua"><span class="nf-card__img"><img src="https://i.ytimg.com/vi/cDCOfbP2hvY/hqdefault.jpg" alt="" loading="lazy"/><span class="nf-card__play" aria-hidden="true"></span><span class="nf-card__n">2</span></span><span class="nf-card__txt"><b>Paso 2: Al agua</b><span>Rumbos, giros y cómo volver con seguridad.</span><small>🇪🇸 Español</small></span><span class="nf-card__tr" hidden>En la segunda fase ya estás cómodo con el ala y empezás a trabajar rumbos y giros. El rumbo de través (90° al viento) es el más fácil para avanzar. El upwind (contra el viento) te permite volver al punto de origen — fundamental para no terminar alejado de la costa. Los giros básicos son la virada (tack), donde cruzás con la proa al viento, y la trasluchada (gybe), donde girás de popa. La trasluchada es más natural al principio porque no perdés velocidad. Reglas de seguridad en el agua: siempre sabé dónde está la costa, cuál es la dirección del viento, y mantené distancia con otros riders. Con viento offshore (que te aleja de la costa) nunca salgas solo. El objetivo de esta sesión es poder hacer un recorrido completo de ida y vuelta.</span></button><button class="nf-card" type="button" data-yt="EyNfWdt1JiM" aria-label="Ver video: Paso 3: Subirse y pararse"><span class="nf-card__img"><img src="https://i.ytimg.com/vi/EyNfWdt1JiM/hqdefault.jpg" alt="" loading="lazy"/><span class="nf-card__play" aria-hidden="true"></span><span class="nf-card__n">3</span></span><span class="nf-card__txt"><b>Paso 3: Subirse y pararse</b><span>Técnicas para mantener el equilibrio en la tabla.</span><small>🇪🇸 Español</small></span><span class="nf-card__tr" hidden>El Paso 3 es el desafío más técnico antes del primer foileo: ponerse de pie sobre la tabla con el foil instalado. El proceso es: 1) Estar en el agua con el foil instalado, tumbado boca abajo sobre la tabla. 2) Agarrar el ala y generar velocidad. 3) Arrodillarse cuando la tabla toma velocidad. 4) Pararse con los pies en posición de surf — pie trasero sobre la caja del mástil, pie delantero al frente. La posición de los pies es clave: el centro de gravedad debe estar sobre el mástil del foil. Al principio el foil va a querer salir volando — mantené el peso hacia adelante para controlarlo. Una vez que podés pararte consistentemente sin que el foil despegue, estás listo para el Paso 4: tu primer vuelo real.</span></button><button class="nf-card" type="button" data-yt="LXvkIXNOjy0" aria-label="Ver video: Paso 4: Ir, girar y volver"><span class="nf-card__img"><img src="https://i.ytimg.com/vi/LXvkIXNOjy0/hqdefault.jpg" alt="" loading="lazy"/><span class="nf-card__play" aria-hidden="true"></span><span class="nf-card__n">4</span></span><span class="nf-card__txt"><b>Paso 4: Ir, girar y volver</b><span>Tu primer ride completo de forma segura.</span><small>🇪🇸 Español</small></span></button></div>
     </div>
-
-    <!-- NIVEL 2 -->
-    <div class="video-panel" id="panel-n2" hidden>
-      <div class="nivel-steps">
-        <h3 class="nivel-steps__title">Pasos del Nivel 2 — Intermedio 🏄</h3>
-        <div class="steps-grid">
-          <div class="step-card"><span class="step-card__num">Paso 1</span><span class="step-card__icon">🛫</span><div class="step-card__title">Primer despegue del foil</div><p class="step-card__desc">Lográ que el foil levante la tabla. Posición del peso sobre el pie trasero + velocidad mínima de vuelo.</p></div>
-          <div class="step-card"><span class="step-card__num">Paso 2</span><span class="step-card__icon">⚖️</span><div class="step-card__title">Mantener la altura</div><p class="step-card__desc">En vuelo, regulá la altura del foil. Demasiado alto = colapso; bajo = touch. Postura del cuerpo es la clave.</p></div>
-          <div class="step-card"><span class="step-card__num">Paso 3</span><span class="step-card__icon">🔄</span><div class="step-card__title">Gibes y cambios de bordo</div><p class="step-card__desc">El gibe es la maniobra más importante. Cambiá de dirección sin perder altura.</p></div>
-          <div class="step-card"><span class="step-card__num">Paso 4</span><span class="step-card__icon">⚡</span><div class="step-card__title">Primer downwind</div><p class="step-card__desc">Tu primera derivada larga con viento en popa. Planificá la ruta y disfrutá.</p></div>
-        </div>
+    <div class="nf-row" id="nivel-2">
+      <div class="nf-row__head">
+        <span class="nf-row__lvl">2</span>
+        <div><h3 class="nx-d nf-row__t" data-en="Intermediate">Intermedio</h3><span class="nx-m nf-row__sub" data-en="Learn to foil">Aprendé a foilear</span></div>
+        <ol class="nf-pasos" aria-label="Pasos del nivel 2"><li><b>1</b>Primer despegue del foil</li><li><b>2</b>Mantener la altura</li><li><b>3</b>Gibes y cambios de bordo</li><li><b>4</b>Primer downwind</li></ol>
       </div>
-      <div class="nivel-divider">Videos · Nivel 2</div>
-      <div class="videos-grid">
-        <div class="video-card"><div class="video-wrap"><iframe src="https://www.youtube.com/embed/LXvkIXNOjy0" title="Cómo bombear" loading="lazy" allowfullscreen></iframe></div><div class="video-info"><span class="video-badge">🇪🇸 Español</span><h4>Cómo bombear para volar</h4><p>Sincronización vela y piernas para el despegue.</p></div></div>
-        <div class="video-card"><div class="video-wrap"><iframe src="https://www.youtube.com/embed/chXe6xBRBTM" title="Foil iniciación vs intermedio" loading="lazy" allowfullscreen></iframe></div><div class="video-info"><span class="video-badge">🇪🇸 Español</span><h4>Foil iniciación vs intermedio</h4><p>Diferencias de equipamiento según tu nivel.</p></div></div>
-        <div class="video-card"><div class="video-wrap"><iframe src="https://www.youtube.com/embed/H4oIOEn9LjI" title="Primera trasluchada" loading="lazy" allowfullscreen></iframe></div><div class="video-info"><span class="video-badge">🇪🇸 Español</span><h4>Primera trasluchada</h4><p>Los 3 puntos clave para tu primer giro.</p></div></div>
-        <div class="video-card"><div class="video-wrap"><iframe src="https://www.youtube.com/embed/EThzuUA7ShQ" title="Primer downwind" loading="lazy" allowfullscreen></iframe></div><div class="video-info"><span class="video-badge">🇪🇸 Español</span><h4>Tu primer downwind</h4><p>Cómo planificar y ejecutar la derivada larga.</p></div></div>
-      </div>
+      <div class="nf-rail"><button class="nf-card" type="button" data-yt="LXvkIXNOjy0" aria-label="Ver video: Cómo bombear para volar"><span class="nf-card__img"><img src="https://i.ytimg.com/vi/LXvkIXNOjy0/hqdefault.jpg" alt="" loading="lazy"/><span class="nf-card__play" aria-hidden="true"></span><span class="nf-card__n">1</span></span><span class="nf-card__txt"><b>Cómo bombear para volar</b><span>Sincronización vela y piernas para el despegue.</span><small>🇪🇸 Español</small></span></button><button class="nf-card" type="button" data-yt="chXe6xBRBTM" aria-label="Ver video: Foil iniciación vs intermedio"><span class="nf-card__img"><img src="https://i.ytimg.com/vi/chXe6xBRBTM/hqdefault.jpg" alt="" loading="lazy"/><span class="nf-card__play" aria-hidden="true"></span><span class="nf-card__n">2</span></span><span class="nf-card__txt"><b>Foil iniciación vs intermedio</b><span>Diferencias de equipamiento según tu nivel.</span><small>🇪🇸 Español</small></span></button><button class="nf-card" type="button" data-yt="H4oIOEn9LjI" aria-label="Ver video: Primera trasluchada"><span class="nf-card__img"><img src="https://i.ytimg.com/vi/H4oIOEn9LjI/hqdefault.jpg" alt="" loading="lazy"/><span class="nf-card__play" aria-hidden="true"></span><span class="nf-card__n">3</span></span><span class="nf-card__txt"><b>Primera trasluchada</b><span>Los 3 puntos clave para tu primer giro.</span><small>🇪🇸 Español</small></span></button><button class="nf-card" type="button" data-yt="EThzuUA7ShQ" aria-label="Ver video: Tu primer downwind"><span class="nf-card__img"><img src="https://i.ytimg.com/vi/EThzuUA7ShQ/hqdefault.jpg" alt="" loading="lazy"/><span class="nf-card__play" aria-hidden="true"></span><span class="nf-card__n">4</span></span><span class="nf-card__txt"><b>Tu primer downwind</b><span>Cómo planificar y ejecutar la derivada larga.</span><small>🇪🇸 Español</small></span></button></div>
     </div>
-
-    <!-- NIVEL 3 -->
-    <div class="video-panel" id="panel-n3" hidden>
-      <div class="nivel-steps">
-        <h3 class="nivel-steps__title">Pasos del Nivel 3 — Avanzado 🚀</h3>
-        <div class="steps-grid">
-          <div class="step-card"><span class="step-card__num">Paso 1</span><span class="step-card__icon">🌊</span><div class="step-card__title">Surf en olas con foil</div><p class="step-card__desc">Desprenderte del ala y surfear la ola con el foil. La energía de la ola se convierte en tu motor.</p></div>
-          <div class="step-card"><span class="step-card__num">Paso 2</span><span class="step-card__icon">🚀</span><div class="step-card__title">Pump avanzado y tacking</div><p class="step-card__desc">Mantener vuelo sin viento usando solo el pump. Dominar el tacking aéreo completa tu toolkit.</p></div>
-          <div class="step-card"><span class="step-card__num">Paso 3</span><span class="step-card__icon">🎯</span><div class="step-card__title">Maniobras freestyle</div><p class="step-card__desc">Backroll, frontroll, jumps, spins. El nivel 3 es el mundo de la expresión personal.</p></div>
-          <div class="step-card"><span class="step-card__num">Paso 4</span><span class="step-card__icon">🏆</span><div class="step-card__title">Competencia y regatas</div><p class="step-card__desc">Argentina tiene circuito nacional activo con fechas todo el año.</p></div>
-        </div>
+    <div class="nf-row" id="nivel-3">
+      <div class="nf-row__head">
+        <span class="nf-row__lvl">3</span>
+        <div><h3 class="nx-d nf-row__t" data-en="Advanced">Avanzado</h3><span class="nx-m nf-row__sub" data-en="Moves and tricks">Maniobras y trucos</span></div>
+        <ol class="nf-pasos" aria-label="Pasos del nivel 3"><li><b>1</b>Surf en olas con foil</li><li><b>2</b>Pump avanzado y tacking</li><li><b>3</b>Maniobras freestyle</li><li><b>4</b>Competencia y regatas</li></ol>
       </div>
-      <div class="nivel-divider">Videos · Nivel 3</div>
-      <div class="videos-grid">
-        <div class="video-card"><div class="video-wrap"><iframe src="https://www.youtube.com/embed/tQM0D9FFnrE" title="Twisted Jump" loading="lazy" allowfullscreen></iframe></div><div class="video-info"><span class="video-badge">🇪🇸 Español</span><h4>Twisted Jump</h4><p>Técnica del salto torcido o "tweaked".</p></div></div>
-        <div class="video-card"><div class="video-wrap"><iframe src="https://www.youtube.com/embed/XBz8loyLr34" title="Top tricks Mundial" loading="lazy" allowfullscreen></iframe></div><div class="video-info"><span class="video-badge">🇪🇸 Español</span><h4>Top tricks Mundial</h4><p>Los mejores trucos del Campeonato Mundial.</p></div></div>
-        <div class="video-card"><div class="video-wrap"><iframe src="https://www.youtube.com/embed/12unYNCfvBk" title="How to Jump" loading="lazy" allowfullscreen></iframe></div><div class="video-info"><span class="video-badge">🇬🇧 Inglés</span><h4>Tutorial completo de saltos</h4><p>Activá subtítulos en español (CC).</p></div></div>
-      </div>
+      <div class="nf-rail"><button class="nf-card" type="button" data-yt="tQM0D9FFnrE" aria-label="Ver video: Twisted Jump"><span class="nf-card__img"><img src="https://i.ytimg.com/vi/tQM0D9FFnrE/hqdefault.jpg" alt="" loading="lazy"/><span class="nf-card__play" aria-hidden="true"></span><span class="nf-card__n">1</span></span><span class="nf-card__txt"><b>Twisted Jump</b><span>Técnica del salto torcido o "tweaked".</span><small>🇪🇸 Español</small></span></button><button class="nf-card" type="button" data-yt="XBz8loyLr34" aria-label="Ver video: Top tricks Mundial"><span class="nf-card__img"><img src="https://i.ytimg.com/vi/XBz8loyLr34/hqdefault.jpg" alt="" loading="lazy"/><span class="nf-card__play" aria-hidden="true"></span><span class="nf-card__n">2</span></span><span class="nf-card__txt"><b>Top tricks Mundial</b><span>Los mejores trucos del Campeonato Mundial.</span><small>🇪🇸 Español</small></span></button><button class="nf-card" type="button" data-yt="12unYNCfvBk" aria-label="Ver video: Tutorial completo de saltos"><span class="nf-card__img"><img src="https://i.ytimg.com/vi/12unYNCfvBk/hqdefault.jpg" alt="" loading="lazy"/><span class="nf-card__play" aria-hidden="true"></span><span class="nf-card__n">3</span></span><span class="nf-card__txt"><b>Tutorial completo de saltos</b><span>Activá subtítulos en español (CC).</span><small>🇬🇧 Inglés</small></span></button></div>
+    </div>
+  </div>
+  <div class="nf-modal" id="nfModal" hidden role="dialog" aria-modal="true" aria-label="Video">
+    <div class="nf-modal__box">
+      <button class="nf-modal__x" type="button" id="nfCerrar" aria-label="Cerrar video">✕</button>
+      <div class="nf-modal__vid" id="nfVid"></div>
+      <div class="nf-modal__info"><b id="nfTit"></b><details id="nfTrW" hidden><summary data-en="📄 Video transcript">📄 Transcripción del video</summary><p id="nfTr"></p></details></div>
     </div>
   </div>
 </section>
@@ -2316,7 +2571,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <span class="eyebrow">Guía visual interactiva</span>
     <h2 class="section-title" data-en="Anatomy of the <span style=&quot;color:var(--primary)&quot;>Foil</span>">Anatomía del <span style="color:var(--primary)">Foil</span></h2>
-    <p class="section-sub">Tocá cada parte para entender qué hace y por qué importa. Antes de comprar equipo, es clave saber de qué hablan los riders.</p>
+    <p class="section-sub" data-en="Tap each part to see what it does.">Tocá cada parte para ver qué hace.</p>
     <div class="anatomy__body">
       <div class="anatomy__visual" style="padding:0;cursor:grab">
         <canvas id="foilCanvas" style="width:100%;display:block;cursor:inherit;touch-action:none;background:#040e1a" aria-label="Foil 3D interactivo"></canvas>
@@ -2345,7 +2600,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <span class="eyebrow">Guía visual interactiva</span>
     <h2 class="section-title" data-en="Anatomy of the <span style=&quot;color:var(--primary)&quot;>Wing</span>">Anatomía del <span style="color:var(--primary)">Ala de Wing</span></h2>
-    <p class="section-sub">El ala es lo que te propulsa. Entendé sus partes antes de comprar o alquilar: cada componente tiene un rol clave en tu control y seguridad.</p>
+    <p class="section-sub" data-en="Tap each number to see what each part does.">Tocá cada número para ver qué hace cada parte.</p>
     <div class="anatomy__body">
       <div class="anatomy__visual" style="padding:0;cursor:default;overflow:hidden">
         <div style="position:relative;width:100%">
@@ -2388,22 +2643,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ============================================================ SPOTS ============================================================ -->
-<section class="section" id="spots" data-pg="spots">
-  <div class="container">
-    <span class="eyebrow">🇦🇷 Argentina</span>
-    <h2 class="section-title" data-en="Argentine waters">Aguas argentinas</h2>
-    <p class="section-sub">Un mapa de la República Argentina con todos los lugares donde se navega wingfoil. Hacé click para abrir el mapa interactivo.</p>
-
-    <div class="spots-cta">
-      <button class="spots-cta-btn" id="openMapModal" aria-label="Abrir mapa expandido de spots">
-        <div class="spots-cta-icon">🗺️</div>
-        <div class="spots-cta-text">
-          <span class="spots-cta-title">Abrir mapa interactivo</span>
-          <span class="spots-cta-sub">22+ spots de wingfoil + 4 cable parks · Argentina</span>
-        </div>
-        <span class="spots-cta-arrow">→</span>
-      </button>
+<section class="section spots-bar" id="spots" data-pg="spots">
+  <div class="container spots-bar__in">
+    <div>
+      <span class="eyebrow">🇦🇷 Argentina</span>
+      <h2 class="section-title" data-en="Argentine waters">Aguas argentinas</h2>
+      <p class="section-sub" data-en="Every spot where people ride wingfoil, with wind, level and how to get there.">Todos los spots donde se navega wingfoil, con viento, nivel y cómo llegar.</p>
     </div>
+    <button class="spots-cta-btn" id="openMapModal" aria-label="Abrir mapa expandido de spots">
+      <div class="spots-cta-icon">🗺️</div>
+      <div class="spots-cta-text">
+        <span class="spots-cta-title" data-en="Open the map">Abrir el mapa</span>
+        <span class="spots-cta-sub" data-en="17 spots + 4 cable parks">17 spots + 4 cable parks</span>
+      </div>
+      <span class="spots-cta-arrow">→</span>
+    </button>
   </div>
 </section>
 
@@ -2663,11 +2917,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <section class="section instructors" id="instructores" data-pg="instructores">
   <div class="container">
-    <span class="eyebrow">Comunidad</span>
-    <h2 class="section-title" data-en="Are you an Instructor?">¿Sos Instructor?</h2>
-    <p class="section-sub">Publicá tu perfil gratis y hacete contactar por alumnos interesados en aprender wingfoil o kitesurf.</p>
-    <div class="instructors-grid" id="instructorsGrid">
+    <div class="instr-head">
+      <div>
+        <span class="eyebrow" data-en="Community">Comunidad</span>
+        <h2 class="section-title" data-en="Instructors in Argentina">Instructores en Argentina</h2>
+      </div>
+      <p class="section-sub" id="instrCuenta" data-en="Write to them directly on WhatsApp. No middlemen, no fees.">Escribiles directo por WhatsApp. Sin intermediarios ni comisiones.</p>
     </div>
+    <div class="instructors-grid" id="instructorsGrid">
+      <div class="instr-sk"></div><div class="instr-sk"></div><div class="instr-sk"></div>
+    </div>
+    <details class="instr-alta" id="instrAlta">
+      <summary><span class="instr-alta__ico">🏄</span><span><b data-en="Are you an instructor?">¿Sos instructor?</b><small data-en="Publish your profile for free. It shows up right away.">Publicá tu perfil gratis. Aparece al instante.</small></span><span class="instr-alta__btn" aria-hidden="true">+</span></summary>
     <div class="form-wrap">
       <div class="form-header"><h3>Publicar mi perfil</h3><span class="badge--free">✓ 100% Gratuito</span></div>
       <p class="form-note">Tu perfil aparece inmediatamente en la página, sin pagar nada.</p>
@@ -2715,6 +2976,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <button type="submit" class="btn btn--primary btn--full">Publicar mi perfil →</button>
       </form>
     </div>
+    </details>
   </div>
 </section>
 
@@ -2845,7 +3107,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <span class="eyebrow">🎯 Catálogo</span>
     <h2 class="section-title" data-en="WingFoil Manoeuvres">Maniobras del WingFoil</h2>
-    <p class="section-sub">Las maniobras del deporte ordenadas por dificultad. Desde la primera vez que despegás hasta los trucos más avanzados.</p>
+    <p class="section-sub" data-en="From your first flight to pro tricks, by difficulty.">De tu primer vuelo a los trucos pro, por dificultad.</p>
 
     <div class="man-filters" id="manFilters">
       <button class="man-filter active" data-mf="all">Todas</button>
@@ -2864,7 +3126,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <span class="eyebrow" data-en="🌟 Inspiration">🌟 Inspiración</span>
     <h2 class="section-title" data-en="Riders &amp; Legends">Riders &amp; Legends</h2>
-    <p class="section-sub" data-en="The world references of wingfoil. Click any video to watch it without leaving the site.">Los referentes mundiales del wingfoil. Hacé click en cualquier video para verlo sin salir del sitio.</p>
+    <p class="section-sub" data-en="The world's wingfoil icons. Tap and watch here.">Los referentes del mundo. Tocá y miralo acá.</p>
     <div class="riders-grid">
 
       <article class="rider-card">
@@ -3676,33 +3938,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- ============================================================ ENCUESTA + SPONSORS ============================================================ -->
 
 <!-- ============================================================ DISCLAIMER ============================================================ -->
-<section class="nx-galeria" data-pg="aprender" aria-label="Fotos">
-  <div class="nx-wrap nx-galeria__in">
-    <figure class="nx-galeria__a"><img src="/assets/img/wf-1666175497584-dab60dcf1419.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
-    <p class="nx-d nx-galeria__t" data-en="Every session counts.">Cada sesión suma.</p>
-    <figure class="nx-galeria__b"><img src="/assets/img/wf-1730134427101-ec7982a3d773-800.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
+<!-- Comunidad: tira de fotos en todas las páginas -->
+<section class="tribu" aria-labelledby="tribuT">
+  <div class="nx-wrap tribu__head">
+    <div>
+      <span class="nx-m tribu__eye" data-en="Community">Comunidad</span>
+      <h2 class="nx-d tribu__t" id="tribuT" data-en="School, showcase and crew.">Escuela, vidriera y tribu.</h2>
+    </div>
+    <p class="tribu__p" data-en="Riders, instructors and readers from all over Argentina learning, comparing gear and going out together.">Riders, instructores y lectores de todo el país que aprenden, comparan equipo y salen juntos al agua.</p>
+    <a class="tribu__ig" href="https://www.instagram.com/clubkitewing" target="_blank" rel="noopener" data-en="Follow on Instagram ↗">Seguinos en Instagram ↗</a>
   </div>
-</section>
-<section class="nx-galeria" data-pg="spots" aria-label="Fotos">
-  <div class="nx-wrap nx-galeria__in">
-    <figure class="nx-galeria__a"><img src="/assets/img/wf-1652732255684-d92200fffa0f.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
-    <p class="nx-d nx-galeria__t" data-en="Water, wind, and off you go.">Agua, viento y a volar.</p>
-    <figure class="nx-galeria__b"><img src="/assets/img/wf-1740688245004-d4e836b7eb58-800.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
-  </div>
-</section>
-<section class="nx-galeria" data-pg="instructores" aria-label="Fotos">
-  <div class="nx-wrap nx-galeria__in">
-    <figure class="nx-galeria__a"><img src="/assets/img/wf-1740688244435-047d479f8113.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
-    <p class="nx-d nx-galeria__t" data-en="With someone beside you, you learn twice as fast.">Con alguien al lado, se aprende el doble.</p>
-    <figure class="nx-galeria__b"><img src="/assets/img/wf-1666175497562-ccb66e6c373b-800.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
-  </div>
-</section>
-<section class="nx-galeria" data-pg="equipos" aria-label="Fotos">
-  <div class="nx-wrap nx-galeria__in">
-    <figure class="nx-galeria__a"><img src="/assets/img/wf-1666175497804-e28c2d800ab9.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
-    <p class="nx-d nx-galeria__t" data-en="The right gear changes everything.">El equipo justo cambia todo.</p>
-    <figure class="nx-galeria__b"><img src="/assets/img/wf-1740688244924-4deca73383dc-800.jpg" alt="Rider de wingfoil navegando" loading="lazy"/></figure>
-  </div>
+  <div class="tribu__cinta"><div class="tribu__in"><img src="/assets/img/wf-13910771-800.jpg" alt="Rider de wingfoil en el agua" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-13910809-800.jpg" alt="Rider de wingfoil en el agua" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-14447118-800.jpg" alt="Rider de wingfoil en el agua" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-14740928-800.jpg" alt="Rider de wingfoil en el agua" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-15151064-800.jpg" alt="Rider de wingfoil en el agua" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-15151070-800.jpg" alt="Rider de wingfoil en el agua" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-1666175496646-6b5ad13b902f-800.jpg" alt="Rider de wingfoil en el agua" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-1666175497932-8c88bbad53b1-800.jpg" alt="Rider de wingfoil en el agua" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-1730134427101-ec7982a3d773-800.jpg" alt="Rider de wingfoil en el agua" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-18388623-800.jpg" alt="Rider de wingfoil en el agua" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-18388700-800.jpg" alt="Rider de wingfoil en el agua" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-18546149-800.jpg" alt="Rider de wingfoil en el agua" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-19169526-800.jpg" alt="Rider de wingfoil en el agua" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-19532131-800.jpg" alt="Rider de wingfoil en el agua" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-26077474-800.jpg" alt="Rider de wingfoil en el agua" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-33834673-800.jpg" alt="Rider de wingfoil en el agua" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-38774856-800.jpg" alt="Rider de wingfoil en el agua" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-39731092-800.jpg" alt="Rider de wingfoil en el agua" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-40076942-800.jpg" alt="Rider de wingfoil en el agua" loading="lazy" width="800" height="600"/><span class="tribu__dup" aria-hidden="true"><img src="/assets/img/wf-13910771-800.jpg" alt="" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-13910809-800.jpg" alt="" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-14447118-800.jpg" alt="" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-14740928-800.jpg" alt="" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-15151064-800.jpg" alt="" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-15151070-800.jpg" alt="" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-1666175496646-6b5ad13b902f-800.jpg" alt="" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-1666175497932-8c88bbad53b1-800.jpg" alt="" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-1730134427101-ec7982a3d773-800.jpg" alt="" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-18388623-800.jpg" alt="" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-18388700-800.jpg" alt="" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-18546149-800.jpg" alt="" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-19169526-800.jpg" alt="" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-19532131-800.jpg" alt="" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-26077474-800.jpg" alt="" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-33834673-800.jpg" alt="" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-38774856-800.jpg" alt="" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-39731092-800.jpg" alt="" loading="lazy" width="800" height="600"/><img src="/assets/img/wf-40076942-800.jpg" alt="" loading="lazy" width="800" height="600"/></span></div></div>
 </section>
 <!-- ============================================================ SUMATE: NOVEDADES + SPONSORS (en todas las páginas) ============================================================ -->
 <section class="sumate" id="sponsor" aria-label="Sumate">
@@ -4537,19 +4783,8 @@ if(instrForm){
     }).then(function(r){return r.json().catch(function(){return {}})}).then(function(res){
       netlifyPost('instructor-form',fields).catch(function(){});
       formTrack('instructor-form');
-      var avatar=res.foto?'<img class="instructor-card__photo" src="/api/instructors-foto/'+encodeURIComponent(res.foto)+'" alt="">':'<div class="instructor-card__photo">🏄</div>';
-      var sports='';
-      if(wf)sports+='<span class="sport-tag">🏄 Wingfoil</span>';
-      if(ks)sports+='<span class="sport-tag">🪁 Kitesurf</span>';
-      var card=document.createElement('div');
-      card.className='instructor-card';
-      card.innerHTML=avatar+
-        '<div class="instructor-card__name">'+formEsc(nombre)+' '+formEsc(apellido)+'</div>'+
-        '<div class="instructor-card__loc">📍 '+formEsc(ub)+'</div>'+
-        (sports?'<div class="instructor-card__sports">'+sports+'</div>':'')+
-        (bio?'<p class="instructor-card__bio">'+formEsc(bio)+'</p>':'')+
-        '<a class="instructor-card__wa" href="https://wa.me/'+wa.replace(/[^0-9]/g,'')+'" target="_blank" rel="noopener">WhatsApp</a>';
-      document.getElementById('instructorsGrid').appendChild(card);
+      var grid=document.getElementById('instructorsGrid');
+      grid.insertBefore(window.instrCard({nombre:nombre,apellido:apellido,ubicacion:ub,bio:bio,whatsapp:wa,deportes:deportes,foto:res.foto}),grid.firstChild);
       formShowMsg(msg,true,'✓ Perfil publicado.');
       instrForm.reset();instrFotoData=null;instrFotoPending=null;if(instrFotoPreview)instrFotoPreview.innerHTML='';
     }).catch(function(err){
@@ -5275,30 +5510,51 @@ window.formatPrecioEquipo=function(raw,moneda){
   return sym+p.valor.toLocaleString('es-AR',{minimumFractionDigits:dec,maximumFractionDigits:dec});
 };
 
+// ============ PERFIL DE INSTRUCTOR ============
+// Una sola tarjeta para la lista y para el perfil recién publicado. La mayoría
+// no sube foto: la portada es una foto de wingfoil y el avatar, sus iniciales.
+window.instrCard=function(d,n){
+  var FOTOS=['wf-18388624','wf-15151070','wf-14740931','wf-26077474','wf-33834673','wf-19169526','wf-18388700','wf-39731095'];
+  var nom=(d.nombre||'')+' '+(d.apellido||'');
+  var h=0;for(var i=0;i<nom.length;i++)h=(h*31+nom.charCodeAt(i))>>>0;
+  var ini=((d.nombre||'?').trim()[0]+((d.apellido||'').trim()[0]||'')).toUpperCase();
+  var lugar=!d.ubicacion||d.ubicacion==='Otro'?'Argentina':d.ubicacion;
+  var dep=(d.deportes||'').split(',').filter(Boolean);
+  var wa=(d.whatsapp||'').replace(/[^0-9]/g,'');
+  var msg=encodeURIComponent('Hola '+(d.nombre||'')+'! Te encontré en Escuela de Wingfoil y quiero info de clases.');
+  var card=document.createElement('article');
+  card.className='instructor-card';
+  card.innerHTML='<div class="instructor-card__cover"><img src="/assets/img/'+FOTOS[(n==null?h:n)%FOTOS.length]+'-800.jpg" alt="" loading="lazy"></div>'+
+    (d.foto?'<img class="instructor-card__photo" src="/api/instructors-foto/'+encodeURIComponent(d.foto)+'" alt="Foto de '+escHtml(nom)+'" loading="lazy">'
+           :'<div class="instructor-card__photo instructor-card__photo--ini" style="--h:'+(h%360)+'">'+escHtml(ini)+'</div>')+
+    '<div class="instructor-card__name">'+escHtml(nom)+'</div>'+
+    '<div class="instructor-card__loc">📍 '+escHtml(lugar)+'</div>'+
+    (dep.length?'<div class="instructor-card__sports">'+dep.map(function(s){return s==='wingfoil'?'<span class="sport-tag">🏄 Wingfoil</span>':s==='kitesurf'?'<span class="sport-tag">🪁 Kitesurf</span>':''}).join('')+'</div>':'')+
+    (d.bio?'<p class="instructor-card__bio">'+escHtml(d.bio)+'</p>':'')+
+    (wa?'<a class="instructor-card__wa" href="https://wa.me/'+wa+'?text='+msg+'" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.3 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.1.1.7-.1 1.2z"/></svg>Escribile por WhatsApp</a>':'');
+  var bio=card.querySelector('.instructor-card__bio');
+  if(bio&&d.bio.length>150){
+    var mas=document.createElement('button');mas.type='button';mas.className='instructor-card__mas';mas.textContent='Leer más';
+    mas.addEventListener('click',function(){var o=card.classList.toggle('is-open');mas.textContent=o?'Leer menos':'Leer más'});
+    bio.after(mas);
+  }
+  return card;
+};
+
 // ============ LOAD INSTRUCTORS ============
 async function loadInstructors(){
   var grid=document.getElementById('instructorsGrid');
   if(!grid)return;
   try{
     var r=await fetch('/api/instructors');
-    if(!r.ok)return;
+    if(!r.ok){grid.innerHTML='';return;}
     var list=await r.json();
-    list.forEach(function(d){
-      var sports='';
-      (d.deportes||'').split(',').forEach(function(s){
-        if(s==='wingfoil')sports+='<span class="sport-tag">🏄 Wingfoil</span>';
-        if(s==='kitesurf')sports+='<span class="sport-tag">🪁 Kitesurf</span>';
-      });
-      var card=document.createElement('div');
-      card.className='instructor-card';
-      var avatar=d.foto?'<img class="instructor-card__photo" src="/api/instructors-foto/'+encodeURIComponent(d.foto)+'" alt="Foto de '+escHtml(d.nombre)+'" loading="lazy">':'<div class="instructor-card__photo">🏄</div>';
-      card.innerHTML=avatar+
-        '<div class="instructor-card__name">'+escHtml(d.nombre)+' '+escHtml(d.apellido)+'</div>'+
-        '<div class="instructor-card__loc">📍 '+escHtml(d.ubicacion)+'</div>'+
-        (sports?'<div class="instructor-card__sports">'+sports+'</div>':'')+
-        (d.bio?'<p class="instructor-card__bio">'+escHtml(d.bio)+'</p>':'')+
-        '<a class="instructor-card__wa" href="https://wa.me/'+(d.whatsapp||'').replace(/[^0-9]/g,'')+'" target="_blank" rel="noopener">WhatsApp</a>';
-      grid.appendChild(card);
+    grid.innerHTML='';
+    try{window.dispatchEvent(new CustomEvent('ewf:instr',{detail:list.length}))}catch(e){}
+    var cuenta=document.getElementById('instrCuenta');
+    if(cuenta&&list.length)cuenta.innerHTML='<b>'+list.length+' instructores</b> que enseñan en el agua. Escribiles directo por WhatsApp, sin intermediarios ni comisiones.';
+    list.forEach(function(d,n){
+      grid.appendChild(window.instrCard(d,n));
       var schemaEl=document.createElement('script');
       schemaEl.type='application/ld+json';
       schemaEl.textContent=JSON.stringify({
@@ -5313,7 +5569,7 @@ async function loadInstructors(){
       });
       document.head.appendChild(schemaEl);
     });
-  }catch(e){}
+  }catch(e){grid.querySelectorAll('.instr-sk').forEach(function(x){x.remove()})}
 }
 
 loadInstructors();
@@ -6381,22 +6637,23 @@ loadInstructors();
   }
 
   function card(r){
+    var FOTO = '/assets/img/wf-14740926-800.jpg';
+    // El dato tiene que ser el de la hora que sirve, no el de ahora: si la
+    // ventana arranca más tarde, mostrar "ahora" contradice el ✓ verde.
+    var v = r.ok ? r.ventana : r.ahora;
+    var cuando = r.ok ? (v.hora === r.horas[0] && r.ahoraEsBuena ? 'Ahora' : 'Desde las ' + v.hora) : 'Ahora';
     var h = '<div class="hoy__card' + (r.ok ? '' : ' hoy__card--no') + '">' +
-            '<span class="hoy__prov">' + esc(r.spot.prov) + '</span>' +
-            '<h3>' + esc(r.spot.n) + '</h3>';
+            '<img class="hoy__foto" src="' + esc(r.spot.img || FOTO) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'' + FOTO + '\'"/>' +
+            '<div class="hoy__top"><span class="hoy__prov">' + esc(r.spot.prov) + '</span>' +
+            '<span class="hoy__pill">' + (r.ok ? '✓ ' + r.horas.length + ' h' : 'Hoy no') + '</span></div>' +
+            '<h3>' + esc(r.spot.n) + '</h3>' +
+            '<p class="hoy__kn"><b>' + v.kn + '</b> kn <span>ráf. ' + v.raf + ' · ' + v.dir + '° · ' + cuando + '</span></p>';
     if(r.ok){
-      // El dato tiene que ser el de la hora que sirve, no el de ahora: si la
-      // ventana arranca más tarde, mostrar "ahora" contradice el ✓ verde.
-      var v = r.ventana;
-      h += '<p class="hoy__dato">' + (v.hora === r.horas[0] && r.ahoraEsBuena ? 'Ahora' : 'A las ' + v.hora) +
-           ' · ' + v.kn + ' kn · ráfagas ' + v.raf + ' · ' + v.dir + '°</p>' +
-           '<p class="hoy__horas">✓ ' + r.horas.length + (r.horas.length === 1 ? ' hora navegable' : ' horas navegables') +
-           ': ' + r.horas.join(', ') + '</p>';
+      h += '<p class="hoy__horas" title="' + esc(r.horas.join(', ')) + '">' + (r.horas.length === 1 ? 'Navegable a las ' + r.horas[0] : 'Navegable ' + r.horas[0] + '–' + r.horas[r.horas.length - 1]) + '</p>';
     }else{
-      h += '<p class="hoy__dato">Ahora · ' + r.ahora.kn + ' kn · ráfagas ' + r.ahora.raf + ' · ' + r.ahora.dir + '°</p>' +
-           '<p class="hoy__motivo">' + esc(r.motivo) + '</p>';
+      h += '<p class="hoy__motivo">' + esc(r.motivo) + '</p>';
     }
-    return h + '<p class="hoy__regla">Este spot pide ' + esc(r.spot.w) + '</p></div>';
+    return h + '<p class="hoy__regla">Pide ' + esc(r.spot.w) + '</p></div>';
   }
 
 
@@ -7174,32 +7431,101 @@ if(/^\/venta-de-wingfoil\/?$/.test(location.pathname)){window.addEventListener('
     }).observe(document.documentElement, { attributes:true, attributeFilter:['data-page'] });
   }
 
-  // Viento ahora: usa el mismo pronóstico que arma "¿Salgo hoy?" en Spots.
-  var caja = document.getElementById('vientoHome');
-  if(!caja) return;
+  // Números de la comunidad, arriba en la portada. Arrancan con un valor
+  // escrito y se corrigen con el dato real apenas llega.
+  function stat(k, n){
+    document.querySelectorAll('[data-stat="' + k + '"]').forEach(function(el){ el.textContent = n; });
+  }
+  var guias = document.querySelectorAll('#blog .blog-card').length;
+  if(guias) stat('guias', guias);
+  var sp = ((window.__EWF || {}).SPOTS || []).filter(function(x){ return x.p !== 'cable'; }).length;
+  if(sp) stat('spots', sp);
+  window.addEventListener('ewf:instr', function(e){ if(e.detail) stat('instr', e.detail); });
+  window.addEventListener('ewf:avisos', function(e){ if(e.detail) stat('avisos', e.detail); });
+
+  // Viento ahora, grande: usa el mismo pronóstico que arma "¿Salgo hoy?" en Spots.
+  var vivo = document.getElementById('vivo');
+  if(!vivo) return;
+  var FOTO_SPOT = '/assets/img/wf-14740926-800.jpg';
   function flecha(deg){
     // La dirección meteorológica dice de dónde VIENE el viento: la flecha apunta hacia donde va.
-    return '<svg class="nx-viento__fl" viewBox="0 0 14 14" style="transform:rotate(' + ((deg + 180) % 360) + 'deg)" aria-hidden="true"><path d="M7 1 L11 9 L7 7 L3 9 Z" fill="currentColor"/></svg>';
+    return '<svg viewBox="0 0 14 14" style="transform:rotate(' + ((deg + 180) % 360) + 'deg)" aria-hidden="true"><path d="M7 1 L11 9 L7 7 L3 9 Z" fill="currentColor"/></svg>';
   }
   function esc(t){ return String(t).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  var RUMBOS = ['N','NE','E','SE','S','SO','O','NO'];
+  function rumbo(g){ return RUMBOS[Math.round(((g % 360) + 360) % 360 / 45) % 8]; }
+  function veredicto(r, en){
+    if(r.ahoraEsBuena) return en ? '✅ Good to go now' : '✅ Se puede salir ahora';
+    if(r.ok) return (en ? '🕐 Gets good at ' : '🕐 Se pone bueno a las ') + r.ventana.hora;
+    return en ? '⛔ Not today' : '⛔ Hoy no da';
+  }
+  var pintado = false;
   function pintar(){
     var h = (window.__EWF || {}).HOY;
     if(!h) return;
-    var total = h.si.length + h.no.length;
+    pintado = true;
     var en = document.documentElement.lang === 'en';
-    document.getElementById('vientoTit').textContent = h.si.length
-      ? (en ? 'You can ride in ' + h.si.length + ' of ' + total + ' spots' : 'Se puede navegar en ' + h.si.length + ' de ' + total + ' spots')
+    var todos = h.si.concat(h.no);
+    var main = todos.filter(function(r){ return r.spot.n === 'San Isidro'; })[0] || h.si[0] || todos[0];
+    if(!main) return;
+    var d = main.ok && !main.ahoraEsBuena ? main.ventana : main.ahora;
+    vivo.classList.toggle('vivo--ok', main.ok);
+    document.getElementById('vivoSpot').textContent = main.spot.n;
+    document.getElementById('vivoKn').textContent = d.kn;
+    document.getElementById('vivoFl').innerHTML = flecha(d.dir);
+    document.getElementById('vivoVer').textContent = veredicto(main, en);
+    document.getElementById('vivoDet').textContent = (en ? 'Gusts ' : 'Ráfagas ') + d.raf + ' kn · ' + (en ? 'from ' : 'del ') + rumbo(d.dir) + ' · ' + (en ? 'needs ' : 'pide ') + main.spot.w;
+    document.getElementById('vivoRes').innerHTML = h.si.length
+      ? (en ? 'You can ride in <b>' + h.si.length + ' of ' + todos.length + '</b> spots in the next 12 h'
+            : 'Se puede navegar en <b>' + h.si.length + ' de ' + todos.length + '</b> spots en las próximas 12 h')
       : (en ? 'No wind window in the next 12 h' : 'Sin ventana de viento en las próximas 12 h');
-    var filas = h.si.slice(0, 3).concat(h.no.slice(0, Math.max(0, 3 - h.si.length)));
-    document.getElementById('vientoLista').innerHTML = filas.map(function(r){
-      var d = r.ok ? r.ventana : r.ahora;
-      return '<span class="nx-viento__fila"><i class="nx-viento__ok' + (r.ok ? '' : ' nx-viento__ok--no') + '"></i><b>' + esc(r.spot.n) + '</b>' +
-             flecha(d.dir) + '<span class="nx-viento__kn">' + d.kn + ' kn</span></span>';
+    var otros = todos.filter(function(r){ return r !== main; }).slice(0, 6);
+    document.getElementById('vivoLista').innerHTML = otros.map(function(r){
+      var x = r.ok ? r.ventana : r.ahora;
+      return '<a class="vivo__fila' + (r.ok ? ' vivo__fila--ok' : '') + '" href="/spots#salgo-hoy">' +
+        '<img src="' + esc(r.spot.img || FOTO_SPOT) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'' + FOTO_SPOT + '\'"/>' +
+        '<span class="vivo__fn"><b>' + esc(r.spot.n.split(' — ')[0]) + '</b><small>' + esc(r.ok ? (r.ahoraEsBuena ? (en ? 'Now' : 'Ahora') : (en ? 'From ' : 'Desde ') + r.ventana.hora) : (en ? 'Not today' : 'Hoy no')) + '</small></span>' +
+        '<span class="vivo__kn">' + flecha(x.dir) + x.kn + '<small>kn</small></span></a>';
     }).join('');
-    caja.hidden = false;
   }
   window.addEventListener('ewf:hoy', pintar);
   pintar();
+  // Si el pronóstico no llega, la tarjeta no se queda midiendo para siempre.
+  setTimeout(function(){
+    if(pintado) return;
+    var en = document.documentElement.lang === 'en';
+    document.getElementById('vivoKn').textContent = '—';
+    document.getElementById('vivoVer').textContent = en ? 'See the forecast in Spots →' : 'Mirá el pronóstico en Spots →';
+    document.getElementById('vivoLista').innerHTML = '';
+  }, 12000);
+})();
+</script>
+<!-- ===== VIDEOS POR NIVEL: el video se carga recién al tocar la tarjeta ===== -->
+<script>
+(function(){
+  var modal = document.getElementById('nfModal');
+  if(!modal) return;
+  var vid = document.getElementById('nfVid'), tit = document.getElementById('nfTit');
+  var trW = document.getElementById('nfTrW'), tr = document.getElementById('nfTr');
+  var volver = null;
+  function cerrar(){
+    modal.hidden = true; vid.innerHTML = ''; document.body.style.overflow = '';
+    if(volver) volver.focus();
+  }
+  document.querySelectorAll('.nf-card').forEach(function(c){
+    c.addEventListener('click', function(){
+      volver = c;
+      vid.innerHTML = '<iframe src="https://www.youtube.com/embed/' + c.dataset.yt + '?autoplay=1&rel=0" title="' + c.querySelector('b').textContent.replace(/"/g, '') + '" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+      tit.textContent = c.querySelector('b').textContent;
+      var t = c.querySelector('.nf-card__tr');
+      trW.hidden = !t; trW.open = false; tr.textContent = t ? t.textContent : '';
+      modal.hidden = false; document.body.style.overflow = 'hidden';
+      document.getElementById('nfCerrar').focus();
+    });
+  });
+  document.getElementById('nfCerrar').addEventListener('click', cerrar);
+  modal.addEventListener('click', function(e){ if(e.target === modal) cerrar(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && !modal.hidden) cerrar(); });
 })();
 </script>
 </body>
