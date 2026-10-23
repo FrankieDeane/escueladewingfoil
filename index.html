@@ -1143,15 +1143,29 @@ html[lang="en"] .es-only{display:none}
 .slive__big span{font-size:13px;font-weight:600;color:rgba(255,255,255,.7)}
 .slive__sub{font-size:13px;color:rgba(255,255,255,.8);margin-top:4px;line-height:1.45}
 .slive__src{font-size:10.5px;color:rgba(255,255,255,.5);margin-top:8px}
-.slive__src a,.slive__sat a,.slive__links a{color:#00cfed}
+.slive__src a{color:#00cfed}
 .slive__src--all{margin-top:14px;line-height:1.5}
-.slive__sat{margin:12px 0 0;border-radius:12px;overflow:hidden;background:rgba(255,255,255,.05)}
-.slive__sat img{display:block;width:100%;height:auto;aspect-ratio:64/50;object-fit:cover}
-.slive__satbox{position:relative}
-.slive__pin{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#ff5a2c;border:2px solid #fff;box-shadow:0 0 0 4px rgba(255,90,44,.35)}
-.slive__sat figcaption{font-size:11px;color:rgba(255,255,255,.6);padding:8px 12px}
-.slive__links{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.slive__links a{font-size:13px;font-weight:700;text-decoration:none;border:1px solid rgba(0,207,237,.4);border-radius:99px;padding:8px 14px}
+#spotLive{min-width:0;max-width:100%}
+.slive__hoy{min-width:0;max-width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:16px}
+.slive__hoytop{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.slive__hoytop>div{min-width:0}
+.slive__brj{flex:none}
+.slive__pill{display:inline-block;font-size:13px;font-weight:700;border-radius:99px;padding:6px 12px}
+.slive__pill--ok{background:rgba(47,191,113,.2);color:#6ee7a4;border:1px solid rgba(47,191,113,.5)}
+.slive__pill--no{background:rgba(255,90,44,.15);color:#ffb39e;border:1px solid rgba(255,90,44,.4)}
+.slive__pill--na{background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)}
+.slive__strip{display:flex;gap:6px;overflow-x:auto;margin-top:16px;padding-bottom:6px;align-items:flex-end}
+.slive__col{flex:0 0 38px;display:flex;flex-direction:column;align-items:center;gap:3px;border:1.5px solid transparent;border-radius:8px;padding:4px 0}
+.slive__col.ok{border-color:#2fbf71;background:rgba(47,191,113,.1)}
+.slive__n{font-size:12px;font-weight:700;color:#fff}
+.slive__bar{width:16px;border-radius:4px 4px 0 0;display:block}
+.slive__dir{font-size:14px;color:#00cfed;line-height:1;display:block}
+.slive__h{font-size:10.5px;color:rgba(255,255,255,.6)}
+.slive__chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.slive__chip{background:none;color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.25);border-radius:99px;padding:6px 12px;font-size:12.5px;font-weight:600;cursor:pointer}
+.slive__chip.on{background:#00cfed;color:#04121e;border-color:#00cfed}
+.slive__cam{border-radius:12px;overflow:hidden;background:rgba(255,255,255,.05);min-height:120px}
+.slive__cam>a[name="windy-webcam-timelapse-player"]{display:block;padding:60px 20px;text-align:center;color:#00cfed;font-size:13px;text-decoration:none}
 
 #leafletMap .leaflet-control-attribution{background:rgba(11,28,48,.85);color:#7da0bd;font-size:10px;padding:3px 8px;border-radius:6px 0 0 0}
 #leafletMap .leaflet-control-attribution a{color:#00cfed}
@@ -5485,8 +5499,61 @@ function climaTxt(c, en){
     c <= 67 ? ['Lluvia','Rain'] : c <= 77 ? ['Nieve','Snow'] : c <= 82 ? ['Chubascos','Showers'] : ['Tormenta','Thunderstorm'];
   return t[en ? 1 : 0];
 }
-var OSIRIS_URL = 'https://osirisai.live/?layers=maritime,satellites,cctv,cctv_previews,live_news,earthquakes,day_night,cables,sdk_sea,sdk_air,sdk_naval,wind_controls,rain_controls';
 function fechaSat(){ return new Date(Date.now() - 864e5).toISOString().slice(0, 10); }
+
+// Cámaras de Windy que ya usa el sitio (sección Cámaras en vivo), por spot.
+var CAMS_SPOT = {
+  'San Isidro': [
+    {id: '1601563134', n: 'Martínez Oeste'}, {id: '1745449788', n: 'Martínez Norte'},
+    {id: '1577126865', n: 'Olivos Norte'}, {id: '1735938641', n: 'Perú Beach · Acassuso'}
+  ],
+  'Mar del Plata — Waikiki': [
+    {id: '1741569283', n: 'Playa Waikiki'}, {id: '1710094887', n: 'Punta Mogotes'}, {id: '1710094584', n: 'Playa Serena'}
+  ]
+};
+var RUMBO_DEG = {N: 0, NE: 45, E: 90, SE: 135, S: 180, SO: 225, O: 270, NO: 315};
+var BANDAS_KN = [
+  {hasta: 8, color: '#3d6a85'}, {hasta: 12, color: '#7fd8ee'}, {hasta: 25, color: '#2fbf71'}, {hasta: Infinity, color: '#e9c46a'}
+];
+function colorKn(kn){ for(var i = 0; i < BANDAS_KN.length; i++) if(kn < BANDAS_KN[i].hasta) return BANDAS_KN[i].color; }
+// 'S/SO 12-25 kn' → {dirs, min, max}; los cable parks no tienen regla de viento
+function reglaSpot(w){
+  var r = /(\d+)\s*-\s*(\d+)/.exec(w || '');
+  if(!r) return null;
+  var dirs = String(w).split(/\s+/)[0].split('/').map(function(d){ return RUMBO_DEG[d.toUpperCase()]; }).filter(function(d){ return d !== undefined; });
+  return {dirs: dirs, min: +r[1], max: +r[2]};
+}
+function difAng(a, b){ var d = Math.abs(a - b) % 360; return d > 180 ? 360 - d : d; }
+function evaluarSpot(r, kn, deg){
+  if(!r) return {ok: false, motivo: ''};
+  if(kn < r.min) return {ok: false, motivo: 'poco viento (' + kn + ' kn, necesitás ' + r.min + '+)'};
+  if(kn > r.max) return {ok: false, motivo: 'demasiado viento (' + kn + ' kn, el máximo es ' + r.max + ')'};
+  if(!r.dirs.some(function(d){ return difAng(d, deg) <= 45; })) return {ok: false, motivo: 'la dirección no sirve (' + Math.round(deg) + '°)'};
+  return {ok: true, motivo: ''};
+}
+function horaArgISO(){
+  var g = {};
+  new Intl.DateTimeFormat('en-CA', {timeZone: 'America/Argentina/Buenos_Aires', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', hour12: false, hourCycle: 'h23'})
+    .formatToParts(new Date()).forEach(function(x){ g[x.type] = x.value; });
+  return g.year + '-' + g.month + '-' + g.day + 'T' + g.hour;
+}
+function brujula(deg){
+  return '<svg class="slive__brj" viewBox="0 0 100 100" width="92" height="92" aria-hidden="true">' +
+    '<circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2"/>' +
+    '<text x="50" y="14" text-anchor="middle" font-size="10" fill="#00cfed" font-weight="700">N</text>' +
+    '<text x="90" y="54" text-anchor="middle" font-size="10" fill="rgba(255,255,255,.6)">E</text>' +
+    '<text x="50" y="96" text-anchor="middle" font-size="10" fill="rgba(255,255,255,.6)">S</text>' +
+    '<text x="10" y="54" text-anchor="middle" font-size="10" fill="rgba(255,255,255,.6)">O</text>' +
+    '<g transform="rotate(' + Math.round(deg) + ' 50 50)"><circle cx="50" cy="22" r="4" fill="#ff5a2c"/>' +
+    '<path d="M50 26 L50 70 M50 70 L43 59 M50 70 L57 59" stroke="#ff5a2c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></g></svg>';
+}
+function montarCam(box, cam){
+  box.innerHTML = '<a name="windy-webcam-timelapse-player" data-id="' + cam.id + '" data-play="day" data-loop="0" data-auto-play="0" data-force-full-screen-on-overlay-play="0" data-interactive="1" href="https://windy.com/webcams/' + cam.id + '" target="_blank" rel="noopener">' + esc(cam.n) + '</a>';
+  var sc = document.createElement('script');
+  sc.async = true;
+  sc.src = 'https://webcams.windy.com/webcams/public/embed/v2/script/player.js';
+  document.body.appendChild(sc);
+}
 
 function renderSpotLive(s){
   var coming = document.getElementById('spotExpandedComing');
@@ -5500,60 +5567,94 @@ function renderSpotLive(s){
   }
   var en = spotsEnIngles();
   function T(es, e){ return en ? e : es; }
+  var regla = reglaSpot(s.w);
   var sol = solDelDia(s.lat, s.lng);
   var solHtml = sol
     ? '<div class="slive__big">🌅 ' + horaAR(sol.rise) + ' <span>→</span> 🌇 ' + horaAR(sol.set) + '</div>' +
       '<div class="slive__sub">' + T('Luz útil', 'Usable light') + ' ' + (sol.dawn ? horaAR(sol.dawn) : '–') + ' a ' + (sol.dusk ? horaAR(sol.dusk) : '–') + ' · ' +
       (Math.round((sol.set - sol.rise) / 36e5 * 10) / 10) + ' h ' + T('de sol', 'of sun') + '</div>'
     : '<div class="slive__sub">–</div>';
-  var f = fechaSat(), dLat = 1.3, dLng = 1.65;
-  var satUrl = 'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=VIIRS_SNPP_CorrectedReflectance_TrueColor&STYLES=&CRS=EPSG:4326&BBOX=' +
-    (s.lat - dLat) + ',' + (s.lng - dLng) + ',' + (s.lat + dLat) + ',' + (s.lng + dLng) + '&WIDTH=640&HEIGHT=500&FORMAT=image/jpeg&TIME=' + f;
+  var cams = CAMS_SPOT[s.n] || [];
   live.innerHTML =
-    '<h3 class="spot-expanded__section-title">' + T('📡 Datos en vivo del spot', '📡 Live spot data') + '</h3>' +
+    '<h3 class="spot-expanded__section-title">' + T('🌬️ ¿Se puede navegar hoy?', '🌬️ Can I ride today?') + '</h3>' +
+    '<div class="slive__hoy" id="sliveHoy"><div class="slive__sub">' + T('Cargando el pronóstico…', 'Loading forecast…') + '</div></div>' +
+    (cams.length ? '<h3 class="spot-expanded__section-title">' + T('📹 Cámara en vivo', '📹 Live camera') + '</h3>' +
+      (cams.length > 1 ? '<div class="slive__chips" id="sliveCamChips">' + cams.map(function(c, i){ return '<button type="button" class="slive__chip' + (i ? '' : ' on') + '" data-i="' + i + '">' + esc(c.n) + '</button>'; }).join('') + '</div>' : '') +
+      '<div class="slive__cam" id="sliveCam"></div>' +
+      '<p class="slive__src" id="sliveCamSrc"></p>' : '') +
+    '<h3 class="spot-expanded__section-title">' + T('📡 Más datos del spot', '📡 More spot data') + '</h3>' +
     '<div class="slive">' +
       '<div class="slive__card"><div class="slive__lbl">' + T('☀️ Sol hoy', '☀️ Sun today') + '</div>' + solHtml + '<div class="slive__src">' + T('Cálculo astronómico, hora de Argentina', 'Astronomical calculation, Argentina time') + '</div></div>' +
-      '<div class="slive__card" id="sliveClima"><div class="slive__lbl">' + T('💨 Viento y clima ahora', '💨 Wind and weather now') + '</div><div class="slive__sub">' + T('Cargando…', 'Loading…') + '</div></div>' +
       '<div class="slive__card" id="sliveFuego"><div class="slive__lbl">' + T('🔥 Incendios cerca', '🔥 Nearby fires') + '</div><div class="slive__sub">' + T('Cargando…', 'Loading…') + '</div></div>' +
       '<div class="slive__card" id="sliveSismo"><div class="slive__lbl">' + T('🌎 Sismos (7 días)', '🌎 Earthquakes (7 days)') + '</div><div class="slive__sub">' + T('Cargando…', 'Loading…') + '</div></div>' +
     '</div>' +
-    '<figure class="slive__sat"><div class="slive__satbox"><img id="sliveSatImg" crossorigin="anonymous" src="' + satUrl + '" alt="' + T('Satélite sobre ', 'Satellite over ') + esc(s.n) + '" loading="lazy" onerror="this.closest(\'figure\').style.display=\'none\'"/><span class="slive__pin" title="' + esc(s.n) + '"></span></div>' +
-      '<figcaption id="sliveSatCap">' + T('Satélite NASA VIIRS del ', 'NASA VIIRS satellite, ') + f + T(' (imagen diaria, no es en tiempo real)', ' (daily image, not real time)') + ' · <a href="https://worldview.earthdata.nasa.gov/" target="_blank" rel="noopener">NASA Worldview</a></figcaption></figure>' +
-    '<div class="slive__links">' +
-      '<a href="' + OSIRIS_URL + '" target="_blank" rel="noopener">🛰️ ' + T('Satélites y cámaras en Osiris', 'Satellites and cameras on Osiris') + ' ↗</a>' +
-      '<a href="https://www.windy.com/' + s.lat + '/' + s.lng + '?' + s.lat + ',' + s.lng + ',10" target="_blank" rel="noopener">🌬️ ' + T('Viento y radar en Windy', 'Wind and radar on Windy') + ' ↗</a>' +
-    '</div>' +
-    '<p class="slive__src slive__src--all">' + T('Fuentes: ', 'Sources: ') + '<a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> · <a href="https://eonet.gsfc.nasa.gov/" target="_blank" rel="noopener">NASA EONET</a> · <a href="https://earthquake.usgs.gov/" target="_blank" rel="noopener">USGS</a> · <a href="https://earthdata.nasa.gov/gibs" target="_blank" rel="noopener">NASA GIBS</a>. ' +
-      T('Las cámaras en vivo no tienen una fuente abierta: se ven en Osiris o Windy.', 'Live cameras have no open source: see them on Osiris or Windy.') + '</p>';
+    '<p class="slive__src slive__src--all">' + T('Fuentes: ', 'Sources: ') + '<a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> · <a href="https://eonet.gsfc.nasa.gov/" target="_blank" rel="noopener">NASA EONET</a> · <a href="https://earthquake.usgs.gov/" target="_blank" rel="noopener">USGS</a>' +
+      (cams.length ? ' · <a href="https://www.windy.com/webcams" target="_blank" rel="noopener">Windy Webcams</a>' : '') + '.</p>';
 
-  // Si la imagen es casi toda blanca, el spot está tapado por nubes: se avisa en vez de mostrar un cuadrado en blanco.
-  var simg = document.getElementById('sliveSatImg');
-  if(simg) simg.addEventListener('load', function(){
-    try{
-      var cv = document.createElement('canvas'); cv.width = 32; cv.height = 25;
-      var cx = cv.getContext('2d'); cx.drawImage(simg, 0, 0, 32, 25);
-      var px = cx.getImageData(0, 0, 32, 25).data, claros = 0;
-      for(var i = 0; i < px.length; i += 4){ if(px[i] > 215 && px[i + 1] > 215 && px[i + 2] > 215) claros++; }
-      var cap = document.getElementById('sliveSatCap');
-      if(cap && claros / (px.length / 4) > 0.8){ simg.parentNode.style.display = 'none'; cap.innerHTML = '☁️ ' + T('Zona cubierta de nubes en la última pasada del satélite. ', 'Area covered by clouds on the last satellite pass. ') + cap.innerHTML; }
-    }catch(e){}
-  });
+  if(cams.length){
+    var box = document.getElementById('sliveCam'), srcP = document.getElementById('sliveCamSrc');
+    function poner_cam(i){
+      montarCam(box, cams[i]);
+      if(srcP) srcP.innerHTML = T('Timelapse de las últimas 24 h, cortesía de Windy.com. ', 'Last-24h timelapse, courtesy of Windy.com. ') + '<a href="https://windy.com/webcams/' + cams[i].id + '" target="_blank" rel="noopener">' + T('Abrir esta cámara en Windy', 'Open this camera on Windy') + ' ↗</a>';
+    }
+    poner_cam(0);
+    var chips = document.getElementById('sliveCamChips');
+    if(chips) chips.addEventListener('click', function(e){
+      var b = e.target.closest('.slive__chip');
+      if(!b) return;
+      chips.querySelectorAll('.slive__chip').forEach(function(x){ x.classList.toggle('on', x === b); });
+      poner_cam(+b.dataset.i);
+    });
+  }
 
   function poner(id, lbl, body, src){
     if(spotExpandedActual !== s) return;
     var el = document.getElementById(id);
     if(el) el.innerHTML = '<div class="slive__lbl">' + lbl + '</div>' + body + '<div class="slive__src">' + src + '</div>';
   }
-  var lblC = T('💨 Viento y clima ahora', '💨 Wind and weather now'), lblF = T('🔥 Incendios cerca', '🔥 Nearby fires'), lblS = T('🌎 Sismos (7 días)', '🌎 Earthquakes (7 days)');
+  var lblF = T('🔥 Incendios cerca', '🔥 Nearby fires'), lblS = T('🌎 Sismos (7 días)', '🌎 Earthquakes (7 days)');
   var fallo = '<div class="slive__sub">' + T('No se pudo cargar ahora.', 'Could not load right now.') + '</div>';
 
+  // Viento: misma lógica que "¿Salgo hoy?": regla del spot (dirección ±45° y rango de nudos) sobre el pronóstico por hora.
   jget('https://api.open-meteo.com/v1/forecast?latitude=' + s.lat + '&longitude=' + s.lng +
-    '&current=temperature_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m,weather_code&wind_speed_unit=kn&timezone=America%2FArgentina%2FBuenos_Aires')
+    '&hourly=wind_speed_10m,wind_gusts_10m,wind_direction_10m&current=temperature_2m,weather_code&wind_speed_unit=kn&timezone=America%2FArgentina%2FBuenos_Aires&forecast_days=2')
     .then(function(d){
-      var c = d.current;
-      poner('sliveClima', lblC, '<div class="slive__big">' + Math.round(c.wind_speed_10m) + ' kn <span>' + T('del', 'from') + ' ' + rumbo(c.wind_direction_10m) + '</span></div>' +
-        '<div class="slive__sub">' + T('Ráfagas', 'Gusts') + ' ' + Math.round(c.wind_gusts_10m) + ' kn · ' + Math.round(c.temperature_2m) + '°C · ' + climaTxt(c.weather_code, en) + '</div>', 'Open-Meteo');
-    }).catch(function(){ poner('sliveClima', lblC, fallo, 'Open-Meteo'); });
+      if(spotExpandedActual !== s) return;
+      var H = d.hourly, ahora = horaArgISO();
+      var ini = H.time.findIndex(function(t){ return t.slice(0, 13) >= ahora; });
+      if(ini < 0) ini = 0;
+      var n = Math.min(14, H.time.length - ini), cols = '', buenas = [];
+      for(var k = 0; k < n; k++){
+        var h = ini + k, kn = Math.round(H.wind_speed_10m[h]), dg = H.wind_direction_10m[h];
+        var ev = evaluarSpot(regla, kn, dg);
+        if(ev.ok) buenas.push(H.time[h].slice(11, 13));
+        cols += '<div class="slive__col' + (ev.ok ? ' ok' : '') + '"><span class="slive__n">' + kn + '</span>' +
+          '<span class="slive__bar" style="height:' + Math.max(6, Math.min(kn, 35) * 2.2) + 'px;background:' + colorKn(kn) + '"></span>' +
+          '<span class="slive__dir" style="transform:rotate(' + Math.round(dg) + 'deg)" title="' + T('Viene del ', 'From ') + rumbo(dg) + '">↓</span>' +
+          '<span class="slive__h">' + H.time[h].slice(11, 13) + '</span></div>';
+      }
+      var kn0 = Math.round(H.wind_speed_10m[ini]), raf0 = Math.round(H.wind_gusts_10m[ini]), dg0 = H.wind_direction_10m[ini];
+      var ev0 = evaluarSpot(regla, kn0, dg0), cur = d.current || {};
+      var veredicto;
+      if(!regla) veredicto = '<span class="slive__pill slive__pill--na">' + T('Sin regla de viento', 'No wind rule') + '</span>';
+      else if(buenas.length) veredicto = '<span class="slive__pill slive__pill--ok">✓ ' + T('Navegable', 'Rideable') + ' ' + (buenas.length === 1 ? buenas[0] + ' h' : buenas[0] + '–' + buenas[buenas.length - 1] + ' h') + '</span>';
+      else veredicto = '<span class="slive__pill slive__pill--no">' + T('Hoy no', 'Not today') + ': ' + esc(ev0.motivo) + '</span>';
+      var el = document.getElementById('sliveHoy');
+      if(!el) return;
+      el.innerHTML =
+        '<div class="slive__hoytop">' + brujula(dg0) +
+          '<div><div class="slive__big">' + kn0 + ' kn <span>' + T('ráfagas', 'gusts') + ' ' + raf0 + '</span></div>' +
+          '<div class="slive__sub"><b>' + T('Viene del ', 'From the ') + rumbo(dg0) + '</b> (' + Math.round(dg0) + '°)' +
+          (isFinite(cur.temperature_2m) ? ' · ' + Math.round(cur.temperature_2m) + '°C · ' + climaTxt(cur.weather_code, en) : '') + '</div>' +
+          '<div style="margin-top:8px">' + veredicto + '</div>' +
+          (regla ? '<div class="slive__src">' + T('Este spot pide ', 'This spot needs ') + esc(s.w) + '</div>' : '') + '</div></div>' +
+        '<div class="slive__strip" role="img" aria-label="' + T('Viento por hora', 'Hourly wind') + '">' + cols + '</div>' +
+        '<div class="slive__src">' + T('Barra = nudos por hora. Flecha = hacia dónde sopla. Con borde verde = se puede navegar. ', 'Bar = knots per hour. Arrow = where it blows to. Green outline = rideable. ') +
+          'Open-Meteo</div>';
+    }).catch(function(){
+      var el = document.getElementById('sliveHoy');
+      if(el && spotExpandedActual === s) el.innerHTML = fallo;
+    });
 
   jget('https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires&status=open&days=30')
     .then(function(d){
