@@ -5738,15 +5738,20 @@ loadInstructors();
   }, { passive: false });
   canvas.addEventListener('touchend', function() { drag = false; });
 
+  // El ancho sale del contenedor visible; si la página está oculta (clientWidth 0) se espera a que aparezca.
   function resize() {
     if (!container) return;
-    var w = container.clientWidth || 600;
+    var w = container.clientWidth;
+    if (!w) return;
     var h = Math.round(w * (w < 600 ? 0.95 : 0.625));
-    renderer.setSize(w, h);
+    renderer.setSize(w, h, false);
+    canvas.style.width = '100%';
+    canvas.style.height = h + 'px';
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
   }
   window.addEventListener('resize', resize);
+  if (window.ResizeObserver) new ResizeObserver(resize).observe(container);
   resize();
 
   var t = 0;
