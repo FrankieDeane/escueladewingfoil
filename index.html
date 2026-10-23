@@ -5603,8 +5603,8 @@ loadInstructors();
   scene.fog = new THREE.Fog(0x040e1a, 18, 30);
 
   var camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
-  camera.position.set(3.8, 2.0, 5.0);
-  camera.lookAt(0, 0.3, 0);
+  camera.position.set(4.3, 2.3, 5.9);
+  camera.lookAt(0, 0.95, 0);
 
   // Lights
   scene.add(new THREE.AmbientLight(0x3366bb, 1.0));
@@ -5651,23 +5651,59 @@ loadInstructors();
   var boardGeo = new THREE.ExtrudeGeometry(bShape, bExt);
   boardGeo.rotateX(Math.PI / 2);
   var boardMesh = new THREE.Mesh(boardGeo, mBoard);
-  boardMesh.position.set(0, 1.54, 0);
+  boardMesh.position.set(0, 1.12, 0);
   fg.add(boardMesh);
   // Board fins (3 small fins at the tail)
   var finMat = new THREE.MeshStandardMaterial({ color: 0x7ab3cc, roughness: 0.3, metalness: 0.5 });
   var finGeo = new THREE.BoxGeometry(0.04, 0.18, 0.12);
-  var fin1 = new THREE.Mesh(finGeo, finMat); fin1.position.set(0, 1.44, -1.3); fg.add(fin1);
-  var fin2 = new THREE.Mesh(finGeo, finMat); fin2.position.set(0.22, 1.44, -1.15); fin2.rotation.y = 0.2; fg.add(fin2);
-  var fin3 = new THREE.Mesh(finGeo, finMat); fin3.position.set(-0.22, 1.44, -1.15); fin3.rotation.y = -0.2; fg.add(fin3);
-  mesh(new THREE.BoxGeometry(0.65, 0.09, 0.38), mBase,  0,  0.90,  0);    // base plate (1)
+  var fin1 = new THREE.Mesh(finGeo, finMat); fin1.position.set(0, 0.99, -1.3); fg.add(fin1);
+  var fin2 = new THREE.Mesh(finGeo, finMat); fin2.position.set(0.22, 0.99, -1.15); fin2.rotation.y = 0.2; fg.add(fin2);
+  var fin3 = new THREE.Mesh(finGeo, finMat); fin3.position.set(-0.22, 0.99, -1.15); fin3.rotation.y = -0.2; fg.add(fin3);
+  mesh(new THREE.BoxGeometry(0.22, 0.09, 0.78), mBase,  0,  0.90,  0);    // base plate (1): largo paralelo a la tabla
   mesh(new THREE.BoxGeometry(0.13, 1.65, 0.055), mMast, 0,  0.05,  0);    // mástil (2)
   mesh(new THREE.BoxGeometry(0.09, 0.09, 1.95), mFuse,  0, -0.82, -0.1);  // fuselaje (3)
   mesh(new THREE.BoxGeometry(2.8, 0.048, 0.52),  mWing, 0, -0.90,  0.65); // ala del (4)
   mesh(new THREE.BoxGeometry(1.1, 0.04, 0.22),   mStab, 0, -0.90, -1.05); // estab (5)
 
+
+  // Rider (ilustrativo): parado de costado sobre la tabla, con el wing en las manos
+  var mSuit = new THREE.MeshStandardMaterial({ color: 0x16202b, roughness: 0.7, metalness: 0.05 });
+  var mSkin = new THREE.MeshStandardMaterial({ color: 0xe0a97d, roughness: 0.8 });
+  var mHelm = new THREE.MeshStandardMaterial({ color: 0xff5a2c, roughness: 0.5 });
+  var mSail = new THREE.MeshStandardMaterial({ color: 0xff5a2c, roughness: 0.6, side: THREE.DoubleSide });
+  var mTube = new THREE.MeshStandardMaterial({ color: 0xf7f4ec, roughness: 0.5 });
+  var up = new THREE.Vector3(0, 1, 0);
+  function limb(a, b, r, mat) {
+    var A = new THREE.Vector3(a[0], a[1], a[2]), B = new THREE.Vector3(b[0], b[1], b[2]);
+    var d = B.clone().sub(A), len = d.length();
+    var m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, 10), mat);
+    m.position.copy(A).add(B).multiplyScalar(0.5);
+    m.quaternion.setFromUnitVectors(up, d.normalize());
+    fg.add(m);
+    return m;
+  }
+  var topY = 1.165;
+  mesh(new THREE.BoxGeometry(0.34, 0.07, 0.15), mSuit, 0.04, topY + 0.035, 0.32);   // pie delantero
+  mesh(new THREE.BoxGeometry(0.34, 0.07, 0.15), mSuit, 0.04, topY + 0.035, -0.38);  // pie trasero
+  limb([0, topY + 0.07, 0.32], [0.06, 1.72, 0.20], 0.075, mSuit);
+  limb([0.06, 1.72, 0.20], [0, 2.1, -0.02], 0.085, mSuit);
+  limb([0, topY + 0.07, -0.38], [0.06, 1.72, -0.24], 0.075, mSuit);
+  limb([0.06, 1.72, -0.24], [0, 2.1, -0.02], 0.085, mSuit);
+  limb([0, 2.1, -0.02], [0.03, 2.72, -0.02], 0.19, mSuit);                           // torso
+  mesh(new THREE.SphereGeometry(0.155, 16, 12), mSkin, 0.05, 2.94, -0.02);           // cabeza
+  var helm = mesh(new THREE.SphereGeometry(0.175, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2), mHelm, 0.04, 2.97, -0.02);
+  limb([0.03, 2.64, 0.14], [0.30, 2.50, 0.30], 0.055, mSuit);                        // brazo delantero
+  limb([0.30, 2.50, 0.30], [0.58, 2.62, 0.26], 0.05, mSuit);
+  limb([0.03, 2.64, -0.18], [0.30, 2.52, -0.28], 0.055, mSuit);                      // brazo trasero
+  limb([0.30, 2.52, -0.28], [0.58, 2.64, -0.24], 0.05, mSuit);
+  mesh(new THREE.BoxGeometry(0.70, 0.025, 2.0), mSail, 0.95, 3.1, 0).rotation.z = -0.22; // vela del wing
+  mesh(new THREE.CylinderGeometry(0.045, 0.045, 2.0, 10), mTube, 1.3, 3.0, 0).rotation.x = Math.PI / 2; // borde de ataque
+  limb([0.58, 2.62, 0.26], [0.9, 3.05, 0.25], 0.025, mTube);                         // manijas
+  limb([0.58, 2.64, -0.24], [0.9, 3.05, -0.25], 0.025, mTube);
+
   // 3D label anchor positions (local to fg)
   var anchors = [
-    new THREE.Vector3( 0.45,  0.90,  0.25),  // 1 base plate
+    new THREE.Vector3( 0.14,  0.92,  0.30),  // 1 base plate
     new THREE.Vector3( 0.12,  0.30,  0.05),  // 2 mast mid
     new THREE.Vector3( 0.10, -0.82, -0.10),  // 3 fuselage
     new THREE.Vector3(-1.35, -0.90,  0.65),  // 4 front wing tip
@@ -5724,7 +5760,7 @@ loadInstructors();
   function resize() {
     if (!container) return;
     var w = container.clientWidth || 600;
-    var h = Math.round(w * 0.625);
+    var h = Math.round(w * (w < 600 ? 0.95 : 0.625));
     renderer.setSize(w, h);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
