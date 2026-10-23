@@ -3613,6 +3613,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <a class="blog-card__link" href="/blog/mejores-spots-wingfoil-argentina" aria-label="Los mejores spots de wingfoil en Argentina 2026"></a>
       </article>
 
+      <!-- ARTICLE: POSICION DEL MASTIL -->
+      <article class="blog-card" id="blogCardMastil">
+        <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-14740931-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
+        <div class="blog-card__body">
+          <span class="blog-card__cat" data-en="Technique and gear">Técnica y equipo</span>
+          <h3 class="blog-card__title" data-en="Mast position in the track: forward, middle or back">Posición del mástil en el track: adelante, al medio o atrás</h3>
+          <p class="blog-card__excerpt" data-en="What changes when you move the mast forward, middle or back in the track, and how to find your spot. No magic recipes.">Qué cambia si movés el mástil adelante, al medio o atrás del track y cómo encontrar tu punto. Sin recetas mágicas.</p>
+          <div class="blog-card__meta">
+            <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--primary)" data-en="Read article →">Leer artículo →</span>
+            <span data-en="· 5 min read">· 5 min lectura</span>
+          </div>
+        </div>
+        <a class="blog-card__link" href="/blog/posicion-mastil-wingfoil-adelante-medio-atras" aria-label="Posición del mástil en el track: adelante, al medio o atrás"></a>
+      </article>
+
       <!-- ARTICLE: EQUIPO USADO -->
       <article class="blog-card" id="blogCardUsado">
         <div class="blog-card__cover" style="padding:0;overflow:hidden"><img src="/assets/img/wf-33834673-800.jpg" alt="Rider de wingfoil navegando" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy"/></div>
@@ -5651,23 +5666,25 @@ loadInstructors();
   var boardGeo = new THREE.ExtrudeGeometry(bShape, bExt);
   boardGeo.rotateX(Math.PI / 2);
   var boardMesh = new THREE.Mesh(boardGeo, mBoard);
-  boardMesh.position.set(0, 1.54, 0);
+  boardMesh.position.set(0, 1.12, 0);
   fg.add(boardMesh);
   // Board fins (3 small fins at the tail)
   var finMat = new THREE.MeshStandardMaterial({ color: 0x7ab3cc, roughness: 0.3, metalness: 0.5 });
   var finGeo = new THREE.BoxGeometry(0.04, 0.18, 0.12);
-  var fin1 = new THREE.Mesh(finGeo, finMat); fin1.position.set(0, 1.44, -1.3); fg.add(fin1);
-  var fin2 = new THREE.Mesh(finGeo, finMat); fin2.position.set(0.22, 1.44, -1.15); fin2.rotation.y = 0.2; fg.add(fin2);
-  var fin3 = new THREE.Mesh(finGeo, finMat); fin3.position.set(-0.22, 1.44, -1.15); fin3.rotation.y = -0.2; fg.add(fin3);
-  mesh(new THREE.BoxGeometry(0.65, 0.09, 0.38), mBase,  0,  0.90,  0);    // base plate (1)
+  var fin1 = new THREE.Mesh(finGeo, finMat); fin1.position.set(0, 0.99, -1.3); fg.add(fin1);
+  var fin2 = new THREE.Mesh(finGeo, finMat); fin2.position.set(0.22, 0.99, -1.15); fin2.rotation.y = 0.2; fg.add(fin2);
+  var fin3 = new THREE.Mesh(finGeo, finMat); fin3.position.set(-0.22, 0.99, -1.15); fin3.rotation.y = -0.2; fg.add(fin3);
+  mesh(new THREE.BoxGeometry(0.22, 0.09, 0.78), mBase,  0,  0.90,  0);    // base plate (1): largo paralelo a la tabla
   mesh(new THREE.BoxGeometry(0.13, 1.65, 0.055), mMast, 0,  0.05,  0);    // mástil (2)
   mesh(new THREE.BoxGeometry(0.09, 0.09, 1.95), mFuse,  0, -0.82, -0.1);  // fuselaje (3)
   mesh(new THREE.BoxGeometry(2.8, 0.048, 0.52),  mWing, 0, -0.90,  0.65); // ala del (4)
   mesh(new THREE.BoxGeometry(1.1, 0.04, 0.22),   mStab, 0, -0.90, -1.05); // estab (5)
 
+
+
   // 3D label anchor positions (local to fg)
   var anchors = [
-    new THREE.Vector3( 0.45,  0.90,  0.25),  // 1 base plate
+    new THREE.Vector3( 0.14,  0.92,  0.30),  // 1 base plate
     new THREE.Vector3( 0.12,  0.30,  0.05),  // 2 mast mid
     new THREE.Vector3( 0.10, -0.82, -0.10),  // 3 fuselage
     new THREE.Vector3(-1.35, -0.90,  0.65),  // 4 front wing tip
@@ -5724,7 +5741,7 @@ loadInstructors();
   function resize() {
     if (!container) return;
     var w = container.clientWidth || 600;
-    var h = Math.round(w * 0.625);
+    var h = Math.round(w * (w < 600 ? 0.95 : 0.625));
     renderer.setSize(w, h);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
