@@ -1147,6 +1147,8 @@ html[lang="en"] .es-only{display:none}
 .slive__src--all{margin-top:14px;line-height:1.5}
 .slive__sat{margin:12px 0 0;border-radius:12px;overflow:hidden;background:rgba(255,255,255,.05)}
 .slive__sat img{display:block;width:100%;height:auto;aspect-ratio:64/50;object-fit:cover}
+.slive__satbox{position:relative}
+.slive__pin{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#ff5a2c;border:2px solid #fff;box-shadow:0 0 0 4px rgba(255,90,44,.35)}
 .slive__sat figcaption{font-size:11px;color:rgba(255,255,255,.6);padding:8px 12px}
 .slive__links{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .slive__links a{font-size:13px;font-weight:700;text-decoration:none;border:1px solid rgba(0,207,237,.4);border-radius:99px;padding:8px 14px}
@@ -5504,7 +5506,7 @@ function renderSpotLive(s){
       '<div class="slive__sub">' + T('Luz útil', 'Usable light') + ' ' + (sol.dawn ? horaAR(sol.dawn) : '–') + ' a ' + (sol.dusk ? horaAR(sol.dusk) : '–') + ' · ' +
       (Math.round((sol.set - sol.rise) / 36e5 * 10) / 10) + ' h ' + T('de sol', 'of sun') + '</div>'
     : '<div class="slive__sub">–</div>';
-  var f = fechaSat(), dLat = 0.35, dLng = 0.45;
+  var f = fechaSat(), dLat = 1.3, dLng = 1.65;
   var satUrl = 'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=VIIRS_SNPP_CorrectedReflectance_TrueColor&STYLES=&CRS=EPSG:4326&BBOX=' +
     (s.lat - dLat) + ',' + (s.lng - dLng) + ',' + (s.lat + dLat) + ',' + (s.lng + dLng) + '&WIDTH=640&HEIGHT=500&FORMAT=image/jpeg&TIME=' + f;
   live.innerHTML =
@@ -5515,14 +5517,27 @@ function renderSpotLive(s){
       '<div class="slive__card" id="sliveFuego"><div class="slive__lbl">' + T('🔥 Incendios cerca', '🔥 Nearby fires') + '</div><div class="slive__sub">' + T('Cargando…', 'Loading…') + '</div></div>' +
       '<div class="slive__card" id="sliveSismo"><div class="slive__lbl">' + T('🌎 Sismos (7 días)', '🌎 Earthquakes (7 days)') + '</div><div class="slive__sub">' + T('Cargando…', 'Loading…') + '</div></div>' +
     '</div>' +
-    '<figure class="slive__sat"><img src="' + satUrl + '" alt="' + T('Satélite sobre ', 'Satellite over ') + esc(s.n) + '" loading="lazy" onerror="this.parentNode.style.display=\'none\'"/>' +
-      '<figcaption>' + T('Satélite NASA VIIRS del ', 'NASA VIIRS satellite, ') + f + T(' (imagen diaria, no es en tiempo real)', ' (daily image, not real time)') + ' · <a href="https://worldview.earthdata.nasa.gov/" target="_blank" rel="noopener">NASA Worldview</a></figcaption></figure>' +
+    '<figure class="slive__sat"><div class="slive__satbox"><img id="sliveSatImg" crossorigin="anonymous" src="' + satUrl + '" alt="' + T('Satélite sobre ', 'Satellite over ') + esc(s.n) + '" loading="lazy" onerror="this.closest(\'figure\').style.display=\'none\'"/><span class="slive__pin" title="' + esc(s.n) + '"></span></div>' +
+      '<figcaption id="sliveSatCap">' + T('Satélite NASA VIIRS del ', 'NASA VIIRS satellite, ') + f + T(' (imagen diaria, no es en tiempo real)', ' (daily image, not real time)') + ' · <a href="https://worldview.earthdata.nasa.gov/" target="_blank" rel="noopener">NASA Worldview</a></figcaption></figure>' +
     '<div class="slive__links">' +
       '<a href="' + OSIRIS_URL + '" target="_blank" rel="noopener">🛰️ ' + T('Satélites y cámaras en Osiris', 'Satellites and cameras on Osiris') + ' ↗</a>' +
       '<a href="https://www.windy.com/' + s.lat + '/' + s.lng + '?' + s.lat + ',' + s.lng + ',10" target="_blank" rel="noopener">🌬️ ' + T('Viento y radar en Windy', 'Wind and radar on Windy') + ' ↗</a>' +
     '</div>' +
     '<p class="slive__src slive__src--all">' + T('Fuentes: ', 'Sources: ') + '<a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> · <a href="https://eonet.gsfc.nasa.gov/" target="_blank" rel="noopener">NASA EONET</a> · <a href="https://earthquake.usgs.gov/" target="_blank" rel="noopener">USGS</a> · <a href="https://earthdata.nasa.gov/gibs" target="_blank" rel="noopener">NASA GIBS</a>. ' +
       T('Las cámaras en vivo no tienen una fuente abierta: se ven en Osiris o Windy.', 'Live cameras have no open source: see them on Osiris or Windy.') + '</p>';
+
+  // Si la imagen es casi toda blanca, el spot está tapado por nubes: se avisa en vez de mostrar un cuadrado en blanco.
+  var simg = document.getElementById('sliveSatImg');
+  if(simg) simg.addEventListener('load', function(){
+    try{
+      var cv = document.createElement('canvas'); cv.width = 32; cv.height = 25;
+      var cx = cv.getContext('2d'); cx.drawImage(simg, 0, 0, 32, 25);
+      var px = cx.getImageData(0, 0, 32, 25).data, claros = 0;
+      for(var i = 0; i < px.length; i += 4){ if(px[i] > 215 && px[i + 1] > 215 && px[i + 2] > 215) claros++; }
+      var cap = document.getElementById('sliveSatCap');
+      if(cap && claros / (px.length / 4) > 0.8){ simg.parentNode.style.display = 'none'; cap.innerHTML = '☁️ ' + T('Zona cubierta de nubes en la última pasada del satélite. ', 'Area covered by clouds on the last satellite pass. ') + cap.innerHTML; }
+    }catch(e){}
+  });
 
   function poner(id, lbl, body, src){
     if(spotExpandedActual !== s) return;
