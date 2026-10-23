@@ -1,5 +1,8 @@
 [build]
   publish = "."
+  # Genera las fichas /spot-… y el <head> propio de /aprender, /spots, etc. a partir de index.html.
+  # Si fallara, el sitio sigue andando igual (las reglas de abajo sirven index.html).
+  command = "node scripts/gen-seo.mjs || echo 'gen-seo falló: se publica sin páginas generadas'"
 
 [functions]
   directory = "netlify/functions"

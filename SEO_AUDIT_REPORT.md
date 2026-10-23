@@ -119,3 +119,14 @@ El techo de Técnica y Performance depende de las revisiones manuales de abajo (
 | P3 | Quitar `<meta name="keywords">` (Google lo ignora desde 2009; solo le muestra tu estrategia a la competencia). | Bajo | Bajo |
 | P3 | Nuevas guías según volumen de búsqueda: "clases de wingfoil en Buenos Aires", "cuánto cuesta un equipo de wingfoil", "altura del Río de la Plata hoy" (enlazada a la costa). | Alto | Medio |
 | P3 | Páginas por spot (`/spots/san-isidro`, `/spots/bariloche`…) con su `SportsActivityLocation`. | Alto | Alto |
+
+## Actualización 23/10/2026 — fichas por spot y SEO por página
+
+| # | Qué se hizo | Impacto |
+|---|---|---|
+| 1 | 21 fichas propias `/spot-<nombre>` (ej. `/spot-sanisidro`, `/spot-mardelplata`): title, meta, canonical, `SportsActivityLocation` + `BreadcrumbList` + `FAQPage`, texto único (viento ideal en nudos y km/h, mejor época, cómo llegar, seguridad, escuelas), spots cercanos y enlace al viento en vivo. | Alto: cada spot puede posicionar por "wingfoil en <lugar>". |
+| 2 | `/aprender`, `/spots`, `/instructores`, `/equipos` y `/articulos` salían con el título y el canonical de la home en el HTML inicial. Ahora cada una tiene su `<head>` (title, descripción, canonical, og/twitter, schema propio). | Alto: Google deja de consolidarlas en la home. |
+| 3 | Schema movido a su página (FAQ/HowTo/glosario a `/aprender`; sudestada/WebApplication a `/spots`); `ItemList` con las 21 fichas en `/spots`. | Medio |
+| 4 | Sitemap con 26 URLs nuevas. Chips "Ficha de cada spot" en `/spots` (enlaces internos rastreables). `alt` en las galerías de spots. | Medio |
+
+Cómo se genera: `scripts/gen-seo.mjs` (corre solo en cada deploy, ver `netlify.toml`; a mano: `node scripts/gen-seo.mjs`). Las fichas se guardan en el repo; las cinco copias de `index.html` no (están en `.gitignore`).
