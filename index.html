@@ -2112,28 +2112,97 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </button>
 </section>
 
-<!-- Viento ahora, grande: lo pinta el script de la portada con el pronóstico de "¿Salgo hoy?" -->
-<section class="vivo" id="vivo" data-pg="inicio" aria-labelledby="vivoSpot">
-  <div class="nx-wrap vivo__in">
-    <a class="vivo__main" href="/spots#salgo-hoy">
-      <img class="vivo__bg" src="/assets/img/wf-14740926-800.jpg" alt="" loading="lazy"/>
-      <span class="nx-m vivo__eye"><i class="nx-viento__dot"></i><span data-en="Wind now">Viento ahora</span></span>
-      <h2 class="nx-d vivo__spot" id="vivoSpot">San Isidro</h2>
-      <div class="vivo__num"><b id="vivoKn">··</b><span>kn</span><span class="vivo__fl" id="vivoFl"></span></div>
-      <p class="vivo__ver" id="vivoVer" data-en="Measuring the wind…">Midiendo el viento…</p>
-      <p class="nx-m vivo__det" id="vivoDet"></p>
-    </a>
-    <div class="vivo__side">
-      <div class="vivo__head">
-        <p class="vivo__res" id="vivoRes" data-en="Wind in the spots around the country">El viento en los spots del país</p>
-        <a class="vivo__todos" href="/spots#salgo-hoy" data-en="All spots →">Todos los spots →</a>
+<!-- Bramador: la app del viento. El botón lleva a /bramador/, donde se instala (el manifest de esta página es el del sitio). -->
+<style>
+.bram{position:relative;isolation:isolate;overflow:hidden;background:#0B1A22;color:#F7F4EC;padding:clamp(28px,4vw,56px) 0}
+.bram__bg{position:absolute;inset:-40px;z-index:-1;background:url(/assets/img/wf-14740926-800.jpg) center/cover;filter:blur(26px) brightness(.38) saturate(1.3)}
+.bram__in{display:grid;grid-template-columns:minmax(0,1.15fr) auto minmax(0,1fr);gap:clamp(20px,3vw,48px);align-items:center}
+.bram__marca{display:flex;align-items:center;gap:12px}
+.bram__marca svg{width:52px;height:52px;flex-shrink:0}
+.bram__nom{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:30px;letter-spacing:.04em;line-height:1}
+.bram__by{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;opacity:.85}
+.bram__t{font-size:clamp(34px,4.4vw,58px);line-height:.95;margin:22px 0 10px}
+.bram__lead{font-size:17px;line-height:1.45;max-width:30em;color:#C9D6DE;margin:0 0 18px}
+.bram__chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 22px;padding:0;list-style:none}
+.bram__chips li{font-size:13px;font-weight:700;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14)}
+.bram__cta{font-size:18px;min-height:58px;padding:0 30px}
+.bram__cta svg{width:20px;height:20px}
+.bram__os{display:flex;gap:16px;margin-top:14px;font-size:14px;font-weight:700;color:#C9D6DE}
+.bram__os span{display:inline-flex;align-items:center;gap:6px}
+.bram__os b{color:#22C3A6}
+.bram__tel{width:230px;height:470px;border-radius:38px;background:#05101A;padding:10px;box-shadow:0 40px 80px rgba(0,0,0,.6),0 0 0 2px rgba(255,255,255,.12);transform:rotate(-4deg)}
+.bram__pant{position:relative;height:100%;border-radius:30px;overflow:hidden;background:#0B1A22}
+.bram__foto{position:absolute;left:0;right:0;top:0;height:62%;background:url(/assets/img/wf-14740926-800.jpg) center/cover}
+.bram__foto:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,26,34,.5),rgba(11,26,34,0) 35%,#0B1A22 100%)}
+.bram__ph{position:absolute;left:14px;right:14px;top:150px}
+.bram__sali{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:64px;line-height:.85;color:#FF5A2C;letter-spacing:-.04em}
+.bram__kn{font-size:30px;font-weight:900;margin-top:6px}
+.bram__kn small{font-size:13px}
+.bram__hasta{font-size:12px;font-weight:800;color:#FFC531}
+.bram__mos{position:absolute;left:12px;right:12px;bottom:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.bram__mos i{font-style:normal;border-radius:10px;padding:7px 7px;font-size:10px;font-weight:800;line-height:1.1}
+.bram__mos i b{display:block;font-size:17px}
+.bram__top{position:absolute;left:14px;top:16px;display:flex;align-items:center;gap:6px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:13px;letter-spacing:.06em}
+.bram__top svg{width:20px;height:20px}
+.bram__pasos{background:rgba(11,26,34,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:20px}
+.bram__pt{font-size:22px;margin:0 0 4px}
+.bram__ps{font-size:14px;color:#9FB3C1;margin:0 0 14px}
+.bram__tabs{display:flex;gap:6px;background:rgba(0,0,0,.35);border-radius:14px;padding:4px;margin-bottom:14px}
+.bram__tabs button{flex:1;min-height:42px;border:0;border-radius:10px;background:transparent;color:#9FB3C1;font:800 15px 'DM Sans',sans-serif;cursor:pointer}
+.bram__tabs button[aria-selected="true"]{background:#F7F4EC;color:#0B1A22}
+.bram__lista{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.bram__lista li{display:flex;gap:12px;align-items:center}
+.bram__n{flex-shrink:0;width:36px;height:36px;border-radius:50%;background:#FF5A2C;color:#0B1A22;display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px}
+.bram__lista strong{display:block;font-size:16px}
+.bram__lista span{font-size:13px;color:#9FB3C1}
+.bram__lista .bram__n{color:#0B1A22;font-size:18px}
+.bram [hidden]{display:none!important}
+.bram__nota{font-size:13px;color:#FFC531;font-weight:700;margin:14px 0 0}
+@media(max-width:1020px){.bram__in{grid-template-columns:1fr 1fr}.bram__tel{display:none}}
+@media(max-width:760px){.bram__in{grid-template-columns:1fr}.bram__cta{width:100%}.bram__tel{display:block;width:200px;height:400px;margin:4px auto 0;transform:rotate(-3deg)}.bram__ph{top:118px}.bram__sali{font-size:54px}}
+</style>
+<section class="bram" id="bramador" data-pg="inicio" aria-labelledby="bramT">
+  <div class="bram__bg" aria-hidden="true"></div>
+  <div class="nx-wrap bram__in">
+    <div>
+      <div class="bram__marca">
+        <svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="8" fill="#0B1A22" stroke="rgba(255,255,255,.18)"/><g transform="translate(-1.8 2.6) scale(1.1)" fill="#F7F4EC"><path d="M18 16 C14 10 7 8 2 10 C7 11 12 13 15 17 Z" opacity=".95"/><path d="M18 16 C22 10 29 8 34 10 C29 11 24 13 21 17 Z" opacity=".8"/><path d="M15 17 C16 19 18 20 20 19 L21 17 C20 18 18 18.5 16 17.5 Z"/><circle cx="21.5" cy="16" r="2"/></g></svg>
+        <div><div class="bram__nom">BRAMADOR</div><div class="bram__by">BY ESCUELA DE WINGFOIL</div></div>
       </div>
-      <div class="vivo__lista" id="vivoLista">
-        <span class="vivo__sk"></span><span class="vivo__sk"></span><span class="vivo__sk"></span><span class="vivo__sk"></span><span class="vivo__sk"></span><span class="vivo__sk"></span>
-      </div>
+      <h2 class="nx-d bram__t" id="bramT">El Río de la Plata,<br>en tu bolsillo.</h2>
+      <p class="bram__lead">¿Salgo? y hasta qué hora, por spot. Cámaras del río en vivo, tormentas, mareas y el mes que viene. <b style="color:#F7F4EC">Gratis.</b></p>
+      <ul class="bram__chips"><li>¿Salgo? hasta las 18:30</li><li>Cámaras en vivo</li><li>Tormentas en el mapa</li><li>Alertas de viento</li><li>Tendencia del mes</li></ul>
+      <a class="nx-btn nx-btn--signal bram__cta" href="/bramador/#/instalar" id="bramCta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>Instalá Bramador</a>
+      <div class="bram__os"><span><b>✓</b> Android</span><span><b>✓</b> iPhone</span><span style="color:#9FB3C1;font-weight:500">Sin Play Store ni App Store</span></div>
+    </div>
+    <div class="bram__tel" aria-hidden="true"><div class="bram__pant">
+      <div class="bram__foto"></div>
+      <div class="bram__top"><svg viewBox="0 0 36 36"><rect width="36" height="36" rx="8" fill="#0B1A22"/><g transform="translate(-1.8 2.6) scale(1.1)" fill="#F7F4EC"><path d="M18 16 C14 10 7 8 2 10 C7 11 12 13 15 17 Z"/><path d="M18 16 C22 10 29 8 34 10 C29 11 24 13 21 17 Z" opacity=".8"/><path d="M15 17 C16 19 18 20 20 19 L21 17 C20 18 18 18.5 16 17.5 Z"/><circle cx="21.5" cy="16" r="2"/></g></svg>BRAMADOR</div>
+      <div class="bram__ph"><div class="bram__sali">SALÍ.</div><div class="bram__kn">16 <small>kn ESE</small></div><div class="bram__hasta">Hasta las 18:30</div></div>
+      <div class="bram__mos"><i style="background:#22C3A6;color:#0B1A22"><b>16</b>San Isidro</i><i style="background:#22C3A6;color:#0B1A22"><b>15</b>Perú Beach</i><i style="background:#A6E22E;color:#14200A"><b>19</b>Martínez</i><i style="background:#22C3A6;color:#0B1A22"><b>13</b>Olivos</i><i style="background:#22C3A6;color:#0B1A22"><b>12</b>Punta Lara</i><i style="background:#2F7FD1;color:#fff"><b>8</b>Quilmes</i></div>
+    </div></div>
+    <div class="bram__pasos">
+      <h3 class="nx-d bram__pt">Instalala en 3 pasos</h3>
+      <p class="bram__ps">En tu teléfono, desde la página de Bramador.</p>
+      <div class="bram__tabs" role="tablist"><button type="button" role="tab" aria-selected="true" data-os="ios">iPhone</button><button type="button" role="tab" aria-selected="false" data-os="android">Android</button></div>
+      <ol class="bram__lista" data-os="ios"><li><span class="bram__n">1</span><div><strong>Abrí <a href="/bramador/" style="color:#FF5A2C">la app</a> en Safari</strong><span>escueladewingfoil.com.ar/bramador</span></div></li><li><span class="bram__n">2</span><div><strong>Tocá Compartir</strong><span>el cuadradito con la flecha para arriba</span></div></li><li><span class="bram__n">3</span><div><strong>"Agregar a pantalla de inicio"</strong><span>listo: el pájaro queda con tus apps</span></div></li></ol>
+      <ol class="bram__lista" data-os="android" hidden><li><span class="bram__n">1</span><div><strong>Abrí <a href="/bramador/#/instalar" style="color:#FF5A2C">la app</a> en Chrome</strong><span>escueladewingfoil.com.ar/bramador</span></div></li><li><span class="bram__n">2</span><div><strong>Tocá "Instalar"</strong><span>aparece la ventanita de Android</span></div></li><li><span class="bram__n">3</span><div><strong>Confirmá "Instalar"</strong><span>listo: el pájaro queda con tus apps</span></div></li></ol>
+      <p class="bram__nota" data-os="ios">En iPhone tiene que ser con Safari.</p>
     </div>
   </div>
 </section>
+<script>
+(function(){
+  var tabs=document.querySelectorAll('.bram__tabs button');
+  function ver(os){tabs.forEach(function(x){x.setAttribute('aria-selected',x.dataset.os===os)});document.querySelectorAll('.bram__lista,.bram__nota').forEach(function(l){l.hidden=l.dataset.os!==os})}
+  tabs.forEach(function(b){b.addEventListener('click',function(){ver(b.dataset.os)})});
+  if(/Android/i.test(navigator.userAgent))ver('android');
+  // Google Analytics: cuántos tocan "Instalá Bramador" (y los links de los pasos).
+  document.querySelectorAll('#bramador a[href^="/bramador/"]').forEach(function(a){a.addEventListener('click',function(){
+    if(typeof gtag==='function')gtag('event','instalar_bramador',{origen:a.id==='bramCta'?'portada':'portada_pasos'});
+  })});
+})();
+</script>
 
 <!-- Las cinco páginas, con foto -->
 <section class="nx-sec" data-pg="inicio">
