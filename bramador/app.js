@@ -1022,27 +1022,59 @@ function vistaPerfil(){
 }
 
 // ─────────────────────────────── BIENVENIDA ───────────────────────────────
+// Nombre, apellido y mail son obligatorios para entrar (Netlify Forms "leads-bramador").
+// Si ya los dejó en la web, el mismo navegador tiene bram_lead y no se piden de nuevo.
+function enviarLead(d){
+  var datos = {'form-name': 'leads-bramador', nombre: d.nombre, apellido: d.apellido, mail: d.mail, origen: 'app' + (instalada() ? ' instalada' : ''), 'bot-field': ''};
+  var cuerpo = Object.keys(datos).map(function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(datos[k]); }).join('&');
+  return fetch('/', {method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'}, body: cuerpo})
+    .then(function(r){ if (!r.ok) throw new Error('form'); evento('bramador_lead'); });
+}
 function bienvenida(){
-  if (leer('bienv', false)) return;
+  var falta = !leer('lead', false);
+  if (leer('bienv', false) && !falta) return;
   var p = perfil();
   var el = document.createElement('div');
   el.className = 'bienv'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', 'Bienvenida a Bramador');
   el.innerHTML = '<div class="bienv__fondo"></div><div class="bienv__luz"></div>' + rachas(null) +
     '<svg class="bienv__logo" viewBox="0 0 36 36" role="img" aria-label="Logo de Escuela de Wingfoil">' + PAJARO + '</svg>' +
     '<h1>BRAMADOR</h1><div class="bienv__by">BY ESCUELA DE WINGFOIL</div><p class="bienv__lema">El viento del Río de la Plata.</p>' +
-    '<div class="bienv__form"><div class="campo"><div class="bienv__peso"><label for="bPeso">Tu peso, para calcular tu ala</label><b id="bPesoV">' + p.peso + ' kg</b></div>' +
+    '<form class="bienv__form">' + (falta ?
+      '<p class="bienv__pide">Para entrar, dejanos tus datos. Es gratis.</p>' +
+      '<div class="bienv__fila"><div class="campo"><label for="bNom">Nombre</label><input id="bNom" name="nombre" required maxlength="60" autocomplete="given-name" value="' + esc(p.nombre) + '"></div>' +
+      '<div class="campo"><label for="bApe">Apellido</label><input id="bApe" name="apellido" required maxlength="60" autocomplete="family-name"></div></div>' +
+      '<div class="campo"><label for="bMail">Mail</label><input id="bMail" name="mail" type="email" inputmode="email" required maxlength="120" autocomplete="email" value="' + esc(p.mail) + '"></div>' : '') +
+      '<div class="campo"><div class="bienv__peso"><label for="bPeso">Tu peso, para calcular tu ala</label><b id="bPesoV">' + p.peso + ' kg</b></div>' +
     '<input id="bPeso" type="range" min="40" max="120" step="1" value="' + p.peso + '"></div>' +
-    '<button class="btn" type="button" id="bEntrar">Ver el viento de hoy <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>' +
-    '<span class="bienv__chica">Gratis · Android y iPhone</span></div>';
+    '<p class="bienv__err" hidden></p>' +
+    '<button class="btn" type="submit" id="bEntrar">Ver el viento de hoy <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>' +
+    '<span class="bienv__chica">Gratis · Android y iPhone</span></form>';
+  if (falta) el.classList.add('bienv--datos');
   document.body.appendChild(el);
   document.getElementById('nav').hidden = true;
   var r = el.querySelector('#bPeso');
   r.addEventListener('input', function(){ el.querySelector('#bPesoV').textContent = r.value + ' kg'; });
-  el.querySelector('#bEntrar').addEventListener('click', function(){
+  function entrar(){
     var pp = leer('perfil', {}); pp.peso = +r.value; guardar('perfil', pp);
     guardar('bienv', true);
     el.remove(); document.getElementById('nav').hidden = false;
     router();
+  }
+  var f = el.querySelector('form');
+  f.addEventListener('submit', function(e){
+    e.preventDefault();
+    if (!falta) return entrar();
+    var d = {nombre: f.nombre.value.trim(), apellido: f.apellido.value.trim(), mail: f.mail.value.trim()};
+    var btn = el.querySelector('#bEntrar'), err = el.querySelector('.bienv__err'), txt = btn.innerHTML;
+    btn.disabled = true; btn.textContent = 'Entrando…'; err.hidden = true;
+    enviarLead(d).then(function(){
+      guardar('lead', 1);
+      var pp = leer('perfil', {}); if (!pp.nombre) pp.nombre = d.nombre; if (!pp.mail) pp.mail = d.mail; guardar('perfil', pp);
+      entrar();
+    }).catch(function(){
+      btn.disabled = false; btn.innerHTML = txt;
+      err.textContent = 'No se pudo enviar. Revisá tu conexión y probá de nuevo.'; err.hidden = false;
+    });
   });
 }
 
@@ -1130,6 +1162,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.9', fecha: '26/10', cambios: ['Para entrar a Bramador te pedimos nombre, apellido y mail, una sola vez.']},
   {v: '1.8', fecha: '26/10', cambios: ['Ahora ves a qué hora sale y se pone el sol en el río, en Hoy y en Mi spot.']},
   {v: '1.7', fecha: '26/10', cambios: ['Nuevo en Mi spot: la curva de la marea con la altura de ahora y si está subiendo o bajando.']},
   {v: '1.6', fecha: '26/10', cambios: ['La brújula ahora marca con un triangulito rojo de dónde viene el viento, en vez de la flecha larga.']},

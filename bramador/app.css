@@ -247,6 +247,13 @@ button{font:inherit;color:inherit}
 .bienv__form .campo{margin-bottom:10px}
 .bienv__peso{display:flex;justify-content:space-between;font-weight:800}
 .bienv__peso b{color:var(--senal);font-size:18px}
+.bienv--datos{overflow-y:auto}
+.bienv--datos .bienv__logo{width:min(30vw,120px)}
+.bienv--datos h1{font-size:clamp(36px,11vw,48px);margin-top:10px}
+.bienv__pide{margin:0 0 10px;font-size:15px;font-weight:700;text-align:center}
+.bienv__fila{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bienv__fila .campo{min-width:0}
+.bienv__err{margin:0 0 10px;font-size:13px;font-weight:700;color:#FFC531;text-align:center}
 .bienv__chica{display:block;text-align:center;margin-top:12px;font-size:12px;color:var(--gris)}
 
 @media (min-width:700px){
