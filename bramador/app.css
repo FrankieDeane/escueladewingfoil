@@ -285,3 +285,7 @@ button{font:inherit;color:inherit}
 .marea-ahora .sube{color:#5BC0F8}
 .marea-ahora .baja{color:#FF8A3D}
 .curva-marea{display:block;width:100%;height:auto;margin:0 0 10px;font-family:'DM Sans',sans-serif}
+/* Salida y puesta del sol */
+.sol-tira{display:flex;gap:6px;padding:6px 16px 0}
+.sol-tira span{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;border-radius:12px;padding:9px 8px;background:var(--vidrio);border:1px solid var(--linea);font-size:12px;font-weight:700;color:var(--gris);white-space:nowrap}
+.sol-tira b{font-size:15px;font-weight:900;color:var(--texto)}

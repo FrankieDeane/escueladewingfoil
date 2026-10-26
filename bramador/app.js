@@ -295,6 +295,12 @@ function curvaMarea(mar, ahora){
     '<line x1="' + xa + '" x2="' + xa + '" y1="' + (ar - 6) + '" y2="' + base + '" stroke="#EAF2F8" stroke-width="1.5"/>' +
     '<text x="' + xa + '" y="' + (ar - 9) + '" text-anchor="middle" font-size="9" font-weight="800" fill="#EAF2F8">AHORA</text>' + marcas + '</svg>';
 }
+// Salida y puesta del sol de hoy sobre el río (del pronóstico del spot).
+function solTira(d){
+  var sr = d.daily && d.daily.sunrise && d.daily.sunrise[0], ss = d.daily && d.daily.sunset && d.daily.sunset[0];
+  if (!sr || !ss) return '';
+  return '<div class="sol-tira"><span>🌅 Sale el sol <b>' + hhmm(msDe(sr)) + '</b></span><span>🌇 Se pone <b>' + hhmm(msDe(ss)) + '</b></span></div>';
+}
 function norden(){ return traer('/api/norden', 'norden', 5 * 60e3); }
 function enso(){ return traer('/api/bramador-enso', 'enso', 24 * 3600e3); }
 
@@ -479,6 +485,7 @@ function vistaHoy(){
         '<div class="dato"><small>LUZ</small><b>' + (luzMin > 0 ? Math.floor(luzMin / 60) + ' h ' + String(luzMin % 60).padStart(2, '0') : 'de noche') + '</b></div>' +
         '<a class="dato" href="#/perfil"><small>ALA HOY</small><b>' + (alaHoy ? alaHoy + ' m' : '—') + '</b></a>' +
       '</div>' +
+      solTira(d) +
       (pico ? '<div class="tarj vidrio pico">' + flecha(pico.deg, '') .replace('<svg', '<svg width="28" height="28" style="flex-shrink:0;fill:none;stroke:#FF5A2C;stroke-width:3;stroke-linecap:round;transform:rotate(' + r0(pico.deg) + 'deg)"') +
         '<div><b>Pico del día: ' + hhmm(pico.ms) + ' · ' + r0(pico.kn) + ' kn ' + rumbo(pico.deg) + '</b><p>' +
         (pico.ev.ok ? 'Llevá un ala de ' + ala(pico.kn, p.peso) + ' m' : 'Ni en el pico da: ' + esc(pico.ev.m)) + '</p></div></div>' : '') +
@@ -611,6 +618,7 @@ function vistaSpot(id){
     pintar('<div class="spot-cab"><div class="hero__foto" style="background-image:url(' + foto(spot.foto) + ')"></div><div class="hero__velo"></div>' +
       '<div class="spot-cab__txt"><div><h1>' + esc(spot.n) + '</h1><p>' + (pico ? 'Pico del día: ' + hhmm(pico.ms) + ' · ' + r0(pico.kn) + ' kn' + (pico.ev.ok ? ' · ala de ' + ala(pico.kn, p.peso) + ' m' : '') : esc(spot.sub)) + '</p></div>' +
       brujula(cur.wind_direction_10m, spot.arco, 96) + '</div></div>' + sel +
+      solTira(d) +
       '<div class="tarj vidrio"><p class="tit">Próximas 24 horas</p><div class="barras">' + barras.map(function(b, j){
         return '<div class="barra">' + (tormenta(b.code) ? '<small>⚡</small>' : b.pp >= 50 ? '<small>💧</small>' : '') +
           '<b>' + r0(b.kn) + '</b><i style="height:' + Math.max(4, r0(b.kn / maxKn * 80)) + 'px;background:' + kcolor(b.kn) + '"></i>' + flecha(b.deg) +
@@ -1122,6 +1130,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.8', fecha: '26/10', cambios: ['Ahora ves a qué hora sale y se pone el sol en el río, en Hoy y en Mi spot.']},
   {v: '1.7', fecha: '26/10', cambios: ['Nuevo en Mi spot: la curva de la marea con la altura de ahora y si está subiendo o bajando.']},
   {v: '1.6', fecha: '26/10', cambios: ['La brújula ahora marca con un triangulito rojo de dónde viene el viento, en vez de la flecha larga.']},
   {v: '1.5', fecha: '26/10', cambios: ['Bramador más simple: sacamos la sección Mapa. El pronóstico día por día, con clima, viento y mareas, está en Mi spot.']},
