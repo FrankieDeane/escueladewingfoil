@@ -5,9 +5,10 @@
 // Librerías del mapa (vendor/, no cambian): primero la copia guardada.
 // Datos (/api/…): primero la red, y si no hay, lo último.
 //
-// Al publicar una mejora: cambiar VERSION y sumar la novedad en NOVEDADES (app.js).
+// Al publicar una mejora: cambiar VERSION acá, sumar la novedad en NOVEDADES (app.js)
+// y poner el mismo número en version.json.
 // Los datos de afuera (pronóstico, mareas) ya los guarda app.js en el celular.
-const VERSION = 'bramador-v1.1';
+const VERSION = 'bramador-v1.2';
 const BASE = [
   '/bramador/',
   '/bramador/index.html',
@@ -38,6 +39,7 @@ self.addEventListener('fetch', e => {
   if (r.method !== 'GET') return;
   const url = new URL(r.url);
   if (url.origin !== location.origin) return;
+  if (url.pathname === '/bramador/version.json') return;
 
   const redPrimero = url.pathname.startsWith('/api/') || url.pathname === '/mp-data.json' ||
     (url.pathname.startsWith('/bramador/') && !url.pathname.startsWith('/bramador/vendor/') && !url.pathname.startsWith('/bramador/icons/'));
@@ -46,7 +48,7 @@ self.addEventListener('fetch', e => {
       fetch(r).then(res => {
         if (res.ok) { const copia = res.clone(); caches.open(VERSION).then(c => c.put(r, copia)); }
         return res;
-      }).catch(() => caches.match(r, { ignoreSearch: r.mode === 'navigate' })
+      }).catch(() => caches.match(r, { ignoreSearch: true })
         .then(g => g || (r.mode === 'navigate' ? caches.match('/bramador/') : null))
         .then(g => g || Response.error()))
     );
