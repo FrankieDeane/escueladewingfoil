@@ -2157,6 +2157,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 .bram__lista span{font-size:13px;color:#9FB3C1}
 .bram__lista .bram__n{color:#0B1A22;font-size:18px}
 .bram [hidden]{display:none!important}
+.bram-lead{margin:auto;border:0;padding:0;box-sizing:border-box;background:transparent;max-width:min(440px,calc(100vw - 32px));width:100%;color:#F7F4EC}
+.bram-lead::backdrop{background:rgba(5,16,26,.8)}
+.bram-lead__c{position:relative;background:#0B1A22;border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:26px 22px 22px;box-shadow:0 40px 80px rgba(0,0,0,.6)}
+.bram-lead__x{position:absolute;top:10px;right:10px;width:40px;height:40px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#F7F4EC;font-size:22px;line-height:1;cursor:pointer}
+.bram-lead__t{font-size:26px;line-height:1.05;margin:0 0 6px;padding-right:36px}
+.bram-lead__s{font-size:14px;color:#9FB3C1;margin:0 0 16px}
+.bram-lead__f{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bram-lead__f *{box-sizing:border-box;min-width:0}
+.bram-lead__f label{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#C9D6DE}
+.bram-lead__f label.ancho{grid-column:1/-1}
+.bram-lead__f input{min-height:48px;border-radius:12px;border:1px solid rgba(255,255,255,.18);width:100%;background:rgba(255,255,255,.06);color:#F7F4EC;font:500 16px 'DM Sans',sans-serif;padding:0 14px;text-transform:none;letter-spacing:0}
+.bram-lead__f input:focus{outline:2px solid #FF5A2C;outline-offset:1px;border-color:transparent}
+.bram-lead__f .nx-btn{grid-column:1/-1;width:100%;min-height:54px;font-size:17px;margin-top:6px}
+.bram-lead__err{grid-column:1/-1;margin:0;font-size:13px;font-weight:700;color:#FFC531}
+.bram-lead__bot{position:absolute;left:-9999px}
 .bram__nota{font-size:13px;color:#FFC531;font-weight:700;margin:14px 0 0}
 @media(max-width:1020px){.bram__in{grid-template-columns:1fr 1fr}.bram__tel{display:none}}
 @media(max-width:760px){.bram__in{grid-template-columns:1fr}.bram__cta{width:100%}.bram__tel{display:block;width:200px;height:400px;margin:4px auto 0;transform:rotate(-3deg)}.bram__ph{top:118px}.bram__sali{font-size:54px}}
@@ -2191,6 +2206,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </div>
 </section>
+<dialog class="bram-lead" id="bramLead" aria-labelledby="bramLeadT">
+  <div class="bram-lead__c">
+    <button type="button" class="bram-lead__x" aria-label="Cerrar" data-cerrar>×</button>
+    <h3 class="nx-d bram-lead__t" id="bramLeadT">Antes de entrar a Bramador</h3>
+    <p class="bram-lead__s">Dejanos tus datos y seguís directo a la app. Es gratis.</p>
+    <form class="bram-lead__f" name="leads-bramador" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="leads-bramador">
+      <input type="hidden" name="origen" value="">
+      <p class="bram-lead__bot"><label>No completar <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+      <label>Nombre<input name="nombre" required autocomplete="given-name" maxlength="60"></label>
+      <label>Apellido<input name="apellido" required autocomplete="family-name" maxlength="60"></label>
+      <label class="ancho">Mail<input name="mail" type="email" required autocomplete="email" maxlength="120"></label>
+      <p class="bram-lead__err" hidden></p>
+      <button class="nx-btn nx-btn--signal" type="submit">Ir a Bramador</button>
+    </form>
+  </div>
+</dialog>
 <script>
 (function(){
   var tabs=document.querySelectorAll('.bram__tabs button');
@@ -2198,9 +2230,30 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   tabs.forEach(function(b){b.addEventListener('click',function(){ver(b.dataset.os)})});
   if(/Android/i.test(navigator.userAgent))ver('android');
   // Google Analytics: cuántos tocan "Instalá Bramador" (y los links de los pasos).
-  document.querySelectorAll('#bramador a[href^="/bramador/"]').forEach(function(a){a.addEventListener('click',function(){
+  // Antes de ir a Bramador se piden nombre, apellido y mail (una sola vez: queda guardado en el navegador).
+  var dlg=document.getElementById('bramLead'),fl=dlg&&dlg.querySelector('form'),destino='/bramador/';
+  function yaDejo(){try{return localStorage.getItem('bram_lead')==='1'}catch(e){return false}}
+  function ir(){location.href=destino}
+  document.querySelectorAll('#bramador a[href^="/bramador/"]').forEach(function(a){a.addEventListener('click',function(ev){
     if(typeof gtag==='function')gtag('event','instalar_bramador',{origen:a.id==='bramCta'?'portada':'portada_pasos'});
+    if(yaDejo()||!dlg||typeof dlg.showModal!=='function')return;
+    ev.preventDefault();destino=a.getAttribute('href');
+    fl.elements.origen.value=location.pathname+(a.id==='bramCta'?' · botón':' · pasos');
+    dlg.showModal();fl.elements.nombre.focus();
   })});
+  if(dlg){
+    dlg.querySelector('[data-cerrar]').addEventListener('click',function(){dlg.close()});
+    dlg.addEventListener('click',function(ev){if(ev.target===dlg)dlg.close()});
+    fl.addEventListener('submit',function(ev){
+      ev.preventDefault();
+      var btn=fl.querySelector('button[type="submit"]'),err=fl.querySelector('.bram-lead__err');
+      btn.disabled=true;btn.textContent='Enviando…';err.hidden=true;
+      fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(fl)).toString()})
+        .then(function(r){if(!r.ok)throw 0;try{localStorage.setItem('bram_lead','1')}catch(e){}
+          if(typeof gtag==='function')gtag('event','lead_bramador',{origen:fl.elements.origen.value});ir()})
+        .catch(function(){btn.disabled=false;btn.textContent='Ir a Bramador';err.textContent='No se pudo enviar. Probá de nuevo.';err.hidden=false});
+    });
+  }
 })();
 </script>
 
