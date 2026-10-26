@@ -343,10 +343,15 @@ function picoDia(spot, d, iso){
   return best;
 }
 // Resumen diario (horas de luz) para el calendario.
+// Clima del día en un emoji, para el calendario del mes.
+function iconoDia(dd){
+  var c = dd.code || 0, mm = dd.lluvia || 0;
+  return dd.rayos ? '⛈️' : mm >= 5 ? '🌧️' : mm >= 0.5 ? '🌦️' : c <= 1 ? '☀️' : c === 2 ? '⛅' : '☁️';
+}
 function resumenDias(spot, d){
   var h = d.hourly, dias = {};
   d.daily.time.forEach(function(iso, k){
-    dias[iso] = {iso: iso, max: 0, deg: null, horasOk: 0, rayos: tormenta(d.daily.weather_code[k]), lluvia: d.daily.precipitation_sum[k],
+    dias[iso] = {iso: iso, max: 0, deg: null, horasOk: 0, rayos: tormenta(d.daily.weather_code[k]), code: d.daily.weather_code[k], lluvia: d.daily.precipitation_sum[k],
                  sr: msDe(d.daily.sunrise[k]), ss: msDe(d.daily.sunset[k])};
   });
   for (var i = 0; i < h.time.length; i++) {
@@ -687,14 +692,13 @@ function pintarDias(grilla){
   var html = '', t = grilla[0].hourly.time;
   var dias = Math.min(16, Math.floor(t.length / 24));
   for (var k = 0; k < dias; k++) {
-    var iso = sumarDias(hoyISO(), k), rayo = false, lluvia = 0, viento = 0;
+    var iso = sumarDias(hoyISO(), k), viento = 0;
     for (var i = 0; i < t.length; i++) {
       if (t[i].slice(0, 10) !== iso) continue;
       var hh = +t[i].slice(11, 13); if (hh < 7 || hh > 21) continue;
-      grilla.forEach(function(g){ var h = g.hourly; if (tormenta(h.weather_code[i])) rayo = true; lluvia = Math.max(lluvia, h.precipitation[i] || 0); viento = Math.max(viento, h.wind_speed_10m[i] || 0); });
+      grilla.forEach(function(g){ viento = Math.max(viento, g.hourly.wind_speed_10m[i] || 0); });
     }
-    var ico = rayo ? '⚡' : lluvia >= 4 ? '⛈️' : lluvia > 0.3 ? '🌧️' : '☀️';
-    html += '<button class="dia-b" type="button" data-dia="' + k + '" aria-pressed="' + (k === mapaEstado.dia) + '"><small>' + (k === 0 ? 'Hoy' : k === 1 ? 'Mañana' : DIAS3[diaSemana(iso)]) + '</small><b>' + (+iso.slice(8)) + '</b><span aria-hidden="true">' + ico + '</span><i class="' + kclase(viento) + '">' + r0(viento) + '</i></button>';
+    html += '<button class="dia-b" type="button" data-dia="' + k + '" aria-pressed="' + (k === mapaEstado.dia) + '"><small>' + (k === 0 ? 'Hoy' : k === 1 ? 'Mañana' : DIAS3[diaSemana(iso)]) + '</small><b>' + (+iso.slice(8)) + '</b><i class="' + kclase(viento) + '">' + r0(viento) + '</i></button>';
   }
   box.innerHTML = html;
   var horas = horasDelDia(grilla, mapaEstado.dia);
@@ -1073,7 +1077,7 @@ function vistaSpot(id){
       var iso = sumarDias(inicio, k), dd = dias[k], dnum = +iso.slice(8);
       if (dd && k < 16) {
         cal += '<a class="cal__dia ' + kclase(dd.max) + '" href="#/dia/' + spot.id + '/' + iso + '" aria-label="' + esc(nombreDia(iso)) + ': ' + r0(dd.max) + ' nudos">' +
-          '<small>' + dnum + '</small><b>' + r0(dd.max) + '</b>' + (dd.rayos ? '<small>⚡</small>' : flecha(dd.deg || 0)) + '</a>';
+          '<small>' + dnum + '</small><span class="cal__ico" aria-hidden="true">' + iconoDia(dd) + '</span><b>' + r0(dd.max) + '</b>' + flecha(dd.deg || 0) + '</a>';
       } else {
         var td = clima ? tendenciaDia(clima, iso) : null;
         cal += '<a class="cal__dia cal__dia--trend ' + (td ? kclase(td.prom) : 'k0') + '" href="#/dia/' + spot.id + '/' + iso + '" aria-label="' + esc(nombreDia(iso)) + ': tendencia">' +
@@ -1612,6 +1616,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.4', fecha: '26/10', cambios: ['El calendario del mes en Mi spot ahora muestra el clima de cada día (sol, nubes, lluvia o tormenta) junto al viento.', 'El selector de días del mapa queda más limpio, sin íconos de clima.']},
   {v: '1.3', fecha: '26/10', cambios: ['Arreglado: al tocar play en Lluvia o Tormentas ahora se ven los colores hora por hora, también las lluvias débiles.', 'Arreglado: en Mi spot y en el mes, las flechas ahora apuntan hacia donde va el viento (si dice ENE, la flecha baja hacia el oeste-suroeste).']},
   {v: '1.2', fecha: '26/10', cambios: ['Nuevo en el mapa: botón Foto satelital y, abajo, el resumen del día con mareas, vientos, lluvias y temperaturas.', 'Mapa nuevo estilo Windy: todo el río pintado con la lluvia, las tormentas o el viento, y líneas que muestran cómo se mueve el viento. Tocá play y mirá cómo avanza.', 'El mapa arranca sobre el Río de la Plata y lo podés alejar hasta ver todo el país o el continente.']},
   {v: '1.1', fecha: '26/10', cambios: ['Ahora podés dejar tu mail en Tu perfil para enterarte de lo nuevo.', 'Bramador se actualiza sola: no hace falta bajarla de nuevo.']}
