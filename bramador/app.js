@@ -187,14 +187,14 @@ function pronosticoPunto(lat, lng){
 // Grilla sobre el río para el mapa: lluvia, tormentas y viento hora por hora.
 var GRILLA = (function(){
   var pts = [];
-  for (var la = -34.30; la >= -35.10; la -= 0.2) for (var lo = -58.70; lo <= -57.30; lo += 0.35) pts.push([+la.toFixed(2), +lo.toFixed(2)]);
+  for (var la = -34.32; la >= -35.03; la -= 0.175) for (var lo = -58.68; lo <= -57.79; lo += 0.22) pts.push([+la.toFixed(2), +lo.toFixed(2)]);
   return pts;
 })();
 function pronosticoGrilla(){
   var url = OM + '?latitude=' + GRILLA.map(function(p){ return p[0]; }).join(',') +
     '&longitude=' + GRILLA.map(function(p){ return p[1]; }).join(',') +
-    '&hourly=wind_speed_10m,wind_direction_10m,precipitation,weather_code&wind_speed_unit=kn&timezone=' + encodeURIComponent(TZ) + '&forecast_days=5';
-  return traer(url, 'grilla', 60 * 60e3).then(function(d){ return Array.isArray(d) ? d : [d]; });
+    '&hourly=wind_speed_10m,wind_direction_10m,precipitation,weather_code&wind_speed_unit=kn&timezone=' + encodeURIComponent(TZ) + '&forecast_days=16';
+  return traer(url, 'grilla3', 60 * 60e3).then(function(d){ return Array.isArray(d) ? d : [d]; });
 }
 // Agua: temperatura de la superficie en la boca del río (modelo marino).
 function agua(){
@@ -525,7 +525,10 @@ function vistaRio(){
 }
 
 // ─────────────────────────────── MAPA ───────────────────────────────
-var mapa = null, mapaEstado = {dia: 0, hora: 0, play: false, timer: null, marcas: [], vista: 'rio', satTimer: null, satMarcas: {}, satSel: null};
+// Filtros del mapa y vista fija sobre el Río de la Plata (costa de Buenos Aires).
+var CAPAS = [['lluvia', '🌧️', 'Lluvia'], ['tormentas', '⚡', 'Tormentas'], ['viento', '💨', 'Viento']];
+var RIO = {center: [-58.28, -34.62], zoom: 9.2, pitch: 40, bearing: -20, minZoom: 8.6, limites: [[-59.2, -35.35], [-57.3, -33.95]]};
+var mapa = null, mapaEstado = {capa: 'tormentas', dia: 0, hora: 0, play: false, timer: null, marcas: [], vista: 'rio', satTimer: null, satMarcas: {}, satSel: null};
 var SATS_INFO = {
   iss:      {n:'ISS', tipo:'ESTACIÓN ESPACIAL · CON GENTE', color:'#FFFFFF', de:'EE.UU., Rusia, Europa, Japón y Canadá', clase:'Tripulado',
              que:'Una casa en el espacio con astronautas a bordo. Da la vuelta al mundo cada 90 minutos.', dato:'Se ve a simple vista: un punto brillante que cruza el cielo sin titilar.'},
@@ -557,14 +560,17 @@ function cargarCss(href){
 function vistaMapa(){
   fondo('mapa');
   pararMapa();
-  pintar('<div class="cab"><div><h1>Mapa del río</h1><p>Tocá play · tocá el agua para ver tu punto</p></div></div>' +
-    '<div class="chips" id="dias"></div>' +
+  pintar('<div class="cab"><div><h1>Mapa del río</h1><p>Elegí qué ver · tocá el agua para ver tu punto</p></div></div>' +
+    '<div class="capas" role="group" aria-label="Qué ver en el mapa">' + CAPAS.map(function(c){
+      return '<button type="button" data-capa="' + c[0] + '" aria-pressed="' + (c[0] === mapaEstado.capa) + '"><span aria-hidden="true">' + c[1] + '</span>' + c[2] + '</button>';
+    }).join('') + '</div>' +
+    '<div class="dias-box vidrio"><p class="dias-box__t">📅 Elegí el día <span>deslizá para ver más →</span></p><div class="dias" id="dias"></div></div>' +
     '<div style="height:10px"></div><div class="mapa-wrap"><div id="mapa" role="application" aria-label="Mapa del Río de la Plata"></div>' +
     '<div class="mapa-info" id="mapaInfo">Cargando…</div>' +
     '<button class="pildora mapa-btn" type="button" data-accion="vista-sats" id="btnSats">🛰️ Satélites</button></div>' +
     '<div class="play"><button class="play__b" type="button" data-accion="play" id="btnPlay" aria-label="Reproducir"><svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg></button>' +
     '<div class="horas" id="horas"></div></div>' +
-    '<div class="leyenda"><span><i style="background:#3D7BD9"></i>Lluvia</span><span><i style="background:#B04FD6"></i>Tormenta fuerte</span><span>⚡ Rayos</span><span><i style="background:#22C3A6"></i>Viento (color = fuerza)</span></div>' +
+    '<div class="leyenda" id="leyenda"></div>' +
     '<button class="tarj vidrio" type="button" data-accion="vista-sats" style="display:flex;gap:10px;align-items:center;width:calc(100% - 32px);text-align:left;cursor:pointer;color:inherit" id="pasoISS">' +
     '<span style="font-size:24px">🛰️</span><span style="font-size:13px;line-height:1.35"><b>Mirá para arriba:</b> calculando cuándo pasa la Estación Espacial…</span></button>' +
     '<aside class="panel" id="panelSat" aria-live="polite"></aside>');
@@ -601,14 +607,15 @@ function iniciarMapa(grilla){
       sat: {type:'raster', tiles:['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'], tileSize:256, maxzoom:18,
             attribution:'Imágenes © Esri'}
     }, layers: [{id:'sat', type:'raster', source:'sat', paint:{'raster-saturation':-0.1, 'raster-brightness-max':0.85}}]},
-    center: [-58.15, -34.62], zoom: 8.3, pitch: 55, bearing: -25, attributionControl: {compact: true}
+    center: RIO.center, zoom: RIO.zoom, pitch: RIO.pitch, bearing: RIO.bearing, minZoom: RIO.minZoom, maxBounds: RIO.limites,
+    attributionControl: {compact: true}
   });
   mapa.on('load', function(){
     mapa.addSource('lluvia', {type:'geojson', data:{type:'FeatureCollection', features:[]}});
     mapa.addLayer({id:'lluvia', type:'heatmap', source:'lluvia', paint:{
-      'heatmap-weight': ['interpolate', ['linear'], ['get', 'mm'], 0, 0, 0.3, 0.3, 5, 1],
-      'heatmap-intensity': 1.1,
-      'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 6, 30, 9, 70],
+      'heatmap-weight': ['interpolate', ['linear'], ['get', 'v'], 0, 0, 0.5, 0.25, 6, 1],
+      'heatmap-intensity': 0.9,
+      'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 8, 28, 9, 46, 11, 140],
       'heatmap-color': ['interpolate', ['linear'], ['heatmap-density'], 0, 'rgba(61,123,217,0)', 0.25, 'rgba(61,123,217,.45)', 0.6, 'rgba(61,123,217,.7)', 0.85, 'rgba(176,79,214,.8)', 1, 'rgba(214,51,108,.9)'],
       'heatmap-opacity': 0.85
     }});
@@ -647,10 +654,17 @@ function iniciarMapa(grilla){
 }
 function pintarDias(grilla){
   var box = document.getElementById('dias'); if (!box) return;
-  var html = '';
-  for (var k = 0; k < 5; k++) {
-    var iso = sumarDias(hoyISO(), k);
-    html += '<button class="chip" type="button" data-dia="' + k + '" aria-pressed="' + (k === mapaEstado.dia) + '">' + (k === 0 ? 'Hoy' : DIAS3[diaSemana(iso)] + ' ' + (+iso.slice(8))) + '</button>';
+  var html = '', t = grilla[0].hourly.time;
+  var dias = Math.min(16, Math.floor(t.length / 24));
+  for (var k = 0; k < dias; k++) {
+    var iso = sumarDias(hoyISO(), k), rayo = false, lluvia = 0, viento = 0;
+    for (var i = 0; i < t.length; i++) {
+      if (t[i].slice(0, 10) !== iso) continue;
+      var hh = +t[i].slice(11, 13); if (hh < 7 || hh > 21) continue;
+      grilla.forEach(function(g){ var h = g.hourly; if (tormenta(h.weather_code[i])) rayo = true; lluvia = Math.max(lluvia, h.precipitation[i] || 0); viento = Math.max(viento, h.wind_speed_10m[i] || 0); });
+    }
+    var ico = rayo ? '⚡' : lluvia >= 4 ? '⛈️' : lluvia > 0.3 ? '🌧️' : '☀️';
+    html += '<button class="dia-b" type="button" data-dia="' + k + '" aria-pressed="' + (k === mapaEstado.dia) + '"><small>' + (k === 0 ? 'Hoy' : k === 1 ? 'Mañana' : DIAS3[diaSemana(iso)]) + '</small><b>' + (+iso.slice(8)) + '</b><span aria-hidden="true">' + ico + '</span><i class="' + kclase(viento) + '">' + r0(viento) + '</i></button>';
   }
   box.innerHTML = html;
   var horas = horasDelDia(grilla, mapaEstado.dia);
@@ -659,35 +673,89 @@ function pintarDias(grilla){
     return '<button type="button" data-hora="' + j + '" aria-pressed="' + (j === mapaEstado.hora) + '">' + grilla[0].hourly.time[ix].slice(11, 13) + '</button>';
   }).join('');
 }
+// Tormenta "común": lluvia fuerte o chaparrón fuerte aunque no haya rayos.
+function tormentaComun(code, mm){ return code === 65 || code === 82 || mm >= 4; }
+// La grilla es de 5×5 puntos; para que lluvia y tormenta se vean como una masa
+// continua se interpola en una malla más fina (bilineal) antes del mapa de calor.
+function masa(valores, filas, cols, paso){
+  var out = [], la0 = GRILLA[0][0], lo0 = GRILLA[0][1], dLa = GRILLA[cols][0] - la0, dLo = GRILLA[1][1] - lo0;
+  for (var r = 0; r <= (filas - 1) * paso; r++) for (var c = 0; c <= (cols - 1) * paso; c++) {
+    var fr = r / paso, fc = c / paso, r0_ = Math.min(filas - 2, Math.floor(fr)), c0 = Math.min(cols - 2, Math.floor(fc)), tr = fr - r0_, tc = fc - c0;
+    var v = valores[r0_ * cols + c0] * (1 - tr) * (1 - tc) + valores[r0_ * cols + c0 + 1] * (1 - tr) * tc +
+            valores[(r0_ + 1) * cols + c0] * tr * (1 - tc) + valores[(r0_ + 1) * cols + c0 + 1] * tr * tc;
+    if (v > 0.05) out.push({type:'Feature', geometry:{type:'Point', coordinates:[lo0 + fc * dLo, la0 + fr * dLa]}, properties:{v: v}});
+  }
+  return out;
+}
+var COLS_GRILLA = (function(){ var n = 1; while (n < GRILLA.length && GRILLA[n][0] === GRILLA[0][0]) n++; return n; })();
 function pintarHora(grilla){
   if (!mapa || !mapa.getSource('lluvia')) return;
   var horas = horasDelDia(grilla, mapaEstado.dia);
   var ix = horas[mapaEstado.hora];
-  if (ix == null) { document.getElementById('mapaInfo').textContent = 'Sin horas de luz para mostrar'; return; }
-  var feats = [], suma = 0, n = 0, rayos = 0, lluvia = 0, dirs = [];
+  var info = document.getElementById('mapaInfo');
+  pintarLeyenda();
   mapaEstado.marcas.forEach(function(m){ m.remove(); }); mapaEstado.marcas = [];
-  grilla.forEach(function(g, k){
-    var h = g.hourly, kn = h.wind_speed_10m[ix], deg = h.wind_direction_10m[ix], mm = h.precipitation[ix], code = h.weather_code[ix];
-    var lng = GRILLA[k][1], lat = GRILLA[k][0];
-    if (mm > 0) { feats.push({type:'Feature', geometry:{type:'Point', coordinates:[lng, lat]}, properties:{mm: code >= 95 ? mm + 5 : mm}}); lluvia++; }
-    if (isFinite(kn)) { suma += kn; n++; dirs.push(deg); }
-    var el = document.createElement('div');
-    if (tormenta(code)) {
-      rayos++;
-      el.className = 'rayo-mapa'; el.textContent = '⚡';
-    } else {
-      el.className = 'flecha-mapa';
-      el.innerHTML = '<svg viewBox="0 0 24 24" style="transform:rotate(' + r0(deg + 180) + 'deg)"><path d="M12 3v18M5 14l7 7 7-7" fill="none" stroke="' + kcolor(kn) + '" stroke-width="3.2" stroke-linecap="round"/></svg>';
-    }
-    mapaEstado.marcas.push(new window.maplibregl.Marker({element: el}).setLngLat([lng, lat]).addTo(mapa));
+  if (ix == null) { info.textContent = 'Sin horas de luz para mostrar'; mapa.getSource('lluvia').setData({type:'FeatureCollection', features:[]}); return; }
+  var capa = mapaEstado.capa, valores = [], suma = 0, n = 0, rayos = 0, fuertes = 0, lluvia = 0, mmMax = 0, sx = 0, sy = 0, codigos = [];
+  grilla.forEach(function(g){
+    var h = g.hourly, kn = h.wind_speed_10m[ix], deg = h.wind_direction_10m[ix], mm = h.precipitation[ix] || 0, code = h.weather_code[ix] || 0;
+    var rayo = tormenta(code), comun = !rayo && tormentaComun(code, mm);
+    if (isFinite(kn)) { suma += kn; n++; sx += Math.sin(deg * Math.PI / 180); sy += Math.cos(deg * Math.PI / 180); }
+    if (mm > 0) { lluvia++; mmMax = Math.max(mmMax, mm); }
+    if (rayo) rayos++; if (comun) fuertes++;
+    codigos.push(code);
+    valores.push(capa === 'lluvia' ? Math.min(mm, 8) : capa === 'tormentas' ? (rayo ? 8 : comun ? Math.min(mm, 8) : 0) : 0);
   });
-  mapa.getSource('lluvia').setData({type:'FeatureCollection', features: feats});
-  var prom = n ? suma / n : 0;
-  var x = Math.atan2(dirs.reduce(function(a, d){ return a + Math.sin(d * Math.PI / 180); }, 0), dirs.reduce(function(a, d){ return a + Math.cos(d * Math.PI / 180); }, 0)) * 180 / Math.PI;
-  var hora = grilla[0].hourly.time[ix].slice(11, 16);
-  document.getElementById('mapaInfo').textContent = hora + ' · ' + r0(prom) + ' kn ' + rumbo((x + 360) % 360) +
-    (rayos ? ' · tormenta eléctrica' : lluvia > 3 ? ' · lluvia' : lluvia ? ' · lluvia aislada' : ' · seco');
+  function marca(el, lng, lat){ mapaEstado.marcas.push(new window.maplibregl.Marker({element: el}).setLngLat([lng, lat]).addTo(mapa)); }
+  var hayMasa = valores.some(function(v){ return v > 0; });
+  mapa.setPaintProperty('lluvia', 'heatmap-color', capa === 'tormentas'
+    ? ['interpolate', ['linear'], ['heatmap-density'], 0, 'rgba(255,138,31,0)', 0.2, 'rgba(255,165,40,.45)', 0.55, 'rgba(255,120,30,.75)', 1, 'rgba(255,72,30,.92)']
+    : ['interpolate', ['linear'], ['heatmap-density'], 0, 'rgba(125,211,252,0)', 0.2, 'rgba(125,211,252,.4)', 0.55, 'rgba(90,190,250,.65)', 1, 'rgba(56,160,240,.85)']);
+  mapa.setPaintProperty('lluvia', 'heatmap-intensity', capa === 'tormentas' ? 1.6 : 1.1);
+  mapa.getSource('lluvia').setData({type:'FeatureCollection', features: capa === 'viento' ? [] : masa(valores, GRILLA.length / COLS_GRILLA, COLS_GRILLA, 4)});
+  // Rayos: un ⚡ donde la tormenta es eléctrica.
+  if (capa === 'tormentas') grilla.forEach(function(g, k){
+    if (!tormenta(g.hourly.weather_code[ix])) return;
+    var el = document.createElement('div'); el.className = 'rayo-mapa'; el.textContent = '⚡'; marca(el, GRILLA[k][1], GRILLA[k][0]);
+  });
+  var hora = grilla[0].hourly.time[ix].slice(11, 16), hh = +hora.slice(0, 2);
+  // Sin lluvia ni tormenta: el cielo en grande (sol, nubes o luna).
+  if (capa !== 'viento' && !hayMasa) {
+    var prom = codigos.reduce(function(a, c){ return a + Math.min(c, 3); }, 0) / codigos.length;
+    var cielo = document.createElement('div'); cielo.className = 'cielo-mapa';
+    cielo.innerHTML = '<span>' + (hh >= 20 ? '🌙' : prom < 1.2 ? '☀️' : prom < 2.4 ? '⛅' : '☁️') + '</span><b>' + (hh >= 20 ? 'Despejado' : prom < 1.2 ? 'Soleado' : prom < 2.4 ? 'Algo nublado' : 'Nublado') + '</b>';
+    marca(cielo, RIO.center[0], RIO.center[1]);
+  }
+  // Viento: una sola flecha grande para el río, hacia donde sopla.
+  if (capa === 'viento' && n) {
+    var kn = suma / n, deg = (Math.atan2(sx, sy) * 180 / Math.PI + 360) % 360;
+    var f = document.createElement('div'); f.className = 'viento-mapa';
+    f.innerHTML = '<svg viewBox="0 0 64 64" style="transform:rotate(' + r0(deg) + 'deg)"><path d="M32 6v44M16 36l16 18 16-18" fill="none" stroke="' + kcolor(kn) + '" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+      '<b class="' + kclase(kn) + '">' + r0(kn) + ' kn · del ' + rumbo(deg) + '</b>';
+    marca(f, RIO.center[0], RIO.center[1]);
+  }
+  if (capa === 'lluvia') info.textContent = hora + ' · ' + (lluvia ? (lluvia > n / 2 ? 'llueve en casi todo el río' : 'lluvia en parte del río') + ' · hasta ' + (Math.round(mmMax * 10) / 10) + ' mm' : 'sin lluvia');
+  else if (capa === 'tormentas') info.textContent = hora + ' · ' + (rayos ? '⚡ tormenta eléctrica' : fuertes ? 'tormenta (lluvia fuerte, sin rayos)' : 'sin tormentas' + proximaTormenta(grilla, ix));
+  else info.textContent = hora + ' · ' + r0(n ? suma / n : 0) + ' kn en el río';
   document.querySelectorAll('#horas button').forEach(function(b, j){ b.setAttribute('aria-pressed', j === mapaEstado.hora ? 'true' : 'false'); });
+}
+// Si no hay tormenta a esta hora, cuándo es la próxima en los 5 días.
+function proximaTormenta(grilla, desde){
+  var t = grilla[0].hourly.time;
+  for (var i = desde + 1; i < t.length; i++) {
+    for (var k = 0; k < grilla.length; k++) if (tormenta(grilla[k].hourly.weather_code[i]) || tormentaComun(grilla[k].hourly.weather_code[i], grilla[k].hourly.precipitation[i] || 0)) {
+      var iso = t[i].slice(0, 10);
+      return ' · la próxima: ' + (iso === hoyISO() ? 'hoy' : nombreDia(iso)) + ' ' + t[i].slice(11, 13) + ' h';
+    }
+  }
+  return ' en los próximos 5 días';
+}
+function pintarLeyenda(){
+  var l = document.getElementById('leyenda'); if (!l) return;
+  var c = mapaEstado.capa;
+  l.innerHTML = c === 'lluvia' ? '<span><i style="background:rgba(125,211,252,.55)"></i>Lluvia débil</span><span><i style="background:#38A0F0"></i>Lluvia fuerte</span><span>Tocá ▶ para ver cómo se mueve</span>'
+    : c === 'tormentas' ? '<span><i style="background:#FF8A1F"></i>Tormenta</span><span>⚡ Eléctrica</span><span>Tocá ▶ para ver cómo se mueve</span>'
+    : '<span>La flecha va hacia donde sopla · color = fuerza</span><span><i style="background:#2F7FD1"></i>8–11</span><span><i style="background:#22C3A6"></i>12–15</span><span><i style="background:#A6E22E"></i>16–19</span><span><i style="background:#FFC531"></i>20–24</span><span><i style="background:#D6336C"></i>25+ kn</span>';
 }
 function playMapa(){
   var b = document.getElementById('btnPlay'); if (!b || !mapa) return;
@@ -754,9 +822,9 @@ function vistaSats(){
     mapaEstado.vista = 'rio'; clearInterval(mapaEstado.satTimer);
     Object.keys(mapaEstado.satMarcas).forEach(function(id){ mapaEstado.satMarcas[id].remove(); }); mapaEstado.satMarcas = {};
     mapa.getSource('orbitas').setData({type:'FeatureCollection', features:[]});
-    mapaEstado.marcas.forEach(function(m){ m.getElement().style.display = ''; });
-    mapa.setLayoutProperty('lluvia', 'visibility', 'visible');
-    mapa.flyTo({center:[-58.15, -34.62], zoom: 8.3, pitch: 55, bearing: -25, duration: 1800});
+    if (mapa.__grilla) pintarHora(mapa.__grilla);
+    mapa.flyTo({center: RIO.center, zoom: RIO.zoom, pitch: RIO.pitch, bearing: RIO.bearing, duration: 1800});
+    mapa.once('moveend', function(){ if (mapa && mapaEstado.vista === 'rio') { mapa.setMinZoom(RIO.minZoom); mapa.setMaxBounds(RIO.limites); } });
     if (btn) btn.textContent = '🛰️ Satélites';
     cerrarPanel();
     return;
@@ -765,6 +833,7 @@ function vistaSats(){
   if (btn) btn.textContent = '↩ Volver al río';
   mapaEstado.marcas.forEach(function(m){ m.getElement().style.display = 'none'; });
   mapa.setLayoutProperty('lluvia', 'visibility', 'none');
+  mapa.setMaxBounds(null); mapa.setMinZoom(0);
   mapa.flyTo({center:[-60, -22], zoom: 1.6, pitch: 0, bearing: 0, duration: 2200});
   document.getElementById('mapaInfo').textContent = 'Satélites en vivo · tocá uno';
   cargarSats().then(function(recs){
@@ -1325,7 +1394,7 @@ function router(){
 }
 
 document.addEventListener('click', function(e){
-  var b = e.target.closest('[data-accion],[data-cam],[data-dia],[data-hora],[data-sat],[data-al-spot],[data-al-min],[data-al-dir],[data-al-finde],[data-al-borrar],[data-preg],[data-voto],[data-os],[data-nivel],[data-pspot],[data-evento]');
+  var b = e.target.closest('[data-accion],[data-cam],[data-dia],[data-capa],[data-hora],[data-sat],[data-al-spot],[data-al-min],[data-al-dir],[data-al-finde],[data-al-borrar],[data-preg],[data-voto],[data-os],[data-nivel],[data-pspot],[data-evento]');
   if (!b) return;
   var a = b.getAttribute('data-accion');
   if (b.hasAttribute('data-evento')) evento(b.getAttribute('data-evento'));
@@ -1350,6 +1419,12 @@ document.addEventListener('click', function(e){
   else if (b.hasAttribute('data-dia')) { mapaEstado.dia = +b.getAttribute('data-dia'); mapaEstado.hora = 0; if (mapa && mapa.__grilla) { pintarDias(mapa.__grilla); pintarHora(mapa.__grilla); } }
   else if (b.hasAttribute('data-hora')) { mapaEstado.hora = +b.getAttribute('data-hora'); if (mapaEstado.play) playMapa(); if (mapa && mapa.__grilla) pintarHora(mapa.__grilla); }
   else if (b.hasAttribute('data-sat')) abrirSat(b.getAttribute('data-sat'));
+  else if (b.hasAttribute('data-capa')) {
+    mapaEstado.capa = b.getAttribute('data-capa');
+    document.querySelectorAll('[data-capa]').forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+    if (mapaEstado.vista === 'sats') vistaSats(); else if (mapa && mapa.__grilla) pintarHora(mapa.__grilla);
+    evento('bramador_mapa_filtro', {capa: mapaEstado.capa});
+  }
   else if (b.hasAttribute('data-al-spot')) { borrador.spot = b.getAttribute('data-al-spot'); vistaAlertas(); }
   else if (b.hasAttribute('data-al-min')) { borrador.min = +b.getAttribute('data-al-min'); vistaAlertas(); }
   else if (b.hasAttribute('data-al-dir')) { var r = b.getAttribute('data-al-dir'), i = borrador.dirs.indexOf(r); if (i >= 0) borrador.dirs.splice(i, 1); else borrador.dirs.push(r); vistaAlertas(); }
@@ -1384,9 +1459,11 @@ document.addEventListener('submit', function(e){
 });
 
 // ─────────────────────────────── ACTUALIZACIONES ───────────────────────────────
-// Cada vez que se publica una mejora: sumar una entrada arriba de todo (y cambiar VERSION en sw.js).
+// Cada vez que se publica una mejora: sumar una entrada arriba de todo, cambiar VERSION en sw.js
+// y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.2', fecha: '26/10', cambios: ['Mapa nuevo: elegí Lluvia (celeste), Tormentas (naranja) o Viento (una sola flecha). Tocá play y mirá cómo se mueven.', 'El mapa ahora arranca más cerca, sobre el Río de la Plata.']},
   {v: '1.1', fecha: '26/10', cambios: ['Ahora podés dejar tu mail en Tu perfil para enterarte de lo nuevo.', 'Bramador se actualiza sola: no hace falta bajarla de nuevo.']}
 ];
 function novedades(){
@@ -1419,12 +1496,23 @@ if ('serviceWorker' in navigator) {
     recargada = true; location.reload();
   });
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('/bramador/sw.js', {scope: '/bramador/'}).then(function(reg){
-      // Al volver a la app después de un rato, se fija si hay versión nueva.
-      document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'visible') reg.update().catch(function(){}); });
-    }).catch(function(){});
+    navigator.serviceWorker.register('/bramador/sw.js', {scope: '/bramador/'}).catch(function(){});
   });
 }
+// Control extra, aparte del service worker: al abrir la app (y al volver a ella) pregunta qué
+// versión está publicada. Si es otra, borra lo guardado y recarga: el usuario no hace nada.
+function buscarVersion(){
+  fetch('/bramador/version.json?t=' + Date.now(), {cache: 'no-store'}).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+    if (!d || !d.v || d.v === NOVEDADES[0].v) return;
+    try { if (sessionStorage.getItem('bram_recargo') === d.v) return; sessionStorage.setItem('bram_recargo', d.v); } catch(e){}
+    var pasos = [];
+    if (navigator.serviceWorker) pasos.push(navigator.serviceWorker.getRegistration('/bramador/').then(function(reg){ return reg && reg.update(); }).catch(function(){}));
+    if (window.caches) pasos.push(caches.keys().then(function(ks){ return Promise.all(ks.filter(function(k){ return k.indexOf('bramador-') === 0; }).map(function(k){ return caches.delete(k); })); }).catch(function(){}));
+    Promise.all(pasos).then(function(){ location.reload(); });
+  }).catch(function(){});
+}
+buscarVersion();
+document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'visible') buscarVersion(); });
 novedades();
 bienvenida();
 if (leer('bienv', false)) router();
