@@ -131,7 +131,7 @@ function leer(k, def){ try { var v = localStorage.getItem('bram_' + k); return v
 function guardar(k, v){ try { localStorage.setItem('bram_' + k, JSON.stringify(v)); } catch(e){} }
 function perfil(){
   var p = leer('perfil', {});
-  return { nombre: p.nombre || '', peso: p.peso || 75, spot: p.spot || 'sanisidro', nivel: p.nivel || 'intermedio' };
+  return { nombre: p.nombre || '', mail: p.mail || '', novedades: p.novedades !== false, peso: p.peso || 75, spot: p.spot || 'sanisidro', nivel: p.nivel || 'intermedio' };
 }
 function spotPorId(id){ for (var i = 0; i < SPOTS.length; i++) if (SPOTS[i].id === id) return SPOTS[i]; return SPOTS[0]; }
 function rango(){ return NIVELES[perfil().nivel] || NIVELES.intermedio; }
@@ -939,7 +939,7 @@ function vistaMas(){
     item('#/alertas', '<path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10 21h4"/>', 'Alertas', 'Avisame cuando haya viento') +
     item('#/pregunta', '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/>', 'Preguntá', '¿Salgo el sábado? ¿Qué ala?') +
     item('#/equipate', '<path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/>', 'Equipate', 'Precios, notas y clases') +
-    item('#/perfil', '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>', 'Tu perfil', 'Peso, nivel y tu spot') +
+    item('#/perfil', '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>', 'Tu perfil', perfil().mail ? 'Mail, peso, nivel y spot' : '<b style="font-size:12px;color:#FF5A2C">Dejá tu mail</b> · peso y spot') +
     item('#/opinion', '<path d="M12 21l-8-8a5 5 0 0 1 8-6 5 5 0 0 1 8 6z"/>', 'Tu opinión', '¿Qué le agregarías?') +
     item('#/instalar', '<path d="M12 3v12M6 10l6 6 6-6M4 20h16"/>', 'Instalar', 'Android y iPhone') +
     item('/', '<path d="M3 11l9-8 9 8M5 10v10h14V10"/>', 'Escuela de Wingfoil', 'Volver al sitio') +
@@ -1243,12 +1243,22 @@ function vistaInstalar(){
 }
 
 // ─────────────────────────────── PERFIL ───────────────────────────────
+// El mail llega a la Escuela por Netlify Forms (formulario "mails-bramador").
+function enviarMail(p){
+  var datos = {'form-name': 'mails-bramador', mail: p.mail, nombre: p.nombre, spot: spotPorId(p.spot).n, nivel: p.nivel,
+               novedades: p.novedades ? 'si' : 'no', casilla: ''};
+  var cuerpo = Object.keys(datos).map(function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(datos[k]); }).join('&');
+  fetch('/', {method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'}, body: cuerpo})
+    .then(function(r){ if (r.ok) evento('bramador_mail'); }).catch(function(){});
+}
 function vistaPerfil(){
   fondo('perfil');
   var p = perfil();
-  pintar('<div class="cab"><div><h1>Tu perfil</h1><p>Se guarda en este teléfono</p></div></div>' +
+  pintar('<div class="cab"><div><h1>Tu perfil</h1><p>Tu mail, tu peso y tu spot</p></div></div>' +
     '<form class="tarj vidrio" id="formPerfil">' +
     '<div class="campo"><label for="pNom">Nombre</label><input id="pNom" name="nombre" type="text" value="' + esc(p.nombre) + '" placeholder="Cómo te llamás" autocomplete="given-name"></div>' +
+    '<div class="campo"><label for="pMail">Tu mail</label><input id="pMail" name="mail" type="email" inputmode="email" value="' + esc(p.mail) + '" placeholder="nombre@mail.com" autocomplete="email"></div>' +
+    '<label class="tilde"><input id="pNov" type="checkbox"' + (p.novedades ? ' checked' : '') + '> Quiero enterarme de las novedades de Bramador</label>' +
     '<div class="campo"><label for="pPeso">Tu peso: <b id="pPesoV" style="color:#FF5A2C">' + p.peso + ' kg</b></label><input id="pPeso" name="peso" type="range" min="40" max="120" step="1" value="' + p.peso + '"></div>' +
     '<div class="campo"><span class="lbl">Tu nivel</span><div class="seg">' + Object.keys(NIVELES).map(function(k){
       return '<button type="button" data-nivel="' + k + '" aria-pressed="' + (k === p.nivel) + '">' + NIVELES[k].n + '</button>';
@@ -1257,6 +1267,7 @@ function vistaPerfil(){
       return '<button class="chip" type="button" data-pspot="' + s.id + '" aria-pressed="' + (s.id === p.spot) + '">' + esc(s.n) + '</button>';
     }).join('') + '</div></div>' +
     '<button class="btn" type="submit">Guardar</button><p class="nota" id="pOk" style="margin:10px 0 0;text-align:center" hidden>✓ Guardado</p></form>' +
+    '<p class="nota">Tu mail queda en la Escuela de Wingfoil, solo para contarte novedades de Bramador. Nunca lo compartimos.</p>' +
     '<p class="nota">Con tu peso calculamos el ala; con tu nivel, cuánto viento es “salí” para vos (principiante: 12 a 20 kn).</p>');
 }
 
@@ -1361,16 +1372,60 @@ document.addEventListener('submit', function(e){
   } else if (e.target.id === 'formPerfil') {
     e.preventDefault();
     var niv = document.querySelector('[data-nivel][aria-pressed="true"]'), sp = document.querySelector('[data-pspot][aria-pressed="true"]');
-    guardar('perfil', {nombre: document.getElementById('pNom').value.trim(), peso: +document.getElementById('pPeso').value,
-                       nivel: niv ? niv.getAttribute('data-nivel') : 'intermedio', spot: sp ? sp.getAttribute('data-pspot') : 'sanisidro'});
-    document.getElementById('pOk').hidden = false;
+    var antes = perfil(), mail = document.getElementById('pMail').value.trim().toLowerCase(), ok = document.getElementById('pOk');
+    if (mail && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail)) { ok.hidden = false; ok.textContent = 'Revisá el mail: parece que le falta algo.'; return; }
+    var nuevo = {nombre: document.getElementById('pNom').value.trim(), mail: mail, novedades: document.getElementById('pNov').checked,
+                 peso: +document.getElementById('pPeso').value,
+                 nivel: niv ? niv.getAttribute('data-nivel') : 'intermedio', spot: sp ? sp.getAttribute('data-pspot') : 'sanisidro'};
+    guardar('perfil', nuevo);
+    if (mail && (mail !== antes.mail || nuevo.novedades !== antes.novedades)) enviarMail(nuevo);
+    ok.hidden = false; ok.textContent = '✓ Guardado';
   }
 });
 
+// ─────────────────────────────── ACTUALIZACIONES ───────────────────────────────
+// Cada vez que se publica una mejora: sumar una entrada arriba de todo (y cambiar VERSION en sw.js).
+// La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
+var NOVEDADES = [
+  {v: '1.1', fecha: '26/10', cambios: ['Ahora podés dejar tu mail en Tu perfil para enterarte de lo nuevo.', 'Bramador se actualiza sola: no hace falta bajarla de nuevo.']}
+];
+function novedades(){
+  var ultima = NOVEDADES[0], vista = leer('version', null);
+  guardar('version', ultima.v);
+  if (!vista || vista === ultima.v || !leer('bienv', false)) return;
+  var el = document.createElement('div');
+  el.className = 'novedad'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', 'Bramador se actualizó');
+  el.innerHTML = '<div class="novedad__caja vidrio"><svg viewBox="0 0 36 36" aria-hidden="true">' + PAJARO + '</svg>' +
+    '<p class="novedad__eti">ACTUALIZACIÓN · ' + esc(ultima.fecha) + '</p><h2>Bramador mejoró</h2><ul>' +
+    ultima.cambios.map(function(c){ return '<li>' + esc(c) + '</li>'; }).join('') + '</ul>' +
+    '<button class="btn" type="button">¡Buenísimo!</button></div>';
+  document.body.appendChild(el);
+  el.querySelector('button').addEventListener('click', function(){ el.remove(); });
+  evento('bramador_actualizada', {version: ultima.v});
+  // Si dio permiso de avisos, además le llega como notificación del teléfono.
+  if (window.Notification && Notification.permission === 'granted' && navigator.serviceWorker && navigator.serviceWorker.ready) {
+    navigator.serviceWorker.ready.then(function(reg){
+      reg.showNotification('Bramador se actualizó', {body: ultima.cambios[0], icon: '/bramador/icons/icon-192.png', badge: '/bramador/icons/icon-192.png', tag: 'version-' + ultima.v, data: {url: '/bramador/'}});
+    }).catch(function(){});
+  }
+}
+
 window.addEventListener('hashchange', router);
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function(){ navigator.serviceWorker.register('/bramador/sw.js', {scope: '/bramador/'}).catch(function(){}); });
+  var teniaVersion = !!navigator.serviceWorker.controller, recargada = false;
+  // Cuando entra una versión nueva, la app se recarga sola una vez (sin reinstalar nada).
+  navigator.serviceWorker.addEventListener('controllerchange', function(){
+    if (!teniaVersion || recargada) return;
+    recargada = true; location.reload();
+  });
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('/bramador/sw.js', {scope: '/bramador/'}).then(function(reg){
+      // Al volver a la app después de un rato, se fija si hay versión nueva.
+      document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'visible') reg.update().catch(function(){}); });
+    }).catch(function(){});
+  });
 }
+novedades();
 bienvenida();
 if (leer('bienv', false)) router();
 })();

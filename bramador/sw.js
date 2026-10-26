@@ -1,9 +1,13 @@
 // Bramador — service worker: la app abre sin señal con lo último que vio.
 //
-// Archivos propios (pantalla, estilos, mapa): primero la copia guardada y se
-// renueva por detrás. Datos (/api/…): primero la red, y si no hay, lo último.
+// La app en sí (pantalla, app.js, estilos): primero la red, así cada mejora
+// publicada le llega sola al que la tiene instalada; sin señal, la copia guardada.
+// Librerías del mapa (vendor/, no cambian): primero la copia guardada.
+// Datos (/api/…): primero la red, y si no hay, lo último.
+//
+// Al publicar una mejora: cambiar VERSION y sumar la novedad en NOVEDADES (app.js).
 // Los datos de afuera (pronóstico, mareas) ya los guarda app.js en el celular.
-const VERSION = 'bramador-v1';
+const VERSION = 'bramador-v1.1';
 const BASE = [
   '/bramador/',
   '/bramador/index.html',
@@ -35,18 +39,17 @@ self.addEventListener('fetch', e => {
   const url = new URL(r.url);
   if (url.origin !== location.origin) return;
 
-  if (url.pathname.startsWith('/api/') || url.pathname === '/mp-data.json') {
+  const redPrimero = url.pathname.startsWith('/api/') || url.pathname === '/mp-data.json' ||
+    (url.pathname.startsWith('/bramador/') && !url.pathname.startsWith('/bramador/vendor/') && !url.pathname.startsWith('/bramador/icons/'));
+  if (redPrimero) {
     e.respondWith(
       fetch(r).then(res => {
         if (res.ok) { const copia = res.clone(); caches.open(VERSION).then(c => c.put(r, copia)); }
         return res;
-      }).catch(() => caches.match(r).then(g => g || Response.error()))
+      }).catch(() => caches.match(r, { ignoreSearch: r.mode === 'navigate' })
+        .then(g => g || (r.mode === 'navigate' ? caches.match('/bramador/') : null))
+        .then(g => g || Response.error()))
     );
-    return;
-  }
-
-  if (r.mode === 'navigate') {
-    e.respondWith(fetch(r).catch(() => caches.match('/bramador/')));
     return;
   }
 
