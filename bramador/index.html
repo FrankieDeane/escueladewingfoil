@@ -14,9 +14,21 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Bramador">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta property="og:title" content="Bramador · El viento del Río de la Plata">
-<meta property="og:description" content="¿Salgo? por spot y hasta qué hora, cámaras del río en vivo, tormentas y mareas. Gratis.">
-<meta property="og:image" content="https://www.escueladewingfoil.com.ar/assets/img/wf-14740926.jpg">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_AR">
+<meta property="og:site_name" content="Escuela de Wingfoil Argentina">
+<meta property="og:url" content="https://www.escueladewingfoil.com.ar/bramador/">
+<meta property="og:title" content="Bramador · El Río de la Plata, en tu bolsillo">
+<meta property="og:description" content="¿Salgo hoy? y hasta qué hora, cámaras del río en vivo, tormentas y mareas. Gratis para Android y iPhone.">
+<meta property="og:image" content="https://www.escueladewingfoil.com.ar/bramador/og-bramador.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Bramador by Escuela de Wingfoil: la app del viento del Río de la Plata">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Bramador · El Río de la Plata, en tu bolsillo">
+<meta name="twitter:description" content="¿Salgo hoy? y hasta qué hora, cámaras del río en vivo, tormentas y mareas. Gratis.">
+<meta name="twitter:image" content="https://www.escueladewingfoil.com.ar/bramador/og-bramador.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=DM+Sans:wght@400;500;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -48,6 +60,9 @@
 <!-- Netlify detecta este formulario al publicar; la app lo manda por fetch desde "Tu opinión". -->
 <form name="opinion-bramador" data-netlify="true" netlify-honeypot="casilla" hidden>
   <input name="voto"><textarea name="comentario"></textarea><input name="casilla"><input name="pantalla">
+</form>
+<form name="mails-bramador" data-netlify="true" netlify-honeypot="casilla" hidden>
+  <input name="mail" type="email"><input name="nombre"><input name="spot"><input name="nivel"><input name="novedades"><input name="casilla">
 </form>
 
 <script src="/bramador/app.js" defer></script>

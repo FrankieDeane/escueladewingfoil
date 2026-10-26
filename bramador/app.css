@@ -293,3 +293,14 @@ button{font:inherit;color:inherit}
   .racha,.veredicto,.vivo-dot{animation:none!important}
   .racha{display:none}
 }
+
+.tilde{display:flex;align-items:center;gap:10px;margin:-2px 0 14px;font-size:14px;font-weight:700;color:var(--texto);cursor:pointer}
+.tilde input{width:22px;height:22px;accent-color:var(--senal);flex-shrink:0}
+.novedad{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center;padding:16px 16px calc(16px + var(--safe-b));background:rgba(5,16,26,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:novIn .3s ease}
+.novedad__caja{width:min(420px,100%);border-radius:26px;padding:22px 20px 18px;background:rgba(11,26,34,.94)}
+.novedad__caja svg{width:52px;height:52px}
+.novedad__eti{margin:12px 0 4px;font:500 11px 'DM Mono',monospace;letter-spacing:.12em;color:var(--senal)}
+.novedad h2{font-family:'Bricolage Grotesque',sans-serif;font-size:30px;font-weight:800;line-height:1;margin:0 0 12px}
+.novedad ul{margin:0 0 18px;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.4}
+@keyframes novIn{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.novedad{animation:none}}
