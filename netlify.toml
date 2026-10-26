@@ -24,6 +24,18 @@
     Cross-Origin-Opener-Policy = "same-origin"
     X-Permitted-Cross-Domain-Policies = "none"
 
+# Bramador: el service worker tiene que revisarse siempre, si no la app
+# instalada se queda con la versión vieja.
+[[headers]]
+  for = "/bramador/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/bramador/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
+
 # El reporte de auditoría SEO vive en la raíz del repo (y por lo tanto se
 # publica): que no lo indexe ningún buscador.
 [[headers]]
