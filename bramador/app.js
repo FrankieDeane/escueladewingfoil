@@ -379,7 +379,7 @@ function picoDia(spot, d, iso){
     var ms = msDe(h.time[i]);
     if (ms < sr || ms > ss) continue;
     var ev = evaluar(spot, h.wind_speed_10m[i], h.wind_direction_10m[i], h.weather_code[i]);
-    var x = {ms: ms, kn: h.wind_speed_10m[i], deg: h.wind_direction_10m[i], ev: ev, code: h.weather_code[i]};
+    var x = {ms: ms, kn: h.wind_speed_10m[i], deg: h.wind_direction_10m[i], raf: h.wind_gusts_10m ? h.wind_gusts_10m[i] : null, ev: ev, code: h.weather_code[i]};
     if (!best || (ev.ok && !best.ev.ok) || (ev.ok === best.ev.ok && x.kn > best.kn)) best = x;
   }
   return best;
@@ -393,7 +393,7 @@ function iconoDia(dd){
 function resumenDias(spot, d){
   var h = d.hourly, dias = {};
   d.daily.time.forEach(function(iso, k){
-    dias[iso] = {iso: iso, max: 0, deg: null, horasOk: 0, rayos: tormenta(d.daily.weather_code[k]), code: d.daily.weather_code[k], lluvia: d.daily.precipitation_sum[k],
+    dias[iso] = {iso: iso, max: 0, raf: 0, deg: null, horasOk: 0, rayos: tormenta(d.daily.weather_code[k]), code: d.daily.weather_code[k], lluvia: d.daily.precipitation_sum[k],
                  sr: msDe(d.daily.sunrise[k]), ss: msDe(d.daily.sunset[k])};
   });
   for (var i = 0; i < h.time.length; i++) {
@@ -403,10 +403,13 @@ function resumenDias(spot, d){
     if (ms < x.sr || ms > x.ss) continue;
     var kn = h.wind_speed_10m[i];
     if (kn > x.max) { x.max = kn; x.deg = h.wind_direction_10m[i]; }
+    if (h.wind_gusts_10m && h.wind_gusts_10m[i] > x.raf) x.raf = h.wind_gusts_10m[i];
     if (evaluar(spot, kn, h.wind_direction_10m[i], h.weather_code[i]).ok) x.horasOk++;
   }
   return d.daily.time.map(function(iso){ return dias[iso]; });
 }
+// Rachado: las ráfagas le sacan 10 kn o más al viento medio.
+function rachado(kn, raf){ return isFinite(raf) && raf - kn >= 10; }
 // Ala recomendada: m² ≈ peso / nudos (75 kg con 15 kn → 5 m).
 function ala(kn, peso){
   if (!isFinite(kn) || kn < 6) return null;
@@ -476,8 +479,9 @@ function vistaHoy(){
       '<div class="hero__spot"><a class="pildora" href="#/spot/' + spot.id + '"><span class="punto vivo-dot"></span>' + esc(spot.n) + ' ▾</a>' +
         (medido && Date.now() - medido.t < 3 * 3600e3 ? '<span class="pildora">Medido en el Náutico: ' + r0(medido.kn) + ' kn ' + rumbo(medido.dir) + '</span>' : '') + '</div>' +
       '<div class="hero__pie">' + verd +
-        '<div class="hero__fila"><div><div class="hero__kn">' + s.kn + '<small> kn</small></div>' +
-        '<div class="hero__dir">del ' + rumbo(s.deg) + ' · ráfagas ' + s.raf + '</div>' +
+        '<div class="hero__fila"><div><div class="hero__kn">' + s.kn + '<small> kn</small>' +
+          (isFinite(s.raf) ? '<span class="hero__raf"><small>RÁFAGAS</small>' + s.raf + '<small> kn</small></span>' : '') + '</div>' +
+        '<div class="hero__dir">del ' + rumbo(s.deg) + (rachado(s.kn, s.raf) ? ' · <span class="rachado">⚠ Rachado</span>' : '') + '</div>' +
         '<div class="hero__hasta">' + esc(linea) + '</div></div>' + brujula(s.deg, spot.arco, 112) + '</div></div></section>' +
       '<div class="datos">' +
         '<div class="dato"><small>AGUA</small><b>' + (aguaT != null ? r0(aguaT) + '° · ' + traje(aguaT) : '—') + '</b></div>' +
@@ -487,7 +491,7 @@ function vistaHoy(){
       '</div>' +
       solTira(d) +
       (pico ? '<div class="tarj vidrio pico">' + flecha(pico.deg, '') .replace('<svg', '<svg width="28" height="28" style="flex-shrink:0;fill:none;stroke:#FF5A2C;stroke-width:3;stroke-linecap:round;transform:rotate(' + r0(pico.deg) + 'deg)"') +
-        '<div><b>Pico del día: ' + hhmm(pico.ms) + ' · ' + r0(pico.kn) + ' kn ' + rumbo(pico.deg) + '</b><p>' +
+        '<div><b>Pico del día: ' + hhmm(pico.ms) + ' · ' + r0(pico.kn) + ' kn ' + rumbo(pico.deg) + (isFinite(pico.raf) ? ' · ráfagas ' + r0(pico.raf) : '') + '</b><p>' +
         (pico.ev.ok ? 'Llevá un ala de ' + ala(pico.kn, p.peso) + ' m' : 'Ni en el pico da: ' + esc(pico.ev.m)) + '</p></div></div>' : '') +
       '<div class="subt"><h2>Todo el río ahora</h2><span>color = fuerza</span></div><div class="mosaico">' +
       SPOTS.map(function(sp){
@@ -586,9 +590,9 @@ function vistaSpot(id){
     var ahora = Date.now(), h = d.hourly, barras = [];
     for (var i = 0; i < h.time.length && barras.length < 24; i++) {
       var ms = msDe(h.time[i]); if (ms < ahora - 3600e3) continue;
-      barras.push({ms: ms, kn: h.wind_speed_10m[i], deg: h.wind_direction_10m[i], code: h.weather_code[i], pp: h.precipitation_probability[i]});
+      barras.push({ms: ms, kn: h.wind_speed_10m[i], raf: h.wind_gusts_10m ? h.wind_gusts_10m[i] : null, deg: h.wind_direction_10m[i], code: h.weather_code[i], pp: h.precipitation_probability[i]});
     }
-    var maxKn = Math.max(25, Math.max.apply(null, barras.map(function(b){ return b.kn; })));
+    var maxKn = Math.max(25, Math.max.apply(null, barras.map(function(b){ return Math.max(b.kn, b.raf || 0); })));
     var dias = resumenDias(spot, d);
     var cal = '', inicio = hoyISO(), sem0 = diaSemana(inicio);
     ['L','M','M','J','V','S','D'].forEach(function(x){ cal += '<div class="cal__sem">' + x + '</div>'; });
@@ -616,14 +620,18 @@ function vistaSpot(id){
         '<span class="' + (cmh >= 0 ? 'sube' : 'baja') + '">' + (cmh >= 0 ? '▲ subiendo' : '▼ bajando') + ' · ' + Math.abs(cmh) + ' cm/h</span></div>' + curvaMarea(mar, ahora);
     }
     pintar('<div class="spot-cab"><div class="hero__foto" style="background-image:url(' + foto(spot.foto) + ')"></div><div class="hero__velo"></div>' +
-      '<div class="spot-cab__txt"><div><h1>' + esc(spot.n) + '</h1><p>' + (pico ? 'Pico del día: ' + hhmm(pico.ms) + ' · ' + r0(pico.kn) + ' kn' + (pico.ev.ok ? ' · ala de ' + ala(pico.kn, p.peso) + ' m' : '') : esc(spot.sub)) + '</p></div>' +
+      '<div class="spot-cab__txt"><div><h1>' + esc(spot.n) + '</h1>' +
+      '<div class="spot-ahora"><b>' + r0(cur.wind_speed_10m) + '</b> kn ' + rumbo(cur.wind_direction_10m) + ' <span>· ráfagas <b>' + r0(cur.wind_gusts_10m) + '</b></span>' +
+        (rachado(cur.wind_speed_10m, cur.wind_gusts_10m) ? ' <em class="rachado">⚠ Rachado</em>' : '') + '</div><p>' + (pico ? 'Pico del día: ' + hhmm(pico.ms) + ' · ' + r0(pico.kn) + ' kn' + (pico.ev.ok ? ' · ala de ' + ala(pico.kn, p.peso) + ' m' : '') : esc(spot.sub)) + '</p></div>' +
       brujula(cur.wind_direction_10m, spot.arco, 96) + '</div></div>' + sel +
       solTira(d) +
       '<div class="tarj vidrio"><p class="tit">Próximas 24 horas</p><div class="barras">' + barras.map(function(b, j){
         return '<div class="barra">' + (tormenta(b.code) ? '<small>⚡</small>' : b.pp >= 50 ? '<small>💧</small>' : '') +
-          '<b>' + r0(b.kn) + '</b><i style="height:' + Math.max(4, r0(b.kn / maxKn * 80)) + 'px;background:' + kcolor(b.kn) + '"></i>' + flecha(b.deg) +
+          (b.raf != null ? '<small class="barra__raf">' + r0(b.raf) + '</small>' : '') + '<b>' + r0(b.kn) + '</b>' +
+          (b.raf != null && b.raf > b.kn ? '<i class="barra__rafi" style="height:' + r0((b.raf - b.kn) / maxKn * 80) + 'px;border-color:' + kcolor(b.kn) + '"></i>' : '') +
+          '<i style="height:' + Math.max(4, r0(b.kn / maxKn * 80)) + 'px;background:' + kcolor(b.kn) + '"></i>' + flecha(b.deg) +
           '<small>' + (j % 3 === 0 ? hhmm(b.ms).slice(0, 2) : '&nbsp;') + '</small></div>';
-      }).join('') + '</div><p style="margin:8px 0 0;font-size:12px;color:#8FA9BF">Verde: viene del agua y alcanza. El arco verde de la brújula es el viento que sirve acá.</p></div>' +
+      }).join('') + '</div><p style="margin:8px 0 0;font-size:12px;color:#8FA9BF">Arriba en amarillo y punteado: las ráfagas. Verde: viene del agua y alcanza. El arco verde de la brújula es el viento que sirve acá.</p></div>' +
       '<div class="tarj vidrio"><p class="tit">Mareas · San Isidro</p>' + marAhora + '<div class="mareas">' + (marHtml || '<span style="color:#8FA9BF;font-size:13px">Sin datos de marea ahora.</span>') + '</div></div>' +
       '<div class="tarj vidrio"><p class="tit">El mes · tocá un día</p><div class="cal">' + cal + '</div>' +
       '<p style="margin:10px 0 0;font-size:12px;line-height:1.35;color:#8FA9BF">Los primeros 16 días: nudos máximos con luz. Los punteados: tendencia (probabilidad de un día de +12 kn según los últimos 20 años).</p></div>' +
@@ -1162,6 +1170,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.10', fecha: '26/10', cambios: ['Ráfagas a la vista: en Hoy y en Mi spot ves las rachas al lado del viento, hora por hora, y un aviso cuando está rachado.']},
   {v: '1.9', fecha: '26/10', cambios: ['Para entrar a Bramador te pedimos nombre, apellido y mail, una sola vez.']},
   {v: '1.8', fecha: '26/10', cambios: ['Ahora ves a qué hora sale y se pone el sol en el río, en Hoy y en Mi spot.']},
   {v: '1.7', fecha: '26/10', cambios: ['Nuevo en Mi spot: la curva de la marea con la altura de ahora y si está subiendo o bajando.']},
