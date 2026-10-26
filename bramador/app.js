@@ -525,10 +525,34 @@ function vistaRio(){
 }
 
 // ─────────────────────────────── MAPA ───────────────────────────────
+// Fondos satelitales reales (NASA GIBS, gratis y sin clave). Las imágenes diarias son de la
+// pasada de la tarde: antes de las 17 h de Argentina todavía no está la de hoy, se usa la de ayer.
+function fechaGibs(){ var d = new Date(Date.now() - (new Date().getUTCHours() < 20 ? 864e5 : 0)); return d.toISOString().slice(0, 10); }
+function horaGoes(){ var t = Math.floor((Date.now() - 40 * 60e3) / 600e3) * 600e3; return new Date(t).toISOString().slice(0, 17) + '00Z'; }
+function urlGibs(capa, tiempo, nivel, ext){
+  return 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/' + capa + '/default/' + tiempo + '/GoogleMapsCompatible_Level' + nivel + '/{z}/{y}/{x}.' + ext;
+}
+var FONDOS = [
+  {id: 'normal', n: 'Mapa', s: 'foto de base'},
+  {id: 'nasa', n: 'NASA', s: 'Terra · color real', capa: 'MODIS_Terra_CorrectedReflectance_TrueColor', nivel: 9, ext: 'jpg', diaria: true},
+  {id: 'noaa', n: 'NOAA', s: 'NOAA-20 · color real', capa: 'VIIRS_NOAA20_CorrectedReflectance_TrueColor', nivel: 9, ext: 'jpg', diaria: true},
+  {id: 'goes', n: 'En vivo', s: 'GOES-19 · nubes', capa: 'GOES-East_ABI_Band13_Clean_Infrared', nivel: 6, ext: 'png'}
+];
+function ponerFondo(){
+  if (!mapa || !mapa.getStyle()) return;
+  FONDOS.forEach(function(f){ if (f.capa && mapa.getLayer('f_' + f.id)) mapa.removeLayer('f_' + f.id); if (f.capa && mapa.getSource('f_' + f.id)) mapa.removeSource('f_' + f.id); });
+  var f = FONDOS.filter(function(x){ return x.id === mapaEstado.fondo; })[0], nota = document.getElementById('fondoNota');
+  if (!f || !f.capa) { if (nota) nota.textContent = ''; return; }
+  var tiempo = f.diaria ? fechaGibs() : horaGoes();
+  mapa.addSource('f_' + f.id, {type: 'raster', tiles: [urlGibs(f.capa, tiempo, f.nivel, f.ext)], tileSize: 256, maxzoom: f.nivel, attribution: 'NASA GIBS'});
+  mapa.addLayer({id: 'f_' + f.id, type: 'raster', source: 'f_' + f.id, paint: {'raster-opacity': f.diaria ? 1 : 0.85}}, 'lluvia');
+  if (nota) nota.textContent = f.diaria ? 'Foto del satélite ' + (f.id === 'nasa' ? 'Terra de la NASA' : 'NOAA-20 de la NOAA') + ', ' + (fechaGibs() === hoyISO() ? 'de hoy' : 'de ayer') + ' a la tarde (pasa una vez por día).'
+    : 'Satélite GOES-19 de la NOAA, cada 10 minutos: lo blanco son nubes altas, las tormentas se ven como manchas muy blancas. De día y de noche.';
+}
 // Filtros del mapa y vista fija sobre el Río de la Plata (costa de Buenos Aires).
 var CAPAS = [['lluvia', '🌧️', 'Lluvia'], ['tormentas', '⚡', 'Tormentas'], ['viento', '💨', 'Viento']];
 var RIO = {center: [-58.28, -34.62], zoom: 9.2, pitch: 40, bearing: -20, minZoom: 8.6, limites: [[-59.2, -35.35], [-57.3, -33.95]]};
-var mapa = null, mapaEstado = {capa: 'tormentas', dia: 0, hora: 0, play: false, timer: null, marcas: [], vista: 'rio', satTimer: null, satMarcas: {}, satSel: null};
+var mapa = null, mapaEstado = {fondo: 'normal', capa: 'tormentas', dia: 0, hora: 0, play: false, timer: null, marcas: [], vista: 'rio', satTimer: null, satMarcas: {}, satSel: null};
 var SATS_INFO = {
   iss:      {n:'ISS', tipo:'ESTACIÓN ESPACIAL · CON GENTE', color:'#FFFFFF', de:'EE.UU., Rusia, Europa, Japón y Canadá', clase:'Tripulado',
              que:'Una casa en el espacio con astronautas a bordo. Da la vuelta al mundo cada 90 minutos.', dato:'Se ve a simple vista: un punto brillante que cruza el cielo sin titilar.'},
@@ -571,6 +595,9 @@ function vistaMapa(){
     '<div class="play"><button class="play__b" type="button" data-accion="play" id="btnPlay" aria-label="Reproducir"><svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg></button>' +
     '<div class="horas" id="horas"></div></div>' +
     '<div class="leyenda" id="leyenda"></div>' +
+    '<div class="fondos"><p>🛰️ Imagen satelital</p><div class="fondos__b">' + FONDOS.map(function(f){
+      return '<button type="button" data-fondo="' + f.id + '" aria-pressed="' + (f.id === mapaEstado.fondo) + '"><b>' + f.n + '</b><small>' + f.s + '</small></button>';
+    }).join('') + '</div><p class="nota" id="fondoNota" style="margin:6px 0 0"></p></div>' +
     '<button class="tarj vidrio" type="button" data-accion="vista-sats" style="display:flex;gap:10px;align-items:center;width:calc(100% - 32px);text-align:left;cursor:pointer;color:inherit" id="pasoISS">' +
     '<span style="font-size:24px">🛰️</span><span style="font-size:13px;line-height:1.35"><b>Mirá para arriba:</b> calculando cuándo pasa la Estación Espacial…</span></button>' +
     '<aside class="panel" id="panelSat" aria-live="polite"></aside>');
@@ -637,6 +664,7 @@ function iniciarMapa(grilla){
       etiquetas.forEach(function(x){ x.el.style.display = x.norte === 'uno' && !cerca || x.norte === 'grupo' && cerca ? 'none' : ''; });
     }
     mapa.on('zoom', verEtiquetas); verEtiquetas();
+    ponerFondo();
     pintarDias(grilla);
     pintarHora(grilla);
   });
@@ -822,6 +850,7 @@ function vistaSats(){
     mapaEstado.vista = 'rio'; clearInterval(mapaEstado.satTimer);
     Object.keys(mapaEstado.satMarcas).forEach(function(id){ mapaEstado.satMarcas[id].remove(); }); mapaEstado.satMarcas = {};
     mapa.getSource('orbitas').setData({type:'FeatureCollection', features:[]});
+    mapa.setLayoutProperty('lluvia', 'visibility', 'visible');
     if (mapa.__grilla) pintarHora(mapa.__grilla);
     mapa.flyTo({center: RIO.center, zoom: RIO.zoom, pitch: RIO.pitch, bearing: RIO.bearing, duration: 1800});
     mapa.once('moveend', function(){ if (mapa && mapaEstado.vista === 'rio') { mapa.setMinZoom(RIO.minZoom); mapa.setMaxBounds(RIO.limites); } });
@@ -1394,7 +1423,7 @@ function router(){
 }
 
 document.addEventListener('click', function(e){
-  var b = e.target.closest('[data-accion],[data-cam],[data-dia],[data-capa],[data-hora],[data-sat],[data-al-spot],[data-al-min],[data-al-dir],[data-al-finde],[data-al-borrar],[data-preg],[data-voto],[data-os],[data-nivel],[data-pspot],[data-evento]');
+  var b = e.target.closest('[data-accion],[data-cam],[data-dia],[data-capa],[data-fondo],[data-hora],[data-sat],[data-al-spot],[data-al-min],[data-al-dir],[data-al-finde],[data-al-borrar],[data-preg],[data-voto],[data-os],[data-nivel],[data-pspot],[data-evento]');
   if (!b) return;
   var a = b.getAttribute('data-accion');
   if (b.hasAttribute('data-evento')) evento(b.getAttribute('data-evento'));
@@ -1419,6 +1448,11 @@ document.addEventListener('click', function(e){
   else if (b.hasAttribute('data-dia')) { mapaEstado.dia = +b.getAttribute('data-dia'); mapaEstado.hora = 0; if (mapa && mapa.__grilla) { pintarDias(mapa.__grilla); pintarHora(mapa.__grilla); } }
   else if (b.hasAttribute('data-hora')) { mapaEstado.hora = +b.getAttribute('data-hora'); if (mapaEstado.play) playMapa(); if (mapa && mapa.__grilla) pintarHora(mapa.__grilla); }
   else if (b.hasAttribute('data-sat')) abrirSat(b.getAttribute('data-sat'));
+  else if (b.hasAttribute('data-fondo')) {
+    mapaEstado.fondo = b.getAttribute('data-fondo');
+    document.querySelectorAll('[data-fondo]').forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+    ponerFondo(); evento('bramador_mapa_fondo', {fondo: mapaEstado.fondo});
+  }
   else if (b.hasAttribute('data-capa')) {
     mapaEstado.capa = b.getAttribute('data-capa');
     document.querySelectorAll('[data-capa]').forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
@@ -1463,7 +1497,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
-  {v: '1.2', fecha: '26/10', cambios: ['Mapa nuevo: elegí Lluvia (celeste), Tormentas (naranja) o Viento (una sola flecha). Tocá play y mirá cómo se mueven.', 'El mapa ahora arranca más cerca, sobre el Río de la Plata.']},
+  {v: '1.2', fecha: '26/10', cambios: ['Nuevo en el mapa: la imagen real de los satélites de la NASA y la NOAA, y las nubes en vivo cada 10 minutos.', 'Mapa nuevo: elegí Lluvia (celeste), Tormentas (naranja) o Viento (una sola flecha). Tocá play y mirá cómo se mueven.', 'El mapa ahora arranca más cerca, sobre el Río de la Plata.']},
   {v: '1.1', fecha: '26/10', cambios: ['Ahora podés dejar tu mail en Tu perfil para enterarte de lo nuevo.', 'Bramador se actualiza sola: no hace falta bajarla de nuevo.']}
 ];
 function novedades(){

@@ -334,3 +334,13 @@ button{font:inherit;color:inherit}
 .dia-b[aria-pressed="true"]{background:var(--papel);color:var(--tinta);border-color:var(--papel)}
 .dia-b[aria-pressed="true"] small{color:var(--tinta)}
 .mapa-info{max-width:calc(100% - 150px)}
+
+.fondos{margin:12px 16px 0}
+.fondos>p:first-child{margin:0 0 6px;font-size:14px;font-weight:900}
+.fondos__b{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.fondos__b button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:54px;padding:8px;border-radius:12px;border:1px solid var(--linea);background:rgba(0,0,0,.25);color:var(--texto);cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif}
+.fondos__b b{font-size:14px;font-weight:900}
+.fondos__b small{font-size:10px;color:var(--gris);line-height:1.2}
+.fondos__b button[aria-pressed="true"]{background:var(--papel);color:var(--tinta);border-color:var(--papel)}
+.fondos__b button[aria-pressed="true"] small{color:#47606F}
+@media (max-width:380px){.fondos__b{grid-template-columns:repeat(2,minmax(0,1fr))}}
