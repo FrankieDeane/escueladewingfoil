@@ -543,15 +543,10 @@ function fotoSatelital(){
   if (mapa.getLayer('foto')) mapa.removeLayer('foto');
   if (mapa.getSource('foto')) mapa.removeSource('foto');
   if (btn) { btn.setAttribute('aria-pressed', mapaEstado.foto ? 'true' : 'false'); btn.textContent = mapaEstado.foto ? '🗺️ Volver al mapa' : '🌍 Foto satelital'; }
-  if (!mapaEstado.foto) {
-    if (mapaEstado.vista === 'rio') { mapa.setMinZoom(RIO.minZoom); mapa.setMaxBounds(RIO.limites); }
-    return;
-  }
+  if (!mapaEstado.foto) return;
   var k = mapaEstado.fotoIx || 0, c = FOTOS_SAT[k];
   mapa.addSource('foto', {type: 'raster', tiles: [urlGibs(c[0], fechaGibs(c[1]))], tileSize: 256, maxzoom: 9});
   mapa.addLayer({id: 'foto', type: 'raster', source: 'foto'}, 'lluvia');
-  // Con la foto se puede alejar y acercar libre, para ver todo el sistema de nubes.
-  mapa.setMaxBounds(null); mapa.setMinZoom(3);
   var fallas = 0;
   mapa.on('error', function malo(e){
     if (!e || e.sourceId !== 'foto') return;
@@ -562,7 +557,7 @@ function fotoSatelital(){
 }
 // Filtros del mapa y vista fija sobre el Río de la Plata (costa de Buenos Aires).
 var CAPAS = [['lluvia', '🌧️', 'Lluvia'], ['tormentas', '⚡', 'Tormentas'], ['viento', '💨', 'Viento']];
-var RIO = {center: [-58.28, -34.62], zoom: 9.2, pitch: 40, bearing: -20, minZoom: 8.6, limites: [[-59.2, -35.35], [-57.3, -33.95]]};
+var RIO = {center: [-58.28, -34.62], zoom: 9.2, pitch: 40, bearing: -20, minZoom: 2, limites: [[-59.2, -35.35], [-57.3, -33.95]]};
 var mapa = null, mapaEstado = {foto: false, fotoIx: 0, capa: 'tormentas', dia: 0, hora: 0, play: false, timer: null, marcas: [], vista: 'rio', satTimer: null, satMarcas: {}, satSel: null};
 var SATS_INFO = {
   iss:      {n:'ISS', tipo:'ESTACIÓN ESPACIAL · CON GENTE', color:'#FFFFFF', de:'EE.UU., Rusia, Europa, Japón y Canadá', clase:'Tripulado',
@@ -644,7 +639,7 @@ function iniciarMapa(grilla){
       sat: {type:'raster', tiles:['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'], tileSize:256, maxzoom:18,
             attribution:'Imágenes © Esri'}
     }, layers: [{id:'sat', type:'raster', source:'sat', paint:{'raster-saturation':-0.1, 'raster-brightness-max':0.85}}]},
-    center: RIO.center, zoom: RIO.zoom, pitch: RIO.pitch, bearing: RIO.bearing, minZoom: RIO.minZoom, maxBounds: RIO.limites,
+    center: RIO.center, zoom: RIO.zoom, pitch: RIO.pitch, bearing: RIO.bearing, minZoom: RIO.minZoom,
     attributionControl: {compact: true}
   });
   mapa.on('load', function(){
@@ -753,7 +748,8 @@ function campoColor(valores, pal){
   for (var y = 0; y < h; y++) for (var x = 0; x < w; x++) {
     var lat = L[1][1] - (y + 0.5) / h * (L[1][1] - L[0][1]), lng = L[0][0] + (x + 0.5) / w * (L[1][0] - L[0][0]);
     var col = colorEn(pal, enGrilla(valores, lng, lat)), o = (y * w + x) * 4;
-    img.data[o] = col[0]; img.data[o + 1] = col[1]; img.data[o + 2] = col[2]; img.data[o + 3] = col[3];
+    var borde = Math.min(1, Math.min(x, w - 1 - x) / (w * 0.12), Math.min(y, h - 1 - y) / (h * 0.12)); // se desvanece en los bordes
+    img.data[o] = col[0]; img.data[o + 1] = col[1]; img.data[o + 2] = col[2]; img.data[o + 3] = col[3] * borde;
   }
   ctx.putImageData(img, 0, 0);
   return cv.toDataURL();
@@ -974,7 +970,6 @@ function vistaSats(){
     mapa.setLayoutProperty('lluvia', 'visibility', 'visible');
     if (mapa.__grilla) pintarHora(mapa.__grilla);
     mapa.flyTo({center: RIO.center, zoom: RIO.zoom, pitch: RIO.pitch, bearing: RIO.bearing, duration: 1800});
-    mapa.once('moveend', function(){ if (mapa && mapaEstado.vista === 'rio' && !mapaEstado.foto) { mapa.setMinZoom(RIO.minZoom); mapa.setMaxBounds(RIO.limites); } });
     if (btn) btn.textContent = '🛰️ Satélites';
     cerrarPanel();
     return;
@@ -1614,7 +1609,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
-  {v: '1.2', fecha: '26/10', cambios: ['Nuevo en el mapa: botón Foto satelital y, abajo, el resumen del día con mareas, vientos, lluvias y temperaturas.', 'Mapa nuevo estilo Windy: todo el río pintado con la lluvia, las tormentas o el viento, y líneas que muestran cómo se mueve el viento. Tocá play y mirá cómo avanza.', 'El mapa ahora arranca más cerca, sobre el Río de la Plata.']},
+  {v: '1.2', fecha: '26/10', cambios: ['Nuevo en el mapa: botón Foto satelital y, abajo, el resumen del día con mareas, vientos, lluvias y temperaturas.', 'Mapa nuevo estilo Windy: todo el río pintado con la lluvia, las tormentas o el viento, y líneas que muestran cómo se mueve el viento. Tocá play y mirá cómo avanza.', 'El mapa arranca sobre el Río de la Plata y lo podés alejar hasta ver todo el país o el continente.']},
   {v: '1.1', fecha: '26/10', cambios: ['Ahora podés dejar tu mail en Tu perfil para enterarte de lo nuevo.', 'Bramador se actualiza sola: no hace falta bajarla de nuevo.']}
 ];
 function novedades(){
