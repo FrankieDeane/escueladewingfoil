@@ -58,7 +58,7 @@ function kcolor(kn){ return KCOLOR[kclase(kn)]; }
 function r0(x){ return Math.round(x); }
 // Flecha que apunta hacia donde VA el viento (la dirección dice de dónde viene).
 function flecha(deg, cls){
-  return '<svg class="' + (cls || '') + '" viewBox="0 0 24 24" aria-hidden="true" style="transform:rotate(' + r0(deg + 180) + 'deg)"><path d="M12 4v16M5 13l7 7 7-7"/></svg>';
+  return '<svg class="' + (cls || '') + '" viewBox="0 0 24 24" aria-hidden="true" style="transform:rotate(' + r0(deg) + 'deg)"><path d="M12 4v16M5 13l7 7 7-7"/></svg>';
 }
 // Brújula: N/S/E/O, sector bueno del spot y la flecha desde donde viene el viento.
 function brujula(deg, arco, tam){
@@ -438,7 +438,7 @@ function vistaHoy(){
         '<div class="dato"><small>LUZ</small><b>' + (luzMin > 0 ? Math.floor(luzMin / 60) + ' h ' + String(luzMin % 60).padStart(2, '0') : 'de noche') + '</b></div>' +
         '<a class="dato" href="#/perfil"><small>ALA HOY</small><b>' + (alaHoy ? alaHoy + ' m' : '—') + '</b></a>' +
       '</div>' +
-      (pico ? '<div class="tarj vidrio pico">' + flecha(pico.deg, '') .replace('<svg', '<svg width="28" height="28" style="flex-shrink:0;fill:none;stroke:#FF5A2C;stroke-width:3;stroke-linecap:round;transform:rotate(' + r0(pico.deg + 180) + 'deg)"') +
+      (pico ? '<div class="tarj vidrio pico">' + flecha(pico.deg, '') .replace('<svg', '<svg width="28" height="28" style="flex-shrink:0;fill:none;stroke:#FF5A2C;stroke-width:3;stroke-linecap:round;transform:rotate(' + r0(pico.deg) + 'deg)"') +
         '<div><b>Pico del día: ' + hhmm(pico.ms) + ' · ' + r0(pico.kn) + ' kn ' + rumbo(pico.deg) + '</b><p>' +
         (pico.ev.ok ? 'Llevá un ala de ' + ala(pico.kn, p.peso) + ' m' : 'Ni en el pico da: ' + esc(pico.ev.m)) + '</p></div></div>' : '') +
       '<div class="subt"><h2>Todo el río ahora</h2><span>color = fuerza</span></div><div class="mosaico">' +
@@ -709,8 +709,8 @@ function tormentaComun(code, mm){ return code === 65 || code === 82 || mm >= 4; 
 // La grilla es de 5×5 puntos; se interpola (bilineal) píxel a píxel y fuera de la grilla
 // se estira el borde, así no quedan huecos al mover el mapa.
 var PALETAS = {
-  lluvia: [[0.1, [125, 211, 252, 0]], [0.3, [125, 211, 252, 120]], [1, [56, 160, 240, 165]], [3, [37, 99, 235, 190]], [6, [168, 85, 247, 205]], [12, [236, 72, 153, 220]]],
-  tormentas: [[0.5, [255, 170, 40, 0]], [1, [255, 170, 40, 125]], [4, [255, 128, 30, 180]], [8, [255, 60, 30, 215]]],
+  lluvia: [[0.02, [125, 211, 252, 0]], [0.1, [125, 211, 252, 120]], [0.5, [90, 190, 250, 150]], [1, [56, 160, 240, 170]], [3, [37, 99, 235, 190]], [6, [168, 85, 247, 205]], [12, [236, 72, 153, 220]]],
+  tormentas: [[0.3, [255, 170, 40, 0]], [1, [255, 170, 40, 135]], [4, [255, 128, 30, 180]], [8, [255, 60, 30, 215]]],
   viento: [[0, [47, 127, 209, 110]], [8, [47, 127, 209, 140]], [12, [34, 195, 166, 150]], [16, [166, 226, 46, 155]], [20, [255, 197, 49, 165]], [25, [214, 51, 108, 180]], [35, [140, 30, 120, 195]]]
 };
 function colorEn(pal, v){
@@ -797,7 +797,10 @@ function pintarHora(grilla){
   if (ix == null) { info.textContent = 'Sin horas de luz para mostrar'; ponerCampo(campoColor(GRILLA.map(function(){ return 0; }), PALETAS.lluvia)); return; }
   var capa = mapaEstado.capa, valores = [], suma = 0, n = 0, rayos = 0, fuertes = 0, lluvia = 0, mmMax = 0, sx = 0, sy = 0, uv = [];
   grilla.forEach(function(g){
-    var h = g.hourly, kn = h.wind_speed_10m[ix], deg = h.wind_direction_10m[ix], mm = h.precipitation[ix] || 0, code = h.weather_code[ix] || 0;
+    // Cada botón de hora cubre 2 horas: la lluvia y la tormenta toman lo peor de las dos,
+    // así no se pierde un chaparrón que cae en la hora impar.
+    var h = g.hourly, kn = h.wind_speed_10m[ix], deg = h.wind_direction_10m[ix];
+    var mm = Math.max(h.precipitation[ix] || 0, h.precipitation[ix + 1] || 0), code = Math.max(h.weather_code[ix] || 0, h.weather_code[ix + 1] || 0);
     var rayo = tormenta(code), comun = !rayo && tormentaComun(code, mm);
     if (isFinite(kn)) { suma += kn; n++; sx += Math.sin(deg * Math.PI / 180); sy += Math.cos(deg * Math.PI / 180); }
     if (mm > 0) { lluvia++; mmMax = Math.max(mmMax, mm); }
@@ -822,7 +825,7 @@ function pintarHora(grilla){
       '<b class="' + kclase(kn) + '">' + r0(kn) + ' kn · del ' + rumbo(deg) + '</b>';
     marca(f, RIO.center[0], RIO.center[1]);
   }
-  if (capa === 'lluvia') info.textContent = hora + ' · ' + (lluvia ? (lluvia > n / 2 ? 'llueve en casi todo el río' : 'lluvia en parte del río') + ' · hasta ' + (Math.round(mmMax * 10) / 10) + ' mm' : 'sin lluvia');
+  if (capa === 'lluvia') info.textContent = hora + ' · ' + (lluvia ? (lluvia > n / 2 ? 'llueve en casi todo el río' : 'lluvia en parte del río') + ' · hasta ' + String(Math.round(mmMax * 10) / 10).replace('.', ',') + ' mm' : 'sin lluvia');
   else if (capa === 'tormentas') info.textContent = hora + ' · ' + (rayos ? '⚡ tormenta eléctrica' : fuertes ? 'tormenta (lluvia fuerte, sin rayos)' : 'sin tormentas' + proximaTormenta(grilla, ix));
   else info.textContent = hora + ' · ' + r0(n ? suma / n : 0) + ' kn en el río';
   document.querySelectorAll('#horas button').forEach(function(b, j){ b.setAttribute('aria-pressed', j === mapaEstado.hora ? 'true' : 'false'); });
@@ -896,7 +899,7 @@ function resumenDia(grilla){
 function pintarLeyenda(){
   var l = document.getElementById('leyenda'); if (!l) return;
   var c = mapaEstado.capa, pal = PALETAS[c], max = pal[pal.length - 1][0];
-  var marcas = {lluvia: [0.3, 1, 3, 6, 12], tormentas: [1, 4, 8], viento: [8, 12, 16, 20, 25, 35]}[c];
+  var marcas = {lluvia: [0.1, 1, 3, 6, 12], tormentas: [1, 4, 8], viento: [8, 12, 16, 20, 25, 35]}[c];
   var grad = pal.map(function(p){ return 'rgba(' + p[1].slice(0, 3).join(',') + ',' + Math.max(0.35, p[1][3] / 255).toFixed(2) + ') ' + (p[0] / max * 100).toFixed(0) + '%'; }).join(',');
   l.innerHTML = '<div class="escala"><p>' + (c === 'lluvia' ? 'Lluvia · mm por hora' : c === 'tormentas' ? 'Tormenta · ⚡ = eléctrica' : 'Viento · nudos · las líneas muestran hacia dónde va') + '</p>' +
     '<div class="escala__barra" style="background:linear-gradient(90deg,' + grad + ')"></div>' +
@@ -1609,6 +1612,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.3', fecha: '26/10', cambios: ['Arreglado: al tocar play en Lluvia o Tormentas ahora se ven los colores hora por hora, también las lluvias débiles.', 'Arreglado: en Mi spot y en el mes, las flechas ahora apuntan hacia donde va el viento (si dice ENE, la flecha baja hacia el oeste-suroeste).']},
   {v: '1.2', fecha: '26/10', cambios: ['Nuevo en el mapa: botón Foto satelital y, abajo, el resumen del día con mareas, vientos, lluvias y temperaturas.', 'Mapa nuevo estilo Windy: todo el río pintado con la lluvia, las tormentas o el viento, y líneas que muestran cómo se mueve el viento. Tocá play y mirá cómo avanza.', 'El mapa arranca sobre el Río de la Plata y lo podés alejar hasta ver todo el país o el continente.']},
   {v: '1.1', fecha: '26/10', cambios: ['Ahora podés dejar tu mail en Tu perfil para enterarte de lo nuevo.', 'Bramador se actualiza sola: no hace falta bajarla de nuevo.']}
 ];
