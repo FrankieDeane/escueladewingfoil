@@ -193,8 +193,8 @@ var GRILLA = (function(){
 function pronosticoGrilla(){
   var url = OM + '?latitude=' + GRILLA.map(function(p){ return p[0]; }).join(',') +
     '&longitude=' + GRILLA.map(function(p){ return p[1]; }).join(',') +
-    '&hourly=wind_speed_10m,wind_direction_10m,precipitation,weather_code&wind_speed_unit=kn&timezone=' + encodeURIComponent(TZ) + '&forecast_days=16';
-  return traer(url, 'grilla3', 60 * 60e3).then(function(d){ return Array.isArray(d) ? d : [d]; });
+    '&hourly=wind_speed_10m,wind_direction_10m,wind_gusts_10m,precipitation,weather_code,temperature_2m&wind_speed_unit=kn&timezone=' + encodeURIComponent(TZ) + '&forecast_days=16';
+  return traer(url, 'grilla4', 60 * 60e3).then(function(d){ return Array.isArray(d) ? d : [d]; });
 }
 // Agua: temperatura de la superficie en la boca del río (modelo marino).
 function agua(){
@@ -525,34 +525,45 @@ function vistaRio(){
 }
 
 // ─────────────────────────────── MAPA ───────────────────────────────
-// Fondos satelitales reales (NASA GIBS, gratis y sin clave). Las imágenes diarias son de la
-// pasada de la tarde: antes de las 17 h de Argentina todavía no está la de hoy, se usa la de ayer.
-function fechaGibs(){ var d = new Date(Date.now() - (new Date().getUTCHours() < 20 ? 864e5 : 0)); return d.toISOString().slice(0, 10); }
-function horaGoes(){ var t = Math.floor((Date.now() - 40 * 60e3) / 600e3) * 600e3; return new Date(t).toISOString().slice(0, 17) + '00Z'; }
-function urlGibs(capa, tiempo, nivel, ext){
-  return 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/' + capa + '/default/' + tiempo + '/GoogleMapsCompatible_Level' + nivel + '/{z}/{y}/{x}.' + ext;
+// Foto satelital real (teselas públicas de GIBS, sin clave). Un solo botón, sin nombrar la fuente
+// en pantalla (pedido de Francisco). Es la foto en color de la pasada de la tarde: antes de las
+// 17 h de Argentina todavía no está la de hoy y se usa la de ayer. Si una capa no responde,
+// se prueba la siguiente.
+function fechaGibs(atras){ var d = new Date(Date.now() - ((new Date().getUTCHours() < 20 ? 1 : 0) + (atras || 0)) * 864e5); return d.toISOString().slice(0, 10); }
+function urlGibs(capa, fecha){
+  return 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/' + capa + '/default/' + fecha + '/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg';
 }
-var FONDOS = [
-  {id: 'normal', n: 'Mapa', s: 'foto de base'},
-  {id: 'nasa', n: 'NASA', s: 'Terra · color real', capa: 'MODIS_Terra_CorrectedReflectance_TrueColor', nivel: 9, ext: 'jpg', diaria: true},
-  {id: 'noaa', n: 'NOAA', s: 'NOAA-20 · color real', capa: 'VIIRS_NOAA20_CorrectedReflectance_TrueColor', nivel: 9, ext: 'jpg', diaria: true},
-  {id: 'goes', n: 'En vivo', s: 'GOES-19 · nubes', capa: 'GOES-East_ABI_Band13_Clean_Infrared', nivel: 6, ext: 'png'}
+var FOTOS_SAT = [
+  ['VIIRS_NOAA20_CorrectedReflectance_TrueColor', 0], ['MODIS_Terra_CorrectedReflectance_TrueColor', 0],
+  ['VIIRS_SNPP_CorrectedReflectance_TrueColor', 0], ['VIIRS_NOAA20_CorrectedReflectance_TrueColor', 1]
 ];
-function ponerFondo(){
+function fotoSatelital(){
   if (!mapa || !mapa.getStyle()) return;
-  FONDOS.forEach(function(f){ if (f.capa && mapa.getLayer('f_' + f.id)) mapa.removeLayer('f_' + f.id); if (f.capa && mapa.getSource('f_' + f.id)) mapa.removeSource('f_' + f.id); });
-  var f = FONDOS.filter(function(x){ return x.id === mapaEstado.fondo; })[0], nota = document.getElementById('fondoNota');
-  if (!f || !f.capa) { if (nota) nota.textContent = ''; return; }
-  var tiempo = f.diaria ? fechaGibs() : horaGoes();
-  mapa.addSource('f_' + f.id, {type: 'raster', tiles: [urlGibs(f.capa, tiempo, f.nivel, f.ext)], tileSize: 256, maxzoom: f.nivel, attribution: 'NASA GIBS'});
-  mapa.addLayer({id: 'f_' + f.id, type: 'raster', source: 'f_' + f.id, paint: {'raster-opacity': f.diaria ? 1 : 0.85}}, 'lluvia');
-  if (nota) nota.textContent = f.diaria ? 'Foto del satélite ' + (f.id === 'nasa' ? 'Terra de la NASA' : 'NOAA-20 de la NOAA') + ', ' + (fechaGibs() === hoyISO() ? 'de hoy' : 'de ayer') + ' a la tarde (pasa una vez por día).'
-    : 'Satélite GOES-19 de la NOAA, cada 10 minutos: lo blanco son nubes altas, las tormentas se ven como manchas muy blancas. De día y de noche.';
+  var btn = document.getElementById('btnFoto');
+  if (mapa.getLayer('foto')) mapa.removeLayer('foto');
+  if (mapa.getSource('foto')) mapa.removeSource('foto');
+  if (btn) { btn.setAttribute('aria-pressed', mapaEstado.foto ? 'true' : 'false'); btn.textContent = mapaEstado.foto ? '🗺️ Volver al mapa' : '🌍 Foto satelital'; }
+  if (!mapaEstado.foto) {
+    if (mapaEstado.vista === 'rio') { mapa.setMinZoom(RIO.minZoom); mapa.setMaxBounds(RIO.limites); }
+    return;
+  }
+  var k = mapaEstado.fotoIx || 0, c = FOTOS_SAT[k];
+  mapa.addSource('foto', {type: 'raster', tiles: [urlGibs(c[0], fechaGibs(c[1]))], tileSize: 256, maxzoom: 9});
+  mapa.addLayer({id: 'foto', type: 'raster', source: 'foto'}, 'lluvia');
+  // Con la foto se puede alejar y acercar libre, para ver todo el sistema de nubes.
+  mapa.setMaxBounds(null); mapa.setMinZoom(3);
+  var fallas = 0;
+  mapa.on('error', function malo(e){
+    if (!e || e.sourceId !== 'foto') return;
+    if (++fallas < 4) return;
+    mapa.off('error', malo);
+    if (k + 1 < FOTOS_SAT.length && mapaEstado.foto) { mapaEstado.fotoIx = k + 1; fotoSatelital(); }
+  });
 }
 // Filtros del mapa y vista fija sobre el Río de la Plata (costa de Buenos Aires).
 var CAPAS = [['lluvia', '🌧️', 'Lluvia'], ['tormentas', '⚡', 'Tormentas'], ['viento', '💨', 'Viento']];
 var RIO = {center: [-58.28, -34.62], zoom: 9.2, pitch: 40, bearing: -20, minZoom: 8.6, limites: [[-59.2, -35.35], [-57.3, -33.95]]};
-var mapa = null, mapaEstado = {fondo: 'normal', capa: 'tormentas', dia: 0, hora: 0, play: false, timer: null, marcas: [], vista: 'rio', satTimer: null, satMarcas: {}, satSel: null};
+var mapa = null, mapaEstado = {foto: false, fotoIx: 0, capa: 'tormentas', dia: 0, hora: 0, play: false, timer: null, marcas: [], vista: 'rio', satTimer: null, satMarcas: {}, satSel: null};
 var SATS_INFO = {
   iss:      {n:'ISS', tipo:'ESTACIÓN ESPACIAL · CON GENTE', color:'#FFFFFF', de:'EE.UU., Rusia, Europa, Japón y Canadá', clase:'Tripulado',
              que:'Una casa en el espacio con astronautas a bordo. Da la vuelta al mundo cada 90 minutos.', dato:'Se ve a simple vista: un punto brillante que cruza el cielo sin titilar.'},
@@ -591,13 +602,12 @@ function vistaMapa(){
     '<div class="dias-box vidrio"><p class="dias-box__t">📅 Elegí el día <span>deslizá para ver más →</span></p><div class="dias" id="dias"></div></div>' +
     '<div style="height:10px"></div><div class="mapa-wrap"><div id="mapa" role="application" aria-label="Mapa del Río de la Plata"></div>' +
     '<div class="mapa-info" id="mapaInfo">Cargando…</div>' +
-    '<button class="pildora mapa-btn" type="button" data-accion="vista-sats" id="btnSats">🛰️ Satélites</button></div>' +
+    '<button class="pildora mapa-btn" type="button" data-accion="vista-sats" id="btnSats">🛰️ Satélites</button>' +
+    '<button class="pildora mapa-btn mapa-btn--izq" type="button" data-accion="foto-sat" id="btnFoto" aria-pressed="false">🌍 Foto satelital</button></div>' +
     '<div class="play"><button class="play__b" type="button" data-accion="play" id="btnPlay" aria-label="Reproducir"><svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg></button>' +
     '<div class="horas" id="horas"></div></div>' +
     '<div class="leyenda" id="leyenda"></div>' +
-    '<div class="fondos"><p>🛰️ Imagen satelital</p><div class="fondos__b">' + FONDOS.map(function(f){
-      return '<button type="button" data-fondo="' + f.id + '" aria-pressed="' + (f.id === mapaEstado.fondo) + '"><b>' + f.n + '</b><small>' + f.s + '</small></button>';
-    }).join('') + '</div><p class="nota" id="fondoNota" style="margin:6px 0 0"></p></div>' +
+    '<section class="tarj vidrio resumen" id="resumenDia" aria-live="polite"><p class="resumen__t">Leyendo el día…</p></section>' +
     '<button class="tarj vidrio" type="button" data-accion="vista-sats" style="display:flex;gap:10px;align-items:center;width:calc(100% - 32px);text-align:left;cursor:pointer;color:inherit" id="pasoISS">' +
     '<span style="font-size:24px">🛰️</span><span style="font-size:13px;line-height:1.35"><b>Mirá para arriba:</b> calculando cuándo pasa la Estación Espacial…</span></button>' +
     '<aside class="panel" id="panelSat" aria-live="polite"></aside>');
@@ -664,8 +674,9 @@ function iniciarMapa(grilla){
       etiquetas.forEach(function(x){ x.el.style.display = x.norte === 'uno' && !cerca || x.norte === 'grupo' && cerca ? 'none' : ''; });
     }
     mapa.on('zoom', verEtiquetas); verEtiquetas();
-    ponerFondo();
+    if (mapaEstado.foto) fotoSatelital();
     pintarDias(grilla);
+    resumenDia(grilla);
     pintarHora(grilla);
   });
   mapa.on('click', function(e){
@@ -778,6 +789,59 @@ function proximaTormenta(grilla, desde){
   }
   return ' en los próximos 5 días';
 }
+// Resumen del día elegido, escrito por la app con los datos (no es una IA): cielo, lluvia,
+// tormentas, viento por franja, temperaturas y mareas de San Isidro.
+function resumenDia(grilla){
+  var box = document.getElementById('resumenDia'); if (!box) return;
+  var t = grilla[0].hourly.time, iso = sumarDias(hoyISO(), mapaEstado.dia), ixs = [];
+  for (var i = 0; i < t.length; i++) if (t[i].slice(0, 10) === iso) ixs.push(i);
+  if (!ixs.length) { box.innerHTML = '<p class="resumen__t">Sin datos para ese día.</p>'; return; }
+  function prom(arr){ var v = arr.filter(isFinite); return v.length ? v.reduce(function(a, x){ return a + x; }, 0) / v.length : NaN; }
+  function enHora(i, campo){ return prom(grilla.map(function(g){ return g.hourly[campo] ? g.hourly[campo][i] : NaN; })); }
+  function dirHora(i){ var x = 0, y = 0; grilla.forEach(function(g){ var d = g.hourly.wind_direction_10m[i]; if (isFinite(d)) { x += Math.sin(d * Math.PI / 180); y += Math.cos(d * Math.PI / 180); } }); return (Math.atan2(x, y) * 180 / Math.PI + 360) % 360; }
+  var temps = ixs.map(function(i){ return enHora(i, 'temperature_2m'); }).filter(isFinite);
+  var franjas = [['A la mañana', 7, 12], ['A la tarde', 12, 18], ['A la noche', 18, 23]].map(function(f){
+    var hs = ixs.filter(function(i){ var h = +t[i].slice(11, 13); return h >= f[1] && h < f[2]; });
+    if (!hs.length) return null;
+    var kn = prom(hs.map(function(i){ return enHora(i, 'wind_speed_10m'); })), raf = Math.max.apply(null, hs.map(function(i){ return enHora(i, 'wind_gusts_10m'); }).filter(isFinite).concat([0]));
+    return f[0] + ': ' + r0(kn) + ' kn del ' + rumbo(dirHora(hs[Math.floor(hs.length / 2)])) + (raf > kn + 5 ? ', ráfagas de ' + r0(raf) : '') + '.';
+  }).filter(Boolean);
+  var horasLluvia = [], horasRayo = [], mmTot = 0, codigos = [];
+  ixs.forEach(function(i){
+    var mm = enHora(i, 'precipitation') || 0, h = t[i].slice(11, 13);
+    var rayo = grilla.some(function(g){ return tormenta(g.hourly.weather_code[i]); });
+    mmTot += mm; codigos.push(Math.max.apply(null, grilla.map(function(g){ return g.hourly.weather_code[i] || 0; })));
+    if (rayo) horasRayo.push(+h); else if (mm >= 0.3) horasLluvia.push(+h);
+  });
+  function rango(hs){ if (!hs.length) return ''; var f = hs[hs.length - 1] + 1; return hs[0] === 0 && f >= 24 ? 'todo el día' : 'entre las ' + hs[0] + ' y las ' + f + ' h'; }
+  var nub = prom(codigos.map(function(c){ return Math.min(c, 3); }));
+  var ico, titulo, sub;
+  if (horasRayo.length) { ico = '⛈️'; titulo = 'Tormenta eléctrica'; sub = rango(horasRayo) + ' · no salgas'; }
+  else if (mmTot >= 10) { ico = '🌧️'; titulo = 'Lluvia fuerte'; sub = r0(mmTot) + ' mm' + (horasLluvia.length ? ', ' + rango(horasLluvia) : ''); }
+  else if (horasLluvia.length) { ico = '🌦️'; titulo = 'Lluvias aisladas'; sub = rango(horasLluvia) + ' · ' + (Math.round(mmTot * 10) / 10) + ' mm'; }
+  else if (nub < 1.2) { ico = '☀️'; titulo = 'Día de sol'; sub = 'sin lluvias'; }
+  else if (nub < 2.4) { ico = '⛅'; titulo = 'Algo nublado'; sub = 'sin lluvias'; }
+  else { ico = '☁️'; titulo = 'Nublado'; sub = 'sin lluvias'; }
+  var knDia = Math.max.apply(null, ixs.filter(function(i){ var h = +t[i].slice(11, 13); return h >= 8 && h <= 20; }).map(function(i){ return enHora(i, 'wind_speed_10m'); }).filter(isFinite).concat([0]));
+  var html = '<div class="resumen__cab"><span class="resumen__ico" aria-hidden="true">' + ico + '</span><div>' +
+      '<p class="resumen__dia">' + esc(mapaEstado.dia === 0 ? 'HOY' : mapaEstado.dia === 1 ? 'MAÑANA' : nombreDia(iso).toUpperCase()) + ' EN EL RÍO</p>' +
+      '<p class="resumen__t">' + titulo + '</p><p class="resumen__sub">' + esc(sub) + '</p></div></div>' +
+    '<div class="resumen__datos">' +
+      (temps.length ? '<div><small>TEMPERATURA</small><b>' + r0(Math.max.apply(null, temps)) + '°<span> / ' + r0(Math.min.apply(null, temps)) + '°</span></b></div>' : '') +
+      '<div class="' + kclase(knDia) + '"><small>VIENTO MÁX.</small><b>' + r0(knDia) + '<span> kn</span></b></div>' +
+      '<div><small>LLUVIA</small><b>' + (Math.round(mmTot * 10) / 10) + '<span> mm</span></b></div>' +
+    '</div>' +
+    '<ul class="resumen__franjas">' + franjas.map(function(f){ var q = f.split(': '); return '<li><b>' + q[0] + '</b><span>' + q[1] + '</span></li>'; }).join('') + '</ul>' +
+    '<div id="resumenMarea" class="resumen__marea"></div>';
+  box.innerHTML = html;
+  mareas().then(function(m){
+    var el = document.getElementById('resumenMarea'); if (!el || sumarDias(hoyISO(), mapaEstado.dia) !== iso) return;
+    var delDia = m.filter(function(x){ return hoyISO(x.t) === iso; });
+    el.innerHTML = '<p class="resumen__mt">🌊 MAREAS · SAN ISIDRO</p>' + (delDia.length ? '<div class="resumen__mareas">' + delDia.map(function(x){
+        return '<div class="' + (x.alta ? 'alta' : 'baja') + '"><small>' + (x.alta ? '▲ PLEAMAR' : '▼ BAJAMAR') + '</small><b>' + hhmm(x.t) + '</b><span>' + String(Math.round(x.m * 100) / 100).replace('.', ',') + ' m</span></div>';
+      }).join('') + '</div>' : '<p class="resumen__sub">El SHN publica las mareas con pocos días de anticipación: todavía no están para este día.</p>');
+  }).catch(function(){});
+}
 function pintarLeyenda(){
   var l = document.getElementById('leyenda'); if (!l) return;
   var c = mapaEstado.capa;
@@ -853,7 +917,7 @@ function vistaSats(){
     mapa.setLayoutProperty('lluvia', 'visibility', 'visible');
     if (mapa.__grilla) pintarHora(mapa.__grilla);
     mapa.flyTo({center: RIO.center, zoom: RIO.zoom, pitch: RIO.pitch, bearing: RIO.bearing, duration: 1800});
-    mapa.once('moveend', function(){ if (mapa && mapaEstado.vista === 'rio') { mapa.setMinZoom(RIO.minZoom); mapa.setMaxBounds(RIO.limites); } });
+    mapa.once('moveend', function(){ if (mapa && mapaEstado.vista === 'rio' && !mapaEstado.foto) { mapa.setMinZoom(RIO.minZoom); mapa.setMaxBounds(RIO.limites); } });
     if (btn) btn.textContent = '🛰️ Satélites';
     cerrarPanel();
     return;
@@ -1423,7 +1487,7 @@ function router(){
 }
 
 document.addEventListener('click', function(e){
-  var b = e.target.closest('[data-accion],[data-cam],[data-dia],[data-capa],[data-fondo],[data-hora],[data-sat],[data-al-spot],[data-al-min],[data-al-dir],[data-al-finde],[data-al-borrar],[data-preg],[data-voto],[data-os],[data-nivel],[data-pspot],[data-evento]');
+  var b = e.target.closest('[data-accion],[data-cam],[data-dia],[data-capa],[data-hora],[data-sat],[data-al-spot],[data-al-min],[data-al-dir],[data-al-finde],[data-al-borrar],[data-preg],[data-voto],[data-os],[data-nivel],[data-pspot],[data-evento]');
   if (!b) return;
   var a = b.getAttribute('data-accion');
   if (b.hasAttribute('data-evento')) evento(b.getAttribute('data-evento'));
@@ -1431,6 +1495,7 @@ document.addEventListener('click', function(e){
   else if (a === 'compartir') compartir();
   else if (a === 'play') playMapa();
   else if (a === 'vista-sats') vistaSats();
+  else if (a === 'foto-sat') { mapaEstado.foto = !mapaEstado.foto; mapaEstado.fotoIx = 0; fotoSatelital(); if (mapaEstado.foto) evento('bramador_foto_satelital'); }
   else if (a === 'cerrar-panel') cerrarPanel();
   else if (a === 'permiso') { Notification.requestPermission().then(function(){ vistaAlertas(); }); }
   else if (a === 'crear-alerta') {
@@ -1445,14 +1510,9 @@ document.addEventListener('click', function(e){
     if (pedidoInstalar) { pedidoInstalar.prompt(); pedidoInstalar.userChoice.finally(function(){ pedidoInstalar = null; vistaInstalar(); }); }
   }
   else if (b.hasAttribute('data-cam')) { camActual = +b.getAttribute('data-cam'); montarCam(); }
-  else if (b.hasAttribute('data-dia')) { mapaEstado.dia = +b.getAttribute('data-dia'); mapaEstado.hora = 0; if (mapa && mapa.__grilla) { pintarDias(mapa.__grilla); pintarHora(mapa.__grilla); } }
+  else if (b.hasAttribute('data-dia')) { mapaEstado.dia = +b.getAttribute('data-dia'); mapaEstado.hora = 0; if (mapa && mapa.__grilla) { pintarDias(mapa.__grilla); pintarHora(mapa.__grilla); resumenDia(mapa.__grilla); } }
   else if (b.hasAttribute('data-hora')) { mapaEstado.hora = +b.getAttribute('data-hora'); if (mapaEstado.play) playMapa(); if (mapa && mapa.__grilla) pintarHora(mapa.__grilla); }
   else if (b.hasAttribute('data-sat')) abrirSat(b.getAttribute('data-sat'));
-  else if (b.hasAttribute('data-fondo')) {
-    mapaEstado.fondo = b.getAttribute('data-fondo');
-    document.querySelectorAll('[data-fondo]').forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
-    ponerFondo(); evento('bramador_mapa_fondo', {fondo: mapaEstado.fondo});
-  }
   else if (b.hasAttribute('data-capa')) {
     mapaEstado.capa = b.getAttribute('data-capa');
     document.querySelectorAll('[data-capa]').forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
@@ -1497,7 +1557,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
-  {v: '1.2', fecha: '26/10', cambios: ['Nuevo en el mapa: la imagen real de los satélites de la NASA y la NOAA, y las nubes en vivo cada 10 minutos.', 'Mapa nuevo: elegí Lluvia (celeste), Tormentas (naranja) o Viento (una sola flecha). Tocá play y mirá cómo se mueven.', 'El mapa ahora arranca más cerca, sobre el Río de la Plata.']},
+  {v: '1.2', fecha: '26/10', cambios: ['Nuevo en el mapa: botón Foto satelital y, abajo, el resumen del día con mareas, vientos, lluvias y temperaturas.', 'Mapa nuevo: elegí Lluvia (celeste), Tormentas (naranja) o Viento (una sola flecha). Tocá play y mirá cómo se mueven.', 'El mapa ahora arranca más cerca, sobre el Río de la Plata.']},
   {v: '1.1', fecha: '26/10', cambios: ['Ahora podés dejar tu mail en Tu perfil para enterarte de lo nuevo.', 'Bramador se actualiza sola: no hace falta bajarla de nuevo.']}
 ];
 function novedades(){
