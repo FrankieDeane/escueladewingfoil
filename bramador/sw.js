@@ -2,13 +2,13 @@
 //
 // La app en sí (pantalla, app.js, estilos): primero la red, así cada mejora
 // publicada le llega sola al que la tiene instalada; sin señal, la copia guardada.
-// Librerías del mapa (vendor/, no cambian): primero la copia guardada.
+// Íconos (icons/, no cambian): primero la copia guardada.
 // Datos (/api/…): primero la red, y si no hay, lo último.
 //
 // Al publicar una mejora: cambiar VERSION acá, sumar la novedad en NOVEDADES (app.js)
 // y poner el mismo número en version.json.
 // Los datos de afuera (pronóstico, mareas) ya los guarda app.js en el celular.
-const VERSION = 'bramador-v1.4';
+const VERSION = 'bramador-v1.5';
 const BASE = [
   '/bramador/',
   '/bramador/index.html',
@@ -16,9 +16,6 @@ const BASE = [
   '/bramador/app.js',
   '/bramador/manifest.webmanifest',
   '/bramador/icons/icon-192.png',
-  '/bramador/vendor/maplibre-gl-4.7.1.js',
-  '/bramador/vendor/maplibre-gl-4.7.1.css',
-  '/bramador/vendor/satellite-5.0.0.min.js',
   '/favicon.svg'
 ];
 
@@ -42,7 +39,7 @@ self.addEventListener('fetch', e => {
   if (url.pathname === '/bramador/version.json') return;
 
   const redPrimero = url.pathname.startsWith('/api/') || url.pathname === '/mp-data.json' ||
-    (url.pathname.startsWith('/bramador/') && !url.pathname.startsWith('/bramador/vendor/') && !url.pathname.startsWith('/bramador/icons/'));
+    (url.pathname.startsWith('/bramador/') && !url.pathname.startsWith('/bramador/icons/'));
   if (redPrimero) {
     e.respondWith(
       fetch(r).then(res => {
