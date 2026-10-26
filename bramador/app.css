@@ -82,6 +82,15 @@ button{font:inherit;color:inherit}
 .hero__fila{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-top:10px}
 .hero__kn{font-size:54px;font-weight:900;line-height:.9}
 .hero__kn small{font-size:18px}
+.hero__raf{display:inline-flex;flex-direction:column;vertical-align:bottom;margin-left:14px;padding-left:12px;border-left:2px solid rgba(255,255,255,.25);font-size:30px;font-weight:900;line-height:.95;color:#FFC531}
+.hero__raf small{font-size:11px;letter-spacing:.08em;font-weight:800;color:#FFC531}
+.hero__raf small:last-child{display:none}
+.rachado{color:#FFC531;font-style:normal;font-weight:800}
+.spot-ahora{font-size:14px;font-weight:700;margin:4px 0 2px}
+.spot-ahora b{font-size:20px;font-weight:900}
+.spot-ahora span,.spot-ahora span b{color:#FFC531}
+.barra__raf{color:#FFC531!important;font-weight:800}
+.barra__rafi{display:block;width:100%;border:1.5px dashed;border-bottom:0;border-radius:4px 4px 0 0;margin-bottom:-2px;opacity:.85;box-sizing:border-box}
 .hero__dir{font-size:15px;font-weight:700;margin-top:2px}
 .hero__hasta{font-size:14px;font-weight:800;color:var(--amarillo);margin-top:2px}
 .brujula{flex-shrink:0}
@@ -140,7 +149,7 @@ button{font:inherit;color:inherit}
 .spot-cab__txt p{margin:4px 0 0;font-size:13px;font-weight:700}
 .selspot{display:flex;gap:6px;overflow-x:auto;padding:10px 16px 0;scrollbar-width:none}
 .selspot::-webkit-scrollbar{display:none}
-.barras{display:flex;align-items:flex-end;gap:3px;height:120px;padding:0 2px}
+.barras{display:flex;align-items:flex-end;gap:3px;height:150px;margin-top:6px;padding:0 2px}
 .barra{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;min-width:0}
 .barra i{display:block;width:100%;border-radius:4px 4px 2px 2px}
 .barra svg{width:11px;height:11px;fill:none;stroke:var(--texto);stroke-width:3;stroke-linecap:round}
