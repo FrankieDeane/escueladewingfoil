@@ -8,7 +8,7 @@
 // Al publicar una mejora: cambiar VERSION acá, sumar la novedad en NOVEDADES (app.js)
 // y poner el mismo número en version.json.
 // Los datos de afuera (pronóstico, mareas) ya los guarda app.js en el celular.
-const VERSION = 'bramador-v1.7';
+const VERSION = 'bramador-v1.8';
 const BASE = [
   '/bramador/',
   '/bramador/index.html',
