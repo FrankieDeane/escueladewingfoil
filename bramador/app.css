@@ -277,3 +277,11 @@ button{font:inherit;color:inherit}
 
 /* Mapa estilo Windy: líneas de viento y barra de escala */
 .cal__ico{font-size:15px;line-height:1}
+/* Marea en Mi spot: altura de ahora y curva */
+.marea-ahora{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin:2px 0 6px}
+.marea-ahora small{display:block;font-size:10px;font-weight:800;color:var(--gris);letter-spacing:.06em}
+.marea-ahora b{font-size:26px;font-weight:900;line-height:1}
+.marea-ahora span{font-size:12px;font-weight:800;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.07)}
+.marea-ahora .sube{color:#5BC0F8}
+.marea-ahora .baja{color:#FF8A3D}
+.curva-marea{display:block;width:100%;height:auto;margin:0 0 10px;font-family:'DM Sans',sans-serif}

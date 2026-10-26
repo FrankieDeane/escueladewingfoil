@@ -247,6 +247,54 @@ function mareas(){
     }).sort(function(a, b){ return a.t - b.t; });
   });
 }
+// Altura estimada de la marea en un momento: entre una pleamar y una bajamar la
+// curva sigue un coseno (así lo dibujan las tablas). Devuelve null fuera de los datos.
+function alturaMarea(mar, ms){
+  for (var i = 0; i + 1 < mar.length; i++) {
+    var a = mar[i], b = mar[i + 1];
+    if (ms >= a.t && ms <= b.t) { var f = (ms - a.t) / (b.t - a.t); return a.m + (b.m - a.m) * (1 - Math.cos(Math.PI * f)) / 2; }
+  }
+  return null;
+}
+// Gráfico de marea: 24 horas desde 6 atrás (o desde el primer dato), la parte pasada pintada, una línea
+// en la hora actual y las pleamares/bajamares marcadas.
+function curvaMarea(mar, ahora){
+  if (!mar.length || mar[0].t > ahora || mar[mar.length - 1].t < ahora + 3600e3) return '';
+  var t0 = Math.max(ahora - 6 * 3600e3, mar[0].t), t1 = t0 + 24 * 3600e3;
+  t1 = Math.min(t1, mar[mar.length - 1].t);
+  var W = 320, H = 150, iz = 30, de = 8, ar = 22, ab = 26, pts = [];
+  for (var ms = t0; ms <= t1; ms += 10 * 60e3) pts.push([ms, alturaMarea(mar, ms)]);
+  var ext = mar.filter(function(x){ return x.t >= t0 && x.t <= t1; });
+  var ms_ = pts.map(function(p){ return p[1]; }), lo = Math.min.apply(null, ms_), hi = Math.max.apply(null, ms_);
+  lo = Math.floor((lo - 0.1) * 5) / 5; hi = Math.ceil((hi + 0.1) * 5) / 5;
+  function X(ms){ return iz + (ms - t0) / (t0 + 24 * 3600e3 - t0) * (W - iz - de); }
+  function Y(m){ return ar + (hi - m) / (hi - lo) * (H - ar - ab); }
+  function linea(arr){ return arr.map(function(p, k){ return (k ? 'L' : 'M') + X(p[0]).toFixed(1) + ' ' + Y(p[1]).toFixed(1); }).join(' '); }
+  var pasado = pts.filter(function(p){ return p[0] <= ahora; }).concat([[ahora, alturaMarea(mar, ahora)]]);
+  var futuro = [[ahora, alturaMarea(mar, ahora)]].concat(pts.filter(function(p){ return p[0] > ahora; }));
+  var g = '';
+  for (var m = lo; m <= hi + 1e-6; m += (hi - lo > 1.2 ? 0.5 : 0.2)) {
+    g += '<line x1="' + iz + '" x2="' + (W - de) + '" y1="' + Y(m).toFixed(1) + '" y2="' + Y(m).toFixed(1) + '" stroke="rgba(255,255,255,.08)"/>' +
+      '<text x="' + (iz - 4) + '" y="' + (Y(m) + 3).toFixed(1) + '" text-anchor="end" font-size="9" fill="#8FA9BF">' + String(Math.round(m * 10) / 10).replace('.', ',') + '</text>';
+  }
+  for (var h = Math.ceil(t0 / (3 * 3600e3)) * 3 * 3600e3; h <= t0 + 24 * 3600e3; h += 3 * 3600e3) {
+    g += '<text x="' + X(h).toFixed(1) + '" y="' + (H - 8) + '" text-anchor="middle" font-size="9" fill="#8FA9BF">' + hhmm(h).slice(0, 2) + '</text>';
+  }
+  var marcas = ext.map(function(x){
+    var y = Y(x.m), arriba = x.alta;
+    return '<circle cx="' + X(x.t).toFixed(1) + '" cy="' + y.toFixed(1) + '" r="3.5" fill="' + (x.alta ? '#5BC0F8' : '#FF8A3D') + '"/>' +
+      '<text x="' + X(x.t).toFixed(1) + '" y="' + (arriba ? y - 8 : y + 15).toFixed(1) + '" text-anchor="middle" font-size="9.5" font-weight="800" fill="#EAF2F8">' +
+      String(Math.round(x.m * 100) / 100).replace('.', ',') + ' m ' + hhmm(x.t) + '</text>';
+  }).join('');
+  var base = Y(lo).toFixed(1), xa = X(ahora).toFixed(1);
+  return '<svg class="curva-marea" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Curva de marea de las próximas horas">' +
+    '<defs><linearGradient id="gMarea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5BC0F8" stop-opacity=".75"/><stop offset="1" stop-color="#5BC0F8" stop-opacity=".08"/></linearGradient></defs>' + g +
+    '<path d="' + linea(pasado) + ' L' + xa + ' ' + base + ' L' + X(t0).toFixed(1) + ' ' + base + ' Z" fill="url(#gMarea)"/>' +
+    '<path d="' + linea(pasado) + '" fill="none" stroke="#5BC0F8" stroke-width="2"/>' +
+    '<path d="' + linea(futuro) + '" fill="none" stroke="#FF8A3D" stroke-width="2" stroke-dasharray="4 3"/>' +
+    '<line x1="' + xa + '" x2="' + xa + '" y1="' + (ar - 6) + '" y2="' + base + '" stroke="#EAF2F8" stroke-width="1.5"/>' +
+    '<text x="' + xa + '" y="' + (ar - 9) + '" text-anchor="middle" font-size="9" font-weight="800" fill="#EAF2F8">AHORA</text>' + marcas + '</svg>';
+}
 function norden(){ return traer('/api/norden', 'norden', 5 * 60e3); }
 function enso(){ return traer('/api/bramador-enso', 'enso', 24 * 3600e3); }
 
@@ -553,6 +601,13 @@ function vistaSpot(id){
     var marHtml = mar.filter(function(x){ return x.t > ahora - 3600e3; }).slice(0, 4).map(function(x){
       return '<div class="marea"><small>' + (x.alta ? '▲ PLEAMAR' : '▼ BAJAMAR') + ' · ' + esc(nombreDia(hoyISO(x.t))) + '</small><b>' + hhmm(x.t) + ' · ' + x.m.toFixed(2) + ' m</b></div>';
     }).join('');
+    // Altura ahora y si sube o baja (cm por hora), arriba de la curva.
+    var mAhora = alturaMarea(mar, ahora), mLuego = alturaMarea(mar, ahora + 3600e3), marAhora = '';
+    if (mAhora != null && mLuego != null) {
+      var cmh = Math.round((mLuego - mAhora) * 100);
+      marAhora = '<div class="marea-ahora"><div><small>AHORA</small><b>' + String(Math.round(mAhora * 100) / 100).replace('.', ',') + ' m</b></div>' +
+        '<span class="' + (cmh >= 0 ? 'sube' : 'baja') + '">' + (cmh >= 0 ? '▲ subiendo' : '▼ bajando') + ' · ' + Math.abs(cmh) + ' cm/h</span></div>' + curvaMarea(mar, ahora);
+    }
     pintar('<div class="spot-cab"><div class="hero__foto" style="background-image:url(' + foto(spot.foto) + ')"></div><div class="hero__velo"></div>' +
       '<div class="spot-cab__txt"><div><h1>' + esc(spot.n) + '</h1><p>' + (pico ? 'Pico del día: ' + hhmm(pico.ms) + ' · ' + r0(pico.kn) + ' kn' + (pico.ev.ok ? ' · ala de ' + ala(pico.kn, p.peso) + ' m' : '') : esc(spot.sub)) + '</p></div>' +
       brujula(cur.wind_direction_10m, spot.arco, 96) + '</div></div>' + sel +
@@ -561,7 +616,7 @@ function vistaSpot(id){
           '<b>' + r0(b.kn) + '</b><i style="height:' + Math.max(4, r0(b.kn / maxKn * 80)) + 'px;background:' + kcolor(b.kn) + '"></i>' + flecha(b.deg) +
           '<small>' + (j % 3 === 0 ? hhmm(b.ms).slice(0, 2) : '&nbsp;') + '</small></div>';
       }).join('') + '</div><p style="margin:8px 0 0;font-size:12px;color:#8FA9BF">Verde: viene del agua y alcanza. El arco verde de la brújula es el viento que sirve acá.</p></div>' +
-      '<div class="tarj vidrio"><p class="tit">Mareas · San Isidro</p><div class="mareas">' + (marHtml || '<span style="color:#8FA9BF;font-size:13px">Sin datos de marea ahora.</span>') + '</div></div>' +
+      '<div class="tarj vidrio"><p class="tit">Mareas · San Isidro</p>' + marAhora + '<div class="mareas">' + (marHtml || '<span style="color:#8FA9BF;font-size:13px">Sin datos de marea ahora.</span>') + '</div></div>' +
       '<div class="tarj vidrio"><p class="tit">El mes · tocá un día</p><div class="cal">' + cal + '</div>' +
       '<p style="margin:10px 0 0;font-size:12px;line-height:1.35;color:#8FA9BF">Los primeros 16 días: nudos máximos con luz. Los punteados: tendencia (probabilidad de un día de +12 kn según los últimos 20 años).</p></div>' +
       '<div style="padding:12px 16px 0"><a class="btn btn--vidrio" href="#/alertas">🔔 Avisame cuando haya viento acá</a></div>');
@@ -1067,6 +1122,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.7', fecha: '26/10', cambios: ['Nuevo en Mi spot: la curva de la marea con la altura de ahora y si está subiendo o bajando.']},
   {v: '1.6', fecha: '26/10', cambios: ['La brújula ahora marca con un triangulito rojo de dónde viene el viento, en vez de la flecha larga.']},
   {v: '1.5', fecha: '26/10', cambios: ['Bramador más simple: sacamos la sección Mapa. El pronóstico día por día, con clima, viento y mareas, está en Mi spot.']},
   {v: '1.4', fecha: '26/10', cambios: ['El calendario del mes en Mi spot ahora muestra el clima de cada día (sol, nubes, lluvia o tormenta) junto al viento.', 'El selector de días del mapa queda más limpio, sin íconos de clima.']},
