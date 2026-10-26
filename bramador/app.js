@@ -60,7 +60,7 @@ function r0(x){ return Math.round(x); }
 function flecha(deg, cls){
   return '<svg class="' + (cls || '') + '" viewBox="0 0 24 24" aria-hidden="true" style="transform:rotate(' + r0(deg) + 'deg)"><path d="M12 4v16M5 13l7 7 7-7"/></svg>';
 }
-// Brújula: N/S/E/O, sector bueno del spot y la flecha desde donde viene el viento.
+// Brújula: N/S/E/O, sector bueno del spot y un triangulito del lado de donde viene el viento.
 function brujula(deg, arco, tam){
   tam = tam || 112;
   var c = 66, r = 44;
@@ -71,15 +71,16 @@ function brujula(deg, arco, tam){
     var p0 = pto(a0, r), p1 = pto(a1, r);
     sector = '<path d="M ' + p0[0].toFixed(1) + ' ' + p0[1].toFixed(1) + ' A ' + r + ' ' + r + ' 0 ' + (largo > 180 ? 1 : 0) + ' 1 ' + p1[0].toFixed(1) + ' ' + p1[1].toFixed(1) + '" fill="none" stroke="#22C3A6" stroke-width="8" opacity=".55"/>';
   }
+  // Un triangulito junto al borde, del lado de donde viene el viento, apuntando al centro.
   var flechaG = deg == null ? '' :
-    '<g transform="rotate(' + r0(deg) + ' 66 66)"><path d="M66 18 L75 38 L66 33 L57 38 Z" fill="#FF5A2C"/><path d="M66 33 L66 100" stroke="#FF5A2C" stroke-width="4" stroke-linecap="round"/></g>';
+    '<g transform="rotate(' + r0(deg) + ' 66 66)"><path d="M53 29 L79 29 L66 52 Z" fill="#FF5A2C" stroke="#0B1A22" stroke-width="2" stroke-linejoin="round"/></g>';
   return '<svg class="brujula" width="' + tam + '" height="' + tam + '" viewBox="0 0 132 132" role="img" aria-label="' + (deg == null ? 'Brújula' : 'El viento viene del ' + rumbo(deg)) + '">' +
     '<circle cx="66" cy="66" r="62" fill="rgba(11,26,34,.75)" stroke="rgba(255,255,255,.25)" stroke-width="2"/>' + sector +
     '<text x="66" y="17" text-anchor="middle" fill="#EAF2F8" font-family="DM Sans" font-weight="800" font-size="13">N</text>' +
     '<text x="66" y="125" text-anchor="middle" fill="#EAF2F8" font-family="DM Sans" font-weight="800" font-size="13">S</text>' +
     '<text x="121" y="70" text-anchor="middle" fill="#EAF2F8" font-family="DM Sans" font-weight="800" font-size="13">E</text>' +
     '<text x="11" y="70" text-anchor="middle" fill="#EAF2F8" font-family="DM Sans" font-weight="800" font-size="13">O</text>' +
-    flechaG + '<circle cx="66" cy="66" r="4" fill="#EAF2F8"/></svg>';
+    flechaG + '</svg>';
 }
 var PAJARO = '<rect width="36" height="36" rx="8" fill="#0B1A22"/><g transform="translate(-1.8 2.6) scale(1.1)" fill="#F7F4EC">' +
   '<path d="M18 16 C14 10 7 8 2 10 C7 11 12 13 15 17 Z" opacity=".95"/><path d="M18 16 C22 10 29 8 34 10 C29 11 24 13 21 17 Z" opacity=".8"/>' +
@@ -1066,6 +1067,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.6', fecha: '26/10', cambios: ['La brújula ahora marca con un triangulito rojo de dónde viene el viento, en vez de la flecha larga.']},
   {v: '1.5', fecha: '26/10', cambios: ['Bramador más simple: sacamos la sección Mapa. El pronóstico día por día, con clima, viento y mareas, está en Mi spot.']},
   {v: '1.4', fecha: '26/10', cambios: ['El calendario del mes en Mi spot ahora muestra el clima de cada día (sol, nubes, lluvia o tormenta) junto al viento.', 'El selector de días del mapa queda más limpio, sin íconos de clima.']},
   {v: '1.3', fecha: '26/10', cambios: ['Arreglado: al tocar play en Lluvia o Tormentas ahora se ven los colores hora por hora, también las lluvias débiles.', 'Arreglado: en Mi spot y en el mes, las flechas ahora apuntan hacia donde va el viento (si dice ENE, la flecha baja hacia el oeste-suroeste).']},
