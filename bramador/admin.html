@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Bramador · Admin</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700..800&family=DM+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--tinta:#0B1A22;--texto:#EAF2F8;--gris:#8FA9BF;--linea:rgba(255,255,255,.14);--senal:#FF5A2C;--ok:#22C3A6;--amarillo:#FFC531}
+*{box-sizing:border-box}
+body{margin:0;background:var(--tinta);color:var(--texto);font:15px/1.4 'DM Sans',sans-serif}
+main{max-width:860px;margin:0 auto;padding:20px 16px 60px}
+h1{font:800 28px 'Bricolage Grotesque',sans-serif;margin:0}
+h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--gris);margin:26px 0 10px}
+.cab{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.tabs{display:flex;gap:6px;margin:16px 0}
+.tabs button,.btn,.chico{min-height:44px;padding:0 16px;border-radius:12px;border:1px solid var(--linea);background:transparent;color:var(--texto);font:800 14px 'DM Sans',sans-serif;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--texto);color:var(--tinta)}
+.btn{background:var(--senal);border:0;color:var(--tinta)}
+.chico{min-height:34px;padding:0 10px;font-size:13px}
+.caja{background:rgba(255,255,255,.04);border:1px solid var(--linea);border-radius:16px;padding:14px;margin-bottom:10px}
+label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:800;color:var(--gris)}
+input,select{min-height:44px;border-radius:10px;border:1px solid var(--linea);background:rgba(0,0,0,.25);color:var(--texto);font:500 15px 'DM Sans',sans-serif;padding:0 10px}
+input[type=checkbox]{min-height:0;width:20px;height:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.sp{display:flex;align-items:center;gap:12px}
+.sp img{width:44px;height:44px;border-radius:10px;background:#fff;object-fit:contain}
+.sp .datos{flex:1;min-width:0}
+.sp small{display:block;color:var(--gris)}
+.on{color:var(--ok)}.off{color:var(--amarillo)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--linea)}
+th{color:var(--gris);font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+td.n{text-align:right;font-variant-numeric:tabular-nums}
+.tabla{overflow-x:auto}
+.fila{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.msj{color:var(--amarillo);font-weight:800}
+.prev{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:12px;color:var(--gris)}
+.prev img{width:28px;height:28px;border-radius:6px;background:#fff;object-fit:contain}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+  <div class="cab"><h1>Bramador · Admin</h1><button class="chico" id="salir" hidden>Salir</button></div>
+
+  <form id="login" class="caja" style="margin-top:16px">
+    <label>Clave de admin<input id="clave" type="password" autocomplete="current-password" required></label>
+    <p class="msj" id="loginMsj" hidden></p>
+    <button class="btn" style="margin-top:10px">Entrar</button>
+  </form>
+
+  <div id="app" hidden>
+    <div class="tabs"><button type="button" data-tab="sponsors" aria-pressed="true">Sponsors</button><button type="button" data-tab="panel" aria-pressed="false">Panel</button></div>
+
+    <section id="tab-sponsors">
+      <form id="form" class="caja">
+        <input type="hidden" id="fId">
+        <div class="grid">
+          <label>Marca<input id="fNombre" required maxlength="40"></label>
+          <label>Spot<select id="fSpot"></select></label>
+          <label>Dónde aparece<select id="fSlot"><option value="senal">Señal del día (SALÍ)</option><option value="alerta">Alertas de viento</option></select></label>
+          <label>Desde<input id="fDesde" type="date" required></label>
+          <label>Hasta<input id="fHasta" type="date" required></label>
+          <label>Logo (se achica solo)<input id="fLogo" type="file" accept="image/*"></label>
+        </div>
+        <div class="prev" id="fPrev" hidden><img alt=""><span>Así se ve el logo</span></div>
+        <label style="flex-direction:row;align-items:center;gap:8px;margin-top:10px"><input id="fActivo" type="checkbox" checked> Activo (destildalo para apagarlo; sus impresiones quedan guardadas)</label>
+        <div class="fila" style="margin-top:10px"><button class="btn">Guardar sponsor</button><button class="chico" type="button" id="fNuevo">Nuevo</button></div>
+        <p class="msj" id="fMsj" hidden></p>
+      </form>
+      <h2>Sponsors cargados</h2>
+      <div id="lista"></div>
+    </section>
+
+    <section id="tab-panel" hidden>
+      <div class="caja grid" style="align-items:end">
+        <label>Desde<input id="pDesde" type="date"></label>
+        <label>Hasta<input id="pHasta" type="date"></label>
+        <button class="btn" type="button" id="pVer">Ver</button>
+      </div>
+      <div id="panel"></div>
+    </section>
+  </div>
+</main>
+<script>
+(function(){
+var SB = 'https://pfwazngwcvirdeyamvsd.supabase.co', SB_KEY = 'sb_publishable_5wLxVtnFy4IMOAMK_rzZ-A_cZ1TSOeV';
+var SPOTS = {sanisidro:'San Isidro', peru:'Perú Beach', martinez:'Martínez', olivos:'Olivos', quilmes:'Quilmes', puntalara:'Punta Lara'};
+var SLOTS = {senal:'Señal del día', alerta:'Alertas'};
+var ETIQ = {bien:'Todo bien', rachado:'Rachado', pocaagua:'Poca agua', gente:'Mucha gente', bajando:'Bajando el viento', ala:'Mi ala'};
+var clave = '', sponsors = [], logoNuevo = null, datos = null;
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function rpc(fn, args){
+  return fetch(SB + '/rest/v1/rpc/' + fn, {method:'POST', headers:{apikey:SB_KEY,'Content-Type':'application/json'}, body: JSON.stringify(args || {})})
+    .then(function(r){ if (!r.ok) throw new Error(fn); return r.status === 204 ? null : r.json(); });
+}
+function iso(d){ return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+
+$('fSpot').innerHTML = '<option value="">Todos los spots</option>' + Object.keys(SPOTS).map(function(k){ return '<option value="' + k + '">' + SPOTS[k] + '</option>'; }).join('');
+
+function entrar(c){
+  return rpc('bram_admin_ok', {p_clave: c}).then(function(ok){
+    if (!ok) throw new Error('clave');
+    clave = c; try { localStorage.setItem('bram_admin', c); } catch(e){}
+    $('login').hidden = true; $('app').hidden = false; $('salir').hidden = false;
+    cargarSponsors();
+  });
+}
+$('login').addEventListener('submit', function(e){
+  e.preventDefault();
+  entrar($('clave').value.trim()).catch(function(){ $('loginMsj').textContent = 'Clave incorrecta.'; $('loginMsj').hidden = false; });
+});
+$('salir').addEventListener('click', function(){ try { localStorage.removeItem('bram_admin'); } catch(e){} location.reload(); });
+try { var g = localStorage.getItem('bram_admin'); if (g) entrar(g).catch(function(){}); } catch(e){}
+
+document.querySelectorAll('[data-tab]').forEach(function(b){ b.addEventListener('click', function(){
+  document.querySelectorAll('[data-tab]').forEach(function(x){ x.setAttribute('aria-pressed', x === b); });
+  $('tab-sponsors').hidden = b.dataset.tab !== 'sponsors'; $('tab-panel').hidden = b.dataset.tab !== 'panel';
+  if (b.dataset.tab === 'panel' && !datos) verPanel();
+}); });
+
+// ── Sponsors
+function limpiar(){
+  $('form').reset(); $('fId').value = ''; logoNuevo = null; $('fPrev').hidden = true; $('fActivo').checked = true;
+  var hoy = new Date(); $('fDesde').value = iso(hoy); $('fHasta').value = iso(new Date(hoy.getFullYear(), hoy.getMonth() + 3, 0));
+}
+limpiar();
+$('fNuevo').addEventListener('click', limpiar);
+$('fLogo').addEventListener('change', function(){
+  var f = this.files[0]; if (!f) return;
+  var img = new Image(), url = URL.createObjectURL(f);
+  img.onload = function(){
+    // Logo cuadrado de 96 px: liviano para que no demore nada en la app.
+    var c = document.createElement('canvas'), L = 96, k = Math.min(L / img.width, L / img.height);
+    c.width = L; c.height = L;
+    var x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, L, L);
+    x.drawImage(img, (L - img.width * k) / 2, (L - img.height * k) / 2, img.width * k, img.height * k);
+    logoNuevo = c.toDataURL('image/webp', 0.85);
+    if (logoNuevo.indexOf('data:image/webp') !== 0) logoNuevo = c.toDataURL('image/png');
+    $('fPrev').querySelector('img').src = logoNuevo; $('fPrev').hidden = false;
+    URL.revokeObjectURL(url);
+  };
+  img.src = url;
+});
+$('form').addEventListener('submit', function(e){
+  e.preventDefault();
+  var p = {id: $('fId').value, nombre: $('fNombre').value.trim(), spot: $('fSpot').value, slot: $('fSlot').value,
+           desde: $('fDesde').value, hasta: $('fHasta').value, activo: $('fActivo').checked};
+  if (logoNuevo) p.logo = logoNuevo;
+  if (p.hasta < p.desde) { $('fMsj').textContent = '"Hasta" tiene que ser después de "Desde".'; $('fMsj').hidden = false; return; }
+  rpc('bram_admin_guardar_sponsor', {p_clave: clave, p: p}).then(function(){
+    $('fMsj').textContent = '✓ Guardado'; $('fMsj').hidden = false; limpiar(); cargarSponsors();
+  }).catch(function(){ $('fMsj').textContent = 'No se pudo guardar. Probá de nuevo.'; $('fMsj').hidden = false; });
+});
+function cargarSponsors(){
+  rpc('bram_admin_sponsors', {p_clave: clave}).then(function(l){
+    sponsors = l || [];
+    var hoy = iso(new Date());
+    $('lista').innerHTML = sponsors.length ? sponsors.map(function(s, i){
+      var vigente = s.activo && s.desde <= hoy && hoy <= s.hasta;
+      return '<div class="caja sp">' + (s.logo ? '<img src="' + esc(s.logo) + '" alt="">' : '<img alt="">') +
+        '<div class="datos"><b>' + esc(s.nombre) + '</b> <span class="' + (vigente ? 'on">● al aire' : 'off">● ' + (s.activo ? 'fuera de fecha' : 'apagado')) + '</span>' +
+        '<small>' + (s.spot ? SPOTS[s.spot] : 'Todos los spots') + ' · ' + SLOTS[s.slot] + ' · ' + s.desde + ' → ' + s.hasta + ' · ' + Number(s.impresiones).toLocaleString('es-AR') + ' impresiones</small></div>' +
+        '<button class="chico" type="button" data-editar="' + i + '">Editar</button></div>';
+    }).join('') : '<p style="color:var(--gris)">Todavía no cargaste sponsors.</p>';
+  });
+}
+$('lista').addEventListener('click', function(e){
+  var b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.editar != null) {
+    var s = sponsors[+b.dataset.editar];
+    $('fId').value = s.id; $('fNombre').value = s.nombre; $('fSpot').value = s.spot || ''; $('fSlot').value = s.slot;
+    $('fDesde').value = s.desde; $('fHasta').value = s.hasta; $('fActivo').checked = s.activo; logoNuevo = null;
+    if (s.logo) { $('fPrev').querySelector('img').src = s.logo; $('fPrev').hidden = false; } else $('fPrev').hidden = true;
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+});
+
+// ── Panel
+var hoy = new Date(); $('pDesde').value = iso(new Date(hoy.getFullYear(), hoy.getMonth(), 1)); $('pHasta').value = iso(hoy);
+$('pVer').addEventListener('click', verPanel);
+var TABLAS = [
+  ['impresiones', 'Impresiones por sponsor', ['mes','sponsor','slot','spot','impresiones']],
+  ['reportes_dia', 'Reportes por spot y día', ['dia','spot','reportes','riders']],
+  ['riders_semana', 'Riders que reportaron, por semana', ['semana','riders']],
+  ['riders_mes', 'Riders que reportaron, por mes', ['mes','riders']],
+  ['dias_viento', 'Días de viento (12 kn o más) con actividad', ['dia','spot','kn_max','reportes','riders']],
+  ['alas_medida', 'Medidas de ala por spot', ['spot','m','riders']],
+  ['alas_marca', 'Marcas de ala por spot', ['spot','marca','riders']],
+  ['etiquetas', 'Qué reportan, por spot', ['spot','tag','reportes']]
+];
+var TITULOS = {mes:'Mes', sponsor:'Sponsor', slot:'Dónde', spot:'Spot', impresiones:'Impresiones', dia:'Día', reportes:'Reportes', riders:'Riders', semana:'Semana del', kn_max:'Kn máx', m:'Medida (m)', marca:'Marca', tag:'Reporte'};
+function valor(k, v){ return k === 'spot' ? (SPOTS[v] || v) : k === 'slot' ? (SLOTS[v] || v) : k === 'tag' ? (ETIQ[v] || (String(v).indexOf('no_') === 0 ? 'Ya no: ' + (ETIQ[v.slice(3)] || v) : v)) : v; }
+function verPanel(){
+  $('panel').innerHTML = '<p style="color:var(--gris)">Cargando…</p>';
+  rpc('bram_admin_panel', {p_clave: clave, p_desde: $('pDesde').value, p_hasta: $('pHasta').value}).then(function(d){
+    datos = d;
+    $('panel').innerHTML = '<p style="color:var(--gris)">' + d.riders_total + ' riders registrados en total.</p>' + TABLAS.map(function(t, i){
+      var filas = d[t[0]] || [];
+      return '<div class="fila"><h2>' + t[1] + '</h2><button class="chico" type="button" data-csv="' + i + '">CSV</button></div>' +
+        (filas.length ? '<div class="tabla"><table><tr>' + t[2].map(function(k){ return '<th>' + TITULOS[k] + '</th>'; }).join('') + '</tr>' +
+        filas.map(function(f){ return '<tr>' + t[2].map(function(k){ return '<td' + (typeof f[k] === 'number' ? ' class="n"' : '') + '>' + esc(valor(k, f[k])) + '</td>'; }).join('') + '</tr>'; }).join('') +
+        '</table></div>' : '<p style="color:var(--gris);margin:0">Sin datos en estas fechas.</p>');
+    }).join('');
+  }).catch(function(){ $('panel').innerHTML = '<p class="msj">No se pudo cargar el panel.</p>'; });
+}
+$('panel').addEventListener('click', function(e){
+  var b = e.target.closest('[data-csv]'); if (!b || !datos) return;
+  var t = TABLAS[+b.dataset.csv], filas = datos[t[0]] || [];
+  var csv = [t[2].map(function(k){ return TITULOS[k]; })].concat(filas.map(function(f){ return t[2].map(function(k){ return valor(k, f[k]); }); }))
+    .map(function(r){ return r.map(function(v){ v = String(v == null ? '' : v); return /[",;\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(','); }).join('\n');
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['﻿' + csv], {type: 'text/csv;charset=utf-8'}));
+  a.download = 'bramador-' + t[0] + '-' + $('pDesde').value + '-a-' + $('pHasta').value + '.csv';
+  a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+});
+})();
+</script>
+</body>
+</html>
