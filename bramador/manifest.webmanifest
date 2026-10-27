@@ -2,7 +2,7 @@
   "id": "/bramador/",
   "name": "Bramador · El viento del Río de la Plata",
   "short_name": "Bramador",
-  "description": "¿Salgo hoy? por spot y hasta qué hora, cámaras del río en vivo, tormentas, mareas y la tendencia del mes.",
+  "description": "Pronóstico de viento gratis del Río de la Plata para wingfoil, kite y windsurf: ¿salgo hoy? por spot y hasta qué hora, ráfagas, tormentas, mareas y cámaras en vivo.",
   "lang": "es-AR",
   "start_url": "/bramador/?origen=app",
   "scope": "/bramador/",
@@ -10,10 +10,30 @@
   "orientation": "portrait",
   "background_color": "#0B1A22",
   "theme_color": "#0B1A22",
-  "categories": ["weather", "sports"],
+  "categories": [
+    "weather",
+    "sports",
+    "navigation"
+  ],
   "icons": [
-    { "src": "/bramador/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/bramador/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "/bramador/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
-  ]
+    {
+      "src": "/bramador/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/bramador/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/bramador/icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "dir": "ltr"
 }

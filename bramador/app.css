@@ -305,3 +305,16 @@ button{font:inherit;color:inherit}
 .sol-tira{display:flex;gap:6px;padding:6px 16px 0}
 .sol-tira span{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;border-radius:12px;padding:9px 8px;background:var(--vidrio);border:1px solid var(--linea);font-size:12px;font-weight:700;color:var(--gris);white-space:nowrap}
 .sol-tira b{font-size:15px;font-weight:900;color:var(--texto)}
+
+/* Texto para buscadores (lo reemplaza la app) y preguntas frecuentes en Más */
+.seo{padding:calc(28px + var(--safe-t,0px)) 20px 8px;max-width:640px;margin:0 auto;line-height:1.45}
+.seo h1{font-family:'Bricolage Grotesque',sans-serif;font-size:30px;line-height:1.05;margin:0 0 10px}
+.seo h2{font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--gris);margin:22px 0 8px}
+.seo__lead{font-size:17px;margin:0}
+.seo ul{margin:0;padding-left:18px}
+.seo a{color:var(--senal)}
+.seo + .cargando{padding:20px}
+.seo details,.faq details{border-top:1px solid var(--linea);padding:10px 0}
+.faq details:first-child{border-top:0;padding-top:0}
+.seo summary,.faq summary{font-weight:800;cursor:pointer}
+.seo details p,.faq details p{margin:6px 0 0;color:var(--gris);font-size:14px}

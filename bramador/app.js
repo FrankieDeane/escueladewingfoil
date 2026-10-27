@@ -689,6 +689,8 @@ function vistaDia(id, iso){
 }
 
 // ─────────────────────────────── MÁS ───────────────────────────────
+// Las mismas preguntas están en index.html (texto y datos para Google): cambiar en los dos lados.
+var FAQ = [["¿Qué es Bramador?", "Una app gratis de la Escuela de Wingfoil que te dice si conviene salir a navegar hoy en el Río de la Plata, spot por spot y hasta qué hora."], ["¿Para qué deportes sirve?", "Para wingfoil, kitesurf, windsurf y foil: muestra nudos, ráfagas, dirección del viento, tormentas, mareas y el ala recomendada según tu peso."], ["¿Qué spots cubre?", "San Isidro, Perú Beach, Martínez, Olivos, Quilmes y Punta Lara, con el pronóstico de 16 días y la tendencia del mes."], ["¿De dónde salen los datos?", "De modelos públicos de pronóstico actualizados cada hora, la estación del Náutico San Isidro, el Pilote Norden en el medio del río, las mareas del SHN y cámaras en vivo de Windy."], ["¿Cómo la instalo?", "Abrí escueladewingfoil.com.ar/bramador en el teléfono. En Android tocá Instalar; en iPhone, desde Safari, tocá Compartir y Agregar a pantalla de inicio. No hace falta Play Store ni App Store."], ["¿Cuesta algo?", "No. Bramador es gratis."]];
 function vistaMas(){
   fondo('mas');
   function item(href, icono, t, s){ return '<a class="vidrio" href="' + href + '"><svg viewBox="0 0 24 24">' + icono + '</svg><b>' + t + '</b><span>' + s + '</span></a>'; }
@@ -701,7 +703,10 @@ function vistaMas(){
     item('#/opinion', '<path d="M12 21l-8-8a5 5 0 0 1 8-6 5 5 0 0 1 8 6z"/>', 'Tu opinión', '¿Qué le agregarías?') +
     item('#/instalar', '<path d="M12 3v12M6 10l6 6 6-6M4 20h16"/>', 'Instalar', 'Android y iPhone') +
     item('/', '<path d="M3 11l9-8 9 8M5 10v10h14V10"/>', 'Escuela de Wingfoil', 'Volver al sitio') +
-    '</div><p class="nota">Bramador es gratis. Datos: modelos públicos de pronóstico, estación del Náutico San Isidro, Pilote Norden (CARP), mareas del SHN, cámaras de Windy y órbitas de CelesTrak.</p>');
+    '</div><div class="subt"><h2>Preguntas frecuentes</h2></div><div class="tarj vidrio faq">' + FAQ.map(function(x){
+      return '<details><summary>' + esc(x[0]) + '</summary><p>' + esc(x[1]) + '</p></details>';
+    }).join('') + '</div>' +
+    '<p class="nota">Bramador es gratis. Datos: modelos públicos de pronóstico, estación del Náutico San Isidro, Pilote Norden (CARP), mareas del SHN y cámaras de Windy.</p>');
 }
 
 // ─────────────────────────────── ALERTAS ───────────────────────────────
@@ -1170,6 +1175,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.11', fecha: '27/10', cambios: ['Nuevo en Más: preguntas frecuentes sobre Bramador.']},
   {v: '1.10', fecha: '26/10', cambios: ['Ráfagas a la vista: en Hoy y en Mi spot ves las rachas al lado del viento, hora por hora, y un aviso cuando está rachado.']},
   {v: '1.9', fecha: '26/10', cambios: ['Para entrar a Bramador te pedimos nombre, apellido y mail, una sola vez.']},
   {v: '1.8', fecha: '26/10', cambios: ['Ahora ves a qué hora sale y se pone el sol en el río, en Hoy y en Mi spot.']},
