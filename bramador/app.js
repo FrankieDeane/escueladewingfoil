@@ -482,7 +482,7 @@ function vistaHoy(){
         '<div class="hero__fila"><div><div class="hero__kn">' + s.kn + '<small> kn</small>' +
           (isFinite(s.raf) ? '<span class="hero__raf"><small>RÁFAGAS</small>' + s.raf + '<small> kn</small></span>' : '') + '</div>' +
         '<div class="hero__dir">del ' + rumbo(s.deg) + (rachado(s.kn, s.raf) ? ' · <span class="rachado">⚠ Rachado</span>' : '') + '</div>' +
-        '<div class="hero__hasta">' + esc(linea) + '</div></div>' + brujula(s.deg, spot.arco, 112) + '</div></div></section>' +
+        '<div class="hero__hasta">' + esc(linea) + '</div><div class="presenta" id="presenta" hidden></div></div>' + brujula(s.deg, spot.arco, 112) + '</div></div></section>' +
       '<div class="datos">' +
         '<div class="dato"><small>AGUA</small><b>' + (aguaT != null ? r0(aguaT) + '° · ' + traje(aguaT) : '—') + '</b></div>' +
         '<a class="dato" href="#/spot/' + spot.id + '"><small>MAREA</small><b>' + (sigMarea ? (sigMarea.alta ? '▲ ' : '▼ ') + hhmm(sigMarea.t) : '—') + '</b></a>' +
@@ -503,6 +503,11 @@ function vistaHoy(){
       '<div class="subt"><h2>El río en vivo</h2><a href="#/rio">Cámaras →</a></div>' +
       '<p class="nota">Pronóstico de modelos públicos, actualizado cada hora. Medido: estación del Náutico San Isidro y Pilote Norden.</p>';
     pintar(html);
+    // El sponsor llega después que el viento: nunca demora el vistazo.
+    sponsorPara(spot.id, 'senal').then(function(sp){
+      var el = document.getElementById('presenta'); if (!sp || !el) return;
+      el.innerHTML = presentado(sp); el.hidden = false; contarImpresion(sp, 'senal', spot.id);
+    });
     compartirDatos = {spot: spot, s: s, linea: linea};
     avisarAlertas(todo);
   }).catch(function(){ pintar('<div class="cab">' + marca() + '</div>' + error()); });
@@ -587,6 +592,7 @@ function vistaSpot(id){
     var d = r[0][spot.id], mar = r[1], clima = r[2];
     if (!d) throw new Error();
     var cur = d.current, pico = picoDia(spot, d, hoyISO());
+    repSpot = spot.id; repKn = cur.wind_speed_10m;
     var ahora = Date.now(), h = d.hourly, barras = [];
     for (var i = 0; i < h.time.length && barras.length < 24; i++) {
       var ms = msDe(h.time[i]); if (ms < ahora - 3600e3) continue;
@@ -624,6 +630,7 @@ function vistaSpot(id){
       '<div class="spot-ahora"><b>' + r0(cur.wind_speed_10m) + '</b> kn ' + rumbo(cur.wind_direction_10m) + ' <span>· ráfagas <b>' + r0(cur.wind_gusts_10m) + '</b></span>' +
         (rachado(cur.wind_speed_10m, cur.wind_gusts_10m) ? ' <em class="rachado">⚠ Rachado</em>' : '') + '</div><p>' + (pico ? 'Pico del día: ' + hhmm(pico.ms) + ' · ' + r0(pico.kn) + ' kn' + (pico.ev.ok ? ' · ala de ' + ala(pico.kn, p.peso) + ' m' : '') : esc(spot.sub)) + '</p></div>' +
       brujula(cur.wind_direction_10m, spot.arco, 96) + '</div></div>' + sel +
+      reportesHtml(spot) +
       solTira(d) +
       '<div class="tarj vidrio"><p class="tit">Próximas 24 horas</p><div class="barras">' + barras.map(function(b, j){
         return '<div class="barra">' + (tormenta(b.code) ? '<small>⚡</small>' : b.pp >= 50 ? '<small>💧</small>' : '') +
@@ -636,6 +643,7 @@ function vistaSpot(id){
       '<div class="tarj vidrio"><p class="tit">El mes · tocá un día</p><div class="cal">' + cal + '</div>' +
       '<p style="margin:10px 0 0;font-size:12px;line-height:1.35;color:#8FA9BF">Los primeros 16 días: nudos máximos con luz. Los punteados: tendencia (probabilidad de un día de +12 kn según los últimos 20 años).</p></div>' +
       '<div style="padding:12px 16px 0"><a class="btn btn--vidrio" href="#/alertas">🔔 Avisame cuando haya viento acá</a></div>');
+    cargarEstado(spot.id);
   }).catch(function(){ pintar(sel + error()); });
 }
 
@@ -739,7 +747,11 @@ function avisarAlertas(todo){
     avisadas[clave] = Date.now();
     var txt = c.spot.n + ': ' + r0(c.max) + ' kn del ' + rumbo(c.deg) + ' ' + nombreDia(c.iso) + ' desde las ' + hhmm(c.desde);
     if (navigator.serviceWorker && navigator.serviceWorker.ready) {
-      navigator.serviceWorker.ready.then(function(reg){ reg.showNotification('🌬️ Hay viento', {body: txt, icon: '/bramador/icons/icon-192.png', badge: '/bramador/icons/icon-192.png', tag: clave, data: {url: '/bramador/#/dia/' + c.spot.id + '/' + c.iso}}); });
+      Promise.all([navigator.serviceWorker.ready, sponsorPara(c.spot.id, 'alerta').catch(function(){ return null; })]).then(function(r){
+        var sp = r[1];
+        r[0].showNotification('🌬️ Hay viento', {body: txt + (sp ? '\nPresentado por ' + sp.nombre : ''), icon: '/bramador/icons/icon-192.png', badge: '/bramador/icons/icon-192.png', tag: clave, data: {url: '/bramador/#/dia/' + c.spot.id + '/' + c.iso}});
+        if (sp) contarImpresion(sp, 'alerta', c.spot.id);
+      });
     }
   });
   guardar('avisadas', avisadas);
@@ -1026,12 +1038,197 @@ function vistaPerfil(){
     '<div class="campo"><span class="lbl">Tu nivel</span><div class="seg">' + Object.keys(NIVELES).map(function(k){
       return '<button type="button" data-nivel="' + k + '" aria-pressed="' + (k === p.nivel) + '">' + NIVELES[k].n + '</button>';
     }).join('') + '</div></div>' +
+    '<div id="alasBox">' + alasHtml() + '</div>' +
     '<div class="campo"><span class="lbl">Tu spot</span><div class="chips" style="padding:0;flex-wrap:wrap">' + SPOTS.map(function(s){
       return '<button class="chip" type="button" data-pspot="' + s.id + '" aria-pressed="' + (s.id === p.spot) + '">' + esc(s.n) + '</button>';
     }).join('') + '</div></div>' +
     '<button class="btn" type="submit">Guardar</button><p class="nota" id="pOk" style="margin:10px 0 0;text-align:center" hidden>✓ Guardado</p></form>' +
     '<p class="nota">Tu mail queda en la Escuela de Wingfoil, solo para contarte novedades de Bramador. Nunca lo compartimos.</p>' +
     '<p class="nota">Con tu peso calculamos el ala; con tu nivel, cuánto viento es “salí” para vos (principiante: 12 a 20 kn).</p>');
+}
+
+// ─────────────────────────────── COMUNIDAD Y SPONSORS ───────────────────────────────
+// Datos en Supabase (tablas bram_ del proyecto compartido con Sliabh). Sin cuentas: cada teléfono
+// tiene un id y un token propios. Si Supabase no contesta, la app sigue igual sin esto.
+var SB = 'https://pfwazngwcvirdeyamvsd.supabase.co', SB_KEY = 'sb_publishable_5wLxVtnFy4IMOAMK_rzZ-A_cZ1TSOeV';
+function rpc(fn, args){
+  return fetch(SB + '/rest/v1/rpc/' + fn, {method: 'POST', headers: {apikey: SB_KEY, 'Content-Type': 'application/json'}, body: JSON.stringify(args || {})})
+    .then(function(r){ if (!r.ok) throw new Error(fn); return r.status === 204 ? null : r.json(); });
+}
+function azar(n){
+  var a = new Uint8Array(n); crypto.getRandomValues(a);
+  return Array.prototype.map.call(a, function(b){ return ('0' + b.toString(16)).slice(-2); }).join('');
+}
+function rider(){
+  var r = leer('rider', null);
+  if (!r) {
+    var h = azar(16);
+    r = {id: crypto.randomUUID ? crypto.randomUUID() : h.slice(0,8) + '-' + h.slice(8,12) + '-4' + h.slice(13,16) + '-a' + h.slice(17,20) + '-' + h.slice(20,32), token: azar(24), ok: false};
+    guardar('rider', r);
+  }
+  return r;
+}
+function registrarRider(d){
+  var r = rider(), p = perfil();
+  d = d || {};
+  return rpc('bram_registrar', {p_id: r.id, p_token: r.token, p_nombre: d.nombre || p.nombre || '', p_apellido: d.apellido || '', p_mail: d.mail || p.mail || ''})
+    .then(function(ok){ if (ok) { r.ok = true; guardar('rider', r); } return ok; });
+}
+function asegurarRider(){ return rider().ok ? Promise.resolve(true) : registrarRider(); }
+
+// Mis alas: se guardan en el teléfono y en Supabase (para las tendencias del spot).
+var MARCAS_ALA = ['Duotone','North','F-One','Cabrinha','Naish','Ozone','Slingshot','Armstrong','Takoon','Gong','Core','Eleveight','Reedin','Otra'];
+function misAlas(){ return leer('alas', []); }
+function guardarAlas(lista){
+  guardar('alas', lista);
+  asegurarRider().then(function(){ var r = rider(); return rpc('bram_guardar_alas', {p_id: r.id, p_token: r.token, p_alas: lista}); }).catch(function(){});
+}
+function alasHtml(){
+  var l = misAlas(), medidas = [];
+  for (var m = 2; m <= 8; m += 0.5) medidas.push(m);
+  return '<div class="campo"><span class="lbl">Mis alas</span>' +
+    (l.length ? '<div class="chips" style="padding:0;flex-wrap:wrap">' + l.map(function(a, i){
+      return '<button class="chip" type="button" data-ala-del="' + i + '" aria-label="Sacar ' + esc(a.marca + ' ' + a.m) + ' m">' + esc(a.marca) + ' ' + String(a.m).replace('.', ',') + ' m ✕</button>';
+    }).join('') + '</div>' : '<p class="nota" style="margin:0;padding:0">Guardalas una vez y en el spot marcás cuál usás con un toque.</p>') +
+    '<div class="ala-nueva"><select id="alaMarca" aria-label="Marca">' + MARCAS_ALA.map(function(x){ return '<option>' + x + '</option>'; }).join('') + '</select>' +
+    '<select id="alaM" aria-label="Medida">' + medidas.map(function(x){ return '<option value="' + x + '"' + (x === 5 ? ' selected' : '') + '>' + String(x).replace('.', ',') + ' m</option>'; }).join('') + '</select>' +
+    '<button class="chip" type="button" data-ala-add>+ Agregar</button></div></div>';
+}
+
+// Reportes del spot ("el Waze del río"): toques de quien está ahí, últimas 2 horas.
+var ETIQ = {bien: ['✅', 'Todo bien'], rachado: ['💨', 'Rachado'], pocaagua: ['🏝️', 'Poca agua'], gente: ['👥', 'Mucha gente'], bajando: ['📉', 'Bajando el viento']};
+var repSpot = null, repKn = null, repEstadoAct = null;
+function hace(seg){
+  var m = Math.max(0, Math.round(seg / 60));
+  return m < 1 ? 'recién' : m < 60 ? 'hace ' + m + ' min' : 'hace ' + Math.floor(m / 60) + ' h ' + String(m % 60).padStart(2, '0');
+}
+function reportesHtml(spot){
+  return '<div class="tarj vidrio rep" id="repBox"><div class="rep__cab"><p class="tit" style="margin:0">En el spot ahora</p><span class="rep__vivo"><i class="vivo-dot"></i>en vivo</span></div>' +
+    '<div class="rep__estado" id="repEstado"><span class="rep__gris">Leyendo reportes…</span></div>' +
+    '<div class="rep__btns">' + Object.keys(ETIQ).map(function(k){
+      return '<button type="button" data-rep="' + k + '"><span aria-hidden="true">' + ETIQ[k][0] + '</span>' + ETIQ[k][1] + '</button>';
+    }).join('') + '<button type="button" data-rep="ala"><span aria-hidden="true">🪁</span>Mi ala</button></div>' +
+    '<div id="repExtra"></div>' +
+    '<p class="rep__nota">Cuenta solo si estás en ' + esc(spot.n) + '. Vence a las 2 horas.</p></div>';
+}
+function pintarEstado(e){
+  repEstadoAct = e;
+  var box = document.getElementById('repEstado'); if (!box) return;
+  if (!e) { box.innerHTML = '<span class="rep__gris">No pudimos leer los reportes ahora.</span>'; return; }
+  var h = '';
+  if (e.tag && ETIQ[e.tag]) {
+    h += '<div class="rep__linea"><b>' + ETIQ[e.tag][0] + ' ' + ETIQ[e.tag][1] + '</b> · ' + e.riders + (e.riders === 1 ? ' rider' : ' riders') + ' · ' + hace(e.hace) + '</div>' +
+      '<div class="rep__sigue"><span>¿Sigue así?</span><button type="button" data-rep="' + e.tag + '">Sigue así</button><button type="button" data-rep="no_' + e.tag + '">Ya no</button></div>';
+  } else {
+    h += '<div class="rep__linea rep__gris">Sin reportes en las últimas 2 horas. ¿Estás ahí? Contá cómo está.</div>';
+  }
+  if (e.alas_n > 0 && e.alas_rango != null) {
+    h += '<div class="rep__alas">🪁 ' + (e.alas_n > 1 ? 'La mayoría con ' : 'Hoy con ') + e.alas_rango + '–' + (e.alas_rango + 1) + ' m' +
+      (e.alas_marcas && e.alas_marcas.length ? ' · ' + e.alas_marcas.map(esc).join(', ') : '') + '</div>';
+  }
+  box.innerHTML = h;
+}
+function cargarEstado(spotId){
+  rpc('bram_estado', {p_spot: spotId}).then(function(e){ if (repSpot === spotId) pintarEstado(e); }).catch(function(){ if (repSpot === spotId) pintarEstado(null); });
+}
+function avisoRep(txt, tipo){
+  var x = document.getElementById('repExtra'); if (!x) return;
+  x.innerHTML = '<p class="rep__msj' + (tipo ? ' rep__msj--' + tipo : '') + '">' + txt + '</p>';
+}
+function distanciaM(a, b, c, d){
+  var R = 6371000, r = Math.PI / 180, x = Math.sin((c - a) * r / 2), y = Math.sin((d - b) * r / 2);
+  return 2 * R * Math.asin(Math.sqrt(x * x + Math.cos(a * r) * Math.cos(c * r) * y * y));
+}
+function ubicacion(){
+  return new Promise(function(ok, mal){
+    if (!navigator.geolocation) return mal('sin');
+    navigator.geolocation.getCurrentPosition(function(p){ ok(p.coords); }, function(err){ mal(err && err.code === 1 ? 'negado' : 'error'); },
+      {enableHighAccuracy: false, timeout: 12000, maximumAge: 30000});
+  });
+}
+function reportar(tag, ala){
+  var spot = spotPorId(repSpot); if (!spot) return;
+  var botones = document.querySelectorAll('#repBox button'); botones.forEach(function(b){ b.disabled = true; });
+  avisoRep('Chequeando que estés en el spot…');
+  var fin = function(){ document.querySelectorAll('#repBox button').forEach(function(b){ b.disabled = false; }); };
+  ubicacion().then(function(c){
+    if (distanciaM(c.latitude, c.longitude, spot.lat, spot.lng) > 1500) { avisoRep('Tenés que estar en ' + esc(spot.n) + ' para reportar.', 'mal'); fin(); return; }
+    guardar('geo_ok', true);
+    return asegurarRider().then(function(){
+      var r = rider();
+      return rpc('bram_reportar', {p_id: r.id, p_token: r.token, p_spot: spot.id, p_tag: tag, p_lat: c.latitude, p_lng: c.longitude,
+        p_marca: ala ? ala.marca : null, p_m: ala ? ala.m : null, p_kn: repKn});
+    }).then(function(res){
+      fin();
+      if (res && res.ok) {
+        evento('bramador_reporte', {spot: spot.id, tag: tag});
+        avisoRep(tag === 'ala' ? '✓ Anotado: ' + esc(ala.marca) + ' ' + String(ala.m).replace('.', ',') + ' m. ¡Buena sesión!' : '✓ Gracias, ya cuenta.', 'ok');
+        pintarEstado(res.estado);
+      } else if (res && res.motivo === 'lejos') avisoRep('Tenés que estar en ' + esc(spot.n) + ' para reportar.', 'mal');
+      else if (res && res.motivo === 'muchos') avisoRep('Ya reportaste mucho hoy. ¡Gracias!', 'mal');
+      else avisoRep('No se pudo guardar. Probá de nuevo.', 'mal');
+    });
+  }).catch(function(err){
+    fin();
+    avisoRep(err === 'negado' ? 'Sin tu ubicación no podemos contar el reporte. Activala para este sitio en el navegador.' : 'No pudimos saber dónde estás. Probá de nuevo.', 'mal');
+  });
+}
+function tocarRep(tag){
+  if (tag !== 'ala' && !leer('geo_ok', false)) {
+    // La primera vez explicamos por qué pedimos la ubicación.
+    var x = document.getElementById('repExtra'); if (!x) return;
+    x.innerHTML = '<div class="rep__geo"><p>📍 Para que los reportes sean reales, Bramador chequea que estés en el spot. Usa tu ubicación solo en ese momento.</p>' +
+      '<button class="btn btn--chico" type="button" data-rep-ok="' + tag + '">Dale, reportar</button></div>';
+    return;
+  }
+  if (tag === 'ala') {
+    var l = misAlas();
+    if (!l.length) { avisoRep('Primero guardá tus alas en <a href="#/perfil">tu perfil</a>. Es una sola vez.'); return; }
+    if (l.length === 1) { reportar('ala', l[0]); return; }
+    var x2 = document.getElementById('repExtra');
+    x2.innerHTML = '<p class="rep__msj">¿Con cuál estás?</p><div class="chips" style="padding:0;flex-wrap:wrap">' + l.map(function(a, i){
+      return '<button class="chip" type="button" data-rep-ala="' + i + '">' + esc(a.marca) + ' ' + String(a.m).replace('.', ',') + ' m</button>';
+    }).join('') + '</div>';
+    return;
+  }
+  reportar(tag);
+}
+document.addEventListener('click', function(e){
+  var b = e.target.closest('[data-rep],[data-rep-ok],[data-rep-ala],[data-ala-add],[data-ala-del]');
+  if (!b) return;
+  if (b.hasAttribute('data-rep')) tocarRep(b.getAttribute('data-rep'));
+  else if (b.hasAttribute('data-rep-ok')) { guardar('geo_ok', true); var t = b.getAttribute('data-rep-ok'); t === 'ala' ? tocarRep('ala') : reportar(t); }
+  else if (b.hasAttribute('data-rep-ala')) reportar('ala', misAlas()[+b.getAttribute('data-rep-ala')]);
+  else if (b.hasAttribute('data-ala-add')) {
+    var l = misAlas(), nueva = {marca: document.getElementById('alaMarca').value, m: +document.getElementById('alaM').value};
+    if (!l.some(function(a){ return a.marca === nueva.marca && a.m === nueva.m; }) && l.length < 12) { l.push(nueva); guardarAlas(l); }
+    document.getElementById('alasBox').innerHTML = alasHtml();
+  } else if (b.hasAttribute('data-ala-del')) {
+    var l2 = misAlas(); l2.splice(+b.getAttribute('data-ala-del'), 1); guardarAlas(l2);
+    document.getElementById('alasBox').innerHTML = alasHtml();
+  }
+});
+
+// Sponsors: "Presentado por" en la señal (SALÍ) y en las alertas. Solo logo y nombre.
+var sponsorsMem = null;
+function sponsorsActivos(){
+  if (sponsorsMem) return sponsorsMem;
+  var c = leer('sponsors', null);
+  // Se consulta una vez cada 6 horas; mientras tanto se usa lo guardado.
+  if (c && Date.now() - c.t < 6 * 3600e3) { sponsorsMem = Promise.resolve(c.lista); return sponsorsMem; }
+  sponsorsMem = rpc('bram_sponsors_activos').then(function(lista){ guardar('sponsors', {t: Date.now(), lista: lista || []}); return lista || []; })
+    .catch(function(){ return c ? c.lista : []; });
+  return sponsorsMem;
+}
+function sponsorPara(spotId, slot){
+  return sponsorsActivos().then(function(l){
+    var hoy = l.filter(function(x){ return x.slot === slot; });
+    return hoy.filter(function(x){ return x.spot === spotId; })[0] || hoy.filter(function(x){ return !x.spot; })[0] || null;
+  });
+}
+function contarImpresion(sp, slot, spotId){ rpc('bram_impresion', {p_sponsor: sp.id, p_slot: slot, p_spot: spotId}).catch(function(){}); }
+function presentado(sp){
+  return '<span class="presenta__por">Presentado por</span>' + (sp.logo ? '<img src="' + esc(sp.logo) + '" alt="" width="20" height="20">' : '') + '<b>' + esc(sp.nombre) + '</b>';
 }
 
 // ─────────────────────────────── BIENVENIDA ───────────────────────────────
@@ -1082,6 +1279,7 @@ function bienvenida(){
     btn.disabled = true; btn.textContent = 'Entrando…'; err.hidden = true;
     enviarLead(d).then(function(){
       guardar('lead', 1);
+      registrarRider(d).catch(function(){});
       var pp = leer('perfil', {}); if (!pp.nombre) pp.nombre = d.nombre; if (!pp.mail) pp.mail = d.mail; guardar('perfil', pp);
       entrar();
     }).catch(function(){
@@ -1175,6 +1373,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.12', fecha: '28/10', cambios: ['Nuevo en Mi spot: contá cómo está el río con un toque (rachado, poca agua, mucha gente…) y mirá qué alas se están usando.', 'En tu perfil guardá tus alas una vez.']},
   {v: '1.11', fecha: '27/10', cambios: ['Nuevo en Más: preguntas frecuentes sobre Bramador.']},
   {v: '1.10', fecha: '26/10', cambios: ['Ráfagas a la vista: en Hoy y en Mi spot ves las rachas al lado del viento, hora por hora, y un aviso cuando está rachado.']},
   {v: '1.9', fecha: '26/10', cambios: ['Para entrar a Bramador te pedimos nombre, apellido y mail, una sola vez.']},
@@ -1236,5 +1435,6 @@ buscarVersion();
 document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'visible') buscarVersion(); });
 novedades();
 bienvenida();
+if (leer('lead', false) && !rider().ok) registrarRider().catch(function(){});
 if (leer('bienv', false)) router();
 })();
