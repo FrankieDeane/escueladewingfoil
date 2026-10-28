@@ -710,6 +710,7 @@ function vistaMas(){
     item('#/perfil', '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>', 'Tu perfil', perfil().mail ? 'Mail, peso, nivel y spot' : '<b style="font-size:12px;color:#FF5A2C">Dejá tu mail</b> · peso y spot') +
     item('#/opinion', '<path d="M12 21l-8-8a5 5 0 0 1 8-6 5 5 0 0 1 8 6z"/>', 'Tu opinión', '¿Qué le agregarías?') +
     item('#/instalar', '<path d="M12 3v12M6 10l6 6 6-6M4 20h16"/>', 'Instalar', 'Android y iPhone') +
+    item('/bramador/sponsors/', '<path d="M3 11v2l13 5V6L3 11z"/><path d="M7 14.5V19h3l-1-3.5M19 9a3 3 0 0 1 0 6"/>', 'Sé sponsor', '¿Tenés una marca? Mostrala acá') +
     item('/', '<path d="M3 11l9-8 9 8M5 10v10h14V10"/>', 'Escuela de Wingfoil', 'Volver al sitio') +
     '</div><div class="subt"><h2>Preguntas frecuentes</h2></div><div class="tarj vidrio faq">' + FAQ.map(function(x){
       return '<details><summary>' + esc(x[0]) + '</summary><p>' + esc(x[1]) + '</p></details>';
@@ -1373,6 +1374,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.14', fecha: '28/10', cambios: ['Nuevo en Más: "Sé sponsor", para las marcas que quieran aparecer en Bramador.']},
   {v: '1.13', fecha: '28/10', cambios: ['Más marcas de alas para elegir en tu perfil.']},
   {v: '1.12', fecha: '28/10', cambios: ['Nuevo en Mi spot: contá cómo está el río con un toque (rachado, poca agua, mucha gente…) y mirá qué alas se están usando.', 'En tu perfil guardá tus alas una vez.']},
   {v: '1.11', fecha: '27/10', cambios: ['Nuevo en Más: preguntas frecuentes sobre Bramador.']},
