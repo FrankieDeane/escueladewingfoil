@@ -1077,7 +1077,7 @@ function registrarRider(d){
 function asegurarRider(){ return rider().ok ? Promise.resolve(true) : registrarRider(); }
 
 // Mis alas: se guardan en el teléfono y en Supabase (para las tendencias del spot).
-var MARCAS_ALA = ['Duotone','North','F-One','Cabrinha','Naish','Ozone','Slingshot','Armstrong','Takoon','Gong','Core','Eleveight','Reedin','Otra'];
+var MARCAS_ALA = ['Airush','AK Durable Supply','Armstrong','Axis','Aztron','Cabrinha','Code Foils','Core','Crazyfly','Duotone','Eleveight','Ensis','F-One','Fanatic','Flysurfer','Gaastra','Go Foil','Gong','Indiana','Kalama','Lift','Liquid Force','Loftsails','Manera','Moses','Mystic','Naish','NeilPryde','Nobile','North','Ocean Rodeo','Ozone','PLKB','Point-7','Reedin','RRD','Sabfoil','Sector','Severne','Slingshot','Spleene','Sroka','Starboard','Takoon','Unifoil','Otra'];
 function misAlas(){ return leer('alas', []); }
 function guardarAlas(lista){
   guardar('alas', lista);
@@ -1373,6 +1373,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.13', fecha: '28/10', cambios: ['Más marcas de alas para elegir en tu perfil.']},
   {v: '1.12', fecha: '28/10', cambios: ['Nuevo en Mi spot: contá cómo está el río con un toque (rachado, poca agua, mucha gente…) y mirá qué alas se están usando.', 'En tu perfil guardá tus alas una vez.']},
   {v: '1.11', fecha: '27/10', cambios: ['Nuevo en Más: preguntas frecuentes sobre Bramador.']},
   {v: '1.10', fecha: '26/10', cambios: ['Ráfagas a la vista: en Hoy y en Mi spot ves las rachas al lado del viento, hora por hora, y un aviso cuando está rachado.']},
