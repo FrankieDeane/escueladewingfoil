@@ -1241,7 +1241,17 @@ function enviarLead(d){
   return fetch('/', {method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'}, body: cuerpo})
     .then(function(r){ if (!r.ok) throw new Error('form'); evento('bramador_lead'); });
 }
+// Respaldo: si el navegador borró localStorage (Safari lo hace a los 7 días sin uso),
+// la cookie bram_lead que pone el servidor sigue ahí y no se vuelven a pedir los datos.
+function cookieLead(){ return /(?:^|;\s*)bram_lead=1/.test(document.cookie); }
+function recordarLead(){ fetch('/api/bramador-recordar', {method: 'POST', credentials: 'same-origin', keepalive: true}).catch(function(){}); }
+function revisarLead(){
+  if (cookieLead()) { if (!leer('lead', false)) { guardar('lead', 1); guardar('bienv', true); } }
+  else if (leer('lead', false)) recordarLead();
+  try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch(e){}
+}
 function bienvenida(){
+  revisarLead();
   var falta = !leer('lead', false);
   if (leer('bienv', false) && !falta) return;
   var p = perfil();
@@ -1279,7 +1289,7 @@ function bienvenida(){
     var btn = el.querySelector('#bEntrar'), err = el.querySelector('.bienv__err'), txt = btn.innerHTML;
     btn.disabled = true; btn.textContent = 'Entrando…'; err.hidden = true;
     enviarLead(d).then(function(){
-      guardar('lead', 1);
+      guardar('lead', 1); recordarLead();
       registrarRider(d).catch(function(){});
       var pp = leer('perfil', {}); if (!pp.nombre) pp.nombre = d.nombre; if (!pp.mail) pp.mail = d.mail; guardar('perfil', pp);
       entrar();
@@ -1374,6 +1384,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.15', fecha: '28/10', cambios: ['Bramador te recuerda mejor: si ya dejaste tus datos, no te los vuelve a pedir.']},
   {v: '1.14', fecha: '28/10', cambios: ['Nuevo en Más: "Sé sponsor", para las marcas que quieran aparecer en Bramador.']},
   {v: '1.13', fecha: '28/10', cambios: ['Más marcas de alas para elegir en tu perfil.']},
   {v: '1.12', fecha: '28/10', cambios: ['Nuevo en Mi spot: contá cómo está el río con un toque (rachado, poca agua, mucha gente…) y mirá qué alas se están usando.', 'En tu perfil guardá tus alas una vez.']},

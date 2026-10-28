@@ -2233,7 +2233,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   // Google Analytics: cuántos tocan "Instalá Bramador" (y los links de los pasos).
   // Antes de ir a Bramador se piden nombre, apellido y mail (una sola vez: queda guardado en el navegador).
   var dlg=document.getElementById('bramLead'),fl=dlg&&dlg.querySelector('form'),destino='/bramador/';
-  function yaDejo(){try{return localStorage.getItem('bram_lead')==='1'}catch(e){return false}}
+  function yaDejo(){if(/(?:^|;\s*)bram_lead=1/.test(document.cookie))return true;try{return localStorage.getItem('bram_lead')==='1'}catch(e){return false}}
   function ir(){location.href=destino}
   document.querySelectorAll('#bramador a[href^="/bramador/"]').forEach(function(a){a.addEventListener('click',function(ev){
     if(typeof gtag==='function')gtag('event','instalar_bramador',{origen:a.id==='bramCta'?'portada':'portada_pasos'});
@@ -2250,7 +2250,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var btn=fl.querySelector('button[type="submit"]'),err=fl.querySelector('.bram-lead__err');
       btn.disabled=true;btn.textContent='Enviando…';err.hidden=true;
       fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(fl)).toString()})
-        .then(function(r){if(!r.ok)throw 0;try{localStorage.setItem('bram_lead','1')}catch(e){}
+        .then(function(r){if(!r.ok)throw 0;try{localStorage.setItem('bram_lead','1')}catch(e){}fetch('/api/bramador-recordar',{method:'POST',keepalive:true}).catch(function(){});
           if(typeof gtag==='function')gtag('event','lead_bramador',{origen:fl.elements.origen.value});ir()})
         .catch(function(){btn.disabled=false;btn.textContent='Ir a Bramador';err.textContent='No se pudo enviar. Probá de nuevo.';err.hidden=false});
     });
