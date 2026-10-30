@@ -290,7 +290,7 @@ const SCHEMA = JSON.parse(read('scripts/seo-schema.json'));
 const PAGINAS = {
   aprender: ['Aprender wingfoil gratis, por nivel | Escuela de Wingfoil', 'Aprendé wingfoil gratis: videos en español por nivel, anatomía del equipo, maniobras, glosario y guías para pasar de la orilla al primer vuelo.', 'Aprender'],
   spots: ['Spots de wingfoil en Argentina | Escuela de Wingfoil', 'Mapa de 17 spots de wingfoil y 4 cable parks en Argentina: viento ideal, nivel, mejor época, cómo llegar, pronóstico y cámaras en vivo.', 'Spots'],
-  instructores: ['Instructores de wingfoil en Argentina | Escuela de Wingfoil', 'Directorio de instructores de wingfoil en Argentina. Elegí por spot y nivel, mirá su perfil y escribile directo por WhatsApp.', 'Instructores'],
+  instructores: ['Clases de wingfoil con instructores | Escuela de Wingfoil', 'Clases de wingfoil en Argentina: directorio de instructores por spot y nivel. Mirá su perfil y escribile directo por WhatsApp, sin intermediarios.', 'Instructores'],
   equipos: ['Precios de equipos de wingfoil | Escuela de Wingfoil', 'Precios de alas, tablas y foils de wingfoil en Mercado Libre, relevados todos los días, y comparador con avisos de Facebook Marketplace.', 'Equipos'],
   articulos: ['Artículos y guías de wingfoil | Escuela de Wingfoil', '28 artículos de wingfoil en español: cómo empezar, técnica, viento, equipo, seguridad y los mejores spots de Argentina y Brasil.', 'Artículos'],
 };
@@ -309,9 +309,31 @@ function pagina(slug) {
   sub(/(<meta name="twitter:title" content=")[^"]*(")/, (_, a, b) => a + esc(t) + b, 'twitter:title');
   sub(/(<meta name="twitter:description" content=")[^"]*(")/, (_, a, b) => a + esc(d) + b, 'twitter:description');
   sub(/<html lang="es-AR" data-theme="light" data-page="inicio">/, () => `<html lang="es-AR" data-theme="light" data-page="${slug}">`, 'html data-page');
+  sub(/(<link rel="alternate" hreflang="es-AR" href=")[^"]*(")/, (_, a, b) => a + url + b, 'hreflang es-AR');
+  sub(/(<link rel="alternate" hreflang="x-default" href=")[^"]*(")/, (_, a, b) => a + url + b, 'hreflang x-default');
+
+  // Un solo h1 por página: el de la portada pasa a h2 y el de esta página a h1
+  sub(/<h1 class="nx-h1">([\s\S]*?)<\/h1>/, (_, a) => `<h2 class="nx-h1">${a}</h2>`, 'h1 de la portada');
+  sub(new RegExp(`(id="pagina-${slug}"[\\s\\S]*?)<h2 class="nx-h1">([\\s\\S]*?)<\\/h2>`), (_, a, b) => `${a}<h1 class="nx-h1">${b}</h1>`, 'título de la página');
+
+  // Foto principal (la que se ve primero): se pide antes y con prioridad; la de la
+  // portada, que acá está oculta, ya no se descarga
+  const fondo = new RegExp(`id="pagina-${slug}">\\s*<img class="nx-intro__bg" src="([^"]+)" alt="" loading="lazy"/>`).exec(h);
+  if (!fondo) throw new Error('No encontré la foto de ' + slug);
+  const foto = fondo[1];
+  h = h.replace(fondo[0], fondo[0].replace('loading="lazy"', 'fetchpriority="high"'));
+  sub(/(<img class="nx-hv__poster" src="[^"]*" alt="") fetchpriority="high"/, (_, a) => `${a} loading="lazy"`, 'foto de la portada');
+  sub(/<link rel="preload" as="image"[^>]*\/>\n(?:\s*<link rel="preload" as="image"[^>]*\/>\n)?/, () => `<link rel="preload" as="image" href="${foto}" fetchpriority="high" />\n`, 'preload');
+  sub(/(<meta property="og:image" content=")[^"]*(")/, (_, a, b) => a + BASE + foto + b, 'og:image');
+  sub(/(<meta name="twitter:image" content=")[^"]*(")/, (_, a, b) => a + BASE + foto + b, 'twitter:image');
+  sub(/(<meta property="og:image:width" content=")[^"]*(")/, (_, a, b) => a + '1600' + b, 'og:image:width');
+  sub(/(<meta property="og:image:height" content=")[^"]*(")/, (_, a, b) => a + '1066' + b, 'og:image:height');
+  sub(/(<meta property="og:image:alt" content=")[^"]*(")/, (_, a, b) => a + esc(`${nombre} · Escuela de Wingfoil Argentina`) + b, 'og:image:alt');
+  // el WebPage de la portada no va en las otras páginas (cada una trae el suyo, abajo)
+  sub(/,\s*\{\s*"@type": "WebPage",\s*"@id": "https:\/\/www\.escueladewingfoil\.com\.ar\/#page"[\s\S]*?\n {6}\}(?=\s*\])/, () => '', 'WebPage de la portada');
 
   const graph = [
-    { '@type': slug === 'articulos' ? 'CollectionPage' : 'WebPage', '@id': `${url}#page`, url, name: t, description: d, inLanguage: 'es-AR', isPartOf: { '@id': `${BASE}/#website` } },
+    { '@type': slug === 'articulos' ? 'CollectionPage' : 'WebPage', '@id': `${url}#page`, url, name: t, description: d, inLanguage: 'es-AR', isPartOf: { '@id': `${BASE}/#website` }, about: { '@id': `${BASE}/#organization` }, primaryImageOfPage: { '@type': 'ImageObject', url: BASE + foto, width: 1600, height: 1066 } },
     { '@type': 'BreadcrumbList', itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Inicio', item: `${BASE}/` },
       { '@type': 'ListItem', position: 2, name: nombre, item: url },
