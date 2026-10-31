@@ -19,7 +19,7 @@ create table public.bram_reportes (
   id bigint generated always as identity primary key,
   rider uuid not null references public.bram_riders(id) on delete cascade,
   spot text not null references public.bram_spots(id),
-  tag text not null,          -- bien, rachado, pocaagua, gente, bajando, ala, o no_<tag> ("Ya no")
+  tag text not null,          -- bien, rachado, pocaagua, gente, bajando, subiendo, ala, o no_<tag> ("Ya no")
   ala_marca text, ala_m numeric(3,1),
   kn numeric(4,1),            -- viento del pronóstico en ese momento (para "días de viento")
   t timestamptz not null default now()
@@ -104,7 +104,7 @@ language sql stable security definer set search_path = '' as $$
   ), est as (
     select p.tag, sum(p.peso) - coalesce((select sum(n.peso) from w n where n.tag = 'no_' || p.tag), 0) puntaje,
            count(distinct p.rider) riders, max(p.t) ultimo
-    from w p where p.tag in ('bien','rachado','pocaagua','gente','bajando') group by p.tag
+    from w p where p.tag in ('bien','rachado','pocaagua','gente','bajando','subiendo') group by p.tag
   ), gan as (select * from est where puntaje > 0.3 order by puntaje desc, ultimo desc limit 1),
   alas as (select * from w where tag = 'ala' and m is not null),
   rango as (select floor(m)::int base, count(*) c from alas group by 1 order by 2 desc, 1 limit 1),
@@ -125,7 +125,7 @@ returns jsonb language plpgsql security definer set search_path = '' as $$
 declare s record; dist double precision; prev bigint;
 begin
   if not public._bram_rider_ok(p_id, p_token) then return jsonb_build_object('ok', false, 'motivo', 'rider'); end if;
-  if p_tag not in ('bien','rachado','pocaagua','gente','bajando','ala','no_bien','no_rachado','no_pocaagua','no_gente','no_bajando') then
+  if p_tag not in ('bien','rachado','pocaagua','gente','bajando','subiendo','ala','no_bien','no_rachado','no_pocaagua','no_gente','no_bajando','no_subiendo') then
     return jsonb_build_object('ok', false, 'motivo', 'tag'); end if;
   select * into s from public.bram_spots where id = p_spot;
   if not found then return jsonb_build_object('ok', false, 'motivo', 'spot'); end if;
@@ -146,6 +146,22 @@ begin
   update public.bram_riders set visto = now() where id = p_id;
   return jsonb_build_object('ok', true, 'estado', public.bram_estado(p_spot));
 end $$;
+
+-- "Subió el viento": por spot, riders que lo dijeron en los últimos 45 min (si son más que los que dicen "Ya no").
+-- La app la consulta cada 2 minutos para avisar rápido en ese spot.
+create or replace function public.bram_subidas() returns jsonb
+language sql stable security definer set search_path = '' as $$
+  with ult as (
+    select rider, spot, tag, max(t) t from public.bram_reportes
+    where tag in ('subiendo','no_subiendo') and t > now() - interval '45 minutes' group by rider, spot, tag
+  ), s as (
+    select spot, count(*) filter (where tag = 'subiendo') si, count(*) filter (where tag = 'no_subiendo') no,
+           max(t) filter (where tag = 'subiendo') ultimo
+    from ult group by spot
+  )
+  select coalesce(jsonb_object_agg(spot, jsonb_build_object('riders', si, 'hace', extract(epoch from now() - ultimo)::int, 't', extract(epoch from ultimo)::bigint)), '{}'::jsonb)
+  from s where si > no
+$$;
 
 -- Sponsors vigentes hoy (la app los guarda y elige por spot y lugar).
 create or replace function public.bram_sponsors_activos() returns jsonb
