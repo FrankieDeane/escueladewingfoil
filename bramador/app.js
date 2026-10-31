@@ -1143,12 +1143,34 @@ function distanciaM(a, b, c, d){
   var R = 6371000, r = Math.PI / 180, x = Math.sin((c - a) * r / 2), y = Math.sin((d - b) * r / 2);
   return 2 * R * Math.asin(Math.sqrt(x * x + Math.cos(a * r) * Math.cos(c * r) * y * y));
 }
-function ubicacion(){
+function pedirPos(opc){
   return new Promise(function(ok, mal){
-    if (!navigator.geolocation) return mal('sin');
-    navigator.geolocation.getCurrentPosition(function(p){ ok(p.coords); }, function(err){ mal(err && err.code === 1 ? 'negado' : 'error'); },
-      {enableHighAccuracy: false, timeout: 12000, maximumAge: 30000});
+    navigator.geolocation.getCurrentPosition(function(p){ ok(p.coords); }, function(err){ mal(err && err.code === 1 ? 'negado' : 'error'); }, opc);
   });
+}
+function ubicacion(){
+  if (!navigator.geolocation) return Promise.reject('sin');
+  // Primero rápido; si no sale, un segundo intento con el GPS del teléfono.
+  return pedirPos({enableHighAccuracy: false, timeout: 12000, maximumAge: 60000}).catch(function(e){
+    if (e === 'negado') throw e;
+    return pedirPos({enableHighAccuracy: true, timeout: 20000, maximumAge: 0});
+  });
+}
+function esIphone(){ return /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); }
+// Cuando no hay ubicación: botón para pedirla de nuevo y, si está bloqueada, cómo activarla.
+function sinUbicacion(tag, err, ala){
+  var x = document.getElementById('repExtra'); if (!x) return;
+  var dato = ala ? ' data-rep-ala-geo="' + misAlas().indexOf(ala) + '"' : '';
+  var boton = '<button class="btn btn--chico" type="button" data-rep-geo="' + tag + '"' + dato + '>📍 Ubicarme y reportar</button>';
+  var ayuda = function(bloq){
+    if (!bloq) return '<p>📍 No pudimos saber dónde estás. Tocá el botón y, si el teléfono pregunta, elegí <b>Permitir</b>.</p>';
+    return '<p>📍 La ubicación está bloqueada para Bramador. Activala y volvé a tocar el botón:</p>' +
+      (esIphone()
+        ? '<p class="rep__pasos">Ajustes del iPhone → Privacidad → Localización (que esté prendida) → Safari → <b>Al usar la app</b>.</p>'
+        : '<p class="rep__pasos">Tocá el candado o los 3 puntos arriba del navegador → Permisos (o Configuración del sitio) → Ubicación → <b>Permitir</b>. Revisá también que la ubicación del teléfono esté prendida.</p>');
+  };
+  var pintar = function(bloq){ x.innerHTML = '<div class="rep__geo">' + ayuda(bloq) + boton + '</div>'; };
+  pintar(err === 'negado');
 }
 function reportar(tag, ala){
   var spot = spotPorId(repSpot); if (!spot) return;
@@ -1175,7 +1197,8 @@ function reportar(tag, ala){
     });
   }).catch(function(err){
     fin();
-    avisoRep(err === 'negado' ? 'Sin tu ubicación no podemos contar el reporte. Activala para este sitio en el navegador.' : 'No pudimos saber dónde estás. Probá de nuevo.', 'mal');
+    if (err === 'sin') avisoRep('Este navegador no da la ubicación. Probá desde Chrome o Safari.', 'mal');
+    else sinUbicacion(tag, err, ala);
   });
 }
 function tocarRep(tag){
@@ -1199,9 +1222,10 @@ function tocarRep(tag){
   reportar(tag);
 }
 document.addEventListener('click', function(e){
-  var b = e.target.closest('[data-rep],[data-rep-ok],[data-rep-ala],[data-ala-add],[data-ala-del]');
+  var b = e.target.closest('[data-rep],[data-rep-ok],[data-rep-geo],[data-rep-ala],[data-ala-add],[data-ala-del]');
   if (!b) return;
-  if (b.hasAttribute('data-rep')) tocarRep(b.getAttribute('data-rep'));
+  if (b.hasAttribute('data-rep-geo')) { var tg = b.getAttribute('data-rep-geo'), ia = b.getAttribute('data-rep-ala-geo'); reportar(tg, ia != null ? misAlas()[+ia] : undefined); }
+  else if (b.hasAttribute('data-rep')) tocarRep(b.getAttribute('data-rep'));
   else if (b.hasAttribute('data-rep-ok')) { guardar('geo_ok', true); var t = b.getAttribute('data-rep-ok'); t === 'ala' ? tocarRep('ala') : reportar(t); }
   else if (b.hasAttribute('data-rep-ala')) reportar('ala', misAlas()[+b.getAttribute('data-rep-ala')]);
   else if (b.hasAttribute('data-ala-add')) {
@@ -1476,7 +1500,8 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
-  {v: '1.16', fecha: '31/10', cambios: ['Si en tu spot sopla más (o menos) de lo pronosticado, Bramador te avisa al toque: lo mide el Náutico o lo cuentan los riders en el agua.', 'Nuevo botón en Mi spot: "📈 Subió el viento". Con un toque avisás a todos los que siguen ese spot.', 'Con la app abierta, el viento se revisa solo cada 2 minutos.']},
+  {v: '1.17', fecha: '31/10', cambios: ['Si en tu spot sopla más (o menos) de lo pronosticado, Bramador te avisa al toque: lo mide el Náutico o lo cuentan los riders en el agua.', 'Nuevo botón en Mi spot: "📈 Subió el viento". Con un toque avisás a todos los que siguen ese spot.', 'Con la app abierta, el viento se revisa solo cada 2 minutos.']},
+  {v: '1.16', fecha: '31/10', cambios: ['Arreglado: los reportes en vivo ya toman tu ubicación. Si no la encuentra, te aparece un botón para ubicarte.']},
   {v: '1.15', fecha: '28/10', cambios: ['Bramador te recuerda mejor: si ya dejaste tus datos, no te los vuelve a pedir.']},
   {v: '1.14', fecha: '28/10', cambios: ['Nuevo en Más: "Sé sponsor", para las marcas que quieran aparecer en Bramador.']},
   {v: '1.13', fecha: '28/10', cambios: ['Más marcas de alas para elegir en tu perfil.']},

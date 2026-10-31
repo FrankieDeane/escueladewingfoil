@@ -340,6 +340,7 @@ button{font:inherit;color:inherit}
 .rep__msj--mal{color:var(--amarillo)}
 .rep__geo{margin-top:10px;padding:12px;border-radius:14px;background:rgba(255,255,255,.06)}
 .rep__geo p{margin:0 0 10px;font-size:14px;line-height:1.35}
+.rep__geo .rep__pasos{font-size:13px;opacity:.85}
 .ala-nueva{display:flex;gap:8px;margin-top:8px}
 .ala-nueva select{flex:1;min-width:0;min-height:44px;border-radius:12px;border:1px solid var(--linea);background:rgba(11,26,34,.6);color:var(--texto);font:600 15px 'DM Sans',sans-serif;padding:0 10px}
 .presenta{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:4px 10px 4px 8px;border-radius:999px;background:rgba(11,26,34,.55);font-size:12px;opacity:.9}
