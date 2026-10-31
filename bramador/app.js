@@ -1110,7 +1110,7 @@ function reportesHtml(spot){
       return '<button type="button" data-rep="' + k + '"><span aria-hidden="true">' + ETIQ[k][0] + '</span>' + ETIQ[k][1] + '</button>';
     }).join('') + '<button type="button" data-rep="ala"><span aria-hidden="true">🪁</span>Mi ala</button></div>' +
     '<div id="repExtra"></div>' +
-    '<p class="rep__nota">Cuenta solo si estás en ' + esc(spot.n) + ' (hasta 3 km). Vence a las 2 horas.</p></div>';
+    '<p class="rep__nota">Cuenta solo si estás en ' + esc(spot.n) + ' (hasta 2 km). Vence a las 2 horas.</p></div>';
 }
 function pintarEstado(e){
   repEstadoAct = e;
@@ -1153,12 +1153,12 @@ function ubicacion(){
     return pedirPos({enableHighAccuracy: false, timeout: 12000, maximumAge: 60000});
   });
 }
-// Radio del spot: 3 km, más el margen de error que informa el teléfono (hasta 2 km).
-// El servidor acepta hasta 5 km (3 + 2), así nunca rechaza algo que la app aceptó.
-var RADIO_SPOT = 3000;
+// Radio del spot: 2 km, más el margen de error que informa el teléfono (hasta 1 km).
+// El servidor acepta hasta 3 km (2 + 1), así nunca rechaza algo que la app aceptó.
+var RADIO_SPOT = 2000;
 function cercaDe(c, spot){
   var d = distanciaM(c.latitude, c.longitude, spot.lat, spot.lng);
-  return {d: d, ok: d - Math.min(c.accuracy || 0, 2000) <= RADIO_SPOT};
+  return {d: d, ok: d - Math.min(c.accuracy || 0, 1000) <= RADIO_SPOT};
 }
 function spotMasCerca(c){
   var mejor = null;
@@ -1436,7 +1436,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
-  {v: '1.17', fecha: '31/10', cambios: ['Reportes en vivo más fáciles: ahora cuentan en toda la zona del spot (3 km) y, si estás en otro spot, te ofrece reportar ahí.']},
+  {v: '1.17', fecha: '31/10', cambios: ['Reportes en vivo más fáciles: ahora cuentan en toda la zona del spot (2 km) y, si estás en otro spot, te ofrece reportar ahí.']},
   {v: '1.16', fecha: '31/10', cambios: ['Arreglado: los reportes en vivo ya toman tu ubicación. Si no la encuentra, te aparece un botón para ubicarte.']},
   {v: '1.15', fecha: '28/10', cambios: ['Bramador te recuerda mejor: si ya dejaste tus datos, no te los vuelve a pedir.']},
   {v: '1.14', fecha: '28/10', cambios: ['Nuevo en Más: "Sé sponsor", para las marcas que quieran aparecer en Bramador.']},
