@@ -16,12 +16,12 @@ var TZ = 'America/Argentina/Buenos_Aires';
 // (N a SSE). Con viento de tierra (S, SO, O, NO) llega rachado y te aleja de
 // la orilla, así que no se marca como bueno. "arco" es ese sector, en grados.
 var SPOTS = [
-  {id:'sanisidro', n:'San Isidro',  sub:'Náutico · CNSI',  lat:-34.4678, lng:-58.5086, arco:[350,170], cam:'1735938641', foto:'wf-14740926'},
-  {id:'peru',      n:'Perú Beach',  sub:'Acassuso',        lat:-34.4790, lng:-58.4985, arco:[350,170], cam:'1735938641', foto:'wf-18388624'},
-  {id:'martinez',  n:'Martínez',    sub:'La Plazita',      lat:-34.4885, lng:-58.4905, arco:[350,170], cam:'1601563134', foto:'wf-15151064'},
-  {id:'olivos',    n:'Olivos',      sub:'Vicente López',   lat:-34.5075, lng:-58.4770, arco:[350,170], cam:'1577126865', foto:'wf-38774856'},
-  {id:'quilmes',   n:'Quilmes',     sub:'Costanera',       lat:-34.7135, lng:-58.2385, arco:[340,160], foto:'wf-14447118'},
-  {id:'puntalara', n:'Punta Lara',  sub:'Ensenada',        lat:-34.8180, lng:-57.9690, arco:[340,160], foto:'wf-17901682'}
+  {id:'sanisidro', n:'San Isidro',  sub:'Náutico · CNSI',  lat:-34.4678, lng:-58.5086, plat:-34.457, plng:-58.497, arco:[350,170], cam:'1735938641', foto:'wf-14740926'},
+  {id:'peru',      n:'Perú Beach',  sub:'Acassuso',        lat:-34.4790, lng:-58.4985, plat:-34.468, plng:-58.487, arco:[350,170], cam:'1735938641', foto:'wf-18388624'},
+  {id:'martinez',  n:'Martínez',    sub:'La Plazita',      lat:-34.4885, lng:-58.4905, plat:-34.478, plng:-58.479, arco:[350,170], cam:'1601563134', foto:'wf-15151064'},
+  {id:'olivos',    n:'Olivos',      sub:'Vicente López',   lat:-34.5075, lng:-58.4770, plat:-34.497, plng:-58.465, arco:[350,170], cam:'1577126865', foto:'wf-38774856'},
+  {id:'quilmes',   n:'Quilmes',     sub:'Costanera',       lat:-34.7135, lng:-58.2385, plat:-34.703, plng:-58.227, arco:[340,160], foto:'wf-14447118'},
+  {id:'puntalara', n:'Punta Lara',  sub:'Ensenada',        lat:-34.8180, lng:-57.9690, plat:-34.807, plng:-57.957, arco:[340,160], foto:'wf-17901682'}
 ];
 // Cámaras de Windy que mira al río (las mismas que ya usa el sitio).
 var CAMS = [
@@ -165,8 +165,10 @@ function traer(url, clave, vida){
 
 var OM = 'https://api.open-meteo.com/v1/forecast';
 function pronostico(){
-  var url = OM + '?latitude=' + SPOTS.map(function(s){ return s.lat; }).join(',') +
-    '&longitude=' + SPOTS.map(function(s){ return s.lng; }).join(',') +
+  // El pronóstico se pide 1-2 km río adentro (plat/plng) y eligiendo la celda de agua
+  // del modelo: en la costa el modelo mezcla tierra y daba menos viento del real.
+  var url = OM + '?latitude=' + SPOTS.map(function(s){ return s.plat; }).join(',') +
+    '&longitude=' + SPOTS.map(function(s){ return s.plng; }).join(',') + '&cell_selection=sea' +
     '&current=wind_speed_10m,wind_direction_10m,wind_gusts_10m,temperature_2m,weather_code' +
     '&minutely_15=wind_speed_10m,wind_direction_10m,wind_gusts_10m&forecast_minutely_15=192' +
     '&hourly=wind_speed_10m,wind_direction_10m,wind_gusts_10m,precipitation,precipitation_probability,weather_code,temperature_2m' +
@@ -1436,6 +1438,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.18', fecha: '31/10', cambios: ['Pronóstico más real: ahora el viento se calcula sobre el agua, río adentro, y no en la costa (ahí daba de menos).']},
   {v: '1.17', fecha: '31/10', cambios: ['Reportes en vivo más fáciles: ahora cuentan en toda la zona del spot (2 km) y, si estás en otro spot, te ofrece reportar ahí.']},
   {v: '1.16', fecha: '31/10', cambios: ['Arreglado: los reportes en vivo ya toman tu ubicación. Si no la encuentra, te aparece un botón para ubicarte.']},
   {v: '1.15', fecha: '28/10', cambios: ['Bramador te recuerda mejor: si ya dejaste tus datos, no te los vuelve a pedir.']},
