@@ -132,7 +132,8 @@ begin
   if p_lat is null or p_lng is null then return jsonb_build_object('ok', false, 'motivo', 'lejos'); end if;
   dist := 2 * 6371000 * asin(sqrt(power(sin(radians(p_lat - s.lat) / 2), 2) +
           cos(radians(s.lat)) * cos(radians(p_lat)) * power(sin(radians(p_lng - s.lng) / 2), 2)));
-  if dist > 1500 then return jsonb_build_object('ok', false, 'motivo', 'lejos', 'metros', round(dist)); end if;
+  -- 2 km de zona + 1 km de margen del GPS (la app chequea con la precisión).
+  if dist > 3000 then return jsonb_build_object('ok', false, 'motivo', 'lejos', 'metros', round(dist)); end if;
   if (select count(*) from public.bram_reportes where rider = p_id and t > now() - interval '1 day') >= 40 then
     return jsonb_build_object('ok', false, 'motivo', 'muchos'); end if;
   if p_tag = 'ala' and (p_m is null or p_m < 1 or p_m > 12) then return jsonb_build_object('ok', false, 'motivo', 'ala'); end if;
