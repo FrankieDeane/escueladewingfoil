@@ -1110,7 +1110,7 @@ function reportesHtml(spot){
       return '<button type="button" data-rep="' + k + '"><span aria-hidden="true">' + ETIQ[k][0] + '</span>' + ETIQ[k][1] + '</button>';
     }).join('') + '<button type="button" data-rep="ala"><span aria-hidden="true">🪁</span>Mi ala</button></div>' +
     '<div id="repExtra"></div>' +
-    '<p class="rep__nota">Cuenta solo si estás en ' + esc(spot.n) + '. Vence a las 2 horas.</p></div>';
+    '<p class="rep__nota">Cuenta solo si estás en ' + esc(spot.n) + ' (hasta 3 km). Vence a las 2 horas.</p></div>';
 }
 function pintarEstado(e){
   repEstadoAct = e;
@@ -1147,11 +1147,38 @@ function pedirPos(opc){
 }
 function ubicacion(){
   if (!navigator.geolocation) return Promise.reject('sin');
-  // Primero rápido; si no sale, un segundo intento con el GPS del teléfono.
-  return pedirPos({enableHighAccuracy: false, timeout: 12000, maximumAge: 60000}).catch(function(e){
+  // Primero el GPS del teléfono (preciso); si no responde, la ubicación aproximada.
+  return pedirPos({enableHighAccuracy: true, timeout: 15000, maximumAge: 20000}).catch(function(e){
     if (e === 'negado') throw e;
-    return pedirPos({enableHighAccuracy: true, timeout: 20000, maximumAge: 0});
+    return pedirPos({enableHighAccuracy: false, timeout: 12000, maximumAge: 60000});
   });
+}
+// Radio del spot: 3 km, más el margen de error que informa el teléfono (hasta 2 km).
+// El servidor acepta hasta 5 km (3 + 2), así nunca rechaza algo que la app aceptó.
+var RADIO_SPOT = 3000;
+function cercaDe(c, spot){
+  var d = distanciaM(c.latitude, c.longitude, spot.lat, spot.lng);
+  return {d: d, ok: d - Math.min(c.accuracy || 0, 2000) <= RADIO_SPOT};
+}
+function spotMasCerca(c){
+  var mejor = null;
+  SPOTS.forEach(function(sp){ var x = cercaDe(c, sp); if (x.ok && (!mejor || x.d < mejor.d)) mejor = {spot: sp, d: x.d}; });
+  return mejor;
+}
+function km(m){ return m < 1000 ? Math.round(m / 100) * 100 + ' m' : String(Math.round(m / 100) / 10).replace('.', ',') + ' km'; }
+// Fuera del spot: decimos a qué distancia te ubicó y, si estás en otro spot, ofrecemos reportar ahí.
+function lejosDe(spot, c, tag, ala){
+  var x = document.getElementById('repExtra'); if (!x) return;
+  var dato = ala ? ' data-rep-ala-geo="' + misAlas().indexOf(ala) + '"' : '';
+  var otro = spotMasCerca(c), d = cercaDe(c, spot).d;
+  if (otro && otro.spot.id !== spot.id) {
+    x.innerHTML = '<div class="rep__geo"><p>📍 Te ubicamos en <b>' + esc(otro.spot.n) + '</b>, no en ' + esc(spot.n) + '.</p>' +
+      '<button class="btn btn--chico" type="button" data-rep-geo="' + tag + '" data-rep-spot="' + otro.spot.id + '"' + dato + '>Reportar en ' + esc(otro.spot.n) + '</button></div>';
+    return;
+  }
+  x.innerHTML = '<div class="rep__geo"><p>📍 Tu teléfono te ubica a <b>' + km(d) + '</b> de ' + esc(spot.n) + '. Para reportar tenés que estar en el spot.' +
+    (c.accuracy > 500 ? ' La ubicación vino imprecisa: si estás ahí, prendé el GPS (ubicación precisa) y probá de nuevo.' : '') + '</p>' +
+    '<button class="btn btn--chico" type="button" data-rep-geo="' + tag + '"' + dato + '>📍 Ubicarme de nuevo</button></div>';
 }
 function esIphone(){ return /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); }
 // Cuando no hay ubicación: botón para pedirla de nuevo y, si está bloqueada, cómo activarla.
@@ -1169,13 +1196,13 @@ function sinUbicacion(tag, err, ala){
   var pintar = function(bloq){ x.innerHTML = '<div class="rep__geo">' + ayuda(bloq) + boton + '</div>'; };
   pintar(err === 'negado');
 }
-function reportar(tag, ala){
-  var spot = spotPorId(repSpot); if (!spot) return;
+function reportar(tag, ala, spotId){
+  var spot = spotPorId(spotId || repSpot); if (!spot) return;
   var botones = document.querySelectorAll('#repBox button'); botones.forEach(function(b){ b.disabled = true; });
   avisoRep('Chequeando que estés en el spot…');
   var fin = function(){ document.querySelectorAll('#repBox button').forEach(function(b){ b.disabled = false; }); };
   ubicacion().then(function(c){
-    if (distanciaM(c.latitude, c.longitude, spot.lat, spot.lng) > 1500) { avisoRep('Tenés que estar en ' + esc(spot.n) + ' para reportar.', 'mal'); fin(); return; }
+    if (!cercaDe(c, spot).ok) { fin(); lejosDe(spot, c, tag, ala); return; }
     guardar('geo_ok', true);
     return asegurarRider().then(function(){
       var r = rider();
@@ -1186,8 +1213,9 @@ function reportar(tag, ala){
       if (res && res.ok) {
         evento('bramador_reporte', {spot: spot.id, tag: tag});
         avisoRep(tag === 'ala' ? '✓ Anotado: ' + esc(ala.marca) + ' ' + String(ala.m).replace('.', ',') + ' m. ¡Buena sesión!' : '✓ Gracias, ya cuenta.', 'ok');
-        pintarEstado(res.estado);
-      } else if (res && res.motivo === 'lejos') avisoRep('Tenés que estar en ' + esc(spot.n) + ' para reportar.', 'mal');
+        if (spot.id === repSpot) pintarEstado(res.estado);
+        else avisoRep('✓ Gracias, ya cuenta en ' + esc(spot.n) + '. <a href="#/spot/' + spot.id + '">Ver ' + esc(spot.n) + '</a>', 'ok');
+      } else if (res && res.motivo === 'lejos') lejosDe(spot, c, tag, ala);
       else if (res && res.motivo === 'muchos') avisoRep('Ya reportaste mucho hoy. ¡Gracias!', 'mal');
       else avisoRep('No se pudo guardar. Probá de nuevo.', 'mal');
     });
@@ -1220,7 +1248,7 @@ function tocarRep(tag){
 document.addEventListener('click', function(e){
   var b = e.target.closest('[data-rep],[data-rep-ok],[data-rep-geo],[data-rep-ala],[data-ala-add],[data-ala-del]');
   if (!b) return;
-  if (b.hasAttribute('data-rep-geo')) { var tg = b.getAttribute('data-rep-geo'), ia = b.getAttribute('data-rep-ala-geo'); reportar(tg, ia != null ? misAlas()[+ia] : undefined); }
+  if (b.hasAttribute('data-rep-geo')) { var tg = b.getAttribute('data-rep-geo'), ia = b.getAttribute('data-rep-ala-geo'); reportar(tg, ia != null ? misAlas()[+ia] : undefined, b.getAttribute('data-rep-spot') || undefined); }
   else if (b.hasAttribute('data-rep')) tocarRep(b.getAttribute('data-rep'));
   else if (b.hasAttribute('data-rep-ok')) { guardar('geo_ok', true); var t = b.getAttribute('data-rep-ok'); t === 'ala' ? tocarRep('ala') : reportar(t); }
   else if (b.hasAttribute('data-rep-ala')) reportar('ala', misAlas()[+b.getAttribute('data-rep-ala')]);
@@ -1408,6 +1436,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.17', fecha: '31/10', cambios: ['Reportes en vivo más fáciles: ahora cuentan en toda la zona del spot (3 km) y, si estás en otro spot, te ofrece reportar ahí.']},
   {v: '1.16', fecha: '31/10', cambios: ['Arreglado: los reportes en vivo ya toman tu ubicación. Si no la encuentra, te aparece un botón para ubicarte.']},
   {v: '1.15', fecha: '28/10', cambios: ['Bramador te recuerda mejor: si ya dejaste tus datos, no te los vuelve a pedir.']},
   {v: '1.14', fecha: '28/10', cambios: ['Nuevo en Más: "Sé sponsor", para las marcas que quieran aparecer en Bramador.']},
