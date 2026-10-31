@@ -1500,7 +1500,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
-  {v: '1.17', fecha: '31/10', cambios: ['Si en tu spot sopla más (o menos) de lo pronosticado, Bramador te avisa al toque: lo mide el Náutico o lo cuentan los riders en el agua.', 'Nuevo botón en Mi spot: "📈 Subió el viento". Con un toque avisás a todos los que siguen ese spot.', 'Con la app abierta, el viento se revisa solo cada 2 minutos.']},
+  {v: '1.18', fecha: '31/10', cambios: ['Si en tu spot sopla más (o menos) de lo pronosticado, Bramador te avisa al toque: lo mide el Náutico o lo cuentan los riders en el agua.', 'Nuevo botón en Mi spot: "📈 Subió el viento". Con un toque avisás a todos los que siguen ese spot.', 'Con la app abierta, el viento se revisa solo cada 2 minutos.']},
   {v: '1.16', fecha: '31/10', cambios: ['Arreglado: los reportes en vivo ya toman tu ubicación. Si no la encuentra, te aparece un botón para ubicarte.']},
   {v: '1.15', fecha: '28/10', cambios: ['Bramador te recuerda mejor: si ya dejaste tus datos, no te los vuelve a pedir.']},
   {v: '1.14', fecha: '28/10', cambios: ['Nuevo en Más: "Sé sponsor", para las marcas que quieran aparecer en Bramador.']},
