@@ -316,6 +316,10 @@ button{font:inherit;color:inherit}
 .seo ul{margin:0;padding-left:18px}
 .seo a{color:var(--senal)}
 .seo + .cargando{padding:20px}
+/* Con JavaScript (la app de verdad) el texto para buscadores queda en la página pero no se ve:
+   así no aparece "texto atrás" mientras la app arranca o se actualiza. */
+.js .seo{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+.js .seo + .cargando{padding:calc(40px + var(--safe-t,0px)) 20px 20px;text-align:center}
 .seo details,.faq details{border-top:1px solid var(--linea);padding:10px 0}
 .faq details:first-child{border-top:0;padding-top:0}
 .seo summary,.faq summary{font-weight:800;cursor:pointer}
