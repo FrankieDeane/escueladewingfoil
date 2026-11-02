@@ -244,3 +244,59 @@ as $$
 $$;
 revoke all on function public.bram_mail_registrado(text) from public;
 grant execute on function public.bram_mail_registrado(text) to anon, authenticated;
+
+-- ─── Seguridad del admin (2/11) ─────────────────────────────────────────────
+-- Registro de intentos y bloqueo: 5 fallos en 15 min desde la misma IP, o
+-- 30 fallos en 1 hora en total → 'bloqueado'. Las funciones de admin
+-- (panel, sponsors, guardar_sponsor, usuarios) devuelven null con clave mala
+-- en vez de tirar error, para que el intento fallido quede registrado.
+create table if not exists public.bram_admin_intentos (
+  id bigint generated always as identity primary key,
+  t timestamptz not null default now(),
+  ip text,
+  ok boolean not null
+);
+alter table public.bram_admin_intentos enable row level security;
+revoke all on public.bram_admin_intentos from anon, authenticated;
+
+create or replace function public._bram_ip() returns text language sql stable set search_path = '' as $$
+  select coalesce(
+    nullif(current_setting('request.headers', true), '')::json ->> 'cf-connecting-ip',
+    split_part(nullif(current_setting('request.headers', true), '')::json ->> 'x-forwarded-for', ',', 1),
+    'sin-ip')
+$$;
+
+create or replace function public._bram_admin_ok(p_clave text) returns boolean
+language plpgsql security definer set search_path = '' as $$
+declare v_ip text := public._bram_ip(); v_ok boolean;
+begin
+  if (select count(*) from public.bram_admin_intentos where not ok and ip = v_ip and t > now() - interval '15 minutes') >= 5
+     or (select count(*) from public.bram_admin_intentos where not ok and t > now() - interval '1 hour') >= 30 then
+    raise exception 'bloqueado' using errcode = 'P0001';
+  end if;
+  select exists(select 1 from public.bram_config c where c.clave = 'admin'
+    and c.valor = extensions.crypt(coalesce(p_clave, ''), c.valor)) into v_ok;
+  if not v_ok then
+    insert into public.bram_admin_intentos (ip, ok) values (v_ip, false);
+  end if;
+  return v_ok;
+end $$;
+
+create or replace function public.bram_admin_ok(p_clave text) returns boolean
+language plpgsql security definer set search_path = '' as $$
+begin
+  if public._bram_admin_ok(p_clave) then
+    insert into public.bram_admin_intentos (ip, ok) values (public._bram_ip(), true);
+    return true;
+  end if;
+  return false;
+end $$;
+
+revoke execute on function public._bram_admin_ok(text) from public, anon, authenticated;
+revoke execute on function public._bram_ip() from public, anon, authenticated;
+revoke execute on function public._bram_rider_ok(uuid, text) from public, anon, authenticated;
+
+-- Dashboard del admin: lista de usuarios y series para gráficos.
+-- (definición completa aplicada en Supabase como migración bram_admin_usuarios)
+-- bram_admin_usuarios(p_clave) → {usuarios[], altas_dia[], activos_dia[], hora_alta[],
+--   marcas[], medidas[], reportes_tag[], accesos[últimos 25]}; null si la clave es mala.
