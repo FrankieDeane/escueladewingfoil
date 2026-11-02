@@ -217,6 +217,15 @@ begin
         select to_char(i.dia, 'YYYY-MM') mes, s.nombre sponsor, i.slot, i.spot, sum(i.n) impresiones
         from public.bram_impresiones i join public.bram_sponsors s on s.id = i.sponsor
         where i.dia between p_desde and p_hasta group by 1,2,3,4) x),
+    'usuarios_dia', (select coalesce(jsonb_agg(x order by x.dia), '[]') from (
+        select (creado at time zone 'America/Argentina/Buenos_Aires')::date dia, count(*) altas from public.bram_riders
+        where (creado at time zone 'America/Argentina/Buenos_Aires')::date between p_desde and p_hasta group by 1) x),
+    'usuarios_resumen', (select jsonb_build_object(
+        'total', count(*),
+        'hoy', count(*) filter (where (creado at time zone 'America/Argentina/Buenos_Aires')::date = (now() at time zone 'America/Argentina/Buenos_Aires')::date),
+        'ult7', count(*) filter (where creado >= now() - interval '7 days'),
+        'con_alas', count(*) filter (where jsonb_array_length(alas) > 0),
+        'con_reportes', (select count(distinct rider) from public.bram_reportes)) from public.bram_riders),
     'riders_total', (select count(*) from public.bram_riders)
   ) into r;
   return r;
