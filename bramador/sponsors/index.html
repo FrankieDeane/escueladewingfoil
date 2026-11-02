@@ -130,6 +130,28 @@ tr+tr td{border-top:1px solid rgba(255,255,255,.05)}
 .tel{font-family:var(--mono);font-weight:500;font-size:15px;user-select:all}
 footer{padding-block:20px;color:var(--gris);font-size:13px}
 
+/* Contratar online */
+.contratar{padding-block:44px;border-top:1px solid var(--linea);background:linear-gradient(180deg,var(--hondo),var(--tinta))}
+.contratar h2{font-size:clamp(28px,4vw,40px);font-weight:800;margin-top:8px}
+.precio{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:14px}
+.precio b{font-family:var(--display);font-size:clamp(40px,7vw,56px);font-weight:800;line-height:1;color:var(--senal)}
+.precio span{color:var(--gris);font-weight:700}
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:22px;background:var(--vidrio);border:1px solid var(--linea);border-radius:16px;padding:18px}
+.form label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:800;color:var(--gris);min-width:0}
+.form input,.form select{min-height:48px;border-radius:12px;border:1px solid var(--linea);background:rgba(0,0,0,.25);color:var(--texto);font:500 16px var(--cuerpo);padding:0 12px;width:100%}
+.form input[type=file]{padding:10px 12px}
+.form .todo{grid-column:1/-1}
+.logo-prev{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--gris)}
+.logo-prev img{width:40px;height:40px;border-radius:8px;background:#fff;object-fit:contain}
+.pagar{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:0 26px;border:0;border-radius:999px;background:var(--senal);color:#1a0a04;font:800 18px var(--cuerpo);cursor:pointer;width:100%}
+.pagar[disabled]{opacity:.6;cursor:wait}
+.pagar:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.letra{font-size:13px;color:var(--gris)}
+.error{color:var(--amarillo);font-weight:800}
+.garantias{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:14px;font-size:14px;color:var(--gris)}
+.garantias span::before{content:"✓ ";color:var(--ok);font-weight:800}
+@media (max-width:620px){.form{grid-template-columns:1fr}}
+
 @media (max-width:820px){
   .hero .w:not(.volver-w){grid-template-columns:minmax(0,1fr);gap:28px;padding-block:16px 32px}
   .grilla{grid-template-columns:1fr}
@@ -245,11 +267,30 @@ footer{padding-block:20px;color:var(--gris);font-size:13px}
   </section>
 </main>
 
+<section class="contratar" id="contratar" hidden>
+  <div class="w">
+    <div class="eti">Contratá online</div>
+    <h2>Elegí tu spot y empezá hoy</h2>
+    <div class="precio"><b>$99.900</b><span>por mes, por spot · se renueva solo</span></div>
+    <div class="garantias"><span>Pagás con Mercado Pago</span><span>Tu marca sale apenas se acredita el pago</span><span>Cancelás cuando quieras desde Mercado Pago</span></div>
+    <form class="form" id="fContratar" novalidate>
+      <label>Nombre de tu marca<input id="cNombre" maxlength="40" autocomplete="organization" required></label>
+      <label>Spot<select id="cSpot" required><option value="">Elegí un spot</option></select></label>
+      <label>Tu mail<input id="cMail" type="email" maxlength="120" autocomplete="email" required></label>
+      <label>Logo (cuadrado queda mejor)<input id="cLogo" type="file" accept="image/png,image/jpeg,image/webp"></label>
+      <div class="logo-prev todo" id="cPrev" hidden><img alt=""><span>Así se va a ver tu logo en la app</span></div>
+      <p class="error todo" id="cError" role="alert" hidden></p>
+      <div class="todo"><button class="pagar" id="cPagar">Pagar con Mercado Pago</button></div>
+      <p class="letra todo">Al pagar aceptás que tu marca y logo aparezcan en Bramador en el spot elegido. El cobro es mensual y automático; si un mes no se cobra, tu marca deja de mostrarse sola.</p>
+    </form>
+  </div>
+</section>
+
 <section class="cierre">
   <div class="w">
     <div>
       <h2>Reservá tu spot antes de la temporada</h2>
-      <p>Hay un solo lugar por spot a la vez. Escribinos y armamos tu presencia en Bramador.</p>
+      <p>Hay un solo lugar por spot a la vez. ¿Querés algo a medida, una temporada o un evento? Escribinos y lo armamos.</p>
     </div>
     <div class="contacto">
       <a class="btn" href="https://wa.me/5491120498620?text=Hola%20Francisco%2C%20quiero%20ser%20sponsor%20de%20Bramador" target="_blank" rel="noopener">Escribinos por WhatsApp</a>    </div>
@@ -261,6 +302,63 @@ footer{padding-block:20px;color:var(--gris);font-size:13px}
 <script>
 document.getElementById('volver').addEventListener('click', function(e){ try { if (document.referrer && new URL(document.referrer).origin === location.origin && history.length > 1) { e.preventDefault(); history.back(); } } catch(x){} });
 document.querySelector('.cierre .btn').addEventListener('click', function(){ try { gtag('event', 'contacto_sponsor', {canal: 'whatsapp'}); } catch(e){} });
+
+// ── Contratar online con Mercado Pago
+(function(){
+  var FN = 'https://pfwazngwcvirdeyamvsd.supabase.co/functions/v1/bramador-sponsor';
+  var SB = 'https://pfwazngwcvirdeyamvsd.supabase.co', KEY = 'sb_publishable_5wLxVtnFy4IMOAMK_rzZ-A_cZ1TSOeV';
+  var SPOTS = {sanisidro:'San Isidro', peru:'Perú Beach', martinez:'Martínez', olivos:'Olivos', quilmes:'Quilmes', puntalara:'Punta Lara'};
+  var prueba = /[?&]prueba=1/.test(location.search), logo = null;
+  function $(id){ return document.getElementById(id); }
+  function post(body){ return fetch(FN, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)}).then(function(r){ return r.json().then(function(j){ j._ok = r.ok; return j; }); }); }
+  function error(t){ $('cError').textContent = t; $('cError').hidden = !t; }
+  Promise.all([
+    post({accion:'estado'}).catch(function(){ return {}; }),
+    fetch(SB + '/rest/v1/rpc/bram_spots_libres', {method:'POST', headers:{apikey:KEY,'Content-Type':'application/json'}, body:'{}'}).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; })
+  ]).then(function(r){
+    if (!(r[0] && r[0].listo) && !prueba) return;
+    var libres = r[1];
+    $('cSpot').innerHTML = '<option value="">Elegí un spot</option>' + Object.keys(SPOTS).map(function(k){
+      var ok = !libres || libres.indexOf(k) >= 0;
+      return '<option value="' + k + '"' + (ok ? '' : ' disabled') + '>' + SPOTS[k] + (ok ? '' : ' · ocupado') + '</option>';
+    }).join('');
+    if (libres && !libres.length) { error('Ahora no quedan spots libres. Escribinos por WhatsApp y te avisamos cuando se libere uno.'); $('cPagar').disabled = true; }
+    $('contratar').hidden = false;
+  });
+  $('cLogo').addEventListener('change', function(){
+    var f = this.files[0]; logo = null; $('cPrev').hidden = true; if (!f) return;
+    var img = new Image(), url = URL.createObjectURL(f);
+    img.onload = function(){
+      var c = document.createElement('canvas'), L = 96, k = Math.min(L / img.width, L / img.height);
+      c.width = L; c.height = L;
+      var x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, L, L);
+      x.drawImage(img, (L - img.width * k) / 2, (L - img.height * k) / 2, img.width * k, img.height * k);
+      logo = c.toDataURL('image/webp', 0.85);
+      if (logo.indexOf('data:image/webp') !== 0) logo = c.toDataURL('image/png');
+      $('cPrev').querySelector('img').src = logo; $('cPrev').hidden = false;
+      URL.revokeObjectURL(url);
+    };
+    img.onerror = function(){ error('No pudimos leer esa imagen. Probá con un PNG o JPG.'); };
+    img.src = url;
+  });
+  $('fContratar').addEventListener('input', function(){ if (!$('cPagar').disabled) error(''); });
+  $('fContratar').addEventListener('submit', function(e){
+    e.preventDefault(); error('');
+    var nombre = $('cNombre').value.trim(), spot = $('cSpot').value, mail = $('cMail').value.trim();
+    if (nombre.length < 2) return error('Poné el nombre de tu marca.');
+    if (!spot) return error('Elegí un spot.');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) return error('Revisá el mail.');
+    $('cPagar').disabled = true; $('cPagar').textContent = 'Abriendo Mercado Pago…';
+    try { gtag('event', 'sponsor_contratar', {spot: spot}); } catch(x){}
+    post({accion:'contratar', nombre: nombre, spot: spot, mail: mail, logo: logo, prueba: prueba}).then(function(j){
+      if (j._ok && j.url) { location.href = j.url; return; }
+      throw new Error(j.error || 'No pudimos abrir Mercado Pago. Probá de nuevo.');
+    }).catch(function(x){
+      error(x && x.message && x.message.indexOf('fetch') < 0 ? x.message : 'No pudimos abrir Mercado Pago. Probá de nuevo.');
+      $('cPagar').disabled = false; $('cPagar').textContent = 'Pagar con Mercado Pago';
+    });
+  });
+})();
 </script>
 </body>
 </html>
