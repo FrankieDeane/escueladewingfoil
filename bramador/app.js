@@ -1415,6 +1415,7 @@ function bienvenida(){
     '<input id="bPeso" type="range" min="40" max="120" step="1" value="' + p.peso + '"></div>' +
     '<p class="bienv__err" hidden></p>' +
     '<button class="btn" type="submit" id="bEntrar">Ver el viento de hoy <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>' +
+    (falta ? '<button type="button" class="bienv__ya" id="bYa">¿Ya usás Bramador? Entrá solo con tu mail</button>' : '') +
     '<span class="bienv__chica">Gratis · Android y iPhone</span></form>';
   if (falta) el.classList.add('bienv--datos');
   document.body.appendChild(el);
@@ -1428,12 +1429,35 @@ function bienvenida(){
     router();
   }
   var f = el.querySelector('form');
+  // Quien ya usa Bramador en otro equipo entra solo con el mail (se busca entre los riders registrados).
+  var ya = false;
+  function modo(v){
+    ya = v; var fila = el.querySelector('.bienv__fila');
+    fila.hidden = v; f.nombre.required = !v; f.apellido.required = !v;
+    el.querySelector('.bienv__pide').textContent = v ? 'Poné el mail que usaste en Bramador.' : 'Para entrar, dejanos tus datos. Es gratis.';
+    el.querySelector('#bYa').textContent = v ? 'Es mi primera vez' : '¿Ya usás Bramador? Entrá solo con tu mail';
+    el.querySelector('.bienv__err').hidden = true;
+  }
+  if (falta) el.querySelector('#bYa').addEventListener('click', function(){ modo(!ya); (ya ? f.mail : f.nombre).focus(); });
   f.addEventListener('submit', function(e){
     e.preventDefault();
     if (!falta) return entrar();
     var d = {nombre: f.nombre.value.trim(), apellido: f.apellido.value.trim(), mail: f.mail.value.trim()};
     var btn = el.querySelector('#bEntrar'), err = el.querySelector('.bienv__err'), txt = btn.innerHTML;
     btn.disabled = true; btn.textContent = 'Entrando…'; err.hidden = true;
+    if (ya) {
+      rpc('bram_mail_registrado', {p_mail: d.mail}).then(function(ok){
+        btn.disabled = false; btn.innerHTML = txt;
+        if (!ok) { modo(false); err.textContent = 'No encontramos ese mail en Bramador. Completá tu nombre y apellido.'; err.hidden = false; f.nombre.focus(); return; }
+        guardar('lead', 1); recordarLead(); evento('bramador_lead_regreso');
+        var pp = leer('perfil', {}); if (!pp.mail) pp.mail = d.mail; guardar('perfil', pp);
+        entrar();
+      }).catch(function(){
+        btn.disabled = false; btn.innerHTML = txt;
+        err.textContent = 'No se pudo revisar. Revisá tu conexión y probá de nuevo.'; err.hidden = false;
+      });
+      return;
+    }
     enviarLead(d).then(function(){
       guardar('lead', 1); recordarLead();
       registrarRider(d).catch(function(){});
@@ -1530,7 +1554,8 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
-  {v: '1.19', fecha: '31/10', cambios: ['Si en tu spot sopla más (o menos) de lo pronosticado, Bramador te avisa al toque: lo mide el Náutico o lo cuentan los riders en el agua.', 'Nuevo botón en Mi spot: "📈 Subió el viento". Con un toque avisás a todos los que siguen ese spot.', 'Con la app abierta, el viento se revisa solo cada 2 minutos.']},
+  {v: '1.20', fecha: '2/11', cambios: ['Si en tu spot sopla más (o menos) de lo pronosticado, Bramador te avisa al toque: lo mide el Náutico o lo cuentan los riders en el agua.', 'Nuevo botón en Mi spot: "📈 Subió el viento". Con un toque avisás a todos los que siguen ese spot.', 'Con la app abierta, el viento se revisa solo cada 2 minutos.']},
+  {v: '1.19', fecha: '2/11', cambios: ['¿Ya usás Bramador en el celular? En otro equipo entrás solo con tu mail.']},
   {v: '1.18', fecha: '31/10', cambios: ['Pronóstico más real: ahora el viento se calcula sobre el agua, río adentro, y no en la costa (ahí daba de menos).']},
   {v: '1.17', fecha: '31/10', cambios: ['Reportes en vivo más fáciles: ahora cuentan en toda la zona del spot (2 km) y, si estás en otro spot, te ofrece reportar ahí.']},
   {v: '1.16', fecha: '31/10', cambios: ['Arreglado: los reportes en vivo ya toman tu ubicación. Si no la encuentra, te aparece un botón para ubicarte.']},

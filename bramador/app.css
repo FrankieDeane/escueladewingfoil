@@ -262,6 +262,8 @@ button{font:inherit;color:inherit}
 .bienv__pide{margin:0 0 10px;font-size:15px;font-weight:700;text-align:center}
 .bienv__fila{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .bienv__fila .campo{min-width:0}
+.bienv__fila[hidden]{display:none}
+.bienv__ya{display:block;margin:12px auto 0;background:none;border:0;color:#22C3A6;font:700 14px inherit;font-family:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .bienv__err{margin:0 0 10px;font-size:13px;font-weight:700;color:#FFC531;text-align:center}
 .bienv__chica{display:block;text-align:center;margin-top:12px;font-size:12px;color:var(--gris)}
 
