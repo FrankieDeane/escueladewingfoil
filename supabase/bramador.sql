@@ -395,3 +395,8 @@ grant execute on function public.bram_srv_sponsor_nuevo(text, jsonb), public.bra
 create extension if not exists pg_net with schema extensions;
 select cron.schedule('bramador-sponsors-mp', '17 */3 * * *',
   $$select net.http_get(url:='https://pfwazngwcvirdeyamvsd.supabase.co/functions/v1/bramador-sponsor', timeout_milliseconds:=30000)$$);
+
+-- 2/11: un pedido puede incluir varios spots (p.spots); el precio es
+-- $99.900 × spots en una sola suscripción. bram_srv_sponsor_nuevo acepta
+-- p.spots (array) o p.spot, rechaza si alguno está ocupado ({error:'ocupado', spots})
+-- y crea 2 filas (senal + alerta) por spot con el mismo grupo.
