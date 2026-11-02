@@ -141,6 +141,20 @@ footer{padding-block:20px;color:var(--gris);font-size:13px}
 .form input,.form select{min-height:48px;border-radius:12px;border:1px solid var(--linea);background:rgba(0,0,0,.25);color:var(--texto);font:500 16px var(--cuerpo);padding:0 12px;width:100%}
 .form input[type=file]{padding:10px 12px}
 .form .todo{grid-column:1/-1}
+.spots-sel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;border:0;margin:0;padding:0;min-width:0}
+.spots-sel legend{font-size:13px;font-weight:800;color:var(--gris);margin-bottom:6px;padding:0;display:flex;justify-content:space-between;width:100%;gap:8px}
+.spots-sel legend button{background:none;border:0;color:var(--ok);font:800 13px var(--cuerpo);cursor:pointer;padding:0}
+.spot-op{position:relative;display:flex}
+.spot-op input{position:absolute;opacity:0;width:1px;height:1px}
+.spot-op span{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:48px;padding:6px 8px;border-radius:12px;border:1px solid var(--linea);background:rgba(0,0,0,.25);font-weight:800;font-size:14px;cursor:pointer;line-height:1.15}
+.spot-op input:checked + span{background:var(--senal);border-color:var(--senal);color:#1a0a04}
+.spot-op input:focus-visible + span{outline:3px solid #fff;outline-offset:2px}
+.spot-op input:disabled + span{opacity:.45;cursor:not-allowed}
+.spot-op small{font-size:11px;font-weight:700;color:var(--gris)}
+.total{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;padding:12px 14px;border-radius:12px;background:rgba(255,90,44,.1);border:1px solid rgba(255,90,44,.35)}
+.total span{color:var(--gris);font-weight:700;font-size:14px}
+.total b{font-family:var(--display);font-size:28px;font-weight:800;color:var(--senal)}
+@media (max-width:420px){.spots-sel{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .logo-prev{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--gris)}
 .logo-prev img{width:40px;height:40px;border-radius:8px;background:#fff;object-fit:contain}
 .pagar{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:0 26px;border:0;border-radius:999px;background:var(--senal);color:#1a0a04;font:800 18px var(--cuerpo);cursor:pointer;width:100%}
@@ -270,18 +284,19 @@ footer{padding-block:20px;color:var(--gris);font-size:13px}
 <section class="contratar" id="contratar" hidden>
   <div class="w">
     <div class="eti">Contratá online</div>
-    <h2>Elegí tu spot y empezá hoy</h2>
-    <div class="precio"><b>$99.900</b><span>por mes, por spot · se renueva solo</span></div>
+    <h2>Elegí tus spots y empezá hoy</h2>
+    <div class="precio"><b>$99.900</b><span>por mes, por spot · elegí uno, varios o todos · se renueva solo</span></div>
     <div class="garantias"><span>Pagás con Mercado Pago</span><span>Tu marca sale apenas se acredita el pago</span><span>Cancelás cuando quieras desde Mercado Pago</span></div>
     <form class="form" id="fContratar" novalidate>
+      <fieldset class="spots-sel todo" id="cSpots"><legend><span>Spots (tocá los que quieras)</span><button type="button" id="cTodos">Elegir todos</button></legend></fieldset>
+      <div class="total todo" aria-live="polite"><span id="cCuenta">Elegí al menos un spot</span><b id="cTotal">$0 / mes</b></div>
       <label>Nombre de tu marca<input id="cNombre" maxlength="40" autocomplete="organization" required></label>
-      <label>Spot<select id="cSpot" required><option value="">Elegí un spot</option></select></label>
       <label>Tu mail<input id="cMail" type="email" maxlength="120" autocomplete="email" required></label>
-      <label>Logo (cuadrado queda mejor)<input id="cLogo" type="file" accept="image/png,image/jpeg,image/webp"></label>
+      <label class="todo">Logo (cuadrado queda mejor)<input id="cLogo" type="file" accept="image/png,image/jpeg,image/webp"></label>
       <div class="logo-prev todo" id="cPrev" hidden><img alt=""><span>Así se va a ver tu logo en la app</span></div>
       <p class="error todo" id="cError" role="alert" hidden></p>
       <div class="todo"><button class="pagar" id="cPagar">Pagar con Mercado Pago</button></div>
-      <p class="letra todo">Al pagar aceptás que tu marca y logo aparezcan en Bramador en el spot elegido. El cobro es mensual y automático; si un mes no se cobra, tu marca deja de mostrarse sola.</p>
+      <p class="letra todo">Al pagar aceptás que tu marca y logo aparezcan en Bramador en los spots elegidos. El cobro es mensual y automático; si un mes no se cobra, tu marca deja de mostrarse sola.</p>
     </form>
   </div>
 </section>
@@ -318,12 +333,29 @@ document.querySelector('.cierre .btn').addEventListener('click', function(){ try
   ]).then(function(r){
     if (!(r[0] && r[0].listo) && !prueba) return;
     var libres = r[1];
-    $('cSpot').innerHTML = '<option value="">Elegí un spot</option>' + Object.keys(SPOTS).map(function(k){
+    $('cSpots').insertAdjacentHTML('beforeend', Object.keys(SPOTS).map(function(k){
       var ok = !libres || libres.indexOf(k) >= 0;
-      return '<option value="' + k + '"' + (ok ? '' : ' disabled') + '>' + SPOTS[k] + (ok ? '' : ' · ocupado') + '</option>';
-    }).join('');
+      return '<label class="spot-op"><input type="checkbox" name="spot" value="' + k + '"' + (ok ? '' : ' disabled') + '><span>' + SPOTS[k] + (ok ? '' : '<small>ocupado</small>') + '</span></label>';
+    }).join(''));
+    contar();
     if (libres && !libres.length) { error('Ahora no quedan spots libres. Escribinos por WhatsApp y te avisamos cuando se libere uno.'); $('cPagar').disabled = true; }
     $('contratar').hidden = false;
+  });
+  var PRECIO = 99900;
+  function elegidos(){ return [].slice.call(document.querySelectorAll('#cSpots input:checked')).map(function(i){ return i.value; }); }
+  function contar(){
+    var n = elegidos().length;
+    $('cCuenta').textContent = n ? n + (n === 1 ? ' spot' : ' spots') + ' × $99.900' : 'Elegí al menos un spot';
+    $('cTotal').textContent = '$' + (n * PRECIO).toLocaleString('es-AR') + ' / mes';
+    $('cPagar').textContent = n ? 'Pagar $' + (n * PRECIO).toLocaleString('es-AR') + ' con Mercado Pago' : 'Pagar con Mercado Pago';
+  }
+  $('cSpots').addEventListener('change', contar);
+  $('cTodos').addEventListener('click', function(){
+    var cajas = [].slice.call(document.querySelectorAll('#cSpots input:not(:disabled)'));
+    var todas = cajas.every(function(i){ return i.checked; });
+    cajas.forEach(function(i){ i.checked = !todas; });
+    this.textContent = todas ? 'Elegir todos' : 'Sacar todos';
+    contar();
   });
   $('cLogo').addEventListener('change', function(){
     var f = this.files[0]; logo = null; $('cPrev').hidden = true; if (!f) return;
@@ -344,18 +376,18 @@ document.querySelector('.cierre .btn').addEventListener('click', function(){ try
   $('fContratar').addEventListener('input', function(){ if (!$('cPagar').disabled) error(''); });
   $('fContratar').addEventListener('submit', function(e){
     e.preventDefault(); error('');
-    var nombre = $('cNombre').value.trim(), spot = $('cSpot').value, mail = $('cMail').value.trim();
+    var nombre = $('cNombre').value.trim(), spots = elegidos(), mail = $('cMail').value.trim();
+    if (!spots.length) return error('Elegí al menos un spot.');
     if (nombre.length < 2) return error('Poné el nombre de tu marca.');
-    if (!spot) return error('Elegí un spot.');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) return error('Revisá el mail.');
     $('cPagar').disabled = true; $('cPagar').textContent = 'Abriendo Mercado Pago…';
-    try { gtag('event', 'sponsor_contratar', {spot: spot}); } catch(x){}
-    post({accion:'contratar', nombre: nombre, spot: spot, mail: mail, logo: logo, prueba: prueba}).then(function(j){
+    try { gtag('event', 'sponsor_contratar', {spots: spots.length, value: spots.length * PRECIO, currency: 'ARS'}); } catch(x){}
+    post({accion:'contratar', nombre: nombre, spots: spots, mail: mail, logo: logo, prueba: prueba}).then(function(j){
       if (j._ok && j.url) { location.href = j.url; return; }
       throw new Error(j.error || 'No pudimos abrir Mercado Pago. Probá de nuevo.');
     }).catch(function(x){
       error(x && x.message && x.message.indexOf('fetch') < 0 ? x.message : 'No pudimos abrir Mercado Pago. Probá de nuevo.');
-      $('cPagar').disabled = false; $('cPagar').textContent = 'Pagar con Mercado Pago';
+      $('cPagar').disabled = false; contar();
     });
   });
 })();
