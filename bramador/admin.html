@@ -35,6 +35,11 @@ th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--linea)}
 th{color:var(--gris);font-size:12px;text-transform:uppercase;letter-spacing:.05em}
 td.n{text-align:right;font-variant-numeric:tabular-nums}
 .tabla{overflow-x:auto}
+.cifras{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:6px}
+.cifra{background:rgba(255,255,255,.04);border:1px solid var(--linea);border-radius:16px;padding:12px 14px}
+.cifra b{display:block;font:800 38px/1 'Bricolage Grotesque',sans-serif;font-variant-numeric:tabular-nums}
+.cifra span{display:block;margin-top:6px;font-size:12px;font-weight:800;color:var(--gris)}
+.cifra--g{border-color:var(--senal)}.cifra--g b{color:var(--senal)}
 .fila{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .msj{color:var(--amarillo);font-weight:800}
 .prev{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:12px;color:var(--gris)}
@@ -184,6 +189,7 @@ $('lista').addEventListener('click', function(e){
 var hoy = new Date(); $('pDesde').value = iso(new Date(hoy.getFullYear(), hoy.getMonth(), 1)); $('pHasta').value = iso(hoy);
 $('pVer').addEventListener('click', verPanel);
 var TABLAS = [
+  ['usuarios_dia', 'Usuarios nuevos por día', ['dia','altas']],
   ['impresiones', 'Impresiones por sponsor', ['mes','sponsor','slot','spot','impresiones']],
   ['reportes_dia', 'Reportes por spot y día', ['dia','spot','reportes','riders']],
   ['riders_semana', 'Riders que reportaron, por semana', ['semana','riders']],
@@ -193,13 +199,16 @@ var TABLAS = [
   ['alas_marca', 'Marcas de ala por spot', ['spot','marca','riders']],
   ['etiquetas', 'Qué reportan, por spot', ['spot','tag','reportes']]
 ];
-var TITULOS = {mes:'Mes', sponsor:'Sponsor', slot:'Dónde', spot:'Spot', impresiones:'Impresiones', dia:'Día', reportes:'Reportes', riders:'Riders', semana:'Semana del', kn_max:'Kn máx', m:'Medida (m)', marca:'Marca', tag:'Reporte'};
+var TITULOS = {altas:'Usuarios nuevos', mes:'Mes', sponsor:'Sponsor', slot:'Dónde', spot:'Spot', impresiones:'Impresiones', dia:'Día', reportes:'Reportes', riders:'Riders', semana:'Semana del', kn_max:'Kn máx', m:'Medida (m)', marca:'Marca', tag:'Reporte'};
 function valor(k, v){ return k === 'spot' ? (SPOTS[v] || v) : k === 'slot' ? (SLOTS[v] || v) : k === 'tag' ? (ETIQ[v] || (String(v).indexOf('no_') === 0 ? 'Ya no: ' + (ETIQ[v.slice(3)] || v) : v)) : v; }
 function verPanel(){
   $('panel').innerHTML = '<p style="color:var(--gris)">Cargando…</p>';
   rpc('bram_admin_panel', {p_clave: clave, p_desde: $('pDesde').value, p_hasta: $('pHasta').value}).then(function(d){
     datos = d;
-    $('panel').innerHTML = '<p style="color:var(--gris)">' + d.riders_total + ' riders registrados en total.</p>' + TABLAS.map(function(t, i){
+    var u = d.usuarios_resumen || {total: d.riders_total};
+    function cifra(n, t, g){ return '<div class="cifra' + (g ? ' cifra--g' : '') + '"><b>' + (n == null ? 0 : n) + '</b><span>' + t + '</span></div>'; }
+    $('panel').innerHTML = '<h2>Usuarios</h2><div class="cifras">' + cifra(u.total, 'registrados en total', true) + cifra(u.hoy, 'hoy') + cifra(u.ult7, 'últimos 7 días') +
+      cifra(u.con_alas, 'cargaron sus alas') + cifra(u.con_reportes, 'reportaron el río') + '</div>' + TABLAS.map(function(t, i){
       var filas = d[t[0]] || [];
       return '<div class="fila"><h2>' + t[1] + '</h2><button class="chico" type="button" data-csv="' + i + '">CSV</button></div>' +
         (filas.length ? '<div class="tabla"><table><tr>' + t[2].map(function(k){ return '<th>' + TITULOS[k] + '</th>'; }).join('') + '</tr>' +
