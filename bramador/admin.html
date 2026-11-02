@@ -116,6 +116,7 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}
 var SB = 'https://pfwazngwcvirdeyamvsd.supabase.co', SB_KEY = 'sb_publishable_5wLxVtnFy4IMOAMK_rzZ-A_cZ1TSOeV';
 var SPOTS = {sanisidro:'San Isidro', peru:'Perú Beach', martinez:'Martínez', olivos:'Olivos', quilmes:'Quilmes', puntalara:'Punta Lara'};
 var SLOTS = {senal:'Señal del día', alerta:'Alertas'};
+var MPEST = {esperando_pago:'esperando el pago', pending:'esperando el pago', authorized:'suscripción activa, cobra solo cada mes', paused:'pausada por el sponsor', cancelled:'cancelada (sale cuando vence)'};
 var ETIQ = {bien:'Todo bien', rachado:'Rachado', pocaagua:'Poca agua', gente:'Mucha gente', bajando:'Bajando el viento', ala:'Mi ala'};
 var clave = '', sponsors = [], logoNuevo = null, datos = null;
 function $(id){ return document.getElementById(id); }
@@ -350,13 +351,20 @@ function cargarSponsors(){
   adm('bram_admin_sponsors').then(function(l){
     sponsors = l || [];
     var hoy = iso(new Date());
-    $('lista').innerHTML = sponsors.length ? sponsors.map(function(s, i){
+    // Pedidos online que nunca se pagaron: aparte, para no ensuciar la lista.
+    function sinPagar(s){ return s.origen === 'mp' && !s.activo && (s.mp_estado === 'esperando_pago' || s.mp_estado === 'pending'); }
+    function tarjeta(s, i){
       var vigente = s.activo && s.desde <= hoy && hoy <= s.hasta;
       return '<div class="caja sp">' + (s.logo ? '<img src="' + esc(s.logo) + '" alt="">' : '<img alt="">') +
         '<div class="datos"><b>' + esc(s.nombre) + '</b> <span class="' + (vigente ? 'on">● al aire' : 'off">● ' + (s.activo ? 'fuera de fecha' : 'apagado')) + '</span>' +
-        '<small>' + (s.spot ? SPOTS[s.spot] : 'Todos los spots') + ' · ' + SLOTS[s.slot] + ' · ' + s.desde + ' → ' + s.hasta + ' · ' + Number(s.impresiones).toLocaleString('es-AR') + ' impresiones</small></div>' +
+        '<small>' + (s.spot ? SPOTS[s.spot] : 'Todos los spots') + ' · ' + SLOTS[s.slot] + ' · ' + s.desde + ' → ' + s.hasta + ' · ' + Number(s.impresiones).toLocaleString('es-AR') + ' impresiones</small>' +
+        (s.origen === 'mp' ? '<small>💳 Mercado Pago: ' + esc(MPEST[s.mp_estado] || s.mp_estado || '—') + (s.mail ? ' · ' + esc(s.mail) : '') + '</small>' : '') + '</div>' +
         '<button class="chico" type="button" data-editar="' + i + '">Editar</button></div>';
-    }).join('') : '<p style="color:var(--gris)">Todavía no cargaste sponsors.</p>';
+    }
+    var html = '', pend = '', nPend = 0;
+    sponsors.forEach(function(s, i){ if (sinPagar(s)) { pend += tarjeta(s, i); nPend++; } else html += tarjeta(s, i); });
+    $('lista').innerHTML = (html || '<p style="color:var(--gris)">Todavía no hay sponsors.</p>') +
+      (nPend ? '<details class="caja"><summary style="cursor:pointer;font-weight:800">Pedidos online sin pagar (' + nPend + ')</summary><div style="margin-top:10px">' + pend + '</div></details>' : '');
   });
 }
 $('lista').addEventListener('click', function(e){
