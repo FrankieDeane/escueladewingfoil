@@ -2173,6 +2173,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 .bram-lead__f .nx-btn{grid-column:1/-1;width:100%;min-height:54px;font-size:17px;margin-top:6px}
 .bram-lead__err{grid-column:1/-1;margin:0;font-size:13px;font-weight:700;color:#FFC531}
 .bram-lead__bot{position:absolute;left:-9999px}
+.bram-lead__ya{grid-column:1/-1;background:none;border:0;color:#22C3A6;font:700 15px 'DM Sans',sans-serif;text-decoration:underline;text-underline-offset:3px;padding:8px 0 0;cursor:pointer}
+.bram-lead__f label[hidden]{display:none}
 .bram__nota{font-size:13px;color:#FFC531;font-weight:700;margin:14px 0 0}
 @media(max-width:1020px){.bram__in{grid-template-columns:1fr 1fr}.bram__tel{display:none}}
 @media(max-width:760px){.bram__in{grid-template-columns:1fr}.bram__cta{width:100%}.bram__tel{display:block;width:200px;height:400px;margin:4px auto 0;transform:rotate(-3deg)}.bram__ph{top:118px}.bram__sali{font-size:54px}}
@@ -2216,11 +2218,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <input type="hidden" name="form-name" value="leads-bramador">
       <input type="hidden" name="origen" value="">
       <p class="bram-lead__bot"><label>No completar <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
-      <label>Nombre<input name="nombre" required autocomplete="given-name" maxlength="60"></label>
-      <label>Apellido<input name="apellido" required autocomplete="family-name" maxlength="60"></label>
+      <label data-nuevo>Nombre<input name="nombre" required autocomplete="given-name" maxlength="60"></label>
+      <label data-nuevo>Apellido<input name="apellido" required autocomplete="family-name" maxlength="60"></label>
       <label class="ancho">Mail<input name="mail" type="email" required autocomplete="email" maxlength="120"></label>
       <p class="bram-lead__err" hidden></p>
       <button class="nx-btn nx-btn--signal" type="submit">Ir a Bramador</button>
+      <button type="button" class="bram-lead__ya" data-ya>¿Ya usás Bramador? Entrá solo con tu mail</button>
     </form>
   </div>
 </dialog>
@@ -2235,6 +2238,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   var dlg=document.getElementById('bramLead'),fl=dlg&&dlg.querySelector('form'),destino='/bramador/';
   function yaDejo(){if(/(?:^|;\s*)bram_lead=1/.test(document.cookie))return true;try{return localStorage.getItem('bram_lead')==='1'}catch(e){return false}}
   function ir(){location.href=destino}
+  function marcar(ev){try{localStorage.setItem('bram_lead','1')}catch(e){}fetch('/api/bramador-recordar',{method:'POST',keepalive:true}).catch(function(){});
+    if(typeof gtag==='function')gtag('event',ev,{origen:fl.elements.origen.value})}
+  // Quien ya usa Bramador (en el celular, por ejemplo) entra solo con el mail: se busca entre los riders registrados.
+  var ya=false,tx=dlg&&{t:dlg.querySelector('.bram-lead__t').textContent,s:dlg.querySelector('.bram-lead__s').textContent};
+  function modo(v){ya=v;fl.querySelectorAll('[data-nuevo]').forEach(function(l){l.hidden=v;l.querySelector('input').required=!v});
+    dlg.querySelector('.bram-lead__t').textContent=v?'Entrá con tu mail':tx.t;
+    dlg.querySelector('.bram-lead__s').textContent=v?'El mismo que usaste en la app.':tx.s;
+    fl.querySelector('button[type="submit"]').textContent=v?'Entrar':'Ir a Bramador';
+    fl.querySelector('[data-ya]').textContent=v?'Es mi primera vez':'¿Ya usás Bramador? Entrá solo con tu mail';
+    fl.querySelector('.bram-lead__err').hidden=true}
+  function registrado(mail){return fetch('https://pfwazngwcvirdeyamvsd.supabase.co/rest/v1/rpc/bram_mail_registrado',{method:'POST',
+    headers:{apikey:'sb_publishable_5wLxVtnFy4IMOAMK_rzZ-A_cZ1TSOeV','Content-Type':'application/json'},body:JSON.stringify({p_mail:mail})})
+    .then(function(r){if(!r.ok)throw 0;return r.json()})}
   document.querySelectorAll('#bramador a[href^="/bramador/"]').forEach(function(a){a.addEventListener('click',function(ev){
     if(typeof gtag==='function')gtag('event','instalar_bramador',{origen:a.id==='bramCta'?'portada':'portada_pasos'});
     if(yaDejo()||!dlg||typeof dlg.showModal!=='function')return;
@@ -2245,13 +2261,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   if(dlg){
     dlg.querySelector('[data-cerrar]').addEventListener('click',function(){dlg.close()});
     dlg.addEventListener('click',function(ev){if(ev.target===dlg)dlg.close()});
+    fl.querySelector('[data-ya]').addEventListener('click',function(){modo(!ya);fl.elements[ya?'mail':'nombre'].focus()});
     fl.addEventListener('submit',function(ev){
       ev.preventDefault();
       var btn=fl.querySelector('button[type="submit"]'),err=fl.querySelector('.bram-lead__err');
       btn.disabled=true;btn.textContent='Enviando…';err.hidden=true;
+      if(ya){registrado(fl.elements.mail.value.trim()).then(function(ok){
+          if(ok){marcar('lead_bramador_regreso');return ir()}
+          btn.disabled=false;modo(false);err.textContent='No encontramos ese mail en Bramador. Completá tu nombre y apellido.';err.hidden=false;fl.elements.nombre.focus()})
+        .catch(function(){btn.disabled=false;btn.textContent='Entrar';err.textContent='No se pudo revisar. Probá de nuevo.';err.hidden=false});return}
       fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(fl)).toString()})
-        .then(function(r){if(!r.ok)throw 0;try{localStorage.setItem('bram_lead','1')}catch(e){}fetch('/api/bramador-recordar',{method:'POST',keepalive:true}).catch(function(){});
-          if(typeof gtag==='function')gtag('event','lead_bramador',{origen:fl.elements.origen.value});ir()})
+        .then(function(r){if(!r.ok)throw 0;marcar('lead_bramador');ir()})
         .catch(function(){btn.disabled=false;btn.textContent='Ir a Bramador';err.textContent='No se pudo enviar. Probá de nuevo.';err.hidden=false});
     });
   }

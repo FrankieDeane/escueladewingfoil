@@ -224,3 +224,14 @@ end $$;
 
 
 -- La clave de admin se guarda encriptada en bram_config (clave = 'admin') con extensions.crypt(..., gen_salt('bf')).
+
+-- 2/11: entrar solo con el mail si ya se usó Bramador en otro equipo (devuelve true/false, no expone datos).
+create or replace function public.bram_mail_registrado(p_mail text) returns boolean
+language sql stable security definer set search_path = ''
+as $$
+  select exists (select 1 from public.bram_riders r
+    where length(coalesce(p_mail,'')) between 5 and 120
+      and lower(trim(r.mail)) = lower(trim(p_mail)));
+$$;
+revoke all on function public.bram_mail_registrado(text) from public;
+grant execute on function public.bram_mail_registrado(text) to anon, authenticated;
