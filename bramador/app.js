@@ -174,7 +174,7 @@ function pronostico(){
     '&hourly=wind_speed_10m,wind_direction_10m,wind_gusts_10m,precipitation,precipitation_probability,weather_code,temperature_2m' +
     '&daily=sunrise,sunset,weather_code,precipitation_sum' +
     '&wind_speed_unit=kn&timezone=' + encodeURIComponent(TZ) + '&forecast_days=16';
-  return traer(url, 'pron', 30 * 60e3).then(function(d){
+  return traer(url, 'pron', 15 * 60e3).then(function(d){
     var arr = Array.isArray(d) ? d : [d];
     var porSpot = {};
     SPOTS.forEach(function(s, i){ if (arr[i]) porSpot[s.id] = arr[i]; });
@@ -230,7 +230,7 @@ function tendenciaDia(clima, iso){
 }
 // Viento medido en el Náutico San Isidro (estación del club, publicada en ThingSpeak).
 function cnsi(){
-  return traer('https://api.thingspeak.com/channels/1506798/feeds.json?results=24', 'cnsi', 5 * 60e3).then(function(d){
+  return traer('https://api.thingspeak.com/channels/1506798/feeds.json?results=24', 'cnsi', 2 * 60e3).then(function(d){
     var f = (d.feeds || []).map(function(x){
       return {t: Date.parse(x.created_at), kn: parseFloat(x.field3), raf: parseFloat(x.field2), dir: parseFloat(x.field4), temp: parseFloat(x.field5)};
     }).filter(function(x){ return isFinite(x.t) && isFinite(x.kn) && isFinite(x.dir); });
@@ -459,10 +459,21 @@ function vistaHoy(){ var t = turno;
     var todo = r[0], d = todo[spot.id];
     if (!d) throw new Error('sin datos');
     var s = salgo(spot, d), aguaT = r[1], mar = r[2], medido = r[3];
+    // Si el Náutico midió hace poco, manda lo medido: el número grande, las ráfagas, la brújula y el veredicto de ahora.
+    // El pronóstico queda chico al lado, para comparar.
+    var med = medido && Date.now() - medido.t < 40 * 60e3 ? medido : null, pronKn = s.kn;
+    if (med) {
+      s.kn = r0(med.kn); s.deg = med.dir; s.raf = isFinite(med.raf) ? r0(med.raf) : s.raf;
+      var evMed = evaluar(spot, med.kn, med.dir, s.code || 0);
+      if (s.estado !== 'noche') {
+        if (evMed.ok && s.estado !== 'sali') { s.estado = 'sali'; s.ahoraMedido = true; s.hasta = null; }
+        else if (!evMed.ok && s.estado === 'sali') { s.estado = 'no'; s.motivo = evMed.m; s.ahoraMedido = true; }
+      }
+    }
     var verd, linea;
     if (s.estado === 'sali') {
       verd = '<p class="veredicto">SALÍ.</p>';
-      linea = s.hastaSol ? 'Hasta que se va el sol · ' + hhmm(s.puesta) : 'Hasta las ' + hhmm(s.hasta);
+      linea = s.ahoraMedido ? 'Lo mide el Náutico ahora · el pronóstico no lo vio' : s.hastaSol ? 'Hasta que se va el sol · ' + hhmm(s.puesta) : 'Hasta las ' + hhmm(s.hasta);
     } else if (s.estado === 'espera') {
       verd = '<p class="veredicto veredicto--espera">ESPERÁ.</p>';
       linea = 'Entra a las ' + hhmm(s.desde) + ' · hasta las ' + hhmm(s.hasta);
@@ -471,7 +482,7 @@ function vistaHoy(){ var t = turno;
       linea = 'Mirá mañana en Mi spot';
     } else {
       verd = '<p class="veredicto veredicto--no">HOY NO.</p>';
-      linea = s.hayRayos ? 'Hay tormenta eléctrica: no salgas' : 'Hoy: ' + s.motivo;
+      linea = s.hayRayos ? 'Hay tormenta eléctrica: no salgas' : (s.ahoraMedido ? 'Ahora: ' : 'Hoy: ') + s.motivo;
     }
     var sigMarea = mar.filter(function(x){ return x.t > Date.now(); })[0];
     var luzMin = Math.max(0, r0((s.puesta - Date.now()) / 60e3));
@@ -483,12 +494,14 @@ function vistaHoy(){ var t = turno;
         '<button class="pildora" type="button" data-accion="compartir" aria-label="Compartir"><svg viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v6h14v-6"/></svg></button>' +
         '<a class="pildora" href="#/equipate"><svg viewBox="0 0 24 24" style="stroke:#FF5A2C"><path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>Equipate</a></div></div>' +
       '<div class="hero__spot"><a class="pildora" href="#/spot/' + spot.id + '"><span class="punto vivo-dot"></span>' + esc(spot.n) + ' ▾</a>' +
-        (medido && Date.now() - medido.t < 3 * 3600e3 ? '<span class="pildora">Medido en el Náutico: ' + r0(medido.kn) + ' kn ' + rumbo(medido.dir) + '</span>' : '') + '</div>' +
+        (med ? '<span class="pildora">Pronóstico: ' + pronKn + ' kn</span>' : medido && Date.now() - medido.t < 3 * 3600e3 ? '<span class="pildora">Náutico a las ' + hhmm(medido.t) + ': ' + r0(medido.kn) + ' kn ' + rumbo(medido.dir) + '</span>' : '') + '</div>' +
       '<div class="hero__pie">' + verd +
+        (med ? '<div class="hero__fuente"><i class="vivo-dot"></i> MEDIDO EN EL NÁUTICO · ' + hhmm(med.t) + '</div>' : '<div class="hero__fuente hero__fuente--pron">PRONÓSTICO</div>') +
         '<div class="hero__fila"><div><div class="hero__kn">' + s.kn + '<small> kn</small>' +
           (isFinite(s.raf) ? '<span class="hero__raf"><small>RÁFAGAS</small>' + s.raf + '<small> kn</small></span>' : '') + '</div>' +
         '<div class="hero__dir">del ' + rumbo(s.deg) + (rachado(s.kn, s.raf) ? ' · <span class="rachado">⚠ Rachado</span>' : '') + '</div>' +
         '<div class="hero__hasta">' + esc(linea) + '</div><div class="presenta" id="presenta" hidden></div></div>' + brujula(s.deg, spot.arco, 112) + '</div></div></section>' +
+      '<div id="cambioBox"></div>' +
       '<div class="datos">' +
         '<div class="dato"><small>AGUA</small><b>' + (aguaT != null ? r0(aguaT) + '° · ' + traje(aguaT) : '—') + '</b></div>' +
         '<a class="dato" href="#/spot/' + spot.id + '"><small>MAREA</small><b>' + (sigMarea ? (sigMarea.alta ? '▲ ' : '▼ ') + hhmm(sigMarea.t) : '—') + '</b></a>' +
@@ -517,6 +530,7 @@ function vistaHoy(){ var t = turno;
     });
     compartirDatos = {spot: spot, s: s, linea: linea};
     avisarAlertas(todo);
+    if (t === turno) { ultimoPron = todo; vigilar(); }
   }).catch(function(){ pintarEn(t, '<div class="cab">' + marca() + '</div>' + error()); });
 }
 var compartirDatos = null;
@@ -637,7 +651,7 @@ function vistaSpot(id){ var t = turno;
       '<div class="spot-ahora"><b>' + r0(cur.wind_speed_10m) + '</b> kn ' + rumbo(cur.wind_direction_10m) + ' <span>· ráfagas <b>' + r0(cur.wind_gusts_10m) + '</b></span>' +
         (rachado(cur.wind_speed_10m, cur.wind_gusts_10m) ? ' <em class="rachado">⚠ Rachado</em>' : '') + '</div><p>' + (pico ? 'Pico del día: ' + hhmm(pico.ms) + ' · ' + r0(pico.kn) + ' kn' + (pico.ev.ok ? ' · ala de ' + ala(pico.kn, p.peso) + ' m' : '') : esc(spot.sub)) + '</p></div>' +
       brujula(cur.wind_direction_10m, spot.arco, 96) + '</div></div>' + sel +
-      reportesHtml(spot) +
+      '<div id="cambioBox"></div>' + reportesHtml(spot) +
       solTira(d) +
       '<div class="tarj vidrio"><p class="tit">Próximas 24 horas</p><div class="barras">' + barras.map(function(b, j){
         return '<div class="barra">' + (tormenta(b.code) ? '<small>⚡</small>' : b.pp >= 50 ? '<small>💧</small>' : '') +
@@ -650,7 +664,7 @@ function vistaSpot(id){ var t = turno;
       '<div class="tarj vidrio"><p class="tit">El mes · tocá un día</p><div class="cal">' + cal + '</div>' +
       '<p style="margin:10px 0 0;font-size:12px;line-height:1.35;color:#8FA9BF">Los primeros 16 días: nudos máximos con luz. Los punteados: tendencia (probabilidad de un día de +12 kn según los últimos 20 años).</p></div>' +
       '<div style="padding:12px 16px 0"><a class="btn btn--vidrio" href="#/alertas">🔔 Avisame cuando haya viento acá</a></div>');
-    if (t === turno) cargarEstado(spot.id);
+    if (t === turno) { cargarEstado(spot.id); ultimoPron = r[0]; vigilar(); }
   }).catch(function(){ pintarEn(t, sel + error()); });
 }
 
@@ -788,7 +802,7 @@ function vistaAlertas(){
         '<div style="font-size:12px;color:#8FA9BF">del ' + a.dirs.join(', ') + (a.finde ? ' · fines de semana' : '') + '</div></div>' +
         '<button class="pildora" type="button" data-al-borrar="' + i + '" aria-label="Borrar alerta">Borrar</button></div>';
     }).join('') + '</div><div class="subt"><h2>Próximos días que se cumplen</h2></div><div id="coinc" style="padding:0 16px"><p class="nota" style="margin:0">Buscando…</p></div>' : '') +
-    (permiso === 'granted' ? '<div class="aviso aviso--ok">Avisos activados en este teléfono. Te avisamos al abrir Bramador cuando se cumpla una alerta.</div>'
+    (permiso === 'granted' ? '<div class="aviso aviso--ok">Avisos activados en este teléfono. Te avisamos cuando se cumpla una alerta y, al toque, si en tu spot sube o baja el viento más de lo pronosticado.</div>'
       : permiso === 'no' ? '<div class="aviso">Este navegador no permite avisos. En iPhone, primero instalá Bramador (Más → Instalar).</div>'
       : '<div style="padding:12px 16px 0"><button class="btn btn--vidrio" type="button" data-accion="permiso">🔔 Activar avisos en este teléfono</button></div>') +
     '<p class="nota">Por ahora los avisos llegan cuando abrís Bramador. Muy pronto también con la app cerrada.</p>');
@@ -1104,7 +1118,7 @@ function alasHtml(){
 }
 
 // Reportes del spot ("el Waze del río"): toques de quien está ahí, últimas 2 horas.
-var ETIQ = {bien: ['✅', 'Todo bien'], rachado: ['💨', 'Rachado'], pocaagua: ['🏝️', 'Poca agua'], gente: ['👥', 'Mucha gente'], bajando: ['📉', 'Bajando el viento']};
+var ETIQ = {subiendo: ['📈', 'Subió el viento'], bien: ['✅', 'Todo bien'], rachado: ['💨', 'Rachado'], pocaagua: ['🏝️', 'Poca agua'], gente: ['👥', 'Mucha gente'], bajando: ['📉', 'Bajando el viento']};
 var repSpot = null, repKn = null, repEstadoAct = null;
 function hace(seg){
   var m = Math.max(0, Math.round(seg / 60));
@@ -1114,7 +1128,7 @@ function reportesHtml(spot){
   return '<div class="tarj vidrio rep" id="repBox"><div class="rep__cab"><p class="tit" style="margin:0">En el spot ahora</p><span class="rep__vivo"><i class="vivo-dot"></i>en vivo</span></div>' +
     '<div class="rep__estado" id="repEstado"><span class="rep__gris">Leyendo reportes…</span></div>' +
     '<div class="rep__btns">' + Object.keys(ETIQ).map(function(k){
-      return '<button type="button" data-rep="' + k + '"><span aria-hidden="true">' + ETIQ[k][0] + '</span>' + ETIQ[k][1] + '</button>';
+      return '<button type="button" data-rep="' + k + '"' + (k === 'subiendo' ? ' class="rep__sube"' : '') + '><span aria-hidden="true">' + ETIQ[k][0] + '</span>' + ETIQ[k][1] + '</button>';
     }).join('') + '<button type="button" data-rep="ala"><span aria-hidden="true">🪁</span>Mi ala</button></div>' +
     '<div id="repExtra"></div>' +
     '<p class="rep__nota">Cuenta solo si estás en ' + esc(spot.n) + ' (hasta 2 km). Vence a las 2 horas.</p></div>';
@@ -1219,6 +1233,7 @@ function reportar(tag, ala, spotId){
       fin();
       if (res && res.ok) {
         evento('bramador_reporte', {spot: spot.id, tag: tag});
+        if (tag === 'subiendo' || tag === 'no_subiendo') revisarCambios();
         avisoRep(tag === 'ala' ? '✓ Anotado: ' + esc(ala.marca) + ' ' + String(ala.m).replace('.', ',') + ' m. ¡Buena sesión!' : '✓ Gracias, ya cuenta.', 'ok');
         if (spot.id === repSpot) pintarEstado(res.estado);
         else avisoRep('✓ Gracias, ya cuenta en ' + esc(spot.n) + '. <a href="#/spot/' + spot.id + '">Ver ' + esc(spot.n) + '</a>', 'ok');
@@ -1268,6 +1283,94 @@ document.addEventListener('click', function(e){
     document.getElementById('alasBox').innerHTML = alasHtml();
   }
 });
+
+// ─────────────────────────────── CAMBIOS DE VIENTO ───────────────────────────────
+// Si en un spot sopla bastante más (o menos) que lo pronosticado, que se sepa ya.
+// Dos señales: la estación del Náutico mide 5 kn o más de diferencia con el pronóstico de ahora,
+// o riders en el agua tocaron "Subió el viento" (últimos 45 min). Con la app abierta se revisa cada 2 min.
+var CERCA_CNSI = ['sanisidro', 'peru', 'martinez'], DIF_KN = 5, CADA = 2 * 60e3;
+var vigReloj = null, vigUltimo = {};
+function cambiosDeViento(todo, medido, subidas){
+  var res = [];
+  SPOTS.forEach(function(sp){
+    var c = todo && todo[sp.id] && todo[sp.id].current; if (!c || !isFinite(c.wind_speed_10m)) return;
+    var x = {spot: sp, pron: c.wind_speed_10m, medido: null, riders: null};
+    if (medido && CERCA_CNSI.indexOf(sp.id) >= 0 && Date.now() - medido.t < 30 * 60e3) {
+      var dif = medido.kn - x.pron;
+      if (dif >= DIF_KN && medido.kn >= 10) x.medido = {kn: medido.kn, dir: medido.dir, t: medido.t, sube: true};
+      else if (dif <= -DIF_KN && x.pron >= 12) x.medido = {kn: medido.kn, dir: medido.dir, t: medido.t, sube: false};
+    }
+    var sb = subidas && subidas[sp.id];
+    if (sb && sb.riders > 0) x.riders = {n: sb.riders, t: sb.t * 1000};
+    if (x.medido || x.riders) res.push(x);
+  });
+  return res;
+}
+function sube(x){ return !!(x.riders || (x.medido && x.medido.sube)); }
+function textoCambio(x){
+  var partes = [];
+  if (x.medido) partes.push('el Náutico mide <b>' + r0(x.medido.kn) + ' kn</b> del ' + rumbo(x.medido.dir) + ' y el pronóstico decía ' + r0(x.pron));
+  if (x.riders) partes.push('<b>' + x.riders.n + (x.riders.n === 1 ? ' rider' : ' riders') + '</b> en el agua ' + (x.riders.n === 1 ? 'dice' : 'dicen') + ' que subió · ' + hace((Date.now() - x.riders.t) / 1000));
+  var t = partes.join('. ');
+  return t.charAt(0).toUpperCase() + t.slice(1);
+}
+function pintarCambios(lista){
+  var box = document.getElementById('cambioBox'); if (!box) return;
+  var enSpot = /^#\/spot/.test(location.hash) ? repSpot : null, mio = perfil().spot;
+  var ver = lista.filter(function(x){ return !enSpot || x.spot.id === enSpot; })
+    .sort(function(a, b){ return (b.spot.id === mio) - (a.spot.id === mio); });
+  if (!ver.length) { box.innerHTML = ''; return; }
+  // En Hoy: el cartel grande para el primero (tu spot si cambió) y el resto en chips, para no ocupar la pantalla.
+  var resto = ver.slice(1);
+  box.innerHTML = ver.slice(0, 1).map(function(x){
+    var up = sube(x);
+    return '<a class="cambio' + (up ? '' : ' cambio--baja') + '" href="#/spot/' + x.spot.id + '" role="status">' +
+      '<span class="cambio__ico" aria-hidden="true">' + (up ? '⚡' : '📉') + '</span><span><b class="cambio__tit">' + (up ? 'Subió el viento' : 'Bajó el viento') + ' en ' + esc(x.spot.n) + '</b>' +
+      '<span class="cambio__txt">' + textoCambio(x) + '</span><small><i class="vivo-dot"></i> En vivo · se revisa cada 2 min</small></span></a>';
+  }).join('') + (resto.length ? '<div class="cambio-otros"><span>También:</span>' + resto.map(function(x){
+    return '<a class="cambio-chip' + (sube(x) ? '' : ' cambio-chip--baja') + '" href="#/spot/' + x.spot.id + '">' + (sube(x) ? '⚡ ' : '📉 ') + esc(x.spot.n) + '</a>';
+  }).join('') + '</div>' : '');
+}
+// Aviso al teléfono para tu spot y los spots de tus alertas: uno por spot por hora (subida y bajada por separado).
+function avisarCambios(lista){
+  if (!('Notification' in window) || Notification.permission !== 'granted' || !navigator.serviceWorker) return;
+  var sigo = {}; sigo[perfil().spot] = 1; alertas().forEach(function(a){ sigo[a.spot] = 1; });
+  var hechos = leer('avisoscambio', {}), ahora = Date.now(), cambio = false;
+  lista.forEach(function(x){
+    if (!sigo[x.spot.id]) return;
+    var clave = x.spot.id + (sube(x) ? '_sube' : '_baja');
+    if (hechos[clave] && ahora - hechos[clave] < 3600e3) return;
+    hechos[clave] = ahora; cambio = true;
+    var tit = (sube(x) ? '⚡ Subió el viento en ' : '📉 Bajó el viento en ') + x.spot.n;
+    var txt = textoCambio(x).replace(/<[^>]+>/g, '');
+    Promise.all([navigator.serviceWorker.ready, sponsorPara(x.spot.id, 'alerta').catch(function(){ return null; })]).then(function(r){
+      var sp = r[1];
+      r[0].showNotification(tit, {body: txt + (sp ? '\nPresentado por ' + sp.nombre : ''), icon: '/bramador/icons/icon-192.png', badge: '/bramador/icons/icon-192.png',
+        tag: 'cambio-' + x.spot.id, renotify: true, data: {url: '/bramador/#/spot/' + x.spot.id}});
+      if (sp) contarImpresion(sp, 'alerta', x.spot.id);
+      evento('bramador_aviso_cambio', {spot: x.spot.id, tipo: sube(x) ? 'sube' : 'baja'});
+    }).catch(function(){});
+  });
+  if (cambio) guardar('avisoscambio', hechos);
+}
+function revisarCambios(){
+  if (document.visibilityState === 'hidden') return;
+  Promise.all([pronostico().catch(function(){ return ultimoPron; }), cnsi().catch(function(){ return null; }),
+               rpc('bram_subidas').catch(function(){ return vigUltimo.subidas || {}; })]).then(function(r){
+    if (r[0]) ultimoPron = r[0];
+    vigUltimo.subidas = r[2] || {};
+    var lista = cambiosDeViento(r[0], r[1], vigUltimo.subidas);
+    pintarCambios(lista);
+    avisarCambios(lista);
+    // En Mi spot, los reportes también se refrescan solos.
+    if (/^#\/spot/.test(location.hash) && repSpot) cargarEstado(repSpot);
+  });
+}
+function vigilar(){
+  revisarCambios();
+  if (!vigReloj) vigReloj = setInterval(revisarCambios, CADA);
+}
+document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'visible' && vigReloj) revisarCambios(); });
 
 // Sponsors: "Presentado por" en la señal (SALÍ) y en las alertas. Solo logo y nombre.
 var sponsorsMem = null;
@@ -1468,6 +1571,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.21', fecha: '4/11', cambios: ['En Hoy, si el Náutico está midiendo, el número grande es el viento medido de verdad, y el pronóstico queda chico al lado.', 'Si en tu spot sopla más (o menos) de lo pronosticado, Bramador te avisa al toque: lo mide el Náutico o lo cuentan los riders en el agua.', 'Nuevo botón en Mi spot: "📈 Subió el viento". Con un toque avisás a todos los que siguen ese spot.', 'Con la app abierta, el viento se revisa solo cada 2 minutos.']},
   {v: '1.20', fecha: '2/11', cambios: ['Arreglado: al cambiar de pantalla rápido ya no aparece de golpe otra pantalla ni texto de fondo.']},
   {v: '1.19', fecha: '2/11', cambios: ['¿Ya usás Bramador en el celular? En otro equipo entrás solo con tu mail.']},
   {v: '1.18', fecha: '31/10', cambios: ['Pronóstico más real: ahora el viento se calcula sobre el agua, río adentro, y no en la costa (ahí daba de menos).']},
