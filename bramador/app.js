@@ -459,10 +459,21 @@ function vistaHoy(){ var t = turno;
     var todo = r[0], d = todo[spot.id];
     if (!d) throw new Error('sin datos');
     var s = salgo(spot, d), aguaT = r[1], mar = r[2], medido = r[3];
+    // Si el Náutico midió hace poco, manda lo medido: el número grande, las ráfagas, la brújula y el veredicto de ahora.
+    // El pronóstico queda chico al lado, para comparar.
+    var med = medido && Date.now() - medido.t < 40 * 60e3 ? medido : null, pronKn = s.kn;
+    if (med) {
+      s.kn = r0(med.kn); s.deg = med.dir; s.raf = isFinite(med.raf) ? r0(med.raf) : s.raf;
+      var evMed = evaluar(spot, med.kn, med.dir, s.code || 0);
+      if (s.estado !== 'noche') {
+        if (evMed.ok && s.estado !== 'sali') { s.estado = 'sali'; s.ahoraMedido = true; s.hasta = null; }
+        else if (!evMed.ok && s.estado === 'sali') { s.estado = 'no'; s.motivo = evMed.m; s.ahoraMedido = true; }
+      }
+    }
     var verd, linea;
     if (s.estado === 'sali') {
       verd = '<p class="veredicto">SALÍ.</p>';
-      linea = s.hastaSol ? 'Hasta que se va el sol · ' + hhmm(s.puesta) : 'Hasta las ' + hhmm(s.hasta);
+      linea = s.ahoraMedido ? 'Lo mide el Náutico ahora · el pronóstico no lo vio' : s.hastaSol ? 'Hasta que se va el sol · ' + hhmm(s.puesta) : 'Hasta las ' + hhmm(s.hasta);
     } else if (s.estado === 'espera') {
       verd = '<p class="veredicto veredicto--espera">ESPERÁ.</p>';
       linea = 'Entra a las ' + hhmm(s.desde) + ' · hasta las ' + hhmm(s.hasta);
@@ -471,7 +482,7 @@ function vistaHoy(){ var t = turno;
       linea = 'Mirá mañana en Mi spot';
     } else {
       verd = '<p class="veredicto veredicto--no">HOY NO.</p>';
-      linea = s.hayRayos ? 'Hay tormenta eléctrica: no salgas' : 'Hoy: ' + s.motivo;
+      linea = s.hayRayos ? 'Hay tormenta eléctrica: no salgas' : (s.ahoraMedido ? 'Ahora: ' : 'Hoy: ') + s.motivo;
     }
     var sigMarea = mar.filter(function(x){ return x.t > Date.now(); })[0];
     var luzMin = Math.max(0, r0((s.puesta - Date.now()) / 60e3));
@@ -483,8 +494,9 @@ function vistaHoy(){ var t = turno;
         '<button class="pildora" type="button" data-accion="compartir" aria-label="Compartir"><svg viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v6h14v-6"/></svg></button>' +
         '<a class="pildora" href="#/equipate"><svg viewBox="0 0 24 24" style="stroke:#FF5A2C"><path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>Equipate</a></div></div>' +
       '<div class="hero__spot"><a class="pildora" href="#/spot/' + spot.id + '"><span class="punto vivo-dot"></span>' + esc(spot.n) + ' ▾</a>' +
-        (medido && Date.now() - medido.t < 3 * 3600e3 ? '<span class="pildora">Medido en el Náutico: ' + r0(medido.kn) + ' kn ' + rumbo(medido.dir) + '</span>' : '') + '</div>' +
+        (med ? '<span class="pildora">Pronóstico: ' + pronKn + ' kn</span>' : medido && Date.now() - medido.t < 3 * 3600e3 ? '<span class="pildora">Náutico a las ' + hhmm(medido.t) + ': ' + r0(medido.kn) + ' kn ' + rumbo(medido.dir) + '</span>' : '') + '</div>' +
       '<div class="hero__pie">' + verd +
+        (med ? '<div class="hero__fuente"><i class="vivo-dot"></i> MEDIDO EN EL NÁUTICO · ' + hhmm(med.t) + '</div>' : '<div class="hero__fuente hero__fuente--pron">PRONÓSTICO</div>') +
         '<div class="hero__fila"><div><div class="hero__kn">' + s.kn + '<small> kn</small>' +
           (isFinite(s.raf) ? '<span class="hero__raf"><small>RÁFAGAS</small>' + s.raf + '<small> kn</small></span>' : '') + '</div>' +
         '<div class="hero__dir">del ' + rumbo(s.deg) + (rachado(s.kn, s.raf) ? ' · <span class="rachado">⚠ Rachado</span>' : '') + '</div>' +
@@ -1559,7 +1571,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
-  {v: '1.21', fecha: '4/11', cambios: ['Si en tu spot sopla más (o menos) de lo pronosticado, Bramador te avisa al toque: lo mide el Náutico o lo cuentan los riders en el agua.', 'Nuevo botón en Mi spot: "📈 Subió el viento". Con un toque avisás a todos los que siguen ese spot.', 'Con la app abierta, el viento se revisa solo cada 2 minutos.']},
+  {v: '1.21', fecha: '4/11', cambios: ['En Hoy, si el Náutico está midiendo, el número grande es el viento medido de verdad, y el pronóstico queda chico al lado.', 'Si en tu spot sopla más (o menos) de lo pronosticado, Bramador te avisa al toque: lo mide el Náutico o lo cuentan los riders en el agua.', 'Nuevo botón en Mi spot: "📈 Subió el viento". Con un toque avisás a todos los que siguen ese spot.', 'Con la app abierta, el viento se revisa solo cada 2 minutos.']},
   {v: '1.20', fecha: '2/11', cambios: ['Arreglado: al cambiar de pantalla rápido ya no aparece de golpe otra pantalla ni texto de fondo.']},
   {v: '1.19', fecha: '2/11', cambios: ['¿Ya usás Bramador en el celular? En otro equipo entrás solo con tu mail.']},
   {v: '1.18', fecha: '31/10', cambios: ['Pronóstico más real: ahora el viento se calcula sobre el agua, río adentro, y no en la costa (ahí daba de menos).']},
