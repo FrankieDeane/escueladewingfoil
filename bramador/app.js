@@ -435,6 +435,10 @@ function aLaOrilla(kn, deg, spot){
 // ─────────────────────────────── Pintado común ───────────────────────────────
 function fondo(clave){ document.getElementById('fondo').style.backgroundImage = 'url(' + foto(FOTOS[clave] || FOTOS.hoy) + ')'; }
 function pintar(html){ $app.innerHTML = html; }
+// Cada cambio de pantalla suma un turno. Lo que llega tarde de una pantalla que ya
+// dejaste (el pronóstico de Hoy, por ejemplo) no se dibuja encima de la nueva.
+var turno = 0;
+function pintarEn(t, html){ if (t === turno) pintar(html); }
 function error(msg){
   return '<div class="tarj vidrio vacio">' + esc(msg || 'No pudimos traer el pronóstico. Revisá la conexión y volvé a intentar.') +
     '<br><br><button class="btn btn--chico" type="button" data-accion="reintentar">Reintentar</button></div>';
@@ -442,7 +446,7 @@ function error(msg){
 function evento(nombre, extra){ try { if (typeof gtag === 'function') gtag('event', nombre, extra || {}); } catch(e){} }
 
 // ─────────────────────────────── HOY ───────────────────────────────
-function vistaHoy(){
+function vistaHoy(){ var t = turno;
   fondo('hoy');
   var p = perfil(), spot = spotPorId(p.spot);
   pintar('<section class="hero"><div class="hero__foto" style="background-image:url(' + foto(spot.foto) + ')"></div>' + rachas(null) +
@@ -505,6 +509,7 @@ function vistaHoy(){
       }).join('') + '</div>' +
       '<div class="subt"><h2>El río en vivo</h2><a href="#/rio">Cámaras →</a></div>' +
       '<p class="nota">Pronóstico de modelos públicos, actualizado cada hora. Medido: estación del Náutico San Isidro y Pilote Norden.</p>';
+    if (t !== turno) return; // ya te fuiste de Hoy
     pintar(html);
     // El sponsor llega después que el viento: nunca demora el vistazo.
     sponsorPara(spot.id, 'senal').then(function(sp){
@@ -513,8 +518,8 @@ function vistaHoy(){
     });
     compartirDatos = {spot: spot, s: s, linea: linea};
     avisarAlertas(todo);
-    ultimoPron = todo; vigilar();
-  }).catch(function(){ pintar('<div class="cab">' + marca() + '</div>' + error()); });
+    if (t === turno) { ultimoPron = todo; vigilar(); }
+  }).catch(function(){ pintarEn(t, '<div class="cab">' + marca() + '</div>' + error()); });
 }
 var compartirDatos = null;
 function compartir(){
@@ -584,7 +589,7 @@ function vistaRio(){
 }
 
 // ─────────────────────────────── MI SPOT ───────────────────────────────
-function vistaSpot(id){
+function vistaSpot(id){ var t = turno;
   fondo('spot');
   var p = perfil(), spot = spotPorId(id || p.spot);
   var sel = '<div class="selspot">' + SPOTS.map(function(s){
@@ -629,7 +634,7 @@ function vistaSpot(id){
       marAhora = '<div class="marea-ahora"><div><small>AHORA</small><b>' + String(Math.round(mAhora * 100) / 100).replace('.', ',') + ' m</b></div>' +
         '<span class="' + (cmh >= 0 ? 'sube' : 'baja') + '">' + (cmh >= 0 ? '▲ subiendo' : '▼ bajando') + ' · ' + Math.abs(cmh) + ' cm/h</span></div>' + curvaMarea(mar, ahora);
     }
-    pintar('<div class="spot-cab"><div class="hero__foto" style="background-image:url(' + foto(spot.foto) + ')"></div><div class="hero__velo"></div>' +
+    pintarEn(t, '<div class="spot-cab"><div class="hero__foto" style="background-image:url(' + foto(spot.foto) + ')"></div><div class="hero__velo"></div>' +
       '<div class="spot-cab__txt"><div><h1>' + esc(spot.n) + '</h1>' +
       '<div class="spot-ahora"><b>' + r0(cur.wind_speed_10m) + '</b> kn ' + rumbo(cur.wind_direction_10m) + ' <span>· ráfagas <b>' + r0(cur.wind_gusts_10m) + '</b></span>' +
         (rachado(cur.wind_speed_10m, cur.wind_gusts_10m) ? ' <em class="rachado">⚠ Rachado</em>' : '') + '</div><p>' + (pico ? 'Pico del día: ' + hhmm(pico.ms) + ' · ' + r0(pico.kn) + ' kn' + (pico.ev.ok ? ' · ala de ' + ala(pico.kn, p.peso) + ' m' : '') : esc(spot.sub)) + '</p></div>' +
@@ -647,13 +652,12 @@ function vistaSpot(id){
       '<div class="tarj vidrio"><p class="tit">El mes · tocá un día</p><div class="cal">' + cal + '</div>' +
       '<p style="margin:10px 0 0;font-size:12px;line-height:1.35;color:#8FA9BF">Los primeros 16 días: nudos máximos con luz. Los punteados: tendencia (probabilidad de un día de +12 kn según los últimos 20 años).</p></div>' +
       '<div style="padding:12px 16px 0"><a class="btn btn--vidrio" href="#/alertas">🔔 Avisame cuando haya viento acá</a></div>');
-    cargarEstado(spot.id);
-    ultimoPron = r[0]; vigilar();
-  }).catch(function(){ pintar(sel + error()); });
+    if (t === turno) { cargarEstado(spot.id); ultimoPron = r[0]; vigilar(); }
+  }).catch(function(){ pintarEn(t, sel + error()); });
 }
 
 // ─────────────────────────────── UN DÍA ───────────────────────────────
-function vistaDia(id, iso){
+function vistaDia(id, iso){ var t = turno;
   fondo('dia');
   var spot = spotPorId(id), p = perfil();
   pintar('<p class="cargando">Cargando…</p>');
@@ -664,7 +668,7 @@ function vistaDia(id, iso){
     var k = d ? d.daily.time.indexOf(iso) : -1;
     if (k < 0) {
       var td = clima ? tendenciaDia(clima, iso) : null;
-      pintar(cab + '<div class="tarj vidrio" style="text-align:center">' +
+      pintarEn(t, cab + '<div class="tarj vidrio" style="text-align:center">' +
         (td ? '<p class="tit">Tendencia · faltan ' + r0((msDe(iso) - msDe(hoyISO())) / 864e5) + ' días</p>' +
           '<div style="font-family:Bricolage Grotesque,sans-serif;font-size:64px;font-weight:800;color:' + kcolor(td.prom) + '">' + r0(td.prob * 100) + '%</div>' +
           '<p style="margin:0;font-size:15px;font-weight:700">de chances de un día de +12 kn</p>' +
@@ -691,14 +695,14 @@ function vistaDia(id, iso){
     }
     var pico = picoDia(spot, d, iso);
     var titulo = hayRayo ? 'TORMENTA' : pico && pico.ev.ok && pico.kn >= 18 ? 'DÍA BRAMADOR' : pico && pico.ev.ok ? 'DÍA PARA SALIR' : 'DÍA FLOJO';
-    pintar(cab + '<div class="tarj vidrio" style="display:flex;gap:14px;align-items:center">' + brujula(domDeg, spot.arco, 120) +
+    pintarEn(t, cab + '<div class="tarj vidrio" style="display:flex;gap:14px;align-items:center">' + brujula(domDeg, spot.arco, 120) +
       '<div><div style="font-family:Bricolage Grotesque,sans-serif;font-size:26px;font-weight:800;line-height:1;color:' + (hayRayo ? '#FFD23F' : '#FF5A2C') + '">' + titulo + '</div>' +
       '<div style="font-size:30px;font-weight:900;margin-top:6px">' + r0(maxKn) + ' kn <small style="font-size:14px">' + (domDeg != null ? rumbo(domDeg) : '') + '</small></div>' +
       (pico && pico.ev.ok ? '<div style="font-size:13px;font-weight:700;color:#FFC531">Mejor: ' + hhmm(pico.ms) + ' · ala de ' + ala(pico.kn, p.peso) + ' m</div>' : '') +
       '<div style="font-size:12px;color:#8FA9BF;margin-top:4px">Sol: ' + hhmm(sr) + ' a ' + hhmm(ss) + '</div></div></div>' +
       '<div class="tarj vidrio"><p class="tit">Hora por hora</p><div class="filas">' + filas.join('') + '</div></div>' +
       (k > 6 ? '<p class="nota">A más de una semana el pronóstico puede cambiar: miralo de nuevo unos días antes.</p>' : ''));
-  }).catch(function(){ pintar(error()); });
+  }).catch(function(){ pintarEn(t, error()); });
 }
 
 // ─────────────────────────────── MÁS ───────────────────────────────
@@ -1472,6 +1476,7 @@ function bienvenida(){
 
 // ─────────────────────────────── Router y eventos ───────────────────────────────
 function router(){
+  turno++;
   var h = (location.hash || '#/').replace(/^#\/?/, '').split('/');
   var ruta = h[0] || 'hoy';
   var nav = {hoy:'hoy', rio:'rio', mapa:'hoy', spot:'spot', dia:'spot'}[ruta] || 'mas';
@@ -1554,7 +1559,8 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
-  {v: '1.20', fecha: '2/11', cambios: ['Si en tu spot sopla más (o menos) de lo pronosticado, Bramador te avisa al toque: lo mide el Náutico o lo cuentan los riders en el agua.', 'Nuevo botón en Mi spot: "📈 Subió el viento". Con un toque avisás a todos los que siguen ese spot.', 'Con la app abierta, el viento se revisa solo cada 2 minutos.']},
+  {v: '1.21', fecha: '4/11', cambios: ['Si en tu spot sopla más (o menos) de lo pronosticado, Bramador te avisa al toque: lo mide el Náutico o lo cuentan los riders en el agua.', 'Nuevo botón en Mi spot: "📈 Subió el viento". Con un toque avisás a todos los que siguen ese spot.', 'Con la app abierta, el viento se revisa solo cada 2 minutos.']},
+  {v: '1.20', fecha: '2/11', cambios: ['Arreglado: al cambiar de pantalla rápido ya no aparece de golpe otra pantalla ni texto de fondo.']},
   {v: '1.19', fecha: '2/11', cambios: ['¿Ya usás Bramador en el celular? En otro equipo entrás solo con tu mail.']},
   {v: '1.18', fecha: '31/10', cambios: ['Pronóstico más real: ahora el viento se calcula sobre el agua, río adentro, y no en la costa (ahí daba de menos).']},
   {v: '1.17', fecha: '31/10', cambios: ['Reportes en vivo más fáciles: ahora cuentan en toda la zona del spot (2 km) y, si estás en otro spot, te ofrece reportar ahí.']},

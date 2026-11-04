@@ -260,3 +260,159 @@ as $$
 $$;
 revoke all on function public.bram_mail_registrado(text) from public;
 grant execute on function public.bram_mail_registrado(text) to anon, authenticated;
+
+-- ─── Seguridad del admin (2/11) ─────────────────────────────────────────────
+-- Registro de intentos y bloqueo: 5 fallos en 15 min desde la misma IP, o
+-- 30 fallos en 1 hora en total → 'bloqueado'. Las funciones de admin
+-- (panel, sponsors, guardar_sponsor, usuarios) devuelven null con clave mala
+-- en vez de tirar error, para que el intento fallido quede registrado.
+create table if not exists public.bram_admin_intentos (
+  id bigint generated always as identity primary key,
+  t timestamptz not null default now(),
+  ip text,
+  ok boolean not null
+);
+alter table public.bram_admin_intentos enable row level security;
+revoke all on public.bram_admin_intentos from anon, authenticated;
+
+create or replace function public._bram_ip() returns text language sql stable set search_path = '' as $$
+  select coalesce(
+    nullif(current_setting('request.headers', true), '')::json ->> 'cf-connecting-ip',
+    split_part(nullif(current_setting('request.headers', true), '')::json ->> 'x-forwarded-for', ',', 1),
+    'sin-ip')
+$$;
+
+create or replace function public._bram_admin_ok(p_clave text) returns boolean
+language plpgsql security definer set search_path = '' as $$
+declare v_ip text := public._bram_ip(); v_ok boolean;
+begin
+  if (select count(*) from public.bram_admin_intentos where not ok and ip = v_ip and t > now() - interval '15 minutes') >= 5
+     or (select count(*) from public.bram_admin_intentos where not ok and t > now() - interval '1 hour') >= 30 then
+    raise exception 'bloqueado' using errcode = 'P0001';
+  end if;
+  select exists(select 1 from public.bram_config c where c.clave = 'admin'
+    and c.valor = extensions.crypt(coalesce(p_clave, ''), c.valor)) into v_ok;
+  if not v_ok then
+    insert into public.bram_admin_intentos (ip, ok) values (v_ip, false);
+  end if;
+  return v_ok;
+end $$;
+
+create or replace function public.bram_admin_ok(p_clave text) returns boolean
+language plpgsql security definer set search_path = '' as $$
+begin
+  if public._bram_admin_ok(p_clave) then
+    insert into public.bram_admin_intentos (ip, ok) values (public._bram_ip(), true);
+    return true;
+  end if;
+  return false;
+end $$;
+
+revoke execute on function public._bram_admin_ok(text) from public, anon, authenticated;
+revoke execute on function public._bram_ip() from public, anon, authenticated;
+revoke execute on function public._bram_rider_ok(uuid, text) from public, anon, authenticated;
+
+-- Dashboard del admin: lista de usuarios y series para gráficos.
+-- (definición completa aplicada en Supabase como migración bram_admin_usuarios)
+-- bram_admin_usuarios(p_clave) → {usuarios[], altas_dia[], activos_dia[], hora_alta[],
+--   marcas[], medidas[], reportes_tag[], accesos[últimos 25]}; null si la clave es mala.
+
+-- ─── Sponsors pagos con Mercado Pago (suscripción mensual por spot) ─────────
+-- Cada contratación crea dos filas (senal + alerta) con el mismo "grupo".
+-- Arrancan apagadas; se prenden cuando Mercado Pago confirma el cobro y
+-- "hasta" se corre a (último cobro + 1 mes + 3 días de gracia). Si el mes
+-- siguiente no se cobra, "hasta" vence y el sponsor sale solo.
+alter table public.bram_sponsors
+  add column if not exists origen text not null default 'manual',
+  add column if not exists grupo uuid,
+  add column if not exists mail text,
+  add column if not exists mp_id text,
+  add column if not exists mp_estado text,
+  add column if not exists creado timestamptz not null default now();
+create index if not exists bram_sponsors_grupo on public.bram_sponsors (grupo);
+
+-- Solo el servidor (función bramador-sponsor, con la service role) puede
+-- usar las funciones bram_srv_*.
+create or replace function public._bram_srv_ok(p text) returns boolean
+language sql stable security definer set search_path = '' as $$
+  select coalesce(nullif(current_setting('request.jwt.claims', true), '')::jsonb ->> 'role', '') = 'service_role'
+    or exists(select 1 from public.bram_config c where c.clave = 'servidor' and c.valor = extensions.crypt(coalesce(p, ''), c.valor))
+$$;
+revoke execute on function public._bram_srv_ok(text) from public, anon, authenticated;
+
+-- Spots que hoy no tienen sponsor (para ofrecerlos en la página).
+create or replace function public.bram_spots_libres() returns jsonb
+language sql stable security definer set search_path = '' as $$
+  select coalesce(jsonb_agg(s.id order by s.id), '[]') from public.bram_spots s
+  where not exists(select 1 from public.bram_sponsors x
+    where x.activo and x.hasta >= public.bram_hoy() and (x.spot = s.id or x.spot is null))
+$$;
+
+create or replace function public.bram_srv_sponsor_nuevo(p_secreto text, p jsonb) returns jsonb
+language plpgsql security definer set search_path = '' as $$
+declare g uuid := gen_random_uuid(); v_spot text := p->>'spot';
+begin
+  if not public._bram_srv_ok(p_secreto) then return null; end if;
+  if not exists(select 1 from public.bram_spots where id = v_spot) then return jsonb_build_object('error', 'spot'); end if;
+  if exists(select 1 from public.bram_sponsors x where x.activo and x.hasta >= public.bram_hoy() and (x.spot = v_spot or x.spot is null)) then
+    return jsonb_build_object('error', 'ocupado');
+  end if;
+  -- Freno anti abuso: como mucho 20 pedidos sin pagar por hora.
+  if (select count(*) from public.bram_sponsors where origen = 'mp' and not activo and creado > now() - interval '1 hour') >= 40 then
+    return jsonb_build_object('error', 'muchos');
+  end if;
+  insert into public.bram_sponsors(nombre, logo, spot, slot, desde, hasta, activo, origen, grupo, mail)
+  select left(p->>'nombre', 40), p->>'logo', v_spot, sl, public.bram_hoy(), public.bram_hoy(), false, 'mp', g, left(lower(p->>'mail'), 120)
+  from unnest(array['senal','alerta']) sl;
+  return jsonb_build_object('grupo', g);
+end $$;
+
+-- p: {grupo, mp_id, mp_estado, cobrado (fecha del último cobro, opcional)}
+create or replace function public.bram_srv_sponsor_mp(p_secreto text, p jsonb) returns boolean
+language plpgsql security definer set search_path = '' as $$
+declare v_hasta date;
+begin
+  if not public._bram_srv_ok(p_secreto) then return null; end if;
+  if nullif(p->>'cobrado', '') is not null then
+    v_hasta := ((p->>'cobrado')::timestamptz at time zone 'America/Argentina/Buenos_Aires')::date + interval '1 month' + interval '3 days';
+  end if;
+  -- Solo un cobro nuevo (que corre "hasta") lo prende: si Francisco lo apaga a mano, queda apagado hasta el próximo pago.
+  update public.bram_sponsors set
+    mp_id = coalesce(nullif(p->>'mp_id', ''), mp_id),
+    mp_estado = coalesce(nullif(p->>'mp_estado', ''), mp_estado),
+    activo = case when v_hasta is not null and v_hasta > hasta then true else activo end,
+    hasta = case when v_hasta is not null then greatest(hasta, v_hasta) else hasta end,
+    actualizado = now()
+  where grupo = (p->>'grupo')::uuid and origen = 'mp';
+  return found;
+end $$;
+
+-- Suscripciones a revisar: todas las que tienen id de Mercado Pago y no
+-- llevan más de 60 días vencidas o canceladas.
+create or replace function public.bram_srv_sponsors_mp(p_secreto text) returns jsonb
+language plpgsql stable security definer set search_path = '' as $$
+begin
+  if not public._bram_srv_ok(p_secreto) then return null; end if;
+  return (select coalesce(jsonb_agg(distinct jsonb_build_object('grupo', grupo, 'mp_id', mp_id)), '[]')
+    from public.bram_sponsors where origen = 'mp' and mp_id is not null
+      and (hasta >= public.bram_hoy() - 60 or creado > now() - interval '7 days'));
+end $$;
+
+grant execute on function public.bram_spots_libres() to anon;
+revoke execute on function public.bram_srv_sponsor_nuevo(text, jsonb), public.bram_srv_sponsor_mp(text, jsonb),
+  public.bram_srv_sponsors_mp(text) from public, anon, authenticated;
+grant execute on function public.bram_srv_sponsor_nuevo(text, jsonb), public.bram_srv_sponsor_mp(text, jsonb),
+  public.bram_srv_sponsors_mp(text) to service_role;
+
+-- Llave de Mercado Pago: insert into bram_config(clave, valor) values ('mp_token', 'APP_USR-…')
+-- (tabla privada; la lee solo la función bramador-sponsor).
+
+-- Revisión de cobros cada 3 horas.
+create extension if not exists pg_net with schema extensions;
+select cron.schedule('bramador-sponsors-mp', '17 */3 * * *',
+  $$select net.http_get(url:='https://pfwazngwcvirdeyamvsd.supabase.co/functions/v1/bramador-sponsor', timeout_milliseconds:=30000)$$);
+
+-- 2/11: un pedido puede incluir varios spots (p.spots); el precio es
+-- $99.900 × spots en una sola suscripción. bram_srv_sponsor_nuevo acepta
+-- p.spots (array) o p.spot, rechaza si alguno está ocupado ({error:'ocupado', spots})
+-- y crea 2 filas (senal + alerta) por spot con el mismo grupo.

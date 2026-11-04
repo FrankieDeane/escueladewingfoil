@@ -45,6 +45,22 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}
 .prev{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:12px;color:var(--gris)}
 .prev img{width:28px;height:28px;border-radius:6px;background:#fff;object-fit:contain}
 [hidden]{display:none!important}
+.graf{background:rgba(255,255,255,.04);border:1px solid var(--linea);border-radius:16px;padding:12px 14px 8px;margin-bottom:10px}
+.graf h3{margin:0 0 2px;font-size:15px}
+.graf p{margin:0 0 8px;font-size:12px;color:var(--gris)}
+.graf svg{display:block;width:100%;height:auto;overflow:visible}
+.graf svg text{fill:var(--gris);font:600 15px 'DM Sans',sans-serif}
+.dos{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.hb{display:grid;grid-template-columns:minmax(70px,auto) 1fr 32px;gap:6px 8px;align-items:center;font-size:13px}
+.hb i{display:block;height:14px;border-radius:0 4px 4px 0;background:var(--senal);min-width:2px}
+.hb b{text-align:right;font-variant-numeric:tabular-nums}
+.buscar{width:100%;margin-bottom:8px}
+.usuarios{max-height:520px;overflow:auto;border:1px solid var(--linea);border-radius:12px}
+.usuarios table{font-size:13px}
+.usuarios th{position:sticky;top:0;background:var(--tinta);cursor:pointer;white-space:nowrap}
+.usuarios td{white-space:nowrap}
+.acc{font-size:13px}.acc .mal{color:var(--amarillo)}
+.seg{font-size:12px;color:var(--gris);margin-top:4px}
 </style>
 </head>
 <body>
@@ -53,14 +69,19 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}
 
   <form id="login" class="caja" style="margin-top:16px">
     <label>Clave de admin<input id="clave" type="password" autocomplete="current-password" required></label>
+    <p class="seg">Por seguridad: después de 5 intentos fallidos se bloquea 15 minutos, y la sesión se cierra sola tras 30 minutos sin uso o al cerrar la pestaña.</p>
     <p class="msj" id="loginMsj" hidden></p>
     <button class="btn" style="margin-top:10px">Entrar</button>
   </form>
 
   <div id="app" hidden>
-    <div class="tabs"><button type="button" data-tab="sponsors" aria-pressed="true">Sponsors</button><button type="button" data-tab="panel" aria-pressed="false">Panel</button></div>
+    <div class="tabs"><button type="button" data-tab="dash" aria-pressed="true">Dashboard</button><button type="button" data-tab="sponsors" aria-pressed="false">Sponsors</button><button type="button" data-tab="panel" aria-pressed="false">Panel</button></div>
 
-    <section id="tab-sponsors">
+    <section id="tab-dash">
+      <div id="dash"><p style="color:var(--gris)">Cargando…</p></div>
+    </section>
+
+    <section id="tab-sponsors" hidden>
       <form id="form" class="caja">
         <input type="hidden" id="fId">
         <div class="grid">
@@ -95,38 +116,203 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}
 var SB = 'https://pfwazngwcvirdeyamvsd.supabase.co', SB_KEY = 'sb_publishable_5wLxVtnFy4IMOAMK_rzZ-A_cZ1TSOeV';
 var SPOTS = {sanisidro:'San Isidro', peru:'Perú Beach', martinez:'Martínez', olivos:'Olivos', quilmes:'Quilmes', puntalara:'Punta Lara'};
 var SLOTS = {senal:'Señal del día', alerta:'Alertas'};
+var MPEST = {esperando_pago:'esperando el pago', pending:'esperando el pago', authorized:'suscripción activa, cobra solo cada mes', paused:'pausada por el sponsor', cancelled:'cancelada (sale cuando vence)'};
 var ETIQ = {bien:'Todo bien', rachado:'Rachado', pocaagua:'Poca agua', gente:'Mucha gente', bajando:'Bajando el viento', ala:'Mi ala'};
 var clave = '', sponsors = [], logoNuevo = null, datos = null;
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
 function rpc(fn, args){
-  return fetch(SB + '/rest/v1/rpc/' + fn, {method:'POST', headers:{apikey:SB_KEY,'Content-Type':'application/json'}, body: JSON.stringify(args || {})})
-    .then(function(r){ if (!r.ok) throw new Error(fn); return r.status === 204 ? null : r.json(); });
+  return fetch(SB + '/rest/v1/rpc/' + fn, {method:'POST', cache:'no-store', referrerPolicy:'no-referrer', headers:{apikey:SB_KEY,'Content-Type':'application/json'}, body: JSON.stringify(args || {})})
+    .then(function(r){
+      if (r.ok) return r.status === 204 ? null : r.json();
+      return r.json().catch(function(){ return {}; }).then(function(j){
+        var e = new Error(fn); e.bloqueado = /bloqueado/.test(j && j.message || ''); throw e;
+      });
+    });
+}
+// Llamadas de admin: si el servidor devuelve vacío es que la clave ya no vale → afuera.
+function adm(fn, args){
+  args = args || {}; args.p_clave = clave;
+  return rpc(fn, args).then(function(d){ if (d == null) { salir(); throw new Error('clave'); } return d; });
 }
 function iso(d){ return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
 
 $('fSpot').innerHTML = '<option value="">Todos los spots</option>' + Object.keys(SPOTS).map(function(k){ return '<option value="' + k + '">' + SPOTS[k] + '</option>'; }).join('');
 
+// La clave vive solo en esta pestaña (sessionStorage): al cerrarla hay que entrar de nuevo.
+try { localStorage.removeItem('bram_admin'); } catch(e){}
+function guardarClave(c){ try { c ? sessionStorage.setItem('bram_admin', c) : sessionStorage.removeItem('bram_admin'); } catch(e){} }
 function entrar(c){
   return rpc('bram_admin_ok', {p_clave: c}).then(function(ok){
     if (!ok) throw new Error('clave');
-    clave = c; try { localStorage.setItem('bram_admin', c); } catch(e){}
+    clave = c; guardarClave(c); $('clave').value = '';
     $('login').hidden = true; $('app').hidden = false; $('salir').hidden = false;
-    cargarSponsors();
+    tocar(); cargarSponsors(); verDash();
   });
 }
+function salir(){ clave = ''; guardarClave(''); location.reload(); }
 $('login').addEventListener('submit', function(e){
   e.preventDefault();
-  entrar($('clave').value.trim()).catch(function(){ $('loginMsj').textContent = 'Clave incorrecta.'; $('loginMsj').hidden = false; });
+  entrar($('clave').value.trim()).catch(function(err){
+    $('loginMsj').textContent = err && err.bloqueado ? 'Demasiados intentos. Esperá 15 minutos y probá de nuevo.' : 'Clave incorrecta.';
+    $('loginMsj').hidden = false;
+  });
 });
-$('salir').addEventListener('click', function(){ try { localStorage.removeItem('bram_admin'); } catch(e){} location.reload(); });
-try { var g = localStorage.getItem('bram_admin'); if (g) entrar(g).catch(function(){}); } catch(e){}
+$('salir').addEventListener('click', salir);
+try { var g = sessionStorage.getItem('bram_admin'); if (g) entrar(g).catch(function(){ guardarClave(''); }); } catch(e){}
+
+// Cierre automático tras 30 minutos sin tocar nada.
+var ultimo = Date.now();
+function tocar(){ ultimo = Date.now(); }
+['click','keydown','scroll','touchstart'].forEach(function(ev){ addEventListener(ev, tocar, {passive:true}); });
+setInterval(function(){ if (clave && Date.now() - ultimo > 30 * 60 * 1000) salir(); }, 30000);
+document.addEventListener('visibilitychange', function(){ if (!document.hidden && clave && Date.now() - ultimo > 30 * 60 * 1000) salir(); });
 
 document.querySelectorAll('[data-tab]').forEach(function(b){ b.addEventListener('click', function(){
   document.querySelectorAll('[data-tab]').forEach(function(x){ x.setAttribute('aria-pressed', x === b); });
-  $('tab-sponsors').hidden = b.dataset.tab !== 'sponsors'; $('tab-panel').hidden = b.dataset.tab !== 'panel';
+  ['dash','sponsors','panel'].forEach(function(t){ $('tab-' + t).hidden = b.dataset.tab !== t; });
   if (b.dataset.tab === 'panel' && !datos) verPanel();
 }); });
+
+// ── Dashboard
+var dash = null, personas = [], orden = {k: 'creado', d: -1}, filtro = '';
+function fecha(t, hora){
+  if (!t) return '—';
+  var d = new Date(t); if (isNaN(d)) return '—';
+  var s = d.getDate() + '/' + (d.getMonth() + 1) + '/' + String(d.getFullYear()).slice(2);
+  return hora ? s + ' ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') : s;
+}
+function diaLocal(t){ var d = new Date(t); return iso(d); }
+function nf(n){ return Number(n || 0).toLocaleString('es-AR'); }
+// Una persona = un mail (puede tener la app en varios dispositivos).
+function agrupar(us){
+  var m = {};
+  us.forEach(function(u){
+    var k = String(u.mail || '').trim().toLowerCase() || ('sin-mail-' + Math.random());
+    var p = m[k];
+    if (!p) p = m[k] = {nombre: u.nombre || '', apellido: u.apellido || '', mail: u.mail || '', creado: u.creado, visto: u.visto, alas: 0, reportes: 0, ultimo_reporte: null, disp: 0};
+    p.disp++;
+    if (u.creado && u.creado < p.creado) p.creado = u.creado;
+    if (u.visto && (!p.visto || u.visto > p.visto)) p.visto = u.visto;
+    if (!p.nombre && u.nombre) p.nombre = u.nombre;
+    if (!p.apellido && u.apellido) p.apellido = u.apellido;
+    p.alas = Math.max(p.alas, (u.alas || []).length);
+    p.reportes += u.reportes || 0;
+    if (u.ultimo_reporte && (!p.ultimo_reporte || u.ultimo_reporte > p.ultimo_reporte)) p.ultimo_reporte = u.ultimo_reporte;
+  });
+  return Object.keys(m).map(function(k){ return m[k]; });
+}
+// Gráfico de barras verticales (SVG, sin librerías). Con acum=true dibuja además la línea del total.
+function barras(filas, kx, ky, op){
+  op = op || {};
+  var W = 600, H = 200, pl = 36, pb = 26, pt = 12, n = filas.length;
+  if (!n) return '<p>Sin datos todavía.</p>';
+  var max = Math.max.apply(null, filas.map(function(f){ return op.acum ? f._acum : f[ky]; }).concat([1]));
+  var paso = Math.pow(10, Math.floor(Math.log10(max))), tope = Math.ceil(max / paso) * paso;
+  var y = function(v){ return pt + (H - pt - pb) * (1 - v / tope); };
+  var bw = (W - pl) / n, g = '';
+  [0, .5, 1].forEach(function(f){ var v = Math.round(tope * f); g += '<line x1="' + pl + '" x2="' + W + '" y1="' + y(v) + '" y2="' + y(v) + '" stroke="rgba(255,255,255,.1)"/><text x="' + (pl - 4) + '" y="' + (y(v) + 3) + '" text-anchor="end">' + v + '</text>'; });
+  var maxB = op.acum ? Math.max.apply(null, filas.map(function(f){ return f[ky]; }).concat([1])) : tope;
+  var yb = op.acum ? function(v){ return pt + (H - pt - pb) * (1 - v / maxB * .45); } : y;
+  filas.forEach(function(f, i){
+    var x = pl + i * bw, v = f[ky] || 0, h = (H - pb) - yb(v);
+    g += '<rect x="' + (x + bw * .12).toFixed(1) + '" y="' + yb(v).toFixed(1) + '" width="' + Math.max(1, bw * .76).toFixed(1) + '" height="' + Math.max(0, h).toFixed(1) + '" rx="2" fill="' + (op.acum ? 'rgba(255,90,44,.45)' : 'var(--senal)') + '"><title>' + esc(f[kx]) + ': ' + v + '</title></rect>';
+    var cada = Math.ceil(n / 6);
+    if (i % cada === 0 || i === n - 1) g += '<text x="' + (x + bw / 2).toFixed(1) + '" y="' + (H - 6) + '" text-anchor="middle">' + esc(op.etq ? op.etq(f[kx]) : f[kx]) + '</text>';
+  });
+  if (op.acum) {
+    var pts = filas.map(function(f, i){ return (pl + i * bw + bw / 2).toFixed(1) + ',' + y(f._acum).toFixed(1); });
+    g += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="var(--ok)" stroke-width="2.5" stroke-linejoin="round"/>';
+    var u = filas[n - 1];
+    g += '<circle cx="' + (pl + (n - 1) * bw + bw / 2).toFixed(1) + '" cy="' + y(u._acum).toFixed(1) + '" r="4" fill="var(--ok)"/>';
+  }
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img">' + g + '</svg>';
+}
+function hbarras(filas, ke, kv, fmt){
+  if (!filas.length) return '<p>Sin datos todavía.</p>';
+  var max = Math.max.apply(null, filas.map(function(f){ return f[kv]; }).concat([1]));
+  return '<div class="hb">' + filas.map(function(f){
+    return '<span>' + esc(fmt ? fmt(f[ke]) : f[ke]) + '</span><i style="width:' + (f[kv] / max * 100).toFixed(1) + '%"></i><b>' + f[kv] + '</b>';
+  }).join('') + '</div>';
+}
+function graf(t, sub, cont){ return '<div class="graf"><h3>' + t + '</h3>' + (sub ? '<p>' + sub + '</p>' : '') + cont + '</div>'; }
+function verDash(){
+  adm('bram_admin_usuarios').then(function(d){
+    dash = d; personas = agrupar(d.usuarios || []);
+    var hoyS = iso(new Date()), hace7 = Date.now() - 7 * 864e5;
+    var activosHoy = personas.filter(function(p){ return p.visto && diaLocal(p.visto) === hoyS; }).length;
+    var activos7 = personas.filter(function(p){ return p.visto && new Date(p.visto) > hace7; }).length;
+    var nuevos7 = personas.filter(function(p){ return new Date(p.creado) > hace7; }).length;
+    var nuevosHoy = personas.filter(function(p){ return diaLocal(p.creado) === hoyS; }).length;
+    var conAlas = personas.filter(function(p){ return p.alas > 0; }).length;
+    var reportan = personas.filter(function(p){ return p.reportes > 0; }).length;
+    function cifra(n, t, g){ return '<div class="cifra' + (g ? ' cifra--g' : '') + '"><b>' + nf(n) + '</b><span>' + t + '</span></div>'; }
+    // Altas por día, con los días sin altas en 0 y el total acumulado.
+    var altas = {}; (d.altas_dia || []).forEach(function(f){ altas[f.dia] = f.altas; });
+    var serie = [], dias = Object.keys(altas).sort();
+    if (dias.length) {
+      var acum = 0, x = new Date(dias[0] + 'T12:00:00'), fin = new Date();
+      for (; iso(x) <= iso(fin); x.setDate(x.getDate() + 1)) { var k = iso(x); acum += altas[k] || 0; serie.push({dia: k, altas: altas[k] || 0, _acum: acum}); }
+    }
+    var act = {}; (d.activos_dia || []).forEach(function(f){ act[f.dia] = f.usuarios; });
+    var serieAct = []; for (var i = 29; i >= 0; i--) { var dd = new Date(Date.now() - i * 864e5), kk = iso(dd); serieAct.push({dia: kk, usuarios: act[kk] || 0}); }
+    var horas = {}; (d.hora_alta || []).forEach(function(f){ horas[f.hora] = f.altas; });
+    var serieH = []; for (var h = 0; h < 24; h++) serieH.push({hora: h, altas: horas[h] || 0});
+    var etqDia = function(s){ var p = String(s).split('-'); return +p[2] + '/' + +p[1]; };
+    var conv = personas.length ? Math.round(conAlas / personas.length * 100) : 0;
+    $('dash').innerHTML =
+      '<div class="cifras">' + cifra(personas.length, 'personas (mails distintos)', true) + cifra((d.usuarios || []).length, 'dispositivos con la app') +
+      cifra(nuevosHoy, 'nuevos hoy') + cifra(nuevos7, 'nuevos en 7 días') + cifra(activosHoy, 'abrieron la app hoy') + cifra(activos7, 'activos en 7 días') +
+      cifra(conAlas, 'cargaron sus alas (' + conv + '%)') + cifra(reportan, 'reportaron el río') + '</div>' +
+      graf('Crecimiento de usuarios', 'Barras: altas de cada día · Línea verde: total acumulado (' + nf(serie.length ? serie[serie.length - 1]._acum : 0) + ')', barras(serie, 'dia', 'altas', {acum: true, etq: etqDia})) +
+      '<div class="dos">' +
+        graf('Usuarios activos por día', 'Últimos 30 días, según la última vez que abrieron la app', barras(serieAct, 'dia', 'usuarios', {etq: etqDia})) +
+        graf('A qué hora se registran', 'Hora de Argentina', barras(serieH, 'hora', 'altas', {etq: function(h){ return h + 'h'; }})) +
+      '</div><div class="dos">' +
+        graf('Marcas de ala', 'Riders que tienen cada marca', hbarras((d.marcas || []).slice(0, 10), 'marca', 'riders')) +
+        graf('Medidas de ala', 'Cantidad de alas por tamaño', hbarras(d.medidas || [], 'm', 'alas', function(m){ return m + ' m'; })) +
+        graf('Qué reportan en el río', 'Total de reportes por tipo', hbarras(d.reportes_tag || [], 'tag', 'reportes', function(v){ return valor('tag', v); })) +
+      '</div>' +
+      '<div class="fila"><h2>Usuarios (' + personas.length + ')</h2><button class="chico" type="button" id="uCsv">Bajar CSV</button></div>' +
+      '<input class="buscar" id="uBuscar" type="search" placeholder="Buscar por nombre, apellido o mail" value="' + esc(filtro) + '">' +
+      '<div class="usuarios"><table id="uTabla"></table></div>' +
+      '<h2>Seguridad · últimos accesos al admin</h2><div class="caja acc">' + ((d.accesos || []).length ? '<table>' + d.accesos.map(function(a){
+        return '<tr><td>' + fecha(a.t, true) + '</td><td class="' + (a.ok ? 'on">✓ Entró' : 'mal">✗ Clave incorrecta') + '</td><td style="color:var(--gris)">' + esc(a.ip) + '</td></tr>';
+      }).join('') + '</table>' : '<p style="margin:0;color:var(--gris)">Sin accesos registrados.</p>') +
+      '<p class="seg">Si ves intentos con clave incorrecta que no son tuyos, avisame y cambiamos la clave.</p></div>';
+    pintarUsuarios();
+  }).catch(function(e){ if (clave) $('dash').innerHTML = '<p class="msj">No se pudo cargar el dashboard. ' + (e && e.bloqueado ? 'Demasiados intentos: esperá 15 minutos.' : 'Probá recargar.') + '</p>'; });
+}
+var COLS = [['nombre','Nombre'],['apellido','Apellido'],['mail','Mail'],['creado','Alta'],['visto','Última vez'],['disp','Disp.'],['alas','Alas'],['reportes','Reportes']];
+function visibles(){
+  var q = filtro.trim().toLowerCase();
+  return personas.filter(function(p){ return !q || (p.nombre + ' ' + p.apellido + ' ' + p.mail).toLowerCase().indexOf(q) >= 0; })
+    .sort(function(a, b){ var x = a[orden.k], y = b[orden.k]; x = x == null ? '' : x; y = y == null ? '' : y;
+      if (typeof x === 'string') { x = x.toLowerCase(); y = String(y).toLowerCase(); }
+      return x < y ? -orden.d : x > y ? orden.d : 0; });
+}
+function pintarUsuarios(){
+  var t = $('uTabla'); if (!t) return;
+  var l = visibles();
+  t.innerHTML = '<tr>' + COLS.map(function(c){ return '<th data-orden="' + c[0] + '">' + c[1] + (orden.k === c[0] ? (orden.d > 0 ? ' ▲' : ' ▼') : '') + '</th>'; }).join('') + '</tr>' +
+    (l.length ? l.map(function(p){
+      return '<tr><td>' + esc(p.nombre) + '</td><td>' + esc(p.apellido) + '</td><td>' + esc(p.mail) + '</td><td>' + fecha(p.creado) + '</td><td>' + fecha(p.visto, true) +
+        '</td><td class="n">' + p.disp + '</td><td class="n">' + p.alas + '</td><td class="n">' + p.reportes + '</td></tr>';
+    }).join('') : '<tr><td colspan="8" style="color:var(--gris)">Nadie coincide con la búsqueda.</td></tr>');
+}
+$('dash').addEventListener('input', function(e){ if (e.target.id === 'uBuscar') { filtro = e.target.value; pintarUsuarios(); } });
+$('dash').addEventListener('click', function(e){
+  var th = e.target.closest('[data-orden]');
+  if (th) { var k = th.dataset.orden; orden = {k: k, d: orden.k === k ? -orden.d : (k === 'nombre' || k === 'apellido' || k === 'mail' ? 1 : -1)}; pintarUsuarios(); return; }
+  if (e.target.id === 'uCsv') {
+    var csv = [COLS.map(function(c){ return c[1]; })].concat(visibles().map(function(p){ return [p.nombre, p.apellido, p.mail, fecha(p.creado), fecha(p.visto, true), p.disp, p.alas, p.reportes]; }))
+      .map(function(r){ return r.map(function(v){ v = String(v == null ? '' : v); if (/^[=+\-@]/.test(v)) v = "'" + v; return /[",;\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(','); }).join('\n');
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(['﻿' + csv], {type: 'text/csv;charset=utf-8'}));
+    a.download = 'bramador-usuarios-' + iso(new Date()) + '.csv';
+    a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+  }
+});
 
 // ── Sponsors
 function limpiar(){
@@ -157,21 +343,28 @@ $('form').addEventListener('submit', function(e){
            desde: $('fDesde').value, hasta: $('fHasta').value, activo: $('fActivo').checked};
   if (logoNuevo) p.logo = logoNuevo;
   if (p.hasta < p.desde) { $('fMsj').textContent = '"Hasta" tiene que ser después de "Desde".'; $('fMsj').hidden = false; return; }
-  rpc('bram_admin_guardar_sponsor', {p_clave: clave, p: p}).then(function(){
+  adm('bram_admin_guardar_sponsor', {p: p}).then(function(){
     $('fMsj').textContent = '✓ Guardado'; $('fMsj').hidden = false; limpiar(); cargarSponsors();
   }).catch(function(){ $('fMsj').textContent = 'No se pudo guardar. Probá de nuevo.'; $('fMsj').hidden = false; });
 });
 function cargarSponsors(){
-  rpc('bram_admin_sponsors', {p_clave: clave}).then(function(l){
+  adm('bram_admin_sponsors').then(function(l){
     sponsors = l || [];
     var hoy = iso(new Date());
-    $('lista').innerHTML = sponsors.length ? sponsors.map(function(s, i){
+    // Pedidos online que nunca se pagaron: aparte, para no ensuciar la lista.
+    function sinPagar(s){ return s.origen === 'mp' && !s.activo && (s.mp_estado === 'esperando_pago' || s.mp_estado === 'pending'); }
+    function tarjeta(s, i){
       var vigente = s.activo && s.desde <= hoy && hoy <= s.hasta;
       return '<div class="caja sp">' + (s.logo ? '<img src="' + esc(s.logo) + '" alt="">' : '<img alt="">') +
         '<div class="datos"><b>' + esc(s.nombre) + '</b> <span class="' + (vigente ? 'on">● al aire' : 'off">● ' + (s.activo ? 'fuera de fecha' : 'apagado')) + '</span>' +
-        '<small>' + (s.spot ? SPOTS[s.spot] : 'Todos los spots') + ' · ' + SLOTS[s.slot] + ' · ' + s.desde + ' → ' + s.hasta + ' · ' + Number(s.impresiones).toLocaleString('es-AR') + ' impresiones</small></div>' +
+        '<small>' + (s.spot ? SPOTS[s.spot] : 'Todos los spots') + ' · ' + SLOTS[s.slot] + ' · ' + s.desde + ' → ' + s.hasta + ' · ' + Number(s.impresiones).toLocaleString('es-AR') + ' impresiones</small>' +
+        (s.origen === 'mp' ? '<small>💳 Mercado Pago: ' + esc(MPEST[s.mp_estado] || s.mp_estado || '—') + (s.mail ? ' · ' + esc(s.mail) : '') + '</small>' : '') + '</div>' +
         '<button class="chico" type="button" data-editar="' + i + '">Editar</button></div>';
-    }).join('') : '<p style="color:var(--gris)">Todavía no cargaste sponsors.</p>';
+    }
+    var html = '', pend = '', nPend = 0;
+    sponsors.forEach(function(s, i){ if (sinPagar(s)) { pend += tarjeta(s, i); nPend++; } else html += tarjeta(s, i); });
+    $('lista').innerHTML = (html || '<p style="color:var(--gris)">Todavía no hay sponsors.</p>') +
+      (nPend ? '<details class="caja"><summary style="cursor:pointer;font-weight:800">Pedidos online sin pagar (' + nPend + ')</summary><div style="margin-top:10px">' + pend + '</div></details>' : '');
   });
 }
 $('lista').addEventListener('click', function(e){
@@ -203,7 +396,7 @@ var TITULOS = {altas:'Usuarios nuevos', mes:'Mes', sponsor:'Sponsor', slot:'Dón
 function valor(k, v){ return k === 'spot' ? (SPOTS[v] || v) : k === 'slot' ? (SLOTS[v] || v) : k === 'tag' ? (ETIQ[v] || (String(v).indexOf('no_') === 0 ? 'Ya no: ' + (ETIQ[v.slice(3)] || v) : v)) : v; }
 function verPanel(){
   $('panel').innerHTML = '<p style="color:var(--gris)">Cargando…</p>';
-  rpc('bram_admin_panel', {p_clave: clave, p_desde: $('pDesde').value, p_hasta: $('pHasta').value}).then(function(d){
+  adm('bram_admin_panel', {p_desde: $('pDesde').value, p_hasta: $('pHasta').value}).then(function(d){
     datos = d;
     var u = d.usuarios_resumen || {total: d.riders_total};
     function cifra(n, t, g){ return '<div class="cifra' + (g ? ' cifra--g' : '') + '"><b>' + (n == null ? 0 : n) + '</b><span>' + t + '</span></div>'; }
@@ -221,7 +414,7 @@ $('panel').addEventListener('click', function(e){
   var b = e.target.closest('[data-csv]'); if (!b || !datos) return;
   var t = TABLAS[+b.dataset.csv], filas = datos[t[0]] || [];
   var csv = [t[2].map(function(k){ return TITULOS[k]; })].concat(filas.map(function(f){ return t[2].map(function(k){ return valor(k, f[k]); }); }))
-    .map(function(r){ return r.map(function(v){ v = String(v == null ? '' : v); return /[",;\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(','); }).join('\n');
+    .map(function(r){ return r.map(function(v){ v = String(v == null ? '' : v); if (/^[=+\-@]/.test(v)) v = "'" + v; return /[",;\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(','); }).join('\n');
   var a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob(['﻿' + csv], {type: 'text/csv;charset=utf-8'}));
   a.download = 'bramador-' + t[0] + '-' + $('pDesde').value + '-a-' + $('pHasta').value + '.csv';
