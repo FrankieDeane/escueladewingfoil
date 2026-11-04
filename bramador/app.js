@@ -802,10 +802,10 @@ function vistaAlertas(){
         '<div style="font-size:12px;color:#8FA9BF">del ' + a.dirs.join(', ') + (a.finde ? ' · fines de semana' : '') + '</div></div>' +
         '<button class="pildora" type="button" data-al-borrar="' + i + '" aria-label="Borrar alerta">Borrar</button></div>';
     }).join('') + '</div><div class="subt"><h2>Próximos días que se cumplen</h2></div><div id="coinc" style="padding:0 16px"><p class="nota" style="margin:0">Buscando…</p></div>' : '') +
-    (permiso === 'granted' ? '<div class="aviso aviso--ok">Avisos activados en este teléfono. Te avisamos cuando se cumpla una alerta y, al toque, si en tu spot sube o baja el viento más de lo pronosticado.</div>'
+    (permiso === 'granted' ? '<div class="aviso aviso--ok">Avisos activados en este teléfono. Te avisamos cuando se cumpla una alerta y, al toque, si en tu spot sube o baja el viento más de lo pronosticado, aunque tengas Bramador cerrado.</div>'
       : permiso === 'no' ? '<div class="aviso">Este navegador no permite avisos. En iPhone, primero instalá Bramador (Más → Instalar).</div>'
       : '<div style="padding:12px 16px 0"><button class="btn btn--vidrio" type="button" data-accion="permiso">🔔 Activar avisos en este teléfono</button></div>') +
-    '<p class="nota">Por ahora los avisos llegan cuando abrís Bramador. Muy pronto también con la app cerrada.</p>');
+    '<p class="nota">El aviso de "subió el viento" te llega aunque tengas Bramador cerrado, para tu spot y los spots de tus alertas. En iPhone, Bramador tiene que estar instalada en la pantalla de inicio.</p>');
   if (lista.length) pronostico().then(function(t){
     var c = coincidencias(t), box = document.getElementById('coinc'); if (!box) return;
     box.innerHTML = c.length ? c.slice(0, 8).map(function(x){
@@ -1284,6 +1284,33 @@ document.addEventListener('click', function(e){
   }
 });
 
+// Aviso con la app cerrada (web push): el teléfono se suscribe y le cuenta al servidor qué spots sigue
+// (su spot + los de sus alertas). El servidor (función bramador-push, cada 3 min) manda el aviso.
+var VAPID_PUB = 'BFafjfdbfb8_b3UdEg3rhom17bx1HkUjxMMAQC-Imei5xKhR3cIu1JfS1a0vnepWfeZ4tJJnOs7q5D8R5XH7m9A';
+function spotsQueSigo(){
+  var l = [perfil().spot]; alertas().forEach(function(a){ if (l.indexOf(a.spot) < 0) l.push(a.spot); });
+  return l;
+}
+function claveB64(b64){
+  var p = '='.repeat((4 - b64.length % 4) % 4), r = atob((b64 + p).replace(/-/g, '+').replace(/_/g, '/'));
+  var u = new Uint8Array(r.length); for (var i = 0; i < r.length; i++) u[i] = r.charCodeAt(i); return u;
+}
+function sincronizarPush(forzar){
+  if (!('Notification' in window) || Notification.permission !== 'granted' || !navigator.serviceWorker || !('PushManager' in window)) return;
+  navigator.serviceWorker.ready.then(function(reg){
+    return reg.pushManager.getSubscription().then(function(s){
+      return s || reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: claveB64(VAPID_PUB)});
+    });
+  }).then(function(s){
+    var sub = s.toJSON(), spots = spotsQueSigo(), k = sub.endpoint + '|' + spots.join(','), ant = leer('push_k', null);
+    if (!forzar && ant && ant.k === k && Date.now() - ant.t < 864e5) return;
+    return asegurarRider().then(function(){
+      var r = rider();
+      return rpc('bram_push_guardar', {p_id: r.id, p_token: r.token, p_sub: sub, p_spots: spots});
+    }).then(function(ok){ if (ok) { guardar('push_k', {k: k, t: Date.now()}); evento('bramador_push_suscripto'); } });
+  }).catch(function(){});
+}
+
 // ─────────────────────────────── CAMBIOS DE VIENTO ───────────────────────────────
 // Si en un spot sopla bastante más (o menos) que lo pronosticado, que se sepa ya.
 // Dos señales: la estación del Náutico mide 5 kn o más de diferencia con el pronóstico de ahora,
@@ -1520,10 +1547,10 @@ document.addEventListener('click', function(e){
   if (b.hasAttribute('data-evento')) evento(b.getAttribute('data-evento'));
   if (a === 'reintentar') { memoria = {}; router(); }
   else if (a === 'compartir') compartir();
-  else if (a === 'permiso') { Notification.requestPermission().then(function(){ vistaAlertas(); }); }
+  else if (a === 'permiso') { Notification.requestPermission().then(function(){ sincronizarPush(true); vistaAlertas(); }); }
   else if (a === 'crear-alerta') {
     if (!borrador.dirs.length) return;
-    var l = alertas(); l.push({spot: borrador.spot, min: borrador.min, dirs: borrador.dirs.slice(), finde: borrador.finde}); guardar('alertas', l);
+    var l = alertas(); l.push({spot: borrador.spot, min: borrador.min, dirs: borrador.dirs.slice(), finde: borrador.finde}); guardar('alertas', l); sincronizarPush();
     evento('bramador_alerta_creada'); vistaAlertas();
   }
   else if (a === 'enviar-opinion') enviarOpinion(false);
@@ -1537,7 +1564,7 @@ document.addEventListener('click', function(e){
   else if (b.hasAttribute('data-al-min')) { borrador.min = +b.getAttribute('data-al-min'); vistaAlertas(); }
   else if (b.hasAttribute('data-al-dir')) { var r = b.getAttribute('data-al-dir'), i = borrador.dirs.indexOf(r); if (i >= 0) borrador.dirs.splice(i, 1); else borrador.dirs.push(r); vistaAlertas(); }
   else if (b.hasAttribute('data-al-finde')) { borrador.finde = b.getAttribute('data-al-finde') === '1'; vistaAlertas(); }
-  else if (b.hasAttribute('data-al-borrar')) { var l2 = alertas(); l2.splice(+b.getAttribute('data-al-borrar'), 1); guardar('alertas', l2); vistaAlertas(); }
+  else if (b.hasAttribute('data-al-borrar')) { var l2 = alertas(); l2.splice(+b.getAttribute('data-al-borrar'), 1); guardar('alertas', l2); sincronizarPush(); vistaAlertas(); }
   else if (b.hasAttribute('data-preg')) responder(b.getAttribute('data-preg'));
   else if (b.hasAttribute('data-voto')) { opinion.voto = b.getAttribute('data-voto'); document.querySelectorAll('[data-voto]').forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); }
   else if (b.hasAttribute('data-os')) { osElegido = b.getAttribute('data-os'); vistaInstalar(); }
@@ -1560,7 +1587,7 @@ document.addEventListener('submit', function(e){
     var nuevo = {nombre: document.getElementById('pNom').value.trim(), mail: mail, novedades: document.getElementById('pNov').checked,
                  peso: +document.getElementById('pPeso').value,
                  nivel: niv ? niv.getAttribute('data-nivel') : 'intermedio', spot: sp ? sp.getAttribute('data-pspot') : 'sanisidro'};
-    guardar('perfil', nuevo);
+    guardar('perfil', nuevo); sincronizarPush();
     if (mail && (mail !== antes.mail || nuevo.novedades !== antes.novedades)) enviarMail(nuevo);
     ok.hidden = false; ok.textContent = '✓ Guardado';
   }
@@ -1571,6 +1598,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.22', fecha: '4/11', cambios: ['Ahora el aviso de "subió el viento" te llega aunque tengas Bramador cerrado. Activá los avisos en Más → Alertas.']},
   {v: '1.21', fecha: '4/11', cambios: ['En Hoy, si el Náutico está midiendo, el número grande es el viento medido de verdad, y el pronóstico queda chico al lado.', 'Si en tu spot sopla más (o menos) de lo pronosticado, Bramador te avisa al toque: lo mide el Náutico o lo cuentan los riders en el agua.', 'Nuevo botón en Mi spot: "📈 Subió el viento". Con un toque avisás a todos los que siguen ese spot.', 'Con la app abierta, el viento se revisa solo cada 2 minutos.']},
   {v: '1.20', fecha: '2/11', cambios: ['Arreglado: al cambiar de pantalla rápido ya no aparece de golpe otra pantalla ni texto de fondo.']},
   {v: '1.19', fecha: '2/11', cambios: ['¿Ya usás Bramador en el celular? En otro equipo entrás solo con tu mail.']},
@@ -1644,4 +1672,5 @@ novedades();
 bienvenida();
 if (leer('lead', false) && !rider().ok) registrarRider().catch(function(){});
 if (leer('bienv', false)) router();
+sincronizarPush();
 })();

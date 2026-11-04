@@ -8,7 +8,7 @@
 // Al publicar una mejora: cambiar VERSION acá, sumar la novedad en NOVEDADES (app.js)
 // y poner el mismo número en version.json.
 // Los datos de afuera (pronóstico, mareas) ya los guarda app.js en el celular.
-const VERSION = 'bramador-v1.21';
+const VERSION = 'bramador-v1.22';
 const BASE = [
   '/bramador/',
   '/bramador/index.html',
@@ -74,4 +74,15 @@ self.addEventListener('notificationclick', e => {
       return self.clients.openWindow(destino);
     })
   );
+});
+
+// Aviso con la app cerrada: lo manda el servidor (función bramador-push) cuando cambia el viento en un spot que seguís.
+self.addEventListener('push', e => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch (err) { d = { body: e.data && e.data.text() }; }
+  e.waitUntil(self.registration.showNotification(d.title || 'Bramador', {
+    body: d.body || '', tag: d.tag || 'bramador', renotify: true,
+    icon: '/bramador/icons/icon-192.png', badge: '/bramador/icons/icon-192.png',
+    data: { url: d.url || '/bramador/' }
+  }));
 });
