@@ -416,3 +416,42 @@ select cron.schedule('bramador-sponsors-mp', '17 */3 * * *',
 -- $99.900 × spots en una sola suscripción. bram_srv_sponsor_nuevo acepta
 -- p.spots (array) o p.spot, rechaza si alguno está ocupado ({error:'ocupado', spots})
 -- y crea 2 filas (senal + alerta) por spot con el mismo grupo.
+
+-- ─── Avisos con la app cerrada (web push) ───
+-- Cada teléfono que da permiso guarda acá su suscripción y los spots que sigue (su spot + los de sus alertas).
+-- La función bramador-push (cada 3 min, por cron) mira el Náutico, el pronóstico y los "Subió el viento"
+-- y manda el aviso a quienes siguen ese spot. bram_push_avisos evita repetir: uno por spot y tipo por hora.
+create table public.bram_push (
+  endpoint text primary key,
+  rider uuid references public.bram_riders(id) on delete cascade,
+  sub jsonb not null,
+  spots text[] not null default '{}',
+  creado timestamptz not null default now(), visto timestamptz not null default now()
+);
+create index bram_push_spots on public.bram_push using gin (spots);
+create table public.bram_push_avisos (
+  spot text not null, tipo text not null, t timestamptz not null default now(), texto text, enviados int,
+  primary key (spot, tipo)
+);
+alter table public.bram_push enable row level security;
+alter table public.bram_push_avisos enable row level security;
+revoke all on public.bram_push, public.bram_push_avisos from anon, authenticated;
+
+create or replace function public.bram_push_guardar(p_id uuid, p_token text, p_sub jsonb, p_spots text[])
+returns boolean language plpgsql security definer set search_path = '' as $$
+declare ep text := p_sub->>'endpoint';
+begin
+  if not public._bram_rider_ok(p_id, p_token) then return false; end if;
+  if ep is null or ep !~ '^https://' or length(ep) > 1000 or p_sub->'keys'->>'p256dh' is null or p_sub->'keys'->>'auth' is null then return false; end if;
+  insert into public.bram_push(endpoint, rider, sub, spots)
+  values (ep, p_id, p_sub, (select coalesce(array_agg(distinct x), '{}') from unnest(p_spots) x where x in (select id from public.bram_spots)))
+  on conflict (endpoint) do update set rider = excluded.rider, sub = excluded.sub, spots = excluded.spots, visto = now();
+  return true;
+end $$;
+
+create or replace function public.bram_push_borrar(p_endpoint text) returns void
+language sql security definer set search_path = '' as $$ delete from public.bram_push where endpoint = p_endpoint $$;
+
+-- Llave pública VAPID para que la app se suscriba (la privada nunca sale de bram_config).
+create or replace function public.bram_push_clave() returns text
+language sql stable security definer set search_path = '' as $$ select valor from public.bram_config where clave = 'vapid_pub' $$;
