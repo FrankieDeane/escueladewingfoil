@@ -8,13 +8,14 @@
 // Un aviso por spot y tipo por hora (bram_push_avisos). Las suscripciones vencidas se borran.
 //
 // Las mismas reglas que app.js (cambiosDeViento): si se cambian allá, cambiarlas acá.
-// Secretos: VAPID_PUBLIC y VAPID_PRIVATE. SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY son automáticos.
+// Las llaves VAPID viven en bram_config (tabla privada): 'vapid_pub' y 'vapid_priv'. Si no están, la función
+// las crea la primera vez. La app lee solo la pública con bram_push_clave(). SUPABASE_URL y
+// SUPABASE_SERVICE_ROLE_KEY son automáticos.
 
 import { createClient } from 'jsr:@supabase/supabase-js@2';
 import webpush from 'npm:web-push@3.6.7';
 
 const sb = createClient(Deno.env.get('SUPABASE_URL') ?? '', Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '');
-webpush.setVapidDetails('https://www.escueladewingfoil.com.ar/bramador/', Deno.env.get('VAPID_PUBLIC') ?? '', Deno.env.get('VAPID_PRIVATE') ?? '');
 
 const SPOTS = [
   { id: 'sanisidro', n: 'San Isidro', plat: -34.457, plng: -58.497 },
@@ -81,7 +82,20 @@ function cambios(pron: Record<string, number>, med: any, subidas: Record<string,
   return res;
 }
 
+async function cargarLlaves() {
+  const { data } = await sb.from('bram_config').select('clave, valor').in('clave', ['vapid_pub', 'vapid_priv']);
+  const m: Record<string, string> = {};
+  (data || []).forEach((x: any) => { m[x.clave] = x.valor; });
+  if (!m.vapid_pub || !m.vapid_priv) {
+    const k = webpush.generateVAPIDKeys();
+    await sb.from('bram_config').upsert([{ clave: 'vapid_priv', valor: k.privateKey }, { clave: 'vapid_pub', valor: k.publicKey }]);
+    m.vapid_pub = k.publicKey; m.vapid_priv = k.privateKey;
+  }
+  webpush.setVapidDetails('https://www.escueladewingfoil.com.ar/bramador/', m.vapid_pub, m.vapid_priv);
+}
+
 Deno.serve(async () => {
+  await cargarLlaves();
   const [pron, med, sub, spons] = await Promise.all([
     pronosticoAhora().catch(() => ({} as Record<string, number>)),
     medidoNautico(),
@@ -110,7 +124,7 @@ Deno.serve(async () => {
         if (e?.statusCode === 404 || e?.statusCode === 410) await sb.from('bram_push').delete().eq('endpoint', s.endpoint);
       }
     }));
-    await sb.from('bram_push_avisos').upsert({ spot: c.spot.id, tipo: c.tipo, t: new Date().toISOString(), texto: c.texto, enviados: ok });
+    if ((subs || []).length) await sb.from('bram_push_avisos').upsert({ spot: c.spot.id, tipo: c.tipo, t: new Date().toISOString(), texto: c.texto, enviados: ok });
     if (sp && ok) await sb.rpc('bram_impresion', { p_sponsor: sp.id, p_slot: 'alerta', p_spot: c.spot.id }).then(() => {}, () => {});
     informe.push({ spot: c.spot.id, tipo: c.tipo, enviados: ok, de: (subs || []).length });
   }

@@ -1286,7 +1286,11 @@ document.addEventListener('click', function(e){
 
 // Aviso con la app cerrada (web push): el teléfono se suscribe y le cuenta al servidor qué spots sigue
 // (su spot + los de sus alertas). El servidor (función bramador-push, cada 3 min) manda el aviso.
-var VAPID_PUB = 'BFafjfdbfb8_b3UdEg3rhom17bx1HkUjxMMAQC-Imei5xKhR3cIu1JfS1a0vnepWfeZ4tJJnOs7q5D8R5XH7m9A';
+// La llave pública se pide al servidor (bram_push_clave) y se guarda en el teléfono.
+function clavePush(){
+  var c = leer('push_pub', null);
+  return c ? Promise.resolve(c) : rpc('bram_push_clave').then(function(k){ if (k) guardar('push_pub', k); return k; });
+}
 function spotsQueSigo(){
   var l = [perfil().spot]; alertas().forEach(function(a){ if (l.indexOf(a.spot) < 0) l.push(a.spot); });
   return l;
@@ -1297,9 +1301,15 @@ function claveB64(b64){
 }
 function sincronizarPush(forzar){
   if (!('Notification' in window) || Notification.permission !== 'granted' || !navigator.serviceWorker || !('PushManager' in window)) return;
-  navigator.serviceWorker.ready.then(function(reg){
+  Promise.all([navigator.serviceWorker.ready, clavePush()]).then(function(r){
+    var reg = r[0], k = r[1]; if (!k) throw new Error('sin clave');
+    var nueva = function(){ return reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: claveB64(k)}); };
     return reg.pushManager.getSubscription().then(function(s){
-      return s || reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: claveB64(VAPID_PUB)});
+      if (!s) return nueva();
+      // Si la suscripción es de otra llave, se rehace.
+      var ask = s.options && s.options.applicationServerKey, mismo = true;
+      if (ask) { var a = new Uint8Array(ask), b = claveB64(k); mismo = a.length === b.length && a.every(function(x, i){ return x === b[i]; }); }
+      return mismo ? s : s.unsubscribe().then(nueva);
     });
   }).then(function(s){
     var sub = s.toJSON(), spots = spotsQueSigo(), k = sub.endpoint + '|' + spots.join(','), ant = leer('push_k', null);

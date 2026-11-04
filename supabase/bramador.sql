@@ -451,3 +451,7 @@ end $$;
 
 create or replace function public.bram_push_borrar(p_endpoint text) returns void
 language sql security definer set search_path = '' as $$ delete from public.bram_push where endpoint = p_endpoint $$;
+
+-- Llave pública VAPID para que la app se suscriba (la privada nunca sale de bram_config).
+create or replace function public.bram_push_clave() returns text
+language sql stable security definer set search_path = '' as $$ select valor from public.bram_config where clave = 'vapid_pub' $$;
