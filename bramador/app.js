@@ -1131,7 +1131,7 @@ function reportesHtml(spot){
       return '<button type="button" data-rep="' + k + '"' + (k === 'subiendo' ? ' class="rep__sube"' : '') + '><span aria-hidden="true">' + ETIQ[k][0] + '</span>' + ETIQ[k][1] + '</button>';
     }).join('') + '<button type="button" data-rep="ala"><span aria-hidden="true">🪁</span>Mi ala</button></div>' +
     '<div id="repExtra"></div>' +
-    '<p class="rep__nota">Cuenta solo si estás en ' + esc(spot.n) + ' (hasta 2 km). Vence a las 2 horas.</p></div>';
+    '<p class="rep__nota">Cuenta solo si estás en ' + esc(spot.n) + ' o cerca (hasta 3 km). Vence a las 2 horas.</p></div>';
 }
 function pintarEstado(e){
   repEstadoAct = e;
@@ -1153,9 +1153,17 @@ function pintarEstado(e){
 function cargarEstado(spotId){
   rpc('bram_estado', {p_spot: spotId}).then(function(e){ if (repSpot === spotId) pintarEstado(e); }).catch(function(){ if (repSpot === spotId) pintarEstado(null); });
 }
+// Lo que contesta un botón aparece abajo de los botones. En el celular eso puede quedar fuera
+// de la pantalla (o tapado por la barra de abajo) y parece que el botón no hizo nada: lo traemos a la vista.
+function verExtra(){
+  var x = document.getElementById('repExtra'); if (!x || !x.firstChild) return;
+  var r = x.getBoundingClientRect(), alto = window.innerHeight - 90;
+  if (r.bottom > alto || r.top < 0) { try { x.scrollIntoView({block: 'center', behavior: 'smooth'}); } catch(e){ x.scrollIntoView(); } }
+}
 function avisoRep(txt, tipo){
   var x = document.getElementById('repExtra'); if (!x) return;
   x.innerHTML = '<p class="rep__msj' + (tipo ? ' rep__msj--' + tipo : '') + '">' + txt + '</p>';
+  verExtra();
 }
 function distanciaM(a, b, c, d){
   var R = 6371000, r = Math.PI / 180, x = Math.sin((c - a) * r / 2), y = Math.sin((d - b) * r / 2);
@@ -1168,18 +1176,23 @@ function pedirPos(opc){
 }
 function ubicacion(){
   if (!navigator.geolocation) return Promise.reject('sin');
-  // Primero el GPS del teléfono (preciso); si no responde, la ubicación aproximada.
-  return pedirPos({enableHighAccuracy: true, timeout: 15000, maximumAge: 20000}).catch(function(e){
+  // Primero una ubicación rápida (la que el teléfono ya tiene, aunque sea de hace unos minutos):
+  // para saber si estás en la costa alcanza y responde al instante. Si no hay, el GPS.
+  return pedirPos({enableHighAccuracy: false, timeout: 6000, maximumAge: 10 * 60e3}).catch(function(e){
     if (e === 'negado') throw e;
-    return pedirPos({enableHighAccuracy: false, timeout: 12000, maximumAge: 60000});
+    return pedirPos({enableHighAccuracy: true, timeout: 15000, maximumAge: 60e3});
   });
 }
-// Radio del spot: 2 km, más el margen de error que informa el teléfono (hasta 1 km).
-// El servidor acepta hasta 3 km (2 + 1), así nunca rechaza algo que la app aceptó.
-var RADIO_SPOT = 2000;
+// Si la ubicación rápida no alcanza para decir que estás en el spot, una segunda con GPS.
+function ubicacionPrecisa(){ return pedirPos({enableHighAccuracy: true, timeout: 15000, maximumAge: 0}); }
+// Radio del spot: 2,7 km desde el punto del spot, más el margen de error que informa el teléfono
+// (hasta 300 m). Antes eran 2 km y en el Náutico o Puerto Tablas a veces quedabas afuera: los
+// puntos de cada spot no son exactos. El servidor acepta hasta 3 km (2,7 + 0,3), así nunca
+// rechaza algo que la app aceptó.
+var RADIO_SPOT = 2700, MARGEN_GPS = 300;
 function cercaDe(c, spot){
   var d = distanciaM(c.latitude, c.longitude, spot.lat, spot.lng);
-  return {d: d, ok: d - Math.min(c.accuracy || 0, 1000) <= RADIO_SPOT};
+  return {d: d, ok: d - Math.min(c.accuracy || 0, MARGEN_GPS) <= RADIO_SPOT};
 }
 function spotMasCerca(c){
   var mejor = null;
@@ -1195,11 +1208,12 @@ function lejosDe(spot, c, tag, ala){
   if (otro && otro.spot.id !== spot.id) {
     x.innerHTML = '<div class="rep__geo"><p>📍 Te ubicamos en <b>' + esc(otro.spot.n) + '</b>, no en ' + esc(spot.n) + '.</p>' +
       '<button class="btn btn--chico" type="button" data-rep-geo="' + tag + '" data-rep-spot="' + otro.spot.id + '"' + dato + '>Reportar en ' + esc(otro.spot.n) + '</button></div>';
-    return;
+    verExtra(); return;
   }
   x.innerHTML = '<div class="rep__geo"><p>📍 Tu teléfono te ubica a <b>' + km(d) + '</b> de ' + esc(spot.n) + '. Para reportar tenés que estar en el spot.' +
     (c.accuracy > 500 ? ' La ubicación vino imprecisa: si estás ahí, prendé el GPS (ubicación precisa) y probá de nuevo.' : '') + '</p>' +
     '<button class="btn btn--chico" type="button" data-rep-geo="' + tag + '"' + dato + '>📍 Ubicarme de nuevo</button></div>';
+  verExtra();
 }
 function esIphone(){ return /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); }
 // Cuando no hay ubicación: botón para pedirla de nuevo y, si está bloqueada, cómo activarla.
@@ -1214,16 +1228,25 @@ function sinUbicacion(tag, err, ala){
         ? '<p class="rep__pasos">Ajustes del iPhone → Privacidad → Localización (que esté prendida) → Safari → <b>Al usar la app</b>.</p>'
         : '<p class="rep__pasos">Tocá el candado o los 3 puntos arriba del navegador → Permisos (o Configuración del sitio) → Ubicación → <b>Permitir</b>. Revisá también que la ubicación del teléfono esté prendida.</p>');
   };
-  var pintar = function(bloq){ x.innerHTML = '<div class="rep__geo">' + ayuda(bloq) + boton + '</div>'; };
+  var pintar = function(bloq){ x.innerHTML = '<div class="rep__geo">' + ayuda(bloq) + boton + '</div>'; verExtra(); };
   pintar(err === 'negado');
 }
 function reportar(tag, ala, spotId){
   var spot = spotPorId(spotId || repSpot); if (!spot) return;
   var botones = document.querySelectorAll('#repBox button'); botones.forEach(function(b){ b.disabled = true; });
+  var tocado = document.querySelector('#repBox [data-rep="' + tag + '"]'); if (tocado) tocado.classList.add('rep--esperando');
   avisoRep('Chequeando que estés en el spot…');
-  var fin = function(){ document.querySelectorAll('#repBox button').forEach(function(b){ b.disabled = false; }); };
+  var fin = function(){ document.querySelectorAll('#repBox button').forEach(function(b){ b.disabled = false; b.classList.remove('rep--esperando'); }); };
   ubicacion().then(function(c){
-    if (!cercaDe(c, spot).ok) { fin(); lejosDe(spot, c, tag, ala); return; }
+    if (cercaDe(c, spot).ok) return c;
+    // La rápida dio lejos: puede ser vieja o de antena. Probamos con el GPS antes de decir que no.
+    avisoRep('Afinando tu ubicación…');
+    return ubicacionPrecisa().then(function(c2){ return c2; }, function(){ return c; });
+  }).then(function(c){
+    if (!cercaDe(c, spot).ok) {
+      evento('bramador_reporte_lejos', {spot: spot.id, metros: Math.round(cercaDe(c, spot).d), precision: Math.round(c.accuracy || 0)});
+      fin(); lejosDe(spot, c, tag, ala); return;
+    }
     guardar('geo_ok', true);
     return asegurarRider().then(function(){
       var r = rider();
@@ -1243,6 +1266,7 @@ function reportar(tag, ala, spotId){
     });
   }).catch(function(err){
     fin();
+    evento('bramador_reporte_sin_ubicacion', {spot: spot.id, motivo: String(err && err.message || err)});
     if (err === 'sin') avisoRep('Este navegador no da la ubicación. Probá desde Chrome o Safari.', 'mal');
     else sinUbicacion(tag, err, ala);
   });
@@ -1253,7 +1277,7 @@ function tocarRep(tag){
     var x = document.getElementById('repExtra'); if (!x) return;
     x.innerHTML = '<div class="rep__geo"><p>📍 Para que los reportes sean reales, Bramador chequea que estés en el spot. Usa tu ubicación solo en ese momento.</p>' +
       '<button class="btn btn--chico" type="button" data-rep-ok="' + tag + '">Dale, reportar</button></div>';
-    return;
+    verExtra(); return;
   }
   if (tag === 'ala') {
     var l = misAlas();
@@ -1263,7 +1287,7 @@ function tocarRep(tag){
     x2.innerHTML = '<p class="rep__msj">¿Con cuál estás?</p><div class="chips" style="padding:0;flex-wrap:wrap">' + l.map(function(a, i){
       return '<button class="chip" type="button" data-rep-ala="' + i + '">' + esc(a.marca) + ' ' + String(a.m).replace('.', ',') + ' m</button>';
     }).join('') + '</div>';
-    return;
+    verExtra(); return;
   }
   reportar(tag);
 }
@@ -1608,6 +1632,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.23', fecha: '12/11', cambios: ['Reportes en el spot arreglados: ahora te toma la ubicación al toque y cuenta en toda la zona (hasta 3 km), también desde el Náutico y Puerto Tablas.']},
   {v: '1.22', fecha: '4/11', cambios: ['Ahora el aviso de "subió el viento" te llega aunque tengas Bramador cerrado. Activá los avisos en Más → Alertas.']},
   {v: '1.21', fecha: '4/11', cambios: ['En Hoy, si el Náutico está midiendo, el número grande es el viento medido de verdad, y el pronóstico queda chico al lado.', 'Si en tu spot sopla más (o menos) de lo pronosticado, Bramador te avisa al toque: lo mide el Náutico o lo cuentan los riders en el agua.', 'Nuevo botón en Mi spot: "📈 Subió el viento". Con un toque avisás a todos los que siguen ese spot.', 'Con la app abierta, el viento se revisa solo cada 2 minutos.']},
   {v: '1.20', fecha: '2/11', cambios: ['Arreglado: al cambiar de pantalla rápido ya no aparece de golpe otra pantalla ni texto de fondo.']},
