@@ -405,3 +405,17 @@ button{font:inherit;color:inherit}
 .patrocina__vacio{display:flex;justify-content:space-between;align-items:center;text-decoration:none;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gris)}
 .patrocina__vacio b{color:var(--senal);letter-spacing:0;text-transform:none;font-size:13px}
 @media (prefers-reduced-motion:reduce){.patrocina__m{transition:none}}
+/* Mapa satelital por spot: el viento que viene llegando */
+.mapa-llega{position:relative;margin:12px 16px 0;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.12);background:#0B1A22;box-shadow:0 14px 40px rgba(0,0,0,.35)}
+.mapa-llega canvas{display:block;width:100%;height:400px}
+.mapa-llega__cred{position:absolute;top:8px;right:10px;font-size:9.5px;color:rgba(255,255,255,.55);letter-spacing:.02em;text-shadow:0 1px 3px #000}
+.mapa-llega__pie{position:absolute;left:10px;right:10px;bottom:10px;padding:12px 14px;border-radius:16px;background:rgba(10,18,24,.72);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#fff}
+.mapa-llega__pie--on{border-color:rgba(56,225,184,.5);background:linear-gradient(150deg,rgba(34,195,166,.28),rgba(10,18,24,.78) 60%)}
+.mapa-llega__k{display:flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#cfd8de}
+.mapa-llega__pie--on .mapa-llega__k{color:#38E1B8}
+.mapa-llega__t{display:block;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:21px;letter-spacing:-.01em;margin:3px 0 2px}
+.mapa-llega__s{display:block;font-size:12.5px;line-height:1.35;color:rgba(255,255,255,.75)}
+.mapa-llega__barra{display:block;height:5px;margin:9px 0 5px;border-radius:5px;background:rgba(255,255,255,.14);overflow:hidden}
+.mapa-llega__barra i{display:block;height:100%;width:50%;border-radius:5px;background:linear-gradient(90deg,#22C3A6,#38E1B8)}
+.mapa-llega__l{display:flex;justify-content:space-between;gap:6px;font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.6)}
+@media (prefers-reduced-motion: reduce){.mapa-llega__barra i{transition:none}}

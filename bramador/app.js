@@ -649,7 +649,7 @@ function vistaSpot(id){ var t = turno;
       '<div class="spot-ahora"><b>' + r0(cur.wind_speed_10m) + '</b> kn ' + rumbo(cur.wind_direction_10m) + ' <span>· ráfagas <b>' + r0(cur.wind_gusts_10m) + '</b></span>' +
         (rachado(cur.wind_speed_10m, cur.wind_gusts_10m) ? ' <em class="rachado">⚠ Rachado</em>' : '') + '</div><p>' + (pico ? 'Pico del día: ' + hhmm(pico.ms) + ' · ' + r0(pico.kn) + ' kn' + (pico.ev.ok ? ' · ala de ' + ala(pico.kn, p.peso) + ' m' : '') : esc(spot.sub)) + '</p></div>' +
       brujula(cur.wind_direction_10m, spot.arco, 96) + '</div></div>' + sel +
-      '<div id="cambioBox"></div><div id="llegaBox"></div>' + reportesHtml(spot) +
+      '<div id="cambioBox"></div>' + mapaLlegaHtml() + reportesHtml(spot) +
       solTira(d) +
       '<div class="tarj vidrio"><p class="tit">Próximas 24 horas</p><div class="barras">' + barras.map(function(b, j){
         return '<div class="barra">' + (tormenta(b.code) ? '<small>⚡</small>' : b.pp >= 50 ? '<small>💧</small>' : '') +
@@ -1459,6 +1459,139 @@ function pintarLlega(lista){
     '<span class="llega__yo"><b>' + r0(x.ahora) + '</b>' + esc(x.spot.n) + '</span></span>' +
     '<small>' + (x.fuente === 'Náutico' ? 'Ahora en ' + esc(x.spot.n) + ': medido en el Náutico' : 'Ahora en ' + esc(x.spot.n) + ': pronóstico') + ' · se revisa cada 2 min</small></a>';
 }
+// Mapa satelital por spot: el viento medido en las estaciones de alrededor y,
+// si viene un viento más fuerte, la línea del frente acercándose al spot.
+// Imagen: Copernicus Sentinel-2 (2/1/2025), en Mercator, guardada en el sitio.
+var RIO_BB = [-58.85, -35.15, -57.80, -33.75], rioImg = null, mapaEstado = null, mapaReloj = 0;
+function rioImagen(){
+  if (!rioImg) { rioImg = new Image(); rioImg.decoding = 'async'; rioImg.src = '/bramador/rio-satelital.jpg'; }
+  return rioImg;
+}
+function mercY(lat){ var r = lat * Math.PI / 180; return Math.log(Math.tan(Math.PI / 4 + r / 2)); }
+function mapaLlegaHtml(){
+  return '<div class="mapa-llega" id="mapaLlega"><canvas aria-label="Mapa satelital con el viento medido alrededor de tu spot"></canvas>' +
+    '<div class="mapa-llega__pie" id="mapaLlegaPie"><span class="mapa-llega__k">Viento medido ahora</span><b class="mapa-llega__t">Buscando estaciones…</b></div>' +
+    '<small class="mapa-llega__cred">Imagen Copernicus Sentinel-2</small></div>';
+}
+function actualizarMapaLlega(todo, est, medido, llega){
+  var caja = document.getElementById('mapaLlega'); if (!caja || !repSpot) return;
+  var sp = spotPorId(repSpot), d = todo && todo[sp.id], c = d && d.current;
+  var x = llega.filter(function(v){ return v.spot.id === sp.id; })[0] || null;
+  var lat = sp.plat || sp.lat, lng = sp.plng || sp.lng;
+  var kn = c ? c.wind_speed_10m : null, dir = c ? c.wind_direction_10m : null;
+  if (medido && CERCA_CNSI.indexOf(sp.id) >= 0 && Date.now() - medido.t < 40 * 60e3) { kn = medido.kn; if (isFinite(medido.dir)) dir = medido.dir; }
+  if (x) { kn = x.ahora; dir = x.dir; }
+  var lista = est.filter(function(e){ return distanciaM(lat, lng, e.lat, e.lng) > 2500; }); // el Náutico es el mismo spot
+  var on = {};
+  if (x) lista.forEach(function(e){ if (e.kn >= LLEGA_MIN && e.kn - x.ahora >= LLEGA_DIF && (!isFinite(e.dir) || difAng(e.dir, x.dir) <= LLEGA_CONO)) on[e.id] = 1; });
+  var origen = x ? lista.filter(function(e){ return e.id === x.cadena[0].id; })[0] : null;
+  mapaEstado = {spot: sp, lat: lat, lng: lng, kn: kn, dir: isFinite(dir) ? dir : 90, est: lista, on: on, x: x, origen: origen, caja: caja, base: null};
+  var pie = document.getElementById('mapaLlegaPie');
+  if (x) {
+    pie.className = 'mapa-llega__pie mapa-llega__pie--on';
+    pie.innerHTML = '<span class="mapa-llega__k"><i class="vivo-dot"></i> El viento viene llegando</span>' +
+      '<b class="mapa-llega__t">' + r0(x.kn) + ' kn del ' + rumbo(x.dir) + ' en ~' + x.min + ' min</b>' +
+      '<span class="mapa-llega__s">Ya sopla en ' + x.cadena.map(function(e){ return esc(e.n); }).join(' y ') + '.</span>' +
+      '<span class="mapa-llega__barra"><i id="mapaBarra"></i></span>' +
+      '<span class="mapa-llega__l">' + x.cadena.map(function(e){ return '<span>' + esc(e.n) + '</span>'; }).join('') + '<span>' + esc(sp.n) + '</span></span>';
+  } else {
+    pie.className = 'mapa-llega__pie';
+    pie.innerHTML = '<span class="mapa-llega__k">Viento medido ahora</span><b class="mapa-llega__t">' + (lista.length ? 'Nada en camino' : 'Sin estaciones ahora') + '</b>' +
+      '<span class="mapa-llega__s">' + (lista.length ? 'Ninguna estación de alrededor mide más que tu spot. Se revisa cada 2 minutos.' : 'Las estaciones no informaron en la última hora. Se revisa cada 2 minutos.') + '</span>';
+  }
+  var img = rioImagen();
+  if (img.complete && img.naturalWidth) dibujarMapaLlega(); else img.onload = dibujarMapaLlega;
+}
+function dibujarMapaLlega(){
+  var m = mapaEstado; if (!m || !document.body.contains(m.caja)) return;
+  var cv = m.caja.querySelector('canvas'), IM = rioImg, rc = cv.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio || 1);
+  if (!rc.width) return;
+  cv.width = Math.round(rc.width * dpr); cv.height = Math.round(rc.height * dpr);
+  var x = cv.getContext('2d'), W = cv.width, H = cv.height, u = W / 322;
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Encuadre: unos 0,75° de ancho; el spot corrido hacia donde va el viento,
+  // así queda lugar para ver lo que viene.
+  var s = W / (IM.naturalWidth * 0.75 / (RIO_BB[2] - RIO_BB[0])), iw = IM.naturalWidth * s, ih = IM.naturalHeight * s;
+  var y0 = mercY(RIO_BB[3]), y1 = mercY(RIO_BB[1]);
+  function P(lng, lat){ return [(lng - RIO_BB[0]) / (RIO_BB[2] - RIO_BB[0]) * iw, (y0 - mercY(lat)) / (y0 - y1) * ih]; }
+  var ang = (m.dir + 180 - 90) * Math.PI / 180, ux = Math.cos(ang), uy = Math.sin(ang);
+  var sp = P(m.lng, m.lat), ox = W * (0.5 + 0.18 * ux) - sp[0], oy = H * (0.36 + 0.12 * uy) - sp[1]; // abajo va la tarjeta
+  ox = Math.min(0, Math.max(W - iw, ox)); oy = Math.min(0, Math.max(H - ih, oy));
+  function Q(lng, lat){ var p = P(lng, lat); return [p[0] + ox, p[1] + oy]; }
+  var base = document.createElement('canvas'); base.width = W; base.height = H; var b = base.getContext('2d');
+  b.drawImage(IM, ox, oy, iw, ih);
+  b.fillStyle = 'rgba(4,10,16,.36)'; b.fillRect(0, 0, W, H);
+  var g = b.createRadialGradient(W / 2, H * .45, H * .2, W / 2, H * .5, Math.max(W, H) * .8);
+  g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.5)'); b.fillStyle = g; b.fillRect(0, 0, W, H);
+  var tr = document.createElement('canvas'); tr.width = W; tr.height = H; var t = tr.getContext('2d');
+  var parts = []; for (var i = 0; i < 260; i++) parts.push({x: Math.random() * W, y: Math.random() * H, a: 0, l: 30 + Math.random() * 50});
+  var q0 = Q(m.lng, m.lat), activo = !!(m.x && m.origen), no = activo ? Q(m.origen.lng, m.origen.lat) : q0;
+  function proy(px, py){ return (px - no[0]) * ux + (py - no[1]) * uy; }
+  var dTot = Math.max(1, proy(q0[0], q0[1]));
+  var yo = ++mapaReloj, barra = document.getElementById('mapaBarra');
+  function frame(now){
+    var ph = reduce ? .55 : ((now / 7000) % 1) * .92 + .05, fd = dTot * ph;
+    x.drawImage(base, 0, 0);
+    if (activo) {
+      x.save(); x.translate(no[0], no[1]); x.rotate(ang);
+      var gg = x.createLinearGradient(fd - 120 * u, 0, fd, 0); gg.addColorStop(0, 'rgba(56,225,184,0)'); gg.addColorStop(1, 'rgba(56,225,184,.2)');
+      x.fillStyle = gg; x.fillRect(fd - 120 * u, -H * 3, 120 * u, H * 6);
+      x.strokeStyle = 'rgba(56,225,184,.95)'; x.lineWidth = 2 * u; x.setLineDash([6 * u, 5 * u]);
+      x.beginPath(); x.moveTo(fd, -H * 3); x.lineTo(fd, H * 3); x.stroke(); x.setLineDash([]); x.restore();
+    }
+    t.globalCompositeOperation = 'destination-out'; t.fillStyle = 'rgba(0,0,0,.14)'; t.fillRect(0, 0, W, H); t.globalCompositeOperation = 'source-over';
+    t.lineCap = 'round'; t.lineWidth = 1.2 * u;
+    var vel = Math.max(.6, Math.min(2.4, (m.kn || 8) / 8));
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i], dentro = activo && proy(p.x, p.y) < fd;
+      var v = (dentro ? 2.6 : vel) * u, a2 = ang + Math.sin(p.y / H * 6 + p.x / W * 4) * .12;
+      var nx = p.x + Math.cos(a2) * v, ny = p.y + Math.sin(a2) * v;
+      t.strokeStyle = dentro ? 'rgba(150,255,225,.75)' : 'rgba(255,255,255,.4)';
+      t.beginPath(); t.moveTo(p.x, p.y); t.lineTo(nx, ny); t.stroke();
+      p.x = nx; p.y = ny; p.a++;
+      if (p.a > p.l || nx < -5 || ny < -5 || nx > W + 5 || ny > H + 5) { p.x = Math.random() * W; p.y = Math.random() * H; p.a = 0; }
+    }
+    x.drawImage(tr, 0, 0);
+    m.est.forEach(function(e){
+      var q = Q(e.lng, e.lat); if (q[0] < -20 || q[0] > W + 20 || q[1] < -20 || q[1] > H + 20) return;
+      var on = activo && m.on[e.id] && proy(q[0], q[1]) < fd + 4;
+      x.save(); x.translate(q[0], q[1]);
+      if (on) { var pul = reduce ? .5 : (now / 1400) % 1; x.strokeStyle = 'rgba(56,225,184,' + (1 - pul) + ')'; x.lineWidth = 1.6 * u; x.beginPath(); x.arc(0, 0, (9 + pul * 16) * u, 0, 7); x.stroke(); }
+      x.fillStyle = on ? 'rgba(56,225,184,.95)' : 'rgba(10,18,24,.82)'; x.strokeStyle = on ? '#fff' : 'rgba(255,255,255,.35)'; x.lineWidth = 1.2 * u;
+      x.beginPath(); x.arc(0, 0, 11 * u, 0, 7); x.fill(); x.stroke();
+      x.fillStyle = on ? '#05211a' : '#fff';
+      if (isFinite(e.dir)) {
+        x.rotate((e.dir + 180 - 90) * Math.PI / 180);
+        x.beginPath(); x.moveTo(6 * u, 0); x.lineTo(-4 * u, -4 * u); x.lineTo(-2 * u, 0); x.lineTo(-4 * u, 4 * u); x.closePath(); x.fill();
+      } else { x.beginPath(); x.arc(0, 0, 3 * u, 0, 7); x.fill(); }
+      x.restore();
+      var tx = e.n, kn = r0(e.kn) + ' kn';
+      x.font = '700 ' + (10 * u) + 'px "DM Sans",sans-serif'; var w1 = x.measureText(tx).width;
+      x.font = '500 ' + (10 * u) + 'px "DM Mono",monospace'; var w2 = x.measureText(kn).width;
+      var bw = w1 + w2 + 16 * u, bh = 18 * u, bx = q[0] + 14 * u, by = q[1] - bh / 2;
+      if (bx + bw > W - 6 * u) bx = q[0] - 14 * u - bw;
+      // Si la etiqueta tapa el spot, va arriba de la estación.
+      if (Math.abs(q[1] - q0[1]) < 30 * u && q0[0] > Math.min(bx, q[0]) - 12 * u && q0[0] < Math.max(bx + bw, q[0]) + 12 * u) { bx = q[0] - bw / 2; by = q[1] - bh - 15 * u; }
+      x.fillStyle = 'rgba(8,16,22,.8)'; x.beginPath(); if (x.roundRect) x.roundRect(bx, by, bw, bh, bh / 2); else x.rect(bx, by, bw, bh); x.fill();
+      x.textAlign = 'left'; x.fillStyle = 'rgba(255,255,255,.92)'; x.font = '700 ' + (10 * u) + 'px "DM Sans",sans-serif'; x.fillText(tx, bx + 6 * u, by + 12.5 * u);
+      x.fillStyle = on ? '#38E1B8' : '#cfd8de'; x.font = '500 ' + (10 * u) + 'px "DM Mono",monospace'; x.fillText(kn, bx + 10 * u + w1, by + 12.5 * u);
+    });
+    var pp = reduce ? .5 : (now / 1600) % 1;
+    x.strokeStyle = 'rgba(255,90,44,' + (1 - pp) + ')'; x.lineWidth = 2 * u; x.beginPath(); x.arc(q0[0], q0[1], (8 + pp * 22) * u, 0, 7); x.stroke();
+    x.fillStyle = '#FF5A2C'; x.beginPath(); x.arc(q0[0], q0[1], 7 * u, 0, 7); x.fill(); x.strokeStyle = '#fff'; x.lineWidth = 2.2 * u; x.stroke();
+    var et = m.spot.n + (m.kn != null ? ' · ' + r0(m.kn) + ' kn' : '');
+    x.font = '800 ' + (12 * u) + 'px "DM Sans",sans-serif'; var we = x.measureText(et).width;
+    x.textAlign = q0[0] + 12 * u + we > W - 6 * u ? 'right' : 'left';
+    x.fillStyle = '#fff'; x.shadowColor = 'rgba(0,0,0,.8)'; x.shadowBlur = 6 * u;
+    x.fillText(et, x.textAlign === 'right' ? q0[0] - 12 * u : q0[0] + 12 * u, q0[1] + 24 * u); x.shadowBlur = 0;
+    if (barra) barra.style.width = (ph * 100).toFixed(0) + '%';
+  }
+  if (reduce) { frame(0); return; }
+  (function loop(n){
+    if (yo !== mapaReloj || !document.body.contains(cv)) return;
+    frame(n); requestAnimationFrame(loop);
+  })(0);
+}
 function avisarLlega(lista){
   if (!('Notification' in window) || Notification.permission !== 'granted' || !navigator.serviceWorker) return;
   var sigo = {}; sigo[perfil().spot] = 1; alertas().forEach(function(a){ sigo[a.spot] = 1; });
@@ -1512,6 +1645,7 @@ function revisarCambios(){
     avisarCambios(lista);
     var llega = vieneLlegando(r[0], r[3] || [], r[1]);
     pintarLlega(llega);
+    actualizarMapaLlega(r[0], r[3] || [], r[1], llega);
     avisarLlega(llega);
     // En Mi spot, los reportes también se refrescan solos.
     if (/^#\/spot/.test(location.hash) && repSpot) cargarEstado(repSpot);
@@ -1748,6 +1882,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.27', fecha: '13/11', cambios: ['Nuevo en Mi spot: mapa satelital con el viento medido en las estaciones de alrededor y, si viene más viento, la línea del frente acercándose a tu spot.']},
   {v: '1.26', fecha: '13/11', cambios: ['Las marcas que patrocinan Bramador ahora aparecen todas juntas en Hoy.', 'En El río queda una sola cámara de Perú Beach.', 'Las actualizaciones ya no muestran cartel ni aviso.']},
   {v: '1.25', fecha: '15/11', cambios: ['Nuevo: "El viento viene llegando". Si en los aeropuertos, el Pilote Norden o el Náutico ya sopla fuerte del lado de donde viene el viento, Bramador te avisa cuánto llega a tu spot y en cuántos minutos.', 'Cámaras ordenadas: la de La Pocho Bay ahora figura como Perú Beach, y la de Náutica como San Isidro.']},
   {v: '1.24', fecha: '14/11', cambios: ['Nueva cámara en El río: La Pocho Bay, en Acassuso. Y la del Paseo del Viento de La Lucila ahora tiene su nombre.']},
