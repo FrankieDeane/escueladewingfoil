@@ -25,8 +25,8 @@ var SPOTS = [
 ];
 // Cámaras de Windy que mira al río (las mismas que ya usa el sitio).
 var CAMS = [
-  {id:'1735938641', n:'Perú Beach',           sub:'Acassuso · Náutica San Isidro', spot:'peru'},
-  {id:'1793908523', n:'La Pocho Bay',         sub:'Acassuso · mira al noreste',    spot:'peru'},
+  {id:'1793908523', n:'Perú Beach',           sub:'La Pocho Bay · mira al noreste', spot:'peru'},
+  {id:'1735938641', n:'San Isidro',           sub:'Náutica San Isidro · al río',   spot:'sanisidro'},
   {id:'1577126865', n:'Vicente López · Olivos', sub:'Mira al río desde Olivos',    spot:'olivos'},
   {id:'1601563134', n:'Martínez · al río',    sub:'Martínez Oeste, de frente al río', spot:'martinez'},
   {id:'1745449788', n:'Paseo del Viento',     sub:'La Lucila · parque natural',     spot:'olivos'}
@@ -1725,7 +1725,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
-  {v: '1.25', fecha: '15/11', cambios: ['Nuevo: "El viento viene llegando". Si en los aeropuertos, el Pilote Norden o el Náutico ya sopla fuerte del lado de donde viene el viento, Bramador te avisa cuánto llega a tu spot y en cuántos minutos.']},
+  {v: '1.25', fecha: '15/11', cambios: ['Nuevo: "El viento viene llegando". Si en los aeropuertos, el Pilote Norden o el Náutico ya sopla fuerte del lado de donde viene el viento, Bramador te avisa cuánto llega a tu spot y en cuántos minutos.', 'Cámaras ordenadas: la de La Pocho Bay ahora figura como Perú Beach, y la de Náutica como San Isidro.']},
   {v: '1.24', fecha: '14/11', cambios: ['Nueva cámara en El río: La Pocho Bay, en Acassuso. Y la del Paseo del Viento de La Lucila ahora tiene su nombre.']},
   {v: '1.23', fecha: '12/11', cambios: ['Reportes en el spot arreglados: ahora te toma la ubicación al toque y cuenta en toda la zona (hasta 3 km), también desde el Náutico y Puerto Tablas.']},
   {v: '1.22', fecha: '4/11', cambios: ['Ahora el aviso de "subió el viento" te llega aunque tengas Bramador cerrado. Activá los avisos en Más → Alertas.']},
