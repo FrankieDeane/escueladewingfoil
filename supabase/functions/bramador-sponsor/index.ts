@@ -1,6 +1,8 @@
 // Supabase Edge Function — sponsors pagos de Bramador con Mercado Pago.
 //
-// Cada contratación = uno o varios spots, $99.900 por spot por mes. Por cada una se
+// Desde el 13/11 cada contratación es una marca que aparece en Hoy, rotando con
+// las demás (hasta 8 a la vez), $99.900 por mes. El formato viejo por spot
+// queda por compatibilidad. Por cada una se
 // crea un "plan de suscripción" propio en Mercado Pago, así el sponsor paga
 // con la cuenta de Mercado Pago que quiera (sin que el mail tenga que
 // coincidir) y nosotros sabemos a qué sponsor corresponde cada pago.
@@ -61,6 +63,7 @@ async function listo() {
 }
 
 async function contratar(b: Record<string, unknown>) {
+  if (b.general === true || (!Array.isArray(b.spots) && !b.spot)) return contratarHoy(b);
   const nombre = String(b.nombre ?? '').trim();
   const mail = String(b.mail ?? '').trim().toLowerCase();
   // Uno o varios spots: $99.900 por cada uno, todo en una sola suscripción.
@@ -88,6 +91,37 @@ async function contratar(b: Record<string, unknown>) {
     body: JSON.stringify({
       reason: `Bramador · Sponsor ${spots.length === 6 ? 'todos los spots' : nombres.join(', ')} · ${nombre}`.slice(0, 120),
       auto_recurring: { frequency: 1, frequency_type: 'months', transaction_amount: PRECIO * spots.length, currency_id: 'ARS' },
+      back_url: `${SITIO}/bramador/sponsors/gracias/?g=${r.grupo}`,
+    }),
+  });
+  if (!res.ok) {
+    console.error('preapproval_plan', res.status, await res.text());
+    return json({ error: 'Mercado Pago no respondió. Probá de nuevo en un rato.' }, 502);
+  }
+  const plan = await res.json();
+  await sb.rpc('bram_srv_sponsor_mp', { p_secreto: '', p: { grupo: r.grupo, mp_id: plan.id, mp_estado: 'esperando_pago' } });
+  return json({ url: plan.init_point });
+}
+
+// Una marca en Hoy, rotando con las demás. Un solo precio por mes.
+async function contratarHoy(b: Record<string, unknown>) {
+  const nombre = String(b.nombre ?? '').trim();
+  const mail = String(b.mail ?? '').trim().toLowerCase();
+  const logo = typeof b.logo === 'string' ? b.logo : '';
+  if (nombre.length < 2 || nombre.length > 40) return json({ error: 'Poné el nombre de tu marca.' }, 400);
+  if (!MAIL_RE.test(mail) || mail.length > 120) return json({ error: 'Revisá el mail.' }, 400);
+  if (logo && (!/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(logo) || logo.length > 60000)) {
+    return json({ error: 'El logo no se pudo leer. Probá con otra imagen.' }, 400);
+  }
+  const { data: r, error } = await sb.rpc('bram_srv_sponsor_nuevo', { p_secreto: '', p: { general: true, nombre, mail, logo: logo || null } });
+  if (error || !r) return json({ error: 'No pudimos guardar el pedido. Probá de nuevo.' }, 500);
+  if (r.error === 'lleno') return json({ error: 'Ahora están todos los lugares ocupados. Escribinos por WhatsApp y te avisamos cuando se libere uno.' }, 409);
+  if (r.error) return json({ error: 'Hay muchos pedidos ahora. Probá en un rato.' }, 429);
+  const res = await mp('/preapproval_plan', {
+    method: 'POST',
+    body: JSON.stringify({
+      reason: `Bramador · Sponsor en Hoy · ${nombre}`.slice(0, 120),
+      auto_recurring: { frequency: 1, frequency_type: 'months', transaction_amount: PRECIO, currency_id: 'ARS' },
       back_url: `${SITIO}/bramador/sponsors/gracias/?g=${r.grupo}`,
     }),
   });

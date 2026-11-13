@@ -26,7 +26,6 @@ var SPOTS = [
 // Cámaras de Windy que mira al río (las mismas que ya usa el sitio).
 var CAMS = [
   {id:'1793908523', n:'Perú Beach',           sub:'La Pocho Bay · mira al noreste', spot:'peru'},
-  {id:'1735938641', n:'San Isidro',           sub:'Náutica San Isidro · al río',   spot:'sanisidro'},
   {id:'1577126865', n:'Vicente López · Olivos', sub:'Mira al río desde Olivos',    spot:'olivos'},
   {id:'1601563134', n:'Martínez · al río',    sub:'Martínez Oeste, de frente al río', spot:'martinez'},
   {id:'1745449788', n:'Paseo del Viento',     sub:'La Lucila · parque natural',     spot:'olivos'}
@@ -501,8 +500,9 @@ function vistaHoy(){ var t = turno;
         '<div class="hero__fila"><div><div class="hero__kn">' + s.kn + '<small> kn</small>' +
           (isFinite(s.raf) ? '<span class="hero__raf"><small>RÁFAGAS</small>' + s.raf + '<small> kn</small></span>' : '') + '</div>' +
         '<div class="hero__dir">del ' + rumbo(s.deg) + (rachado(s.kn, s.raf) ? ' · <span class="rachado">⚠ Rachado</span>' : '') + '</div>' +
-        '<div class="hero__hasta">' + esc(linea) + '</div><div class="presenta" id="presenta" hidden></div></div>' + brujula(s.deg, spot.arco, 112) + '</div></div></section>' +
+        '<div class="hero__hasta">' + esc(linea) + '</div></div>' + brujula(s.deg, spot.arco, 112) + '</div></div></section>' +
       '<div id="cambioBox"></div><div id="llegaBox"></div>' +
+      '<div id="patrocina" class="patrocina" hidden></div>' +
       '<div class="datos">' +
         '<div class="dato"><small>AGUA</small><b>' + (aguaT != null ? r0(aguaT) + '° · ' + traje(aguaT) : '—') + '</b></div>' +
         '<a class="dato" href="#/spot/' + spot.id + '"><small>MAREA</small><b>' + (sigMarea ? (sigMarea.alta ? '▲ ' : '▼ ') + hhmm(sigMarea.t) : '—') + '</b></a>' +
@@ -525,10 +525,7 @@ function vistaHoy(){ var t = turno;
     if (t !== turno) return; // ya te fuiste de Hoy
     pintar(html);
     // El sponsor llega después que el viento: nunca demora el vistazo.
-    sponsorPara(spot.id, 'senal').then(function(sp){
-      var el = document.getElementById('presenta'); if (!sp || !el) return;
-      el.innerHTML = presentado(sp); el.hidden = false; contarImpresion(sp, 'senal', spot.id);
-    });
+    pintarSponsors(spot.id, t);
     compartirDatos = {spot: spot, s: s, linea: linea};
     avisarAlertas(todo);
     if (t === turno) { ultimoPron = todo; vigilar(); }
@@ -1526,8 +1523,9 @@ function vigilar(){
 }
 document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'visible' && vigReloj) revisarCambios(); });
 
-// Sponsors: "Presentado por" en la señal (SALÍ) y en las alertas. Solo logo y nombre.
-var sponsorsMem = null;
+// Sponsors: solo en Hoy, todas las marcas juntas rotando ("Patrocinan Bramador").
+// No van por spot ni en los avisos (pedido de Francisco, 13/11).
+var sponsorsMem = null, rotaReloj = null;
 function sponsorsActivos(){
   if (sponsorsMem) return sponsorsMem;
   var c = leer('sponsors', null);
@@ -1537,15 +1535,40 @@ function sponsorsActivos(){
     .catch(function(){ return c ? c.lista : []; });
   return sponsorsMem;
 }
-function sponsorPara(spotId, slot){
-  return sponsorsActivos().then(function(l){
-    var hoy = l.filter(function(x){ return x.slot === slot; });
-    return hoy.filter(function(x){ return x.spot === spotId; })[0] || hoy.filter(function(x){ return !x.spot; })[0] || null;
-  });
-}
+// Los avisos ya no llevan sponsor.
+function sponsorPara(){ return Promise.resolve(null); }
 function contarImpresion(sp, slot, spotId){ rpc('bram_impresion', {p_sponsor: sp.id, p_slot: slot, p_spot: spotId}).catch(function(){}); }
-function presentado(sp){
-  return '<span class="presenta__por">Presentado por</span>' + (sp.logo ? '<img src="' + esc(sp.logo) + '" alt="" width="20" height="20">' : '') + '<b>' + esc(sp.nombre) + '</b>';
+function marcasHoy(l){
+  // Una por marca (las viejas por spot pueden tener varias filas).
+  var vistas = {}, res = [];
+  l.forEach(function(x){ if (x.slot === 'alerta') return; var k = String(x.nombre).toLowerCase(); if (vistas[k]) return; vistas[k] = 1; res.push(x); });
+  return res;
+}
+function pintarSponsors(spotId, t){
+  if (rotaReloj) { clearInterval(rotaReloj); rotaReloj = null; }
+  sponsorsActivos().then(function(l){
+    var el = document.getElementById('patrocina'); if (!el || t !== turno) return;
+    var m = marcasHoy(l);
+    if (!m.length) {
+      el.innerHTML = '<a class="patrocina__vacio" href="/bramador/sponsors/"><span>Patrocinan Bramador</span><b>Tu marca acá →</b></a>';
+      el.hidden = false; return;
+    }
+    el.innerHTML = '<div class="patrocina__tit"><span>Patrocinan Bramador</span>' + (m.length > 1 ? '<i>' + m.map(function(_, i){ return '<b' + (i ? '' : ' class="on"') + '></b>'; }).join('') + '</i>' : '') + '</div>' +
+      '<div class="patrocina__marcas">' + m.map(function(x, i){
+        return '<div class="patrocina__m' + (i ? '' : ' on') + '">' + (x.logo ? '<img src="' + esc(x.logo) + '" alt="" width="40" height="40">' : '<span class="patrocina__ini">' + esc(String(x.nombre).slice(0, 2).toUpperCase()) + '</span>') +
+          '<b>' + esc(x.nombre) + '</b></div>';
+      }).join('') + '</div>';
+    el.hidden = false;
+    m.forEach(function(x){ contarImpresion(x, 'hoy', spotId); });
+    if (m.length < 2 || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var i = 0, cajas = el.querySelectorAll('.patrocina__m'), puntos = el.querySelectorAll('.patrocina__tit i b');
+    rotaReloj = setInterval(function(){
+      if (!document.body.contains(el)) { clearInterval(rotaReloj); rotaReloj = null; return; }
+      cajas[i].classList.remove('on'); puntos[i].classList.remove('on');
+      i = (i + 1) % cajas.length;
+      cajas[i].classList.add('on'); puntos[i].classList.add('on');
+    }, 3500);
+  });
 }
 
 // ─────────────────────────────── BIENVENIDA ───────────────────────────────
@@ -1725,6 +1748,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.26', fecha: '13/11', cambios: ['Las marcas que patrocinan Bramador ahora aparecen todas juntas en Hoy.', 'En El río queda una sola cámara de Perú Beach.', 'Las actualizaciones ya no muestran cartel ni aviso.']},
   {v: '1.25', fecha: '15/11', cambios: ['Nuevo: "El viento viene llegando". Si en los aeropuertos, el Pilote Norden o el Náutico ya sopla fuerte del lado de donde viene el viento, Bramador te avisa cuánto llega a tu spot y en cuántos minutos.', 'Cámaras ordenadas: la de La Pocho Bay ahora figura como Perú Beach, y la de Náutica como San Isidro.']},
   {v: '1.24', fecha: '14/11', cambios: ['Nueva cámara en El río: La Pocho Bay, en Acassuso. Y la del Paseo del Viento de La Lucila ahora tiene su nombre.']},
   {v: '1.23', fecha: '12/11', cambios: ['Reportes en el spot arreglados: ahora te toma la ubicación al toque y cuenta en toda la zona (hasta 3 km), también desde el Náutico y Puerto Tablas.']},
@@ -1751,25 +1775,12 @@ var NOVEDADES = [
   {v: '1.2', fecha: '26/10', cambios: ['Nuevo en el mapa: botón Foto satelital y, abajo, el resumen del día con mareas, vientos, lluvias y temperaturas.', 'Mapa nuevo estilo Windy: todo el río pintado con la lluvia, las tormentas o el viento, y líneas que muestran cómo se mueve el viento. Tocá play y mirá cómo avanza.', 'El mapa arranca sobre el Río de la Plata y lo podés alejar hasta ver todo el país o el continente.']},
   {v: '1.1', fecha: '26/10', cambios: ['Ahora podés dejar tu mail en Tu perfil para enterarte de lo nuevo.', 'Bramador se actualiza sola: no hace falta bajarla de nuevo.']}
 ];
+// Las actualizaciones entran en silencio: sin cartel ni notificación (pedido de
+// Francisco, 13/11: muchos avisos molestan). La lista queda como historial.
 function novedades(){
   var ultima = NOVEDADES[0], vista = leer('version', null);
   guardar('version', ultima.v);
-  if (!vista || vista === ultima.v || !leer('bienv', false)) return;
-  var el = document.createElement('div');
-  el.className = 'novedad'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', 'Bramador se actualizó');
-  el.innerHTML = '<div class="novedad__caja vidrio"><svg viewBox="0 0 36 36" aria-hidden="true">' + PAJARO + '</svg>' +
-    '<p class="novedad__eti">ACTUALIZACIÓN · ' + esc(ultima.fecha) + '</p><h2>Bramador mejoró</h2><ul>' +
-    ultima.cambios.map(function(c){ return '<li>' + esc(c) + '</li>'; }).join('') + '</ul>' +
-    '<button class="btn" type="button">¡Buenísimo!</button></div>';
-  document.body.appendChild(el);
-  el.querySelector('button').addEventListener('click', function(){ el.remove(); });
-  evento('bramador_actualizada', {version: ultima.v});
-  // Si dio permiso de avisos, además le llega como notificación del teléfono.
-  if (window.Notification && Notification.permission === 'granted' && navigator.serviceWorker && navigator.serviceWorker.ready) {
-    navigator.serviceWorker.ready.then(function(reg){
-      reg.showNotification('Bramador se actualizó', {body: ultima.cambios[0], icon: '/bramador/icons/icon-192.png', badge: '/bramador/icons/icon-192.png', tag: 'version-' + ultima.v, data: {url: '/bramador/'}});
-    }).catch(function(){});
-  }
+  if (vista && vista !== ultima.v) evento('bramador_actualizada', {version: ultima.v});
 }
 
 window.addEventListener('hashchange', router);

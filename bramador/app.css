@@ -388,3 +388,20 @@ button{font:inherit;color:inherit}
 .llega__est>span.llega__yo b{color:var(--texto)}
 .llega__est i{flex:0 0 18px;height:1px;background:linear-gradient(90deg,transparent,var(--ok))}
 .llega small{display:block;margin-top:8px;font-size:11px;color:var(--gris)}
+
+/* Patrocinan Bramador: todas las marcas juntas en Hoy, rotando */
+.patrocina{margin:12px 16px 0;padding:10px 12px;border-radius:16px;background:var(--vidrio);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--linea)}
+.patrocina[hidden]{display:none}
+.patrocina__tit{display:flex;justify-content:space-between;align-items:center;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gris)}
+.patrocina__tit i{display:flex;gap:4px}
+.patrocina__tit i b{width:5px;height:5px;border-radius:3px;background:rgba(255,255,255,.25);transition:width .4s,background .4s}
+.patrocina__tit i b.on{width:14px;background:var(--senal)}
+.patrocina__marcas{position:relative;height:44px;margin-top:6px}
+.patrocina__m{position:absolute;inset:0;display:flex;align-items:center;gap:10px;opacity:0;transform:translateY(6px);transition:opacity .6s,transform .6s}
+.patrocina__m.on{opacity:1;transform:none}
+.patrocina__m img,.patrocina__ini{width:40px;height:40px;border-radius:10px;object-fit:contain;background:#fff;flex-shrink:0}
+.patrocina__ini{display:grid;place-items:center;color:var(--tinta);font-weight:800;font-size:14px}
+.patrocina__m b{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.patrocina__vacio{display:flex;justify-content:space-between;align-items:center;text-decoration:none;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gris)}
+.patrocina__vacio b{color:var(--senal);letter-spacing:0;text-transform:none;font-size:13px}
+@media (prefers-reduced-motion:reduce){.patrocina__m{transition:none}}
