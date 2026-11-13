@@ -25,8 +25,8 @@ var SPOTS = [
 ];
 // Cámaras de Windy que mira al río (las mismas que ya usa el sitio).
 var CAMS = [
-  {id:'1735938641', n:'Perú Beach',           sub:'Acassuso · Náutica San Isidro', spot:'peru'},
-  {id:'1793908523', n:'La Pocho Bay',         sub:'Acassuso · mira al noreste',    spot:'peru'},
+  {id:'1793908523', n:'Perú Beach',           sub:'La Pocho Bay · mira al noreste', spot:'peru'},
+  {id:'1735938641', n:'San Isidro',           sub:'Náutica San Isidro · al río',   spot:'sanisidro'},
   {id:'1577126865', n:'Vicente López · Olivos', sub:'Mira al río desde Olivos',    spot:'olivos'},
   {id:'1601563134', n:'Martínez · al río',    sub:'Martínez Oeste, de frente al río', spot:'martinez'},
   {id:'1745449788', n:'Paseo del Viento',     sub:'La Lucila · parque natural',     spot:'olivos'}
@@ -502,7 +502,7 @@ function vistaHoy(){ var t = turno;
           (isFinite(s.raf) ? '<span class="hero__raf"><small>RÁFAGAS</small>' + s.raf + '<small> kn</small></span>' : '') + '</div>' +
         '<div class="hero__dir">del ' + rumbo(s.deg) + (rachado(s.kn, s.raf) ? ' · <span class="rachado">⚠ Rachado</span>' : '') + '</div>' +
         '<div class="hero__hasta">' + esc(linea) + '</div><div class="presenta" id="presenta" hidden></div></div>' + brujula(s.deg, spot.arco, 112) + '</div></div></section>' +
-      '<div id="cambioBox"></div>' +
+      '<div id="cambioBox"></div><div id="llegaBox"></div>' +
       '<div class="datos">' +
         '<div class="dato"><small>AGUA</small><b>' + (aguaT != null ? r0(aguaT) + '° · ' + traje(aguaT) : '—') + '</b></div>' +
         '<a class="dato" href="#/spot/' + spot.id + '"><small>MAREA</small><b>' + (sigMarea ? (sigMarea.alta ? '▲ ' : '▼ ') + hhmm(sigMarea.t) : '—') + '</b></a>' +
@@ -652,7 +652,7 @@ function vistaSpot(id){ var t = turno;
       '<div class="spot-ahora"><b>' + r0(cur.wind_speed_10m) + '</b> kn ' + rumbo(cur.wind_direction_10m) + ' <span>· ráfagas <b>' + r0(cur.wind_gusts_10m) + '</b></span>' +
         (rachado(cur.wind_speed_10m, cur.wind_gusts_10m) ? ' <em class="rachado">⚠ Rachado</em>' : '') + '</div><p>' + (pico ? 'Pico del día: ' + hhmm(pico.ms) + ' · ' + r0(pico.kn) + ' kn' + (pico.ev.ok ? ' · ala de ' + ala(pico.kn, p.peso) + ' m' : '') : esc(spot.sub)) + '</p></div>' +
       brujula(cur.wind_direction_10m, spot.arco, 96) + '</div></div>' + sel +
-      '<div id="cambioBox"></div>' + reportesHtml(spot) +
+      '<div id="cambioBox"></div><div id="llegaBox"></div>' + reportesHtml(spot) +
       solTira(d) +
       '<div class="tarj vidrio"><p class="tit">Próximas 24 horas</p><div class="barras">' + barras.map(function(b, j){
         return '<div class="barra">' + (tormenta(b.code) ? '<small>⚡</small>' : b.pp >= 50 ? '<small>💧</small>' : '') +
@@ -1393,6 +1393,94 @@ function pintarCambios(lista){
     return '<a class="cambio-chip' + (sube(x) ? '' : ' cambio-chip--baja') + '" href="#/spot/' + x.spot.id + '">' + (sube(x) ? '⚡ ' : '📉 ') + esc(x.spot.n) + '</a>';
   }).join('') + '</div>' : '');
 }
+// ─── El viento viene llegando ───
+// Si una estación que está viento arriba de tu spot (aeródromos, Pilote Norden,
+// Náutico) ya mide bastante más que tu spot, ese viento está en camino.
+// Se estima cuándo llega con la distancia y la velocidad a la que viaja el aire.
+// Las mismas reglas, si algún día se avisan con la app cerrada, van en la función del servidor.
+var LLEGA_DIF = 5, LLEGA_MIN = 12, LLEGA_FRESCO = 75 * 60e3, LLEGA_CONO = 45;
+function metar(){ return traer('/api/metar', 'metar', 5 * 60e3).then(function(d){ return (d && d.estaciones) || []; }); }
+function nordenFecha(s){ // "13-11-2026 11:40" hora argentina
+  var m = /^(\d{1,2})-(\d{1,2})-(\d{4})\s+(\d{1,2}):(\d{2})/.exec(s || ''); if (!m) return NaN;
+  return Date.UTC(+m[3], +m[2] - 1, +m[1], +m[4] + 3, +m[5]);
+}
+function estacionesVivas(){
+  return Promise.all([metar().catch(function(){ return []; }), norden().catch(function(){ return null; }), cnsi().catch(function(){ return null; })]).then(function(r){
+    var l = r[0].slice();
+    var n = r[1];
+    if (n && !n.vencido && isFinite(n.kn)) l.push({id: 'norden', n: 'Pilote Norden', lat: NORDEN.lat, lng: NORDEN.lng, kn: n.kn, dir: n.grados, t: nordenFecha(n.medidoEn) || Date.now()});
+    var c = r[2];
+    if (c) l.push({id: 'cnsi', n: 'Náutico', lat: -34.4678, lng: -58.5086, kn: c.kn, raf: c.raf, dir: c.dir, t: c.t});
+    var ahora = Date.now();
+    return l.filter(function(e){ return isFinite(e.kn) && isFinite(e.t) && ahora - e.t < LLEGA_FRESCO; });
+  });
+}
+function rumboA(lat1, lng1, lat2, lng2){
+  var r = Math.PI / 180, y = Math.sin((lng2 - lng1) * r) * Math.cos(lat2 * r),
+      x = Math.cos(lat1 * r) * Math.sin(lat2 * r) - Math.sin(lat1 * r) * Math.cos(lat2 * r) * Math.cos((lng2 - lng1) * r);
+  return (Math.atan2(y, x) / r + 360) % 360;
+}
+function difAng(a, b){ var d = Math.abs(a - b) % 360; return d > 180 ? 360 - d : d; }
+function vieneLlegando(todo, est, medido){
+  var res = [];
+  SPOTS.forEach(function(sp){
+    var c = todo && todo[sp.id] && todo[sp.id].current; if (!c || !isFinite(c.wind_speed_10m)) return;
+    var lat = sp.plat || sp.lat, lng = sp.plng || sp.lng;
+    var ahoraKn = c.wind_speed_10m, fuente = 'pronóstico';
+    if (medido && CERCA_CNSI.indexOf(sp.id) >= 0 && Date.now() - medido.t < 40 * 60e3) { ahoraKn = medido.kn; fuente = 'Náutico'; }
+    var cand = est.filter(function(e){
+      if (e.id === 'cnsi' && CERCA_CNSI.indexOf(sp.id) >= 0) return false; // es el mismo lugar
+      var dKm = distanciaM(lat, lng, e.lat, e.lng) / 1000;
+      if (dKm < 4 || dKm > 70) return false;
+      var dir = isFinite(e.dir) ? e.dir : c.wind_direction_10m;
+      if (!isFinite(dir)) return false;
+      // Viento arriba: la estación está hacia donde viene el viento.
+      if (difAng(rumboA(lat, lng, e.lat, e.lng), dir) > LLEGA_CONO) return false;
+      if (e.kn < LLEGA_MIN || e.kn - ahoraKn < LLEGA_DIF) return false;
+      // El frente viaja a una velocidad parecida a la del viento (algo menos).
+      e._km = dKm; e._min = Math.max(5, Math.round(dKm / (e.kn * 1.852 * 0.8) * 60));
+      return e._min <= 120;
+    }).map(function(e){ return {id: e.id, n: e.n, kn: e.kn, dir: e.dir, km: e._km, min: e._min}; });
+    if (!cand.length) return;
+    var fuerte = cand.slice().sort(function(a, b){ return b.kn - a.kn || a.min - b.min; })[0];
+    // Solo las estaciones del mismo viento (misma dirección que el más fuerte).
+    var cadena = cand.filter(function(e){ return !isFinite(e.dir) || !isFinite(fuerte.dir) || difAng(e.dir, fuerte.dir) <= LLEGA_CONO; })
+      .sort(function(a, b){ return b.km - a.km; }).slice(-2);
+    res.push({spot: sp, ahora: ahoraKn, fuente: fuente, kn: fuerte.kn, dir: isFinite(fuerte.dir) ? fuerte.dir : c.wind_direction_10m, min: fuerte.min, cadena: cadena});
+  });
+  return res;
+}
+function pintarLlega(lista){
+  var box = document.getElementById('llegaBox'); if (!box) return;
+  var enSpot = /^#\/spot/.test(location.hash) ? repSpot : null, mio = perfil().spot;
+  var x = lista.filter(function(v){ return enSpot ? v.spot.id === enSpot : v.spot.id === mio; })[0] || (enSpot ? null : lista[0]);
+  if (!x) { box.innerHTML = ''; return; }
+  box.innerHTML = '<a class="llega" href="#/spot/' + x.spot.id + '" role="status">' +
+    '<span class="llega__k"><i class="vivo-dot"></i> El viento viene llegando</span>' +
+    '<b class="llega__t">' + r0(x.kn) + ' kn del ' + rumbo(x.dir) + ' en ~' + x.min + ' min</b>' +
+    '<span class="llega__est">' + x.cadena.map(function(e){ return '<span><b>' + r0(e.kn) + '</b>' + esc(e.n) + '</span><i></i>'; }).join('') +
+    '<span class="llega__yo"><b>' + r0(x.ahora) + '</b>' + esc(x.spot.n) + '</span></span>' +
+    '<small>' + (x.fuente === 'Náutico' ? 'Ahora en ' + esc(x.spot.n) + ': medido en el Náutico' : 'Ahora en ' + esc(x.spot.n) + ': pronóstico') + ' · se revisa cada 2 min</small></a>';
+}
+function avisarLlega(lista){
+  if (!('Notification' in window) || Notification.permission !== 'granted' || !navigator.serviceWorker) return;
+  var sigo = {}; sigo[perfil().spot] = 1; alertas().forEach(function(a){ sigo[a.spot] = 1; });
+  var hechos = leer('avisosllega', {}), ahora = Date.now(), cambio = false;
+  lista.forEach(function(x){
+    if (!sigo[x.spot.id]) return;
+    if (hechos[x.spot.id] && ahora - hechos[x.spot.id] < 2 * 3600e3) return;
+    hechos[x.spot.id] = ahora; cambio = true;
+    var txt = x.spot.n + ': sube a ' + r0(x.kn) + ' kn en ~' + x.min + ' min. Ya ' + (x.cadena.length > 1 ? 'pegó en ' + x.cadena.map(function(e){ return e.n; }).join(' y ') : 'pega en ' + x.cadena[0].n) + '.';
+    Promise.all([navigator.serviceWorker.ready, sponsorPara(x.spot.id, 'alerta').catch(function(){ return null; })]).then(function(r){
+      var sp = r[1];
+      r[0].showNotification('🌬️ Viene llegando el viento', {body: txt + (sp ? '\nPresentado por ' + sp.nombre : ''), icon: '/bramador/icons/icon-192.png', badge: '/bramador/icons/icon-192.png',
+        tag: 'llega-' + x.spot.id, renotify: true, data: {url: '/bramador/#/spot/' + x.spot.id}});
+      if (sp) contarImpresion(sp, 'alerta', x.spot.id);
+      evento('bramador_aviso_llega', {spot: x.spot.id, min: x.min});
+    }).catch(function(){});
+  });
+  if (cambio) guardar('avisosllega', hechos);
+}
 // Aviso al teléfono para tu spot y los spots de tus alertas: uno por spot por hora (subida y bajada por separado).
 function avisarCambios(lista){
   if (!('Notification' in window) || Notification.permission !== 'granted' || !navigator.serviceWorker) return;
@@ -1418,12 +1506,16 @@ function avisarCambios(lista){
 function revisarCambios(){
   if (document.visibilityState === 'hidden') return;
   Promise.all([pronostico().catch(function(){ return ultimoPron; }), cnsi().catch(function(){ return null; }),
-               rpc('bram_subidas').catch(function(){ return vigUltimo.subidas || {}; })]).then(function(r){
+               rpc('bram_subidas').catch(function(){ return vigUltimo.subidas || {}; }),
+               estacionesVivas().catch(function(){ return []; })]).then(function(r){
     if (r[0]) ultimoPron = r[0];
     vigUltimo.subidas = r[2] || {};
     var lista = cambiosDeViento(r[0], r[1], vigUltimo.subidas);
     pintarCambios(lista);
     avisarCambios(lista);
+    var llega = vieneLlegando(r[0], r[3] || [], r[1]);
+    pintarLlega(llega);
+    avisarLlega(llega);
     // En Mi spot, los reportes también se refrescan solos.
     if (/^#\/spot/.test(location.hash) && repSpot) cargarEstado(repSpot);
   });
@@ -1633,6 +1725,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.25', fecha: '15/11', cambios: ['Nuevo: "El viento viene llegando". Si en los aeropuertos, el Pilote Norden o el Náutico ya sopla fuerte del lado de donde viene el viento, Bramador te avisa cuánto llega a tu spot y en cuántos minutos.', 'Cámaras ordenadas: la de La Pocho Bay ahora figura como Perú Beach, y la de Náutica como San Isidro.']},
   {v: '1.24', fecha: '14/11', cambios: ['Nueva cámara en El río: La Pocho Bay, en Acassuso. Y la del Paseo del Viento de La Lucila ahora tiene su nombre.']},
   {v: '1.23', fecha: '12/11', cambios: ['Reportes en el spot arreglados: ahora te toma la ubicación al toque y cuenta en toda la zona (hasta 3 km), también desde el Náutico y Puerto Tablas.']},
   {v: '1.22', fecha: '4/11', cambios: ['Ahora el aviso de "subió el viento" te llega aunque tengas Bramador cerrado. Activá los avisos en Más → Alertas.']},
