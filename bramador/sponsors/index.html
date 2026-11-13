@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sponsors de Bramador · Tu marca en la app de viento del Río de la Plata</title>
-<meta name="description" content="Poné tu marca en Bramador, la app gratis de viento para wingfoil y kite del Río de la Plata: Presentado por en la señal del día y en los avisos de viento, por spot y por fechas.">
+<meta name="description" content="Poné tu marca en Bramador, la app gratis de viento para wingfoil y kite del Río de la Plata: tu logo en la pantalla Hoy, junto a las marcas que patrocinan la app.">
 <link rel="canonical" href="https://www.escueladewingfoil.com.ar/bramador/sponsors/">
 <meta name="theme-color" content="#0B1A22">
 <meta property="og:type" content="website">
@@ -172,6 +172,21 @@ footer{padding-block:20px;color:var(--gris);font-size:13px}
   .dos{grid-template-columns:1fr}
 }
 @media (max-width:400px){.presenta{font-size:9.5px;gap:4px;white-space:nowrap;max-width:100%}.fon--b{margin-top:24px}.pant .sali{font-size:28px}.kn b{font-size:32px}}
+.patro{margin-top:12px;padding:8px 10px;border-radius:12px;background:rgba(11,26,34,.7);outline:2px solid var(--senal);outline-offset:3px;animation:pulso 2.4s ease-in-out infinite;font-size:10px}
+.patro>span{display:block;color:var(--gris);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:9px}
+.patro__m{display:flex;align-items:center;gap:8px;margin-top:5px}
+.patro__m i,.rueda__m i{width:24px;height:24px;border-radius:6px;background:#fff;display:grid;place-items:center;color:var(--tinta);font-style:normal;font-weight:800;font-size:10px;flex-shrink:0}
+.patro__m b{font-size:13px;font-weight:800}
+.patro__p{display:flex;gap:4px;margin-top:6px}
+.patro__p b{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.3)}
+.patro__p b.on{background:var(--senal);width:14px;border-radius:3px}
+.rueda{position:relative;height:120px;margin-top:14px}
+.rueda__m{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;opacity:0;transform:translateY(8px);transition:opacity .6s,transform .6s}
+.rueda__m.on{opacity:1;transform:none}
+.rueda__m i{width:56px;height:56px;border-radius:14px;font-size:18px}
+.rueda__m b{font-size:16px;font-weight:800}
+.rueda__pie{font-size:11px;color:var(--gris);text-align:center;margin:8px 4px 0;line-height:1.35}
+@media (prefers-reduced-motion:reduce){.patro{animation:none}.rueda__m{transition:none}}
 </style>
 </head>
 <body>
@@ -183,36 +198,35 @@ footer{padding-block:20px;color:var(--gris);font-size:13px}
       <h1>Tu marca, justo cuando el río <em>se pone bueno.</em></h1>
       <p class="bajada">Bramador es la app gratis de viento del Río de la Plata para wingfoil y kite. Los riders la abren antes de salir al agua, y ahí aparece tu marca.</p>
       <div class="cifras">
-        <div><b>6</b><span>spots del río</span></div>
-        <div><b>2</b><span>lugares para tu logo</span></div>
-        <div><b>1</b><span>marca por spot a la vez</span></div>
+        <div><b>Hoy</b><span>la pantalla que abren todos</span></div>
+        <div><b>8</b><span>marcas como máximo</span></div>
+        <div><b>1</b><span>precio, todo el río</span></div>
       </div>
     </div>
     <div>
       <div class="fones">
-        <div class="fon" aria-label="Ejemplo de la pantalla Hoy con Presentado por">
+        <div class="fon" aria-label="Ejemplo de la pantalla Hoy con las marcas que patrocinan">
           <div class="pant">
             <div class="sali">SALÍ,<br><i>HAY VIENTO.</i></div>
             <div class="kn"><div><b>18</b><small> kn</small></div><div class="raf"><span>RÁFAGAS</span><b>23</b></div></div>
             <div class="dir">del SE · San Isidro</div>
-            <div class="presenta"><i>TM</i><span>Presentado por</span><b>Tu Marca</b></div>
+            <div class="patro"><span>Patrocinan Bramador</span><div class="patro__m"><i>TM</i><b>Tu Marca</b></div><div class="patro__p"><b class="on"></b><b></b><b></b></div></div>
             <div class="nav"><b>Hoy</b><span>Mi spot</span><span>Mapa</span><span>Más</span></div>
           </div>
         </div>
-        <div class="fon fon--b" aria-label="Ejemplo de aviso de viento en el celular">
+        <div class="fon fon--b" aria-label="Las marcas rotan una por una en la pantalla Hoy">
           <div class="pant lock">
-            <div class="hora">9:41</div>
-            <div class="fecha">sábado 1 de noviembre</div>
-            <div class="noti">
-              <header><span>BRAMADOR</span><span>ahora</span></header>
-              <b>🌬️ Hay viento</b><br>
-              San Isidro mañana 14 a 18 h: 17 kn del SE.<br>
-              <span class="pp">Presentado por Tu Marca</span>
+            <div class="fecha">Patrocinan Bramador</div>
+            <div class="rueda">
+              <div class="rueda__m on"><i>TM</i><b>Tu Marca</b></div>
+              <div class="rueda__m"><i>M2</i><b>Marca 2</b></div>
+              <div class="rueda__m"><i>M3</i><b>Marca 3</b></div>
             </div>
+            <p class="rueda__pie">Cada marca pasa unos segundos y vuelve a aparecer. Todas se ven lo mismo.</p>
           </div>
         </div>
       </div>
-      <p class="pie-fon">Ejemplo con una marca inventada. En naranja, dónde va la tuya.</p>
+      <p class="pie-fon">Ejemplo con marcas inventadas. En naranja, dónde va la tuya.</p>
     </div>
   </div>
 </header>
@@ -224,16 +238,16 @@ footer{padding-block:20px;color:var(--gris);font-size:13px}
       <h2>Simple, a la vista y sin molestar</h2>
       <div class="grilla">
         <div class="c">
-          <h3>En la señal del día</h3>
-          <p>"Presentado por" con tu logo y nombre, abajo del viento de la pantalla Hoy. Es lo primero que mira un rider para decidir si sale.</p>
+          <h3>En la pantalla Hoy</h3>
+          <p>"Patrocinan Bramador" con tu logo y nombre, justo debajo del viento. Es lo primero que mira un rider para decidir si sale.</p>
         </div>
         <div class="c">
-          <h3>En los avisos de viento</h3>
-          <p>Cuando el río se pone bueno, Bramador avisa al celular. Ese aviso termina con "Presentado por" y tu marca.</p>
+          <h3>Junto a otras marcas</h3>
+          <p>Las marcas rotan una por una, todas el mismo tiempo. Hasta 8 a la vez, para que cada una se vea.</p>
         </div>
         <div class="c">
-          <h3>Por spot y por fechas</h3>
-          <p>Elegís el spot y el período: una temporada, un mes, un fin de semana largo o un evento.</p>
+          <h3>En todo el río</h3>
+          <p>No hay spots que elegir: tu marca sale para todos los riders, estén en San Isidro, Olivos, Quilmes o Punta Lara.</p>
           <div class="chips"><span>San Isidro</span><span>Perú Beach</span><span>Martínez</span><span>Olivos</span><span>Quilmes</span><span>Punta Lara</span></div>
         </div>
       </div>
@@ -243,24 +257,23 @@ footer{padding-block:20px;color:var(--gris);font-size:13px}
   <section class="blk">
     <div class="w">
       <div class="eti">Qué recibís</div>
-      <h2>Sabés cuántas veces te vieron, y quién navega cada spot</h2>
+      <h2>Sabés cuántas veces te vieron y quién navega</h2>
       <div class="dos">
         <ul class="lista">
-          <li><div><b>Veces que se mostró tu marca</b><span>Contadas por día y por spot, en la señal y en los avisos.</span></div></li>
-          <li><div><b>Qué alas usan en tu spot</b><span>Los riders reportan en vivo cómo está el río y con qué ala salieron. Ves tamaños y marcas más usadas, nunca nombres.</span></div></li>
+          <li><div><b>Veces que se mostró tu marca</b><span>Contadas por día, en la pantalla Hoy.</span></div></li>
+          <li><div><b>Qué alas usan en el río</b><span>Los riders reportan en vivo cómo está el río y con qué ala salieron. Ves tamaños y marcas más usadas, nunca nombres.</span></div></li>
           <li><div><b>Días con viento y actividad</b><span>Cuántos riders reportaron cada día y cada semana.</span></div></li>
           <li><div><b>Todo en planilla</b><span>Te pasamos los números en un archivo que abrís con Excel.</span></div></li>
         </ul>
         <div>
           <div class="tabla-w">
             <table>
-              <thead><tr><th>Día</th><th>Spot</th><th>Lugar</th><th style="text-align:right">Veces</th></tr></thead>
+              <thead><tr><th>Día</th><th>Lugar</th><th style="text-align:right">Veces</th></tr></thead>
               <tbody>
-                <tr><td>sáb 1/11</td><td>San Isidro</td><td>Señal del día</td><td class="n">412</td></tr>
-                <tr><td>sáb 1/11</td><td>San Isidro</td><td>Aviso de viento</td><td class="n">186</td></tr>
-                <tr><td>dom 2/11</td><td>San Isidro</td><td>Señal del día</td><td class="n">377</td></tr>
-                <tr><td>dom 2/11</td><td>San Isidro</td><td>Aviso de viento</td><td class="n">94</td></tr>
-                <tr><td colspan="3">Alas más usadas en el spot</td><td class="n">5 m · 6 m</td></tr>
+                <tr><td>sáb 1/11</td><td>Pantalla Hoy</td><td class="n">412</td></tr>
+                <tr><td>dom 2/11</td><td>Pantalla Hoy</td><td class="n">377</td></tr>
+                <tr><td>lun 3/11</td><td>Pantalla Hoy</td><td class="n">205</td></tr>
+                <tr><td colspan="2">Alas más usadas en el río</td><td class="n">5 m · 6 m</td></tr>
               </tbody>
             </table>
             <p class="nota">Números de ejemplo para mostrar cómo se ve el informe.</p>
@@ -284,19 +297,18 @@ footer{padding-block:20px;color:var(--gris);font-size:13px}
 <section class="contratar" id="contratar" hidden>
   <div class="w">
     <div class="eti">Contratá online</div>
-    <h2>Elegí tus spots y empezá hoy</h2>
-    <div class="precio"><b>$99.900</b><span>por mes, por spot · elegí uno, varios o todos · se renueva solo</span></div>
+    <h2>Sumá tu marca y empezá hoy</h2>
+    <div class="precio"><b>$99.900</b><span>por mes · tu marca en Hoy, para todo el río · se renueva solo</span></div>
     <div class="garantias"><span>Pagás con Mercado Pago</span><span>Tu marca sale apenas se acredita el pago</span><span>Cancelás cuando quieras desde Mercado Pago</span></div>
     <form class="form" id="fContratar" novalidate>
-      <fieldset class="spots-sel todo" id="cSpots"><legend><span>Spots (tocá los que quieras)</span><button type="button" id="cTodos">Elegir todos</button></legend></fieldset>
-      <div class="total todo" aria-live="polite"><span id="cCuenta">Elegí al menos un spot</span><b id="cTotal">$0 / mes</b></div>
+      <div class="total todo" aria-live="polite"><span id="cCuenta">Lugares libres: …</span><b id="cTotal">$99.900 / mes</b></div>
       <label>Nombre de tu marca<input id="cNombre" maxlength="40" autocomplete="organization" required></label>
       <label>Tu mail<input id="cMail" type="email" maxlength="120" autocomplete="email" required></label>
       <label class="todo">Logo (cuadrado queda mejor)<input id="cLogo" type="file" accept="image/png,image/jpeg,image/webp"></label>
       <div class="logo-prev todo" id="cPrev" hidden><img alt=""><span>Así se va a ver tu logo en la app</span></div>
       <p class="error todo" id="cError" role="alert" hidden></p>
       <div class="todo"><button class="pagar" id="cPagar">Pagar con Mercado Pago</button></div>
-      <p class="letra todo">Al pagar aceptás que tu marca y logo aparezcan en Bramador en los spots elegidos. El cobro es mensual y automático; si un mes no se cobra, tu marca deja de mostrarse sola.</p>
+      <p class="letra todo">Al pagar aceptás que tu marca y logo aparezcan en la pantalla Hoy de Bramador, rotando con las demás marcas. El cobro es mensual y automático; si un mes no se cobra, tu marca deja de mostrarse sola.</p>
     </form>
   </div>
 </section>
@@ -304,8 +316,8 @@ footer{padding-block:20px;color:var(--gris);font-size:13px}
 <section class="cierre">
   <div class="w">
     <div>
-      <h2>Reservá tu spot antes de la temporada</h2>
-      <p>Hay un solo lugar por spot a la vez. ¿Querés algo a medida, una temporada o un evento? Escribinos y lo armamos.</p>
+      <h2>Asegurá tu lugar antes de la temporada</h2>
+      <p>Hay hasta 8 marcas a la vez. ¿Querés algo a medida, una temporada o un evento? Escribinos y lo armamos.</p>
     </div>
     <div class="contacto">
       <a class="btn" href="https://wa.me/5491120498620?text=Hola%20Francisco%2C%20quiero%20ser%20sponsor%20de%20Bramador" target="_blank" rel="noopener">Escribinos por WhatsApp</a>    </div>
@@ -316,46 +328,28 @@ footer{padding-block:20px;color:var(--gris);font-size:13px}
 
 <script>
 document.getElementById('volver').addEventListener('click', function(e){ try { if (document.referrer && new URL(document.referrer).origin === location.origin && history.length > 1) { e.preventDefault(); history.back(); } } catch(x){} });
+(function(){ var m = document.querySelectorAll('.rueda__m'), i = 0; if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; setInterval(function(){ m[i].classList.remove('on'); i = (i + 1) % m.length; m[i].classList.add('on'); }, 2400); })();
 document.querySelector('.cierre .btn').addEventListener('click', function(){ try { gtag('event', 'contacto_sponsor', {canal: 'whatsapp'}); } catch(e){} });
 
 // ── Contratar online con Mercado Pago
 (function(){
   var FN = 'https://pfwazngwcvirdeyamvsd.supabase.co/functions/v1/bramador-sponsor';
   var SB = 'https://pfwazngwcvirdeyamvsd.supabase.co', KEY = 'sb_publishable_5wLxVtnFy4IMOAMK_rzZ-A_cZ1TSOeV';
-  var SPOTS = {sanisidro:'San Isidro', peru:'Perú Beach', martinez:'Martínez', olivos:'Olivos', quilmes:'Quilmes', puntalara:'Punta Lara'};
   var prueba = /[?&]prueba=1/.test(location.search), logo = null;
   function $(id){ return document.getElementById(id); }
   function post(body){ return fetch(FN, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)}).then(function(r){ return r.json().then(function(j){ j._ok = r.ok; return j; }); }); }
   function error(t){ $('cError').textContent = t; $('cError').hidden = !t; }
+  var PRECIO = 99900, libres = 8;
   Promise.all([
     post({accion:'estado'}).catch(function(){ return {}; }),
-    fetch(SB + '/rest/v1/rpc/bram_spots_libres', {method:'POST', headers:{apikey:KEY,'Content-Type':'application/json'}, body:'{}'}).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; })
+    fetch(SB + '/rest/v1/rpc/bram_sponsor_cupos', {method:'POST', headers:{apikey:KEY,'Content-Type':'application/json'}, body:'{}'}).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; })
   ]).then(function(r){
     if (!(r[0] && r[0].listo) && !prueba) return;
-    var libres = r[1];
-    $('cSpots').insertAdjacentHTML('beforeend', Object.keys(SPOTS).map(function(k){
-      var ok = !libres || libres.indexOf(k) >= 0;
-      return '<label class="spot-op"><input type="checkbox" name="spot" value="' + k + '"' + (ok ? '' : ' disabled') + '><span>' + SPOTS[k] + (ok ? '' : '<small>ocupado</small>') + '</span></label>';
-    }).join(''));
-    contar();
-    if (libres && !libres.length) { error('Ahora no quedan spots libres. Escribinos por WhatsApp y te avisamos cuando se libere uno.'); $('cPagar').disabled = true; }
+    if (r[1] && isFinite(r[1].libres)) libres = r[1].libres;
+    $('cCuenta').textContent = libres > 0 ? (libres === 1 ? 'Queda 1 lugar' : 'Quedan ' + libres + ' lugares') : 'Sin lugares libres';
+    if (libres <= 0) { error('Ahora están todos los lugares ocupados. Escribinos por WhatsApp y te avisamos cuando se libere uno.'); $('cPagar').disabled = true; }
+    $('cPagar').textContent = 'Pagar $' + PRECIO.toLocaleString('es-AR') + ' con Mercado Pago';
     $('contratar').hidden = false;
-  });
-  var PRECIO = 99900;
-  function elegidos(){ return [].slice.call(document.querySelectorAll('#cSpots input:checked')).map(function(i){ return i.value; }); }
-  function contar(){
-    var n = elegidos().length;
-    $('cCuenta').textContent = n ? n + (n === 1 ? ' spot' : ' spots') + ' × $99.900' : 'Elegí al menos un spot';
-    $('cTotal').textContent = '$' + (n * PRECIO).toLocaleString('es-AR') + ' / mes';
-    $('cPagar').textContent = n ? 'Pagar $' + (n * PRECIO).toLocaleString('es-AR') + ' con Mercado Pago' : 'Pagar con Mercado Pago';
-  }
-  $('cSpots').addEventListener('change', contar);
-  $('cTodos').addEventListener('click', function(){
-    var cajas = [].slice.call(document.querySelectorAll('#cSpots input:not(:disabled)'));
-    var todas = cajas.every(function(i){ return i.checked; });
-    cajas.forEach(function(i){ i.checked = !todas; });
-    this.textContent = todas ? 'Elegir todos' : 'Sacar todos';
-    contar();
   });
   $('cLogo').addEventListener('change', function(){
     var f = this.files[0]; logo = null; $('cPrev').hidden = true; if (!f) return;
@@ -376,18 +370,17 @@ document.querySelector('.cierre .btn').addEventListener('click', function(){ try
   $('fContratar').addEventListener('input', function(){ if (!$('cPagar').disabled) error(''); });
   $('fContratar').addEventListener('submit', function(e){
     e.preventDefault(); error('');
-    var nombre = $('cNombre').value.trim(), spots = elegidos(), mail = $('cMail').value.trim();
-    if (!spots.length) return error('Elegí al menos un spot.');
+    var nombre = $('cNombre').value.trim(), mail = $('cMail').value.trim();
     if (nombre.length < 2) return error('Poné el nombre de tu marca.');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) return error('Revisá el mail.');
     $('cPagar').disabled = true; $('cPagar').textContent = 'Abriendo Mercado Pago…';
-    try { gtag('event', 'sponsor_contratar', {spots: spots.length, value: spots.length * PRECIO, currency: 'ARS'}); } catch(x){}
-    post({accion:'contratar', nombre: nombre, spots: spots, mail: mail, logo: logo, prueba: prueba}).then(function(j){
+    try { gtag('event', 'sponsor_contratar', {value: PRECIO, currency: 'ARS'}); } catch(x){}
+    post({accion:'contratar', general: true, nombre: nombre, mail: mail, logo: logo, prueba: prueba}).then(function(j){
       if (j._ok && j.url) { location.href = j.url; return; }
       throw new Error(j.error || 'No pudimos abrir Mercado Pago. Probá de nuevo.');
     }).catch(function(x){
       error(x && x.message && x.message.indexOf('fetch') < 0 ? x.message : 'No pudimos abrir Mercado Pago. Probá de nuevo.');
-      $('cPagar').disabled = false; contar();
+      $('cPagar').disabled = false; $('cPagar').textContent = 'Pagar $' + PRECIO.toLocaleString('es-AR') + ' con Mercado Pago';
     });
   });
 })();
