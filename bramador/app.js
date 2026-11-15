@@ -454,7 +454,8 @@ function vistaHoy(){ var t = turno;
     '<div class="hero__pie"><p class="veredicto veredicto--no" style="opacity:.4">···</p></div></section>' +
     '<p class="cargando">Leyendo el viento del río…</p>');
   Promise.all([pronostico(), agua().catch(function(){ return null; }), mareas().catch(function(){ return []; }),
-               spot.id === 'sanisidro' || spot.id === 'peru' || spot.id === 'martinez' ? cnsi().catch(function(){ return null; }) : Promise.resolve(null)])
+               spot.id === 'sanisidro' || spot.id === 'peru' || spot.id === 'martinez' ? cnsi().catch(function(){ return null; }) : Promise.resolve(null),
+               rayos().catch(function(){ return null; })])
   .then(function(r){
     var todo = r[0], d = todo[spot.id];
     if (!d) throw new Error('sin datos');
@@ -469,6 +470,11 @@ function vistaHoy(){ var t = turno;
         if (evMed.ok && s.estado !== 'sali') { s.estado = 'sali'; s.ahoraMedido = true; s.hasta = null; }
         else if (!evMed.ok && s.estado === 'sali') { s.estado = 'no'; s.motivo = evMed.m; s.ahoraMedido = true; }
       }
+    }
+    // Rayos a menos de 15 km (o hace menos de 30 min): no se sale, diga lo que diga el viento.
+    var ray = rayosSpot(spot, r[4]);
+    if (ray && (ray.nivel === 'peligro' || ray.nivel === 'espera') && s.estado !== 'noche') {
+      s.estado = 'no'; s.motivo = ray.nivel === 'peligro' ? 'rayos a ' + kmTxt(ray.km) + ', salí del agua' : 'hubo rayos cerca, esperá ' + ray.libre + ' min'; s.hayRayos = false; s.ahoraMedido = true;
     }
     var verd, linea;
     if (s.estado === 'sali') {
@@ -501,7 +507,7 @@ function vistaHoy(){ var t = turno;
           (isFinite(s.raf) ? '<span class="hero__raf"><small>RÁFAGAS</small>' + s.raf + '<small> kn</small></span>' : '') + '</div>' +
         '<div class="hero__dir">del ' + rumbo(s.deg) + (rachado(s.kn, s.raf) ? ' · <span class="rachado">⚠ Rachado</span>' : '') + '</div>' +
         '<div class="hero__hasta">' + esc(linea) + '</div></div>' + brujula(s.deg, spot.arco, 112) + '</div></div></section>' +
-      '<div id="cambioBox"></div><div id="llegaBox"></div>' +
+      '<div id="rayosBox">' + rayosHtml(spot, ray) + '</div><div id="cambioBox"></div><div id="llegaBox"></div>' +
       '<div id="patrocina" class="patrocina" hidden></div>' +
       '<div class="datos">' +
         '<div class="dato"><small>AGUA</small><b>' + (aguaT != null ? r0(aguaT) + '° · ' + traje(aguaT) : '—') + '</b></div>' +
@@ -813,7 +819,7 @@ function vistaSpot(id){ var t = turno;
       '<div class="spot-ahora"><b>' + r0(cur.wind_speed_10m) + '</b> kn ' + rumbo(cur.wind_direction_10m) + ' <span>· ráfagas <b>' + r0(cur.wind_gusts_10m) + '</b></span>' +
         (rachado(cur.wind_speed_10m, cur.wind_gusts_10m) ? ' <em class="rachado">⚠ Rachado</em>' : '') + '</div><p>' + (pico ? 'Pico del día: ' + hhmm(pico.ms) + ' · ' + r0(pico.kn) + ' kn' + (pico.ev.ok ? ' · ala de ' + ala(pico.kn, p.peso) + ' m' : '') : esc(spot.sub)) + '</p></div>' +
       brujula(cur.wind_direction_10m, spot.arco, 96) + '</div></div>' + sel +
-      '<div id="cambioBox"></div>' + mapaLlegaHtml() + reportesHtml(spot) +
+      '<div id="rayosBox"></div><div id="cambioBox"></div>' + mapaLlegaHtml() + reportesHtml(spot) +
       solTira(d) +
       '<div class="tarj vidrio"><p class="tit">Próximas 24 horas</p><div class="barras">' + barras.map(function(b, j){
         return '<div class="barra">' + (tormenta(b.code) ? '<small>⚡</small>' : b.pp >= 50 ? '<small>💧</small>' : '') +
@@ -1650,7 +1656,9 @@ function actualizarMapaLlega(todo, est, medido, llega){
   var on = {};
   if (x) lista.forEach(function(e){ if (e.kn >= LLEGA_MIN && e.kn - x.ahora >= LLEGA_DIF && (!isFinite(e.dir) || difAng(e.dir, x.dir) <= LLEGA_CONO)) on[e.id] = 1; });
   var origen = x ? lista.filter(function(e){ return e.id === x.cadena[0].id; })[0] : null;
-  mapaEstado = {spot: sp, lat: lat, lng: lng, kn: kn, dir: isFinite(dir) ? dir : 90, est: lista, on: on, x: x, origen: origen, caja: caja, base: null};
+  var ray = rayosSpot(sp, ultimosRayos);
+  mapaEstado = {spot: sp, lat: lat, lng: lng, kn: kn, dir: isFinite(dir) ? dir : 90, est: lista, on: on, x: x, origen: origen, caja: caja, base: null,
+                rayos: ray && ray.lista ? ray.lista.filter(function(r){ return Date.now() - r.t <= 30 * 60e3; }).slice(-300) : []};
   var pie = document.getElementById('mapaLlegaPie');
   if (x) {
     pie.className = 'mapa-llega__pie mapa-llega__pie--on';
@@ -1717,6 +1725,16 @@ function dibujarMapaLlega(){
       if (p.a > p.l || nx < -5 || ny < -5 || nx > W + 5 || ny > H + 5) { p.x = Math.random() * W; p.y = Math.random() * H; p.a = 0; }
     }
     x.drawImage(tr, 0, 0);
+    // Rayos de la última media hora: los más nuevos, amarillos y titilando; los viejos se apagan.
+    m.rayos.forEach(function(r, k){
+      var q = Q(r.lng, r.lat); if (q[0] < -10 || q[0] > W + 10 || q[1] < -10 || q[1] > H + 10) return;
+      var edad = (Date.now() - r.t) / (30 * 60e3), nuevo = edad < 1 / 6;
+      var al = Math.max(.25, 1 - edad) * (nuevo && !reduce ? .6 + .4 * Math.abs(Math.sin(now / 160 + k)) : 1);
+      x.save(); x.translate(q[0], q[1]); x.scale(u * (nuevo ? 1.15 : .8), u * (nuevo ? 1.15 : .8));
+      x.fillStyle = 'rgba(255,210,63,' + al.toFixed(2) + ')'; x.strokeStyle = 'rgba(30,20,0,' + (al * .8).toFixed(2) + ')'; x.lineWidth = 1.2;
+      x.beginPath(); x.moveTo(1.5, -9); x.lineTo(-4.5, 1); x.lineTo(-0.5, 1); x.lineTo(-2, 9); x.lineTo(4.5, -2); x.lineTo(0.5, -2); x.closePath(); x.fill(); x.stroke();
+      x.restore();
+    });
     m.est.forEach(function(e){
       var q = Q(e.lng, e.lat); if (q[0] < -20 || q[0] > W + 20 || q[1] < -20 || q[1] > H + 20) return;
       var on = activo && m.on[e.id] && proy(q[0], q[1]) < fd + 4;
@@ -1756,6 +1774,85 @@ function dibujarMapaLlega(){
     if (yo !== mapaReloj || !document.body.contains(cv)) return;
     frame(n); requestAnimationFrame(loop);
   })(0);
+}
+// ─────────────────────────────── RAYOS ───────────────────────────────
+// Rayos reales del detector del satélite GOES-19 (cada 20 s, toda la región),
+// que el sitio junta cada 2 minutos en /api/rayos. Regla de seguridad: con un
+// rayo a menos de 15 km, afuera del agua hasta 30 minutos sin rayos.
+var ultimosRayos = null;
+var RAYO_PELIGRO = 15, RAYO_CERCA = 40, RAYO_LEJOS = 100; // km
+function rayos(){ return traer('/api/rayos', 'rayos', 2 * 60e3); }
+function rayosSpot(spot, d){
+  if (!d || !d.datoHasta || Date.now() - d.datoHasta > 15 * 60e3) return null; // dato viejo: no se afirma nada
+  var ahora = Date.now(), lat = spot.lat, lng = spot.lng, cerca = [];
+  (d.rayos || []).forEach(function(r){
+    if (ahora - r.t > 45 * 60e3) return;
+    var km = distanciaM(lat, lng, r.lat, r.lng) / 1000;
+    if (km <= RAYO_LEJOS) cerca.push({t: r.t, km: km, lat: r.lat, lng: r.lng});
+  });
+  if (!cerca.length) return {nivel: 'nada'};
+  var ult20 = cerca.filter(function(r){ return ahora - r.t <= 20 * 60e3; });
+  var base = ult20.length ? ult20 : cerca;
+  var min = base.reduce(function(a, r){ return r.km < a.km ? r : a; });
+  var ultimo = cerca.reduce(function(a, r){ return r.t > a.t ? r : a; });
+  var nivel = !ult20.length ? (ahora - ultimo.t <= 30 * 60e3 && cerca.some(function(r){ return r.km <= RAYO_PELIGRO; }) ? 'espera' : 'nada')
+            : min.km <= RAYO_PELIGRO ? 'peligro' : min.km <= RAYO_CERCA ? 'cerca' : 'lejos';
+  // ¿Se acerca? Distancia media de los rayos de los últimos 10 min contra los de 20 a 30 min atrás.
+  var nuevos = cerca.filter(function(r){ return ahora - r.t <= 10 * 60e3; }), viejos = cerca.filter(function(r){ return ahora - r.t > 20 * 60e3 && ahora - r.t <= 30 * 60e3; });
+  var media = function(l){ return l.reduce(function(a, r){ return a + r.km; }, 0) / l.length; };
+  var llegaMin = null;
+  if (nuevos.length >= 3 && viejos.length >= 3) {
+    var dn = media(nuevos), dv = media(viejos), vel = (dv - dn) / 20; // km por minuto
+    if (vel > 0.15 && dn > RAYO_PELIGRO) llegaMin = Math.max(5, Math.round((dn - RAYO_PELIGRO) / vel / 5) * 5);
+  }
+  // Para qué lado está la tormenta: rumbo desde el spot al centro de los rayos recientes.
+  var cLat = 0, cLng = 0; base.forEach(function(r){ cLat += r.lat; cLng += r.lng; });
+  var hacia = rumboA(lat, lng, cLat / base.length, cLng / base.length);
+  return {nivel: nivel, km: min.km, hace: Math.max(0, Math.round((ahora - (ult20.length ? min.t : ultimo.t)) / 60e3)), n: ult20.length,
+          libre: nivel === 'espera' ? Math.max(1, 30 - Math.round((ahora - ultimo.t) / 60e3)) : null,
+          lado: rumbo8(hacia), llegaMin: llegaMin, lista: cerca};
+}
+function kmTxt(km){ return km < 1 ? 'menos de 1 km' : r0(km) + ' km'; }
+function rayosHtml(spot, x){
+  if (!x || x.nivel === 'nada' || (x.nivel === 'lejos' && !x.llegaMin)) return '';
+  var tit, sub, cls = 'rayos';
+  if (x.nivel === 'peligro') {
+    cls += ' rayos--peligro'; tit = '⚡ Rayos a ' + kmTxt(x.km) + ' de ' + spot.n;
+    sub = 'Hace ' + x.hace + ' min. Salí del agua y esperá 30 minutos sin rayos para volver.';
+  } else if (x.nivel === 'espera') {
+    cls += ' rayos--espera'; tit = '⚡ Hubo rayos cerca de ' + spot.n;
+    sub = 'Si no cae otro, en ' + x.libre + ' min ya se puede volver al agua.';
+  } else {
+    cls += x.nivel === 'cerca' ? ' rayos--cerca' : ''; tit = '⚡ Tormenta eléctrica a ' + kmTxt(x.km) + ' al ' + x.lado;
+    sub = x.llegaMin ? 'Se está acercando: podría llegar a ' + spot.n + ' en ~' + x.llegaMin + ' min.' : 'Por ahora no se acerca. Si viene, te avisamos.';
+  }
+  return '<div class="' + cls + '" role="status"><span class="rayos__k"><i class="vivo-dot"></i> Rayos en vivo · satélite</span><b class="rayos__t">' + esc(tit) + '</b><span class="rayos__s">' + esc(sub) + '</span></div>';
+}
+function pintarRayos(d){
+  var box = document.getElementById('rayosBox'); if (!box) return;
+  var id = /^#\/spot/.test(location.hash) ? repSpot : perfil().spot;
+  box.innerHTML = rayosHtml(spotPorId(id), rayosSpot(spotPorId(id), d));
+}
+// Aviso al teléfono (app abierta o en segundo plano): tu spot y los de tus alertas,
+// cuando hay rayos a menos de 15 km o una tormenta que se acerca. Uno por spot cada 45 min.
+function avisarRayos(d){
+  if (!('Notification' in window) || Notification.permission !== 'granted' || !navigator.serviceWorker) return;
+  var sigo = {}; sigo[perfil().spot] = 1; alertas().forEach(function(a){ sigo[a.spot] = 1; });
+  var hechos = leer('avisosrayos', {}), ahora = Date.now(), cambio = false;
+  Object.keys(sigo).forEach(function(id){
+    var spot = spotPorId(id), x = rayosSpot(spot, d);
+    if (!x || !(x.nivel === 'peligro' || (x.llegaMin && x.nivel !== 'espera'))) return;
+    if (hechos[id] && ahora - hechos[id] < 45 * 60e3) return;
+    hechos[id] = ahora; cambio = true;
+    var tit = x.nivel === 'peligro' ? '⚡ Rayos a ' + kmTxt(x.km) + ' de ' + spot.n : '⚡ Tormenta eléctrica acercándose a ' + spot.n;
+    var txt = x.nivel === 'peligro' ? 'Salí del agua. Esperá 30 minutos sin rayos para volver.' : 'Está a ' + kmTxt(x.km) + ' al ' + x.lado + ' y podría llegar en ~' + x.llegaMin + ' min.';
+    navigator.serviceWorker.ready.then(function(reg){
+      reg.showNotification(tit, {body: txt, icon: '/bramador/icons/icon-192.png', badge: '/bramador/icons/icon-192.png',
+        tag: 'rayos-' + id, renotify: true, requireInteraction: x.nivel === 'peligro', data: {url: '/bramador/#/spot/' + id}});
+      evento('bramador_aviso_rayos', {spot: id, nivel: x.nivel});
+    }).catch(function(){});
+  });
+  if (cambio) guardar('avisosrayos', hechos);
 }
 function avisarLlega(lista){
   if (!('Notification' in window) || Notification.permission !== 'granted' || !navigator.serviceWorker) return;
@@ -1802,8 +1899,12 @@ function revisarCambios(){
   if (document.visibilityState === 'hidden') return;
   Promise.all([pronostico().catch(function(){ return ultimoPron; }), cnsi().catch(function(){ return null; }),
                rpc('bram_subidas').catch(function(){ return vigUltimo.subidas || {}; }),
-               estacionesVivas().catch(function(){ return []; })]).then(function(r){
+               estacionesVivas().catch(function(){ return []; }),
+               rayos().catch(function(){ return null; })]).then(function(r){
     if (r[0]) ultimoPron = r[0];
+    ultimosRayos = r[4];
+    pintarRayos(r[4]);
+    avisarRayos(r[4]);
     vigUltimo.subidas = r[2] || {};
     var lista = cambiosDeViento(r[0], r[1], vigUltimo.subidas);
     pintarCambios(lista);
@@ -2053,6 +2154,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.29', fecha: '17/11', cambios: ['Rayos en vivo: Bramador mira los rayos que detecta el satélite cada 20 segundos. Si caen a menos de 15 km de tu spot te dice que salgas del agua, y si una tormenta eléctrica se acerca te avisa cuánto falta.', 'En el mapa de Mi spot ves los rayos de la última media hora.']},
   {v: '1.28', fecha: '16/11', cambios: ['Nuevo en Hoy: botón Historia. Arma una imagen lista para Instagram o WhatsApp con la foto de tu spot, los nudos, las ráfagas y de dónde viene el viento.']},
   {v: '1.27', fecha: '13/11', cambios: ['Nuevo en Mi spot: mapa satelital con el viento medido en las estaciones de alrededor y, si viene más viento, la línea del frente acercándose a tu spot.']},
   {v: '1.26', fecha: '13/11', cambios: ['Las marcas que patrocinan Bramador ahora aparecen todas juntas en Hoy.', 'En El río queda una sola cámara de Perú Beach.', 'Las actualizaciones ya no muestran cartel ni aviso.']},
