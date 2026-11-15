@@ -461,3 +461,35 @@ button{font:inherit;color:inherit}
 .rio-aviso--crecido{border-color:rgba(91,192,248,.6)}
 .rio-aviso b{display:block;font-size:15px;line-height:1.25}
 .rio-aviso span{display:block;font-size:12.5px;line-height:1.35;color:rgba(255,255,255,.78);margin-top:3px}
+/* Radar de tormentas */
+.radar-boton{display:flex;align-items:center;gap:12px;margin:14px 16px 0;padding:12px 14px;text-decoration:none;color:var(--texto);border-color:rgba(255,226,122,.35)}
+.radar-boton>span{font-size:26px}
+.radar-boton div{flex:1}
+.radar-boton b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px}
+.radar-boton small{display:block;font-size:12px;color:var(--gris)}
+.radar-boton i{font-style:normal;color:var(--senal);font-weight:900;font-size:20px}
+a.rayos{text-decoration:none;color:inherit}
+.radar{position:relative;height:calc(100vh - var(--nav-h) - var(--safe-b) - 16px);height:calc(100dvh - var(--nav-h) - var(--safe-b) - 16px);min-height:480px;overflow:hidden;background:#05090D}
+.radar canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.radar__volver{position:absolute;top:calc(12px + var(--safe-t));left:12px;z-index:3}
+.radar__alerta{position:absolute;z-index:3;top:calc(52px + var(--safe-t));left:12px;right:12px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:12px 14px;border-radius:20px;background:rgba(10,18,24,.6);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4)}
+.radar__alerta--on{border-color:rgba(255,226,122,.45);box-shadow:0 0 30px rgba(255,226,122,.18)}
+.radar__ico{font-size:26px;width:40px;height:40px;display:grid;place-items:center;border-radius:12px;background:rgba(255,255,255,.06)}
+.radar__alerta--on .radar__ico{background:radial-gradient(circle at 50% 40%,rgba(255,226,122,.35),rgba(255,90,44,.15))}
+.radar__alerta>div:not(.radar__datos){flex:1;min-width:0}
+.radar__t{display:block;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:19px;line-height:1.1}
+.radar__s{display:block;font-size:12px;color:var(--gris);margin-top:2px}
+.radar__datos{flex-basis:100%;display:grid;grid-template-columns:repeat(2,1fr);padding-top:8px;border-top:1px solid rgba(255,255,255,.1);font-family:'DM Mono',monospace;font-size:15px;font-weight:500}
+.radar__datos small{display:block;font-family:'DM Sans',sans-serif;font-size:10px;color:var(--gris);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.radar__ley{position:absolute;z-index:3;left:12px;bottom:96px;display:flex;align-items:center;gap:7px;padding:6px 10px;border-radius:12px;background:rgba(10,18,24,.6);font-size:10px;font-weight:700;color:var(--gris);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.radar__ley i{display:block;width:76px;height:5px;border-radius:5px;background:linear-gradient(90deg,#2fb7ff,#38e1b8,#ffe27a,#ff7a2c,#ff2d6f,#c03cff)}
+.radar__ray{color:#FFE27A}
+.radar__tl{position:absolute;z-index:3;left:12px;right:12px;bottom:12px;display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:20px;background:rgba(10,18,24,.6);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.radar__play{flex-shrink:0;width:40px;height:40px;border-radius:50%;border:0;background:var(--texto);display:grid;place-items:center;cursor:pointer}
+.radar__play svg{width:13px;height:13px;fill:var(--tinta)}
+.radar__play.on{background:var(--senal)}
+.radar__pista{flex:1;min-width:0}
+.radar__pista input{width:100%;accent-color:#fff;margin:0}
+.radar__horas{display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:9.5px;color:var(--gris);margin-top:2px}
+.radar__hora{flex-shrink:0;min-width:74px;text-align:right;font-family:'DM Mono',monospace;font-size:12px}
+.radar__cred{position:absolute;z-index:3;right:12px;bottom:76px;font-size:9px;color:rgba(255,255,255,.5);text-shadow:0 1px 3px #000}

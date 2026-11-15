@@ -606,6 +606,7 @@ function vistaHoy(){ var t = turno;
       (pico ? '<div class="tarj vidrio pico">' + flecha(pico.deg, '') .replace('<svg', '<svg width="28" height="28" style="flex-shrink:0;fill:none;stroke:#FF5A2C;stroke-width:3;stroke-linecap:round;transform:rotate(' + r0(pico.deg) + 'deg)"') +
         '<div><b>Pico del día: ' + hhmm(pico.ms) + ' · ' + r0(pico.kn) + ' kn ' + rumbo(pico.deg) + (isFinite(pico.raf) ? ' · ráfagas ' + r0(pico.raf) : '') + '</b><p>' +
         (pico.ev.ok ? 'Llevá un ala de ' + ala(pico.kn, p.peso) + ' m' : 'Ni en el pico da: ' + esc(pico.ev.m)) + '</p></div></div>' : '') +
+      '<a class="radar-boton vidrio" href="#/radar"><span>🌩️</span><div><b>Radar de tormentas</b><small>Lluvia, rayos y viento en el mapa, hora por hora</small></div><i>→</i></a>' +
       '<div class="subt"><h2>Todo el río ahora</h2><span>color = fuerza</span></div><div class="mosaico">' +
       SPOTS.map(function(sp){
         var dd = todo[sp.id]; if (!dd) return '';
@@ -1914,7 +1915,7 @@ function rayosHtml(spot, x){
     cls += x.nivel === 'cerca' ? ' rayos--cerca' : ''; tit = '⚡ Tormenta eléctrica a ' + kmTxt(x.km) + ' al ' + x.lado;
     sub = x.llegaMin ? 'Se está acercando: podría llegar a ' + spot.n + ' en ~' + x.llegaMin + ' min.' : 'Por ahora no se acerca. Si viene, te avisamos.';
   }
-  return '<div class="' + cls + '" role="status"><span class="rayos__k"><i class="vivo-dot"></i> Rayos en vivo · satélite</span><b class="rayos__t">' + esc(tit) + '</b><span class="rayos__s">' + esc(sub) + '</span></div>';
+  return '<a class="' + cls + '" href="#/radar" role="status"><span class="rayos__k"><i class="vivo-dot"></i> Rayos en vivo · satélite · ver radar →</span><b class="rayos__t">' + esc(tit) + '</b><span class="rayos__s">' + esc(sub) + '</span></a>';
 }
 function pintarRayos(d){
   var box = document.getElementById('rayosBox'); if (!box) return;
@@ -1941,6 +1942,197 @@ function avisarRayos(d){
     }).catch(function(){});
   });
   if (cambio) guardar('avisosrayos', hechos);
+}
+// ─────────────────────────────── RADAR DE TORMENTAS ───────────────────────────────
+// Mapa satelital real del río (Sentinel-2) con la lluvia y las tormentas de las
+// próximas 6 horas pintadas encima (pronóstico de una grilla de 48 puntos), los
+// rayos reales de la última media hora (GOES-19) y el viento moviéndose.
+// Tocás play y ves la tormenta avanzar hora por hora.
+var RADAR_COLS = 6, RADAR_FILAS = 8, RADAR_HORAS = 7, radarEstado = null, radarReloj = 0;
+function radarGrilla(){
+  var p = [];
+  for (var j = 0; j < RADAR_FILAS; j++) for (var i = 0; i < RADAR_COLS; i++) {
+    p.push([RIO_BB[3] - (j + .5) / RADAR_FILAS * (RIO_BB[3] - RIO_BB[1]), RIO_BB[0] + (i + .5) / RADAR_COLS * (RIO_BB[2] - RIO_BB[0])]);
+  }
+  return p;
+}
+function radarPron(){
+  var g = radarGrilla();
+  var url = OM + '?latitude=' + g.map(function(x){ return x[0].toFixed(3); }).join(',') + '&longitude=' + g.map(function(x){ return x[1].toFixed(3); }).join(',') +
+    '&hourly=precipitation,weather_code,wind_speed_10m,wind_direction_10m&forecast_hours=' + (RADAR_HORAS + 1) + '&past_hours=1' +
+    '&wind_speed_unit=kn&timezone=' + encodeURIComponent(TZ);
+  return traer(url, 'radar', 20 * 60e3).then(function(d){
+    var arr = Array.isArray(d) ? d : [d];
+    if (arr.length !== g.length) throw new Error('grilla');
+    // horas[k][celda] = {p, c, kn, dir}, desde la hora actual
+    var t = arr[0].hourly.time, ahora = Date.now(), k0 = 0;
+    for (var k = 0; k < t.length; k++) if (msDe(t[k]) <= ahora) k0 = k;
+    var horas = [];
+    for (var h = 0; h < RADAR_HORAS && k0 + h < t.length; h++) {
+      horas.push({ms: msDe(t[k0 + h]), celdas: arr.map(function(x){
+        var hh = x.hourly, i = k0 + h;
+        return {p: hh.precipitation[i] || 0, c: hh.weather_code[i] || 0, kn: hh.wind_speed_10m[i] || 0, dir: hh.wind_direction_10m[i] || 0};
+      })});
+    }
+    return horas;
+  });
+}
+// Colores de la lluvia (mm por hora), como los radares: celeste, verde, amarillo, naranja, rojo, violeta.
+var LLUVIA = [[0.1, [47, 183, 255]], [1, [56, 225, 184]], [3, [255, 226, 122]], [6, [255, 122, 44]], [10, [255, 45, 111]], [20, [192, 60, 255]]];
+function colorLluvia(mm){
+  if (mm < 0.1) return null;
+  for (var i = LLUVIA.length - 1; i >= 0; i--) if (mm >= LLUVIA[i][0]) {
+    var a = LLUVIA[i], b = LLUVIA[i + 1];
+    if (!b) return a[1];
+    var f = (mm - a[0]) / (b[0] - a[0]);
+    return [0, 1, 2].map(function(c){ return Math.round(a[1][c] + (b[1][c] - a[1][c]) * f); });
+  }
+  return LLUVIA[0][1];
+}
+// Lo que se viene para tu spot en las próximas 6 horas, en una frase.
+function radarResumen(spot, horas, ray){
+  if (ray && ray.nivel === 'peligro') return {ico: '⚡', t: 'Rayos a ' + kmTxt(ray.km), s: 'Salí del agua: cayó uno hace ' + ray.hace + ' min.', on: true};
+  if (ray && ray.llegaMin) return {ico: '⚡', t: 'Tormenta en ~' + ray.llegaMin + ' min', s: 'Eléctrica · viene del ' + ray.lado + ' hacia ' + spot.n + '.', on: true, km: ray.km, n: ray.n};
+  // celda de la grilla más cercana al spot
+  var g = radarGrilla(), best = 0, bd = 1e9;
+  g.forEach(function(p, i){ var dd = distanciaM(spot.lat, spot.lng, p[0], p[1]); if (dd < bd) { bd = dd; best = i; } });
+  for (var h = 0; h < horas.length; h++) {
+    var c = horas[h].celdas[best];
+    if (c.c >= 95) return {ico: '⚡', t: h ? 'Tormenta eléctrica a las ' + hhmm(horas[h].ms).slice(0, 2) + ' h' : 'Tormenta eléctrica ahora', s: 'Pronóstico para ' + spot.n + '. Mirá el mapa y tocá play.', on: true};
+  }
+  if (ray && (ray.nivel === 'cerca' || ray.nivel === 'lejos')) return {ico: '⚡', t: 'Rayos a ' + kmTxt(ray.km) + ' al ' + ray.lado, s: 'Por ahora no se acercan a ' + spot.n + '. Si vienen, te avisamos.', on: true, km: ray.km, n: ray.n};
+  for (var h2 = 0; h2 < horas.length; h2++) {
+    var c2 = horas[h2].celdas[best];
+    if (c2.p >= 0.3) return {ico: '🌧️', t: h2 ? 'Lluvia desde las ' + hhmm(horas[h2].ms).slice(0, 2) + ' h' : 'Llueve ahora', s: 'Hasta ' + String(Math.round(c2.p * 10) / 10).replace('.', ',') + ' mm por hora en ' + spot.n + '.', on: false};
+  }
+  return {ico: '☀️', t: 'Sin lluvia ni tormentas', s: 'Nada a la vista en ' + spot.n + ' en las próximas 6 horas.', on: false};
+}
+function vistaRadar(){ var t = turno;
+  fondo('rio');
+  var spot = spotPorId(perfil().spot);
+  pintar('<div class="radar" id="radar"><canvas aria-label="Radar: mapa satelital del río con lluvia, tormentas, rayos y viento"></canvas>' +
+    '<a class="radar__volver pildora" href="#/">← Volver</a>' +
+    '<div class="radar__alerta" id="radarAlerta"><b class="radar__t">Leyendo el cielo…</b></div>' +
+    '<div class="radar__ley"><span>Débil</span><i></i><span>Fuerte</span><span class="radar__ray">⚡ rayo</span></div>' +
+    '<div class="radar__tl"><button class="radar__play" type="button" data-accion="radar-play" aria-label="Play"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z"/></svg></button>' +
+    '<div class="radar__pista"><input type="range" id="radarHora" min="0" max="6" value="0" step="1" aria-label="Hora del pronóstico"><div class="radar__horas" id="radarHoras"></div></div>' +
+    '<b class="radar__hora" id="radarHoraTxt">Ahora</b></div>' +
+    '<small class="radar__cred">Imagen Copernicus Sentinel-2 · rayos GOES-19 · pronóstico Open-Meteo</small></div>');
+  Promise.all([radarPron(), rayos().catch(function(){ return null; })]).then(function(r){
+    if (t !== turno) return;
+    var horas = r[0], ray = rayosSpot(spot, r[1]), res = radarResumen(spot, horas, ray);
+    var rec = r[1] && r[1].rayos ? r[1].rayos.filter(function(x){ return Date.now() - x.t <= 30 * 60e3; }) : [];
+    var al = document.getElementById('radarAlerta');
+    al.className = 'radar__alerta' + (res.on ? ' radar__alerta--on' : '');
+    al.innerHTML = '<span class="radar__ico">' + res.ico + '</span><div><b class="radar__t">' + esc(res.t) + '</b><span class="radar__s">' + esc(res.s) + '</span></div>' +
+      (res.km ? '<div class="radar__datos"><div>' + res.n + '<small>rayos en 20 min</small></div><div>' + kmTxt(res.km) + '<small>distancia</small></div></div>' : '');
+    var inp = document.getElementById('radarHora'); inp.max = horas.length - 1;
+    document.getElementById('radarHoras').innerHTML = horas.map(function(h, i){ return '<span>' + (i ? hhmm(h.ms).slice(0, 2) : 'Ya') + '</span>'; }).join('');
+    radarEstado = {spot: spot, horas: horas, rayos: rec, h: 0, play: false, ultimoPaso: 0};
+    evento('bramador_radar', {spot: spot.id, aviso: res.t});
+    var img = rioImagen();
+    if (img.complete && img.naturalWidth) dibujarRadar(); else img.onload = function(){ if (t === turno) dibujarRadar(); };
+  }).catch(function(){
+    var al = document.getElementById('radarAlerta'); if (al) al.innerHTML = '<b class="radar__t">No pudimos leer el pronóstico</b><span class="radar__s">Revisá la conexión y volvé a entrar.</span>';
+  });
+}
+function radarHora(h){
+  var e = radarEstado; if (!e) return;
+  e.h = Math.max(0, Math.min(e.horas.length - 1, h));
+  var inp = document.getElementById('radarHora'); if (inp) inp.value = e.h;
+  var tx = document.getElementById('radarHoraTxt'); if (tx) tx.textContent = e.h ? '+' + e.h + ' h · ' + hhmm(e.horas[e.h].ms) : 'Ahora';
+  e.capa = null; // se rehace la capa de lluvia
+}
+function dibujarRadar(){
+  var e = radarEstado, caja = document.getElementById('radar'); if (!e || !caja) return;
+  var cv = caja.querySelector('canvas'), IM = rioImg, rc = cv.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio || 1);
+  if (!rc.width) return;
+  cv.width = Math.round(rc.width * dpr); cv.height = Math.round(rc.height * dpr);
+  var x = cv.getContext('2d'), W = cv.width, H = cv.height, u = W / 360;
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Toda la imagen a lo alto (es más alta que ancha), centrada en el spot a lo ancho.
+  var s = Math.max(H / IM.naturalHeight, W / IM.naturalWidth), iw = IM.naturalWidth * s, ih = IM.naturalHeight * s;
+  var y0 = mercY(RIO_BB[3]), y1 = mercY(RIO_BB[1]);
+  function P(lng, lat){ return [(lng - RIO_BB[0]) / (RIO_BB[2] - RIO_BB[0]) * iw, (y0 - mercY(lat)) / (y0 - y1) * ih]; }
+  var sp = P(e.spot.lng, e.spot.lat), ox = Math.min(0, Math.max(W - iw, W / 2 - sp[0])), oy = Math.min(0, Math.max(H - ih, H * .5 - sp[1]));
+  function Q(lng, lat){ var p = P(lng, lat); return [p[0] + ox, p[1] + oy]; }
+  var base = document.createElement('canvas'); base.width = W; base.height = H; var b = base.getContext('2d');
+  b.drawImage(IM, ox, oy, iw, ih); b.fillStyle = 'rgba(4,10,16,.42)'; b.fillRect(0, 0, W, H);
+  // Esquinas de la grilla en pantalla (para pintar la lluvia en su lugar)
+  var g0 = Q(RIO_BB[0], RIO_BB[3]), g1 = Q(RIO_BB[2], RIO_BB[1]);
+  function capaLluvia(hh){
+    // Grilla chica interpolada (bilineal) y estirada: queda una mancha suave como en los radares.
+    var cw = RADAR_COLS * 8, ch = RADAR_FILAS * 8, c = document.createElement('canvas'); c.width = cw; c.height = ch;
+    var cx = c.getContext('2d'), im = cx.createImageData(cw, ch), cel = e.horas[hh].celdas;
+    function v(i, j, k){ i = Math.max(0, Math.min(RADAR_COLS - 1, i)); j = Math.max(0, Math.min(RADAR_FILAS - 1, j)); return k(cel[j * RADAR_COLS + i]); }
+    function bil(fx, fy, k){
+      var i = Math.floor(fx), j = Math.floor(fy), a = fx - i, bb = fy - j;
+      return v(i, j, k) * (1 - a) * (1 - bb) + v(i + 1, j, k) * a * (1 - bb) + v(i, j + 1, k) * (1 - a) * bb + v(i + 1, j + 1, k) * a * bb;
+    }
+    for (var py = 0; py < ch; py++) for (var px = 0; px < cw; px++) {
+      var fx = (px + .5) / 8 - .5, fy = (py + .5) / 8 - .5;
+      var mm = bil(fx, fy, function(q){ return q.p; }), tor = bil(fx, fy, function(q){ return q.c >= 95 ? 1 : 0; });
+      var col = colorLluvia(mm), o = (py * cw + px) * 4;
+      if (tor > .35) { col = col ? [Math.round((col[0] + 255) / 2), Math.round(col[1] * .6), Math.round(col[2] * .4)] : [255, 122, 44]; }
+      if (!col) continue;
+      im.data[o] = col[0]; im.data[o + 1] = col[1]; im.data[o + 2] = col[2];
+      im.data[o + 3] = Math.round(Math.min(.78, .3 + mm / 12 + tor * .3) * 255);
+    }
+    cx.putImageData(im, 0, 0);
+    return c;
+  }
+  var tr = document.createElement('canvas'); tr.width = W; tr.height = H; var tc = tr.getContext('2d');
+  var parts = []; for (var i = 0; i < 320; i++) parts.push({x: Math.random() * W, y: Math.random() * H, a: 0, l: 25 + Math.random() * 45});
+  function vientoEn(px, py){
+    var cel = e.horas[e.h].celdas, fi = Math.max(0, Math.min(RADAR_COLS - 1, Math.round((px - g0[0]) / (g1[0] - g0[0]) * RADAR_COLS - .5)));
+    var fj = Math.max(0, Math.min(RADAR_FILAS - 1, Math.round((py - g0[1]) / (g1[1] - g0[1]) * RADAR_FILAS - .5)));
+    return cel[fj * RADAR_COLS + fi];
+  }
+  var yo = ++radarReloj;
+  function frame(now){
+    if (e.play && now - e.ultimoPaso > 1100) { e.ultimoPaso = now; radarHora(e.h + 1 >= e.horas.length ? 0 : e.h + 1); }
+    if (!e.capa) e.capa = capaLluvia(e.h);
+    x.drawImage(base, 0, 0);
+    x.imageSmoothingEnabled = true; x.drawImage(e.capa, g0[0], g0[1], g1[0] - g0[0], g1[1] - g0[1]);
+    // viento
+    tc.globalCompositeOperation = 'destination-out'; tc.fillStyle = 'rgba(0,0,0,.12)'; tc.fillRect(0, 0, W, H); tc.globalCompositeOperation = 'source-over';
+    tc.lineCap = 'round'; tc.lineWidth = 1.1 * u; tc.strokeStyle = 'rgba(255,255,255,.42)';
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i], w = vientoEn(p.x, p.y), ang = (w.dir + 90) * Math.PI / 180, vel = Math.max(.5, Math.min(2.6, w.kn / 8)) * u;
+      var nx = p.x + Math.cos(ang) * vel, ny = p.y + Math.sin(ang) * vel;
+      tc.beginPath(); tc.moveTo(p.x, p.y); tc.lineTo(nx, ny); tc.stroke();
+      p.x = nx; p.y = ny; p.a++;
+      if (p.a > p.l || nx < -5 || ny < -5 || nx > W + 5 || ny > H + 5) { p.x = Math.random() * W; p.y = Math.random() * H; p.a = 0; }
+    }
+    x.drawImage(tr, 0, 0);
+    // rayos reales: solo en "ahora"
+    if (e.h === 0) e.rayos.forEach(function(r, k){
+      var q = Q(r.lng, r.lat); if (q[0] < -10 || q[0] > W + 10 || q[1] < -10 || q[1] > H + 10) return;
+      var edad = (Date.now() - r.t) / (30 * 60e3), nuevo = edad < 1 / 6;
+      var al = Math.max(.3, 1 - edad) * (nuevo && !reduce ? .55 + .45 * Math.abs(Math.sin(now / 150 + k)) : 1);
+      x.save(); x.translate(q[0], q[1]); x.scale(u * (nuevo ? 1.3 : .9), u * (nuevo ? 1.3 : .9));
+      if (nuevo) { x.fillStyle = 'rgba(255,226,122,' + (al * .25).toFixed(2) + ')'; x.beginPath(); x.arc(0, 0, 14, 0, 7); x.fill(); }
+      x.fillStyle = 'rgba(255,226,122,' + al.toFixed(2) + ')'; x.strokeStyle = 'rgba(30,20,0,.8)'; x.lineWidth = 1.2;
+      x.beginPath(); x.moveTo(1.5, -9); x.lineTo(-4.5, 1); x.lineTo(-0.5, 1); x.lineTo(-2, 9); x.lineTo(4.5, -2); x.lineTo(0.5, -2); x.closePath(); x.fill(); x.stroke();
+      x.restore();
+    });
+    // spots
+    SPOTS.forEach(function(sp2){
+      var q = Q(sp2.lng, sp2.lat), mio = sp2.id === e.spot.id; if (q[0] < 0 || q[0] > W || q[1] < 0 || q[1] > H) return;
+      x.fillStyle = mio ? '#FF5A2C' : 'rgba(255,255,255,.85)'; x.strokeStyle = mio ? '#fff' : 'rgba(0,0,0,.5)'; x.lineWidth = 2 * u;
+      x.beginPath(); x.arc(q[0], q[1], (mio ? 6 : 3.5) * u, 0, 7); x.fill(); x.stroke();
+      if (mio || sp2.id === 'quilmes' || sp2.id === 'puntalara' || sp2.id === 'olivos') {
+        x.font = (mio ? '800 ' + 12 * u : '700 ' + 10 * u) + 'px "DM Sans",sans-serif'; x.fillStyle = '#fff'; x.shadowColor = 'rgba(0,0,0,.85)'; x.shadowBlur = 5 * u;
+        x.textAlign = 'right'; x.fillText(sp2.n, q[0] - 10 * u, q[1] + 4 * u); x.shadowBlur = 0;
+      }
+    });
+  }
+  if (reduce) { frame(0); e.redibujar = function(){ e.capa = null; frame(0); }; return; }
+  e.redibujar = null;
+  (function loop(n){
+    if (yo !== radarReloj || !document.body.contains(cv)) return;
+    frame(n); requestAnimationFrame(loop);
+  })(0);
 }
 function avisarLlega(lista){
   if (!('Notification' in window) || Notification.permission !== 'granted' || !navigator.serviceWorker) return;
@@ -2157,13 +2349,14 @@ function router(){
   cerrarTarjeta();
   var h = (location.hash || '#/').replace(/^#\/?/, '').split('/');
   var ruta = h[0] || 'hoy';
-  var nav = {hoy:'hoy', rio:'rio', mapa:'hoy', spot:'spot', dia:'spot'}[ruta] || 'mas';
+  var nav = {hoy:'hoy', rio:'rio', radar:'rio', mapa:'hoy', spot:'spot', dia:'spot'}[ruta] || 'mas';
   document.querySelectorAll('.nav a').forEach(function(a){
     if (a.getAttribute('data-ruta') === nav) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
   });
   window.scrollTo(0, 0);
   switch (ruta) {
     case 'rio': vistaRio(); break;
+    case 'radar': vistaRadar(); break;
     case 'spot': vistaSpot(h[1]); break;
     case 'dia': vistaDia(h[1], h[2] || hoyISO()); break;
     case 'mas': vistaMas(); break;
@@ -2190,6 +2383,7 @@ document.addEventListener('click', function(e){
   else if (a === 'tarjeta-guardar') guardarTarjeta();
   else if (a === 'compartir-texto') { evento('bramador_compartir_texto'); compartirTexto(); }
   else if (a === 'tarjeta-cerrar') cerrarTarjeta();
+  else if (a === 'radar-play' && radarEstado) { radarEstado.play = !radarEstado.play; b.classList.toggle('on', radarEstado.play); b.setAttribute('aria-label', radarEstado.play ? 'Pausa' : 'Play'); if (radarEstado.redibujar) { radarHora(radarEstado.h + 1 >= radarEstado.horas.length ? 0 : radarEstado.h + 1); radarEstado.redibujar(); } evento('bramador_radar_play'); }
   else if (a === 'permiso') { Notification.requestPermission().then(function(){ sincronizarPush(true); vistaAlertas(); }); }
   else if (a === 'crear-alerta') {
     if (!borrador.dirs.length) return;
@@ -2216,6 +2410,7 @@ document.addEventListener('click', function(e){
 });
 document.addEventListener('keydown', function(e){ if (e.key === 'Escape') cerrarTarjeta(); });
 document.addEventListener('input', function(e){
+  if (e.target.id === 'radarHora' && radarEstado) { radarEstado.play = false; radarHora(+e.target.value); if (radarEstado.redibujar) radarEstado.redibujar(); var pb = document.querySelector('[data-accion="radar-play"]'); if (pb) pb.classList.remove('on'); }
   if (e.target.id === 'pPeso') document.getElementById('pPesoV').textContent = e.target.value + ' kg';
 });
 document.addEventListener('submit', function(e){
@@ -2242,6 +2437,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.32', fecha: '20/11', cambios: ['Nuevo: Radar de tormentas. Sobre el mapa satelital del río ves la lluvia y las tormentas de las próximas 6 horas, los rayos que están cayendo y el viento moviéndose. Tocá play y mirá cómo avanza. Lo abrís desde Hoy.']},
   {v: '1.31', fecha: '19/11', cambios: ['La altura real del río, medida en San Fernando, contra la marea de la tabla. En Mi spot ves las dos curvas y la diferencia; en Hoy te avisa si hay bajante o río crecido por sudestada.']},
   {v: '1.30', fecha: '18/11', cambios: ['Temperatura del agua medida por satélite frente a cada spot, con el traje que conviene y si el agua se está calentando o enfriando. La ves en Hoy y en Mi spot.']},
   {v: '1.29', fecha: '17/11', cambios: ['Rayos en vivo: Bramador mira los rayos que detecta el satélite cada 20 segundos. Si caen a menos de 15 km de tu spot te dice que salgas del agua, y si una tormenta eléctrica se acerca te avisa cuánto falta.', 'En el mapa de Mi spot ves los rayos de la última media hora.']},
