@@ -326,6 +326,71 @@ function solTira(d){
   return '<div class="sol-tira"><span>🌅 Sale el sol <b>' + hhmm(msDe(sr)) + '</b></span><span>🌇 Se pone <b>' + hhmm(msDe(ss)) + '</b></span></div>';
 }
 function norden(){ return traer('/api/norden', 'norden', 5 * 60e3); }
+// Altura REAL del río (mareógrafo del SHN en San Fernando) contra la marea de la
+// tabla. La diferencia la hace el viento: sudestada = río crecido; viento del
+// oeste = bajante.
+function rioReal(){ return traer('/api/rio', 'rio', 10 * 60e3); }
+function interp(serie, ms){
+  for (var i = 0; i + 1 < serie.length; i++) {
+    var a = serie[i], b = serie[i + 1];
+    if (ms >= a.t && ms <= b.t) return b.t === a.t ? a.m : a.m + (b.m - a.m) * (ms - a.t) / (b.t - a.t);
+  }
+  return null;
+}
+function rioEstado(d){
+  if (!d || !d.lecturas || !d.lecturas.length) return null;
+  var ult = d.lecturas[d.lecturas.length - 1];
+  if (Date.now() - ult.t > 3 * 3600e3) return null;
+  var tabla = interp(d.astronomica || [], ult.t);
+  if (tabla == null) return {real: ult.m, t: ult.t, tabla: null, dif: null, tipo: null};
+  var dif = ult.m - tabla;
+  return {real: ult.m, t: ult.t, tabla: tabla, dif: dif, tipo: dif >= 0.5 ? 'crecido' : dif <= -0.5 ? 'bajante' : null};
+}
+function metros(m){ return String(Math.round(m * 100) / 100).replace('.', ','); }
+function cm(m){ return (m > 0 ? '+' : m < 0 ? '−' : '') + Math.abs(Math.round(m * 100)) + ' cm'; }
+function rioAvisoHtml(x){
+  if (!x || !x.tipo) return '';
+  return '<a class="rio-aviso rio-aviso--' + x.tipo + '" href="#/spot/' + perfil().spot + '"><b>' +
+    (x.tipo === 'bajante' ? '▼ Bajante: el río está ' + Math.abs(Math.round(x.dif * 100)) + ' cm por debajo de la marea' : '▲ Río crecido: ' + Math.round(x.dif * 100) + ' cm por encima de la marea') + '</b><span>' +
+    (x.tipo === 'bajante' ? 'Ojo con la poca agua al entrar y salir: el foil puede tocar fondo.' : 'Es la sudestada: la playa puede estar tapada y entra agua a las bajadas.') + ' Medido en San Fernando.</span></a>';
+}
+// Gráfico: las últimas 24 h de altura real (línea llena) sobre la marea de la tabla
+// (punteada), y la tabla de las 12 h que vienen.
+function curvaRio(d, ahora){
+  var re = (d.lecturas || []).filter(function(x){ return x.t >= ahora - 24 * 3600e3; }), as = (d.astronomica || []).filter(function(x){ return x.t >= ahora - 24 * 3600e3 && x.t <= ahora + 12 * 3600e3; });
+  if (re.length < 2 || as.length < 2) return '';
+  var t0 = ahora - 24 * 3600e3, t1 = ahora + 12 * 3600e3, W = 320, H = 150, iz = 30, de = 8, ar = 18, ab = 24;
+  var todos = re.concat(as).map(function(x){ return x.m; }), lo = Math.min.apply(null, todos), hi = Math.max.apply(null, todos);
+  lo = Math.floor((lo - 0.1) * 5) / 5; hi = Math.ceil((hi + 0.1) * 5) / 5;
+  function X(ms){ return iz + (ms - t0) / (t1 - t0) * (W - iz - de); }
+  function Y(m){ return ar + (hi - m) / (hi - lo) * (H - ar - ab); }
+  function linea(arr){ return arr.map(function(p, k){ return (k ? 'L' : 'M') + X(p.t).toFixed(1) + ' ' + Y(p.m).toFixed(1); }).join(' '); }
+  var g = '', paso = hi - lo > 1.6 ? 0.5 : 0.2;
+  for (var m = lo; m <= hi + 1e-6; m += paso) {
+    g += '<line x1="' + iz + '" x2="' + (W - de) + '" y1="' + Y(m).toFixed(1) + '" y2="' + Y(m).toFixed(1) + '" stroke="rgba(255,255,255,.08)"/>' +
+      '<text x="' + (iz - 4) + '" y="' + (Y(m) + 3).toFixed(1) + '" text-anchor="end" font-size="9" fill="#8FA9BF">' + metros(m) + '</text>';
+  }
+  for (var h = Math.ceil(t0 / (6 * 3600e3)) * 6 * 3600e3; h <= t1; h += 6 * 3600e3) {
+    g += '<text x="' + X(h).toFixed(1) + '" y="' + (H - 7) + '" text-anchor="middle" font-size="9" fill="#8FA9BF">' + hhmm(h).slice(0, 2) + 'h</text>';
+  }
+  var xa = X(ahora).toFixed(1), base = Y(lo).toFixed(1);
+  return '<svg class="curva-marea" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Altura real del río contra la marea de la tabla">' +
+    '<defs><linearGradient id="gRio" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5BC0F8" stop-opacity=".6"/><stop offset="1" stop-color="#5BC0F8" stop-opacity=".05"/></linearGradient></defs>' + g +
+    '<path d="' + linea(re) + ' L' + X(re[re.length - 1].t).toFixed(1) + ' ' + base + ' L' + X(re[0].t).toFixed(1) + ' ' + base + ' Z" fill="url(#gRio)"/>' +
+    '<path d="' + linea(as) + '" fill="none" stroke="#EAF2F8" stroke-opacity=".6" stroke-width="1.6" stroke-dasharray="4 3"/>' +
+    '<path d="' + linea(re) + '" fill="none" stroke="#5BC0F8" stroke-width="2.4"/>' +
+    '<line x1="' + xa + '" x2="' + xa + '" y1="' + (ar - 4) + '" y2="' + base + '" stroke="#EAF2F8" stroke-width="1.2"/>' +
+    '<text x="' + xa + '" y="' + (ar - 7) + '" text-anchor="middle" font-size="9" font-weight="800" fill="#EAF2F8">AHORA</text></svg>';
+}
+function rioHtml(d){
+  var x = rioEstado(d); if (!x) return '';
+  return '<div class="tarj vidrio"><p class="tit">El río real · San Fernando</p>' +
+    '<div class="rio-nums"><div><small>MEDIDO</small><b style="color:#5BC0F8">' + metros(x.real) + ' m</b></div>' +
+    (x.tabla != null ? '<div><small>TABLA</small><b>' + metros(x.tabla) + ' m</b></div><div><small>DIFERENCIA</small><b class="' + (x.tipo || '') + '">' + cm(x.dif) + '</b></div>' : '') + '</div>' +
+    curvaRio(d, Date.now()) +
+    '<p style="margin:6px 0 0;font-size:12px;line-height:1.35;color:#8FA9BF">Línea azul: lo que mide el mareógrafo del SHN · punteada: la marea de la tabla. ' +
+    (x.tipo === 'bajante' ? 'Hay bajante: el viento empuja el agua afuera.' : x.tipo === 'crecido' ? 'Hay sudestada: el viento mete agua al río.' : 'Hoy el río va con la tabla.') + ' Medido a las ' + hhmm(x.t) + '.</p></div>';
+}
 function enso(){ return traer('/api/bramador-enso', 'enso', 24 * 3600e3); }
 
 // ─────────────────────────────── Lógica del viento ───────────────────────────────
@@ -477,7 +542,7 @@ function vistaHoy(){ var t = turno;
     '<p class="cargando">Leyendo el viento del río…</p>');
   Promise.all([pronostico(), aguaSpot(spot.id).catch(function(){ return null; }), mareas().catch(function(){ return []; }),
                spot.id === 'sanisidro' || spot.id === 'peru' || spot.id === 'martinez' ? cnsi().catch(function(){ return null; }) : Promise.resolve(null),
-               rayos().catch(function(){ return null; })])
+               rayos().catch(function(){ return null; }), rioReal().catch(function(){ return null; })])
   .then(function(r){
     var todo = r[0], d = todo[spot.id];
     if (!d) throw new Error('sin datos');
@@ -529,7 +594,7 @@ function vistaHoy(){ var t = turno;
           (isFinite(s.raf) ? '<span class="hero__raf"><small>RÁFAGAS</small>' + s.raf + '<small> kn</small></span>' : '') + '</div>' +
         '<div class="hero__dir">del ' + rumbo(s.deg) + (rachado(s.kn, s.raf) ? ' · <span class="rachado">⚠ Rachado</span>' : '') + '</div>' +
         '<div class="hero__hasta">' + esc(linea) + '</div></div>' + brujula(s.deg, spot.arco, 112) + '</div></div></section>' +
-      '<div id="rayosBox">' + rayosHtml(spot, ray) + '</div><div id="cambioBox"></div><div id="llegaBox"></div>' +
+      '<div id="rayosBox">' + rayosHtml(spot, ray) + '</div><div id="cambioBox"></div><div id="llegaBox"></div>' + rioAvisoHtml(rioEstado(r[5])) +
       '<div id="patrocina" class="patrocina" hidden></div>' +
       '<div class="datos">' +
         '<a class="dato" href="#/spot/' + spot.id + '"><small>AGUA</small><b>' + (aguaT ? r0(aguaT.c) + '° · ' + traje(aguaT.c) : '—') + '</b></a>' +
@@ -799,8 +864,8 @@ function vistaSpot(id){ var t = turno;
   }).join('') + '</div>';
   pintar('<div class="spot-cab"><div class="hero__foto" style="background-image:url(' + foto(spot.foto) + ')"></div><div class="hero__velo"></div>' +
     '<div class="spot-cab__txt"><div><h1>' + esc(spot.n) + '</h1><p>' + esc(spot.sub) + '</p></div></div></div>' + sel + '<p class="cargando">Cargando…</p>');
-  Promise.all([pronostico(), mareas().catch(function(){ return []; }), climatologia().catch(function(){ return null; }), aguaSpot(spot.id).catch(function(){ return null; })]).then(function(r){
-    var d = r[0][spot.id], mar = r[1], clima = r[2], aguaS = r[3];
+  Promise.all([pronostico(), mareas().catch(function(){ return []; }), climatologia().catch(function(){ return null; }), aguaSpot(spot.id).catch(function(){ return null; }), rioReal().catch(function(){ return null; })]).then(function(r){
+    var d = r[0][spot.id], mar = r[1], clima = r[2], aguaS = r[3], rioD = r[4];
     if (!d) throw new Error();
     var cur = d.current, pico = picoDia(spot, d, hoyISO());
     repSpot = spot.id; repKn = cur.wind_speed_10m;
@@ -850,6 +915,7 @@ function vistaSpot(id){ var t = turno;
           '<i style="height:' + Math.max(4, r0(b.kn / maxKn * 80)) + 'px;background:' + kcolor(b.kn) + '"></i>' + flecha(b.deg) +
           '<small>' + (j % 3 === 0 ? hhmm(b.ms).slice(0, 2) : '&nbsp;') + '</small></div>';
       }).join('') + '</div><p style="margin:8px 0 0;font-size:12px;color:#8FA9BF">Arriba en amarillo y punteado: las ráfagas. Verde: viene del agua y alcanza. El arco verde de la brújula es el viento que sirve acá.</p></div>' +
+      rioHtml(rioD) +
       '<div class="tarj vidrio"><p class="tit">Mareas · San Isidro</p>' + marAhora + '<div class="mareas">' + (marHtml || '<span style="color:#8FA9BF;font-size:13px">Sin datos de marea ahora.</span>') + '</div></div>' +
       '<div class="tarj vidrio"><p class="tit">El mes · tocá un día</p><div class="cal">' + cal + '</div>' +
       '<p style="margin:10px 0 0;font-size:12px;line-height:1.35;color:#8FA9BF">Los primeros 16 días: nudos máximos con luz. Los punteados: tendencia (probabilidad de un día de +12 kn según los últimos 20 años).</p></div>' +
@@ -2176,6 +2242,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.31', fecha: '19/11', cambios: ['La altura real del río, medida en San Fernando, contra la marea de la tabla. En Mi spot ves las dos curvas y la diferencia; en Hoy te avisa si hay bajante o río crecido por sudestada.']},
   {v: '1.30', fecha: '18/11', cambios: ['Temperatura del agua medida por satélite frente a cada spot, con el traje que conviene y si el agua se está calentando o enfriando. La ves en Hoy y en Mi spot.']},
   {v: '1.29', fecha: '17/11', cambios: ['Rayos en vivo: Bramador mira los rayos que detecta el satélite cada 20 segundos. Si caen a menos de 15 km de tu spot te dice que salgas del agua, y si una tormenta eléctrica se acerca te avisa cuánto falta.', 'En el mapa de Mi spot ves los rayos de la última media hora.']},
   {v: '1.28', fecha: '16/11', cambios: ['Nuevo en Hoy: botón Historia. Arma una imagen lista para Instagram o WhatsApp con la foto de tu spot, los nudos, las ráfagas y de dónde viene el viento.']},
