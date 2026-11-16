@@ -491,9 +491,9 @@ function vistaHoy(){ var t = turno;
     var html = '<section class="hero"><div class="hero__foto" style="background-image:url(' + foto(spot.foto) + ')"></div>' + rachas(s.deg) +
       '<div class="hero__velo"></div>' +
       '<div class="hero__top">' + marca() + '<div class="hero__acc">' +
-        '<button class="pildora" type="button" data-accion="compartir" aria-label="Compartir"><svg viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v6h14v-6"/></svg></button>' +
         '<a class="pildora" href="#/equipate"><svg viewBox="0 0 24 24" style="stroke:#FF5A2C"><path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>Equipate</a></div></div>' +
       '<div class="hero__spot"><a class="pildora" href="#/spot/' + spot.id + '"><span class="punto vivo-dot"></span>' + esc(spot.n) + ' ▾</a>' +
+        '<button class="pildora pildora--historia" type="button" data-accion="compartir" aria-label="Tarjeta para historias"><svg viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M12 7v7M9 10l3-3 3 3"/></svg>Historia</button>' +
         (med ? '<span class="pildora">Pronóstico: ' + pronKn + ' kn</span>' : medido && Date.now() - medido.t < 3 * 3600e3 ? '<span class="pildora">Náutico a las ' + hhmm(medido.t) + ': ' + r0(medido.kn) + ' kn ' + rumbo(medido.dir) + '</span>' : '') + '</div>' +
       '<div class="hero__pie">' + verd +
         (med ? '<div class="hero__fuente"><i class="vivo-dot"></i> MEDIDO EN EL NÁUTICO · ' + hhmm(med.t) + '</div>' : '<div class="hero__fuente hero__fuente--pron">PRONÓSTICO</div>') +
@@ -526,18 +526,182 @@ function vistaHoy(){ var t = turno;
     pintar(html);
     // El sponsor llega después que el viento: nunca demora el vistazo.
     pintarSponsors(spot.id, t);
-    compartirDatos = {spot: spot, s: s, linea: linea};
+    compartirDatos = {spot: spot, s: s, linea: linea, medido: !!med};
     avisarAlertas(todo);
     if (t === turno) { ultimoPron = todo; vigilar(); }
   }).catch(function(){ pintarEn(t, '<div class="cab">' + marca() + '</div>' + error()); });
 }
 var compartirDatos = null;
+// ─────────────────────────────── TARJETA PARA HISTORIAS ───────────────────────────────
+// El botón de compartir de Hoy arma una imagen vertical (1080×1920, el tamaño de las
+// historias de Instagram y WhatsApp) con la foto del spot, los nudos, la dirección y
+// la marca. Se dibuja en el teléfono: no sale nada a ningún servidor.
+// Primero se arma y se muestra; recién al tocar "Compartir" se abre el menú del
+// teléfono, porque iPhone solo deja compartir archivos en el mismo toque.
+var tarjetaArchivo = null;
+function cargarImg(src){
+  return new Promise(function(ok, mal){ var im = new Image(); im.onload = function(){ ok(im); }; im.onerror = mal; im.src = src; });
+}
+function fuentesListas(){
+  if (!document.fonts || !document.fonts.load) return Promise.resolve();
+  return Promise.all(['800 100px "Bricolage Grotesque"', '900 100px "DM Sans"', '700 40px "DM Sans"', '500 30px "DM Mono"'].map(function(f){
+    return document.fonts.load(f).catch(function(){});
+  })).then(function(){}, function(){});
+}
+function dibujarTarjeta(c){
+  var W = 1080, H = 1920, s = c.s, spot = c.spot;
+  return Promise.all([cargarImg(foto(spot.foto, true)).catch(function(){ return null; }), fuentesListas()]).then(function(r){
+    var im = r[0], cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+    var g = cv.getContext('2d');
+    // Foto del spot, cubriendo todo
+    g.fillStyle = '#0B1A22'; g.fillRect(0, 0, W, H);
+    if (im) {
+      var esc_ = Math.max(W / im.width, H / im.height), iw = im.width * esc_, ih = im.height * esc_;
+      g.drawImage(im, (W - iw) / 2, (H - ih) / 2, iw, ih);
+    }
+    // Velo: oscuro arriba (marca) y bien oscuro abajo (los números)
+    var v = g.createLinearGradient(0, 0, 0, H);
+    v.addColorStop(0, 'rgba(11,26,34,.78)'); v.addColorStop(.18, 'rgba(11,26,34,.18)');
+    v.addColorStop(.42, 'rgba(11,26,34,.10)'); v.addColorStop(.66, 'rgba(11,26,34,.72)'); v.addColorStop(1, 'rgba(11,26,34,.97)');
+    g.fillStyle = v; g.fillRect(0, 0, W, H);
+    // Rachas blancas en el sentido del viento
+    // Hacia dónde va el viento, visto en el mapa (norte arriba)
+    var rad = s.deg * Math.PI / 180;
+    g.save(); g.translate(W / 2, H * .38); g.rotate(Math.atan2(Math.cos(rad), -Math.sin(rad)));
+    g.strokeStyle = 'rgba(255,255,255,.2)'; g.lineCap = 'round';
+    [[-420, -260, 300, 5], [-80, -170, 220, 3], [120, -60, 360, 6], [-360, 40, 260, 4], [60, 150, 200, 3], [-200, 260, 340, 5]].forEach(function(l){
+      g.lineWidth = l[3]; g.beginPath(); g.moveTo(l[0], l[1]); g.lineTo(l[0] + l[2], l[1]); g.stroke();
+    });
+    g.restore();
+    // Marca arriba: pájaro + BRAMADOR
+    var pj = new Image();
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">' + PAJARO + '</svg>';
+    return cargarImg('data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg)).catch(function(){ return null; }).then(function(logo){
+      var x0 = 72;
+      if (logo) g.drawImage(logo, x0, 96, 96, 96);
+      g.fillStyle = '#F7F4EC'; g.textBaseline = 'alphabetic';
+      g.font = '800 58px "Bricolage Grotesque", sans-serif'; g.fillText('BRAMADOR', x0 + 120, 152);
+      g.font = '500 22px "DM Mono", monospace'; g.fillStyle = 'rgba(247,244,236,.85)';
+      g.fillText('BY ESCUELA DE WINGFOIL', x0 + 122, 186);
+      // Spot + fecha
+      var ahora = Date.now(), dia = nombreDia(hoyISO(ahora));
+      g.font = '800 40px "DM Sans", sans-serif';
+      var etq = spot.n.toUpperCase(), aw = g.measureText(etq).width;
+      g.fillStyle = 'rgba(11,26,34,.7)'; redondo(g, x0, 250, aw + 96, 76, 38); g.fill();
+      g.fillStyle = '#22C3A6'; g.beginPath(); g.arc(x0 + 40, 288, 11, 0, 7); g.fill();
+      g.fillStyle = '#F7F4EC'; g.fillText(etq, x0 + 66, 302);
+      g.font = '700 32px "DM Sans", sans-serif'; g.fillStyle = 'rgba(247,244,236,.9)';
+      g.fillText(dia.charAt(0).toUpperCase() + dia.slice(1) + ' · ' + hhmm(ahora) + ' h', x0 + aw + 120, 300);
+      // Veredicto
+      var verd = s.estado === 'sali' ? 'SALÍ.' : s.estado === 'espera' ? 'ESPERÁ.' : s.estado === 'noche' ? 'DE NOCHE.' : 'HOY NO.';
+      var yv = 1150;
+      g.fillStyle = s.estado === 'sali' ? '#FF5A2C' : s.estado === 'espera' ? '#FFC531' : '#EAF2F8';
+      g.font = '800 ' + (verd.length > 6 ? 168 : 210) + 'px "Bricolage Grotesque", sans-serif';
+      g.fillText(verd, x0 - 8, yv);
+      // Fuente del dato
+      g.font = '500 28px "DM Mono", monospace'; g.fillStyle = c.medido ? '#38E1B8' : 'rgba(234,242,248,.7)';
+      g.fillText(c.medido ? '● MEDIDO EN EL NÁUTICO' : 'PRONÓSTICO', x0, yv + 72);
+      // Nudos gigantes
+      var yk = yv + 400;
+      g.fillStyle = '#FFFFFF'; g.font = '900 330px "DM Sans", sans-serif';
+      var kTxt = String(s.kn), kw = g.measureText(kTxt).width;
+      g.fillText(kTxt, x0 - 14, yk);
+      g.font = '800 72px "DM Sans", sans-serif'; g.fillText('kn', x0 + kw, yk);
+      // Ráfagas
+      if (isFinite(s.raf)) {
+        var xr = x0 + kw + 120;
+        g.fillStyle = 'rgba(255,255,255,.28)'; g.fillRect(xr, yk - 220, 4, 220);
+        g.fillStyle = '#FFC531'; g.font = '800 30px "DM Sans", sans-serif'; g.fillText('RÁFAGAS', xr + 32, yk - 168);
+        g.font = '900 128px "DM Sans", sans-serif'; g.fillText(String(s.raf), xr + 26, yk - 40);
+      }
+      // Barra de color de la fuerza
+      g.fillStyle = kcolor(s.kn); redondo(g, x0, yk + 44, 260, 14, 7); g.fill();
+      // Dirección + brújula
+      g.fillStyle = '#F7F4EC'; g.font = '800 64px "DM Sans", sans-serif';
+      g.fillText('del ' + rumbo(s.deg), x0, yk + 160);
+      brujulaCanvas(g, W - 72 - 118, yk + 36, 118, s.deg, spot.arco);
+      // Pie: la invitación
+      g.fillStyle = 'rgba(255,255,255,.16)'; g.fillRect(x0, H - 190, W - 2 * x0, 2);
+      g.fillStyle = '#FF5A2C'; g.font = '800 40px "DM Sans", sans-serif';
+      g.fillText('El viento del río, gratis', x0, H - 128);
+      g.fillStyle = 'rgba(247,244,236,.9)'; g.font = '500 30px "DM Mono", monospace';
+      g.fillText('escueladewingfoil.com.ar/bramador', x0, H - 80);
+      return new Promise(function(ok){ cv.toBlob(function(b){ ok(b); }, 'image/png'); });
+    });
+  });
+}
+function redondo(g, x, y, w, h, r){
+  g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r);
+  g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath();
+}
+// La misma brújula de la app (sector bueno en verde, triangulito de donde viene), en el canvas.
+function brujulaCanvas(g, cx, cy, R, deg, arco){
+  g.save(); g.translate(cx, cy);
+  g.fillStyle = 'rgba(11,26,34,.8)'; g.strokeStyle = 'rgba(255,255,255,.3)'; g.lineWidth = 4;
+  g.beginPath(); g.arc(0, 0, R, 0, 7); g.fill(); g.stroke();
+  if (arco) {
+    g.strokeStyle = 'rgba(34,195,166,.6)'; g.lineWidth = 18;
+    g.beginPath(); g.arc(0, 0, R * .68, (arco[0] - 90) * Math.PI / 180, (arco[1] - 90) * Math.PI / 180); g.stroke();
+  }
+  g.fillStyle = '#EAF2F8'; g.font = '800 30px "DM Sans", sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.font = '800 ' + Math.round(R * .22) + 'px "DM Sans", sans-serif';
+  g.fillText('N', 0, -R + R * .2); g.fillText('S', 0, R - R * .19); g.fillText('E', R - R * .18, 2); g.fillText('O', -R + R * .18, 2);
+  g.rotate(deg * Math.PI / 180);
+  g.fillStyle = '#FF5A2C'; g.strokeStyle = '#0B1A22'; g.lineWidth = 4; g.lineJoin = 'round';
+  g.beginPath(); g.moveTo(-R * .2, -R * .56); g.lineTo(R * .2, -R * .56); g.lineTo(0, -R * .2); g.closePath(); g.fill(); g.stroke();
+  g.restore(); g.textAlign = 'start'; g.textBaseline = 'alphabetic';
+}
+function cerrarTarjeta(){
+  var h = document.getElementById('hojaTarjeta'); if (h) h.remove();
+  if (tarjetaArchivo && tarjetaArchivo.url) URL.revokeObjectURL(tarjetaArchivo.url);
+  tarjetaArchivo = null;
+}
 function compartir(){
+  var c = compartirDatos;
+  evento('bramador_compartir');
+  if (!c) return compartirTexto();
+  cerrarTarjeta();
+  var hoja = document.createElement('div');
+  hoja.id = 'hojaTarjeta'; hoja.className = 'hoja-tarjeta'; hoja.setAttribute('role', 'dialog'); hoja.setAttribute('aria-label', 'Tarjeta para historias');
+  hoja.innerHTML = '<div class="hoja-tarjeta__caja"><div class="hoja-tarjeta__img"><p>Armando tu tarjeta…</p></div>' +
+    '<div class="hoja-tarjeta__bot"><button class="btn" type="button" data-accion="tarjeta-compartir" disabled>Compartir en historias</button>' +
+    '<div class="hoja-tarjeta__fila"><button class="btn btn--vidrio btn--chico" type="button" data-accion="tarjeta-guardar" disabled>Guardar imagen</button>' +
+    '<button class="btn btn--vidrio btn--chico" type="button" data-accion="compartir-texto">Mandar texto</button></div>' +
+    '<button class="hoja-tarjeta__x" type="button" data-accion="tarjeta-cerrar" aria-label="Cerrar">✕</button></div></div>';
+  document.body.appendChild(hoja);
+  dibujarTarjeta(c).then(function(blob){
+    if (!blob || !document.getElementById('hojaTarjeta')) return;
+    var nombre = 'bramador-' + c.spot.id + '-' + hoyISO() + '.png';
+    var url = URL.createObjectURL(blob);
+    tarjetaArchivo = {blob: blob, url: url, nombre: nombre};
+    hoja.querySelector('.hoja-tarjeta__img').innerHTML = '<img src="' + url + '" alt="Tarjeta de Bramador: ' + esc(c.spot.n) + ', ' + c.s.kn + ' nudos del ' + rumbo(c.s.deg) + '">';
+    hoja.querySelectorAll('[disabled]').forEach(function(b){ b.disabled = false; });
+    evento('bramador_tarjeta_armada', {spot: c.spot.id});
+  }).catch(function(){
+    hoja.querySelector('.hoja-tarjeta__img').innerHTML = '<p>No pudimos armar la imagen. Podés mandar el texto.</p>';
+  });
+}
+function compartirTarjeta(){
+  var a = tarjetaArchivo; if (!a) return;
+  var f = null;
+  try { f = new File([a.blob], a.nombre, {type: 'image/png'}); } catch(e){}
+  var url = 'https://www.escueladewingfoil.com.ar/bramador/';
+  if (f && navigator.canShare && navigator.canShare({files: [f]})) {
+    evento('bramador_tarjeta_compartir', {spot: compartirDatos ? compartirDatos.spot.id : ''});
+    navigator.share({files: [f], title: 'Bramador', text: 'El viento del río en Bramador: ' + url}).catch(function(){});
+  } else guardarTarjeta();
+}
+function guardarTarjeta(){
+  var a = tarjetaArchivo; if (!a) return;
+  evento('bramador_tarjeta_guardar');
+  var l = document.createElement('a'); l.href = a.url; l.download = a.nombre;
+  document.body.appendChild(l); l.click(); l.remove();
+}
+function compartirTexto(){
   var c = compartirDatos;
   var txt = c ? (c.s.estado === 'sali' ? '¡SALÍ! ' : c.s.estado === 'espera' ? 'Hoy entra: ' : 'Hoy no da: ') + c.spot.n + ' · ' + c.s.kn + ' kn del ' + rumbo(c.s.deg) + ' · ' + c.linea + ' — Bramador'
               : 'Bramador: el viento del Río de la Plata';
   var url = 'https://www.escueladewingfoil.com.ar/bramador/';
-  evento('bramador_compartir');
   if (navigator.share) { navigator.share({title: 'Bramador', text: txt, url: url}).catch(function(){}); return; }
   location.href = 'https://wa.me/?text=' + encodeURIComponent(txt + ' ' + url);
 }
@@ -1290,6 +1454,7 @@ function tocarRep(tag){
   reportar(tag);
 }
 document.addEventListener('click', function(e){
+  if (e.target.id === 'hojaTarjeta') { cerrarTarjeta(); return; }
   var b = e.target.closest('[data-rep],[data-rep-ok],[data-rep-geo],[data-rep-ala],[data-ala-add],[data-ala-del]');
   if (!b) return;
   if (b.hasAttribute('data-rep-geo')) { var tg = b.getAttribute('data-rep-geo'), ia = b.getAttribute('data-rep-ala-geo'); reportar(tg, ia != null ? misAlas()[+ia] : undefined, b.getAttribute('data-rep-spot') || undefined); }
@@ -1800,6 +1965,7 @@ function bienvenida(){
 // ─────────────────────────────── Router y eventos ───────────────────────────────
 function router(){
   turno++;
+  cerrarTarjeta();
   var h = (location.hash || '#/').replace(/^#\/?/, '').split('/');
   var ruta = h[0] || 'hoy';
   var nav = {hoy:'hoy', rio:'rio', mapa:'hoy', spot:'spot', dia:'spot'}[ruta] || 'mas';
@@ -1831,6 +1997,10 @@ document.addEventListener('click', function(e){
   if (b.hasAttribute('data-evento')) evento(b.getAttribute('data-evento'));
   if (a === 'reintentar') { memoria = {}; router(); }
   else if (a === 'compartir') compartir();
+  else if (a === 'tarjeta-compartir') compartirTarjeta();
+  else if (a === 'tarjeta-guardar') guardarTarjeta();
+  else if (a === 'compartir-texto') { evento('bramador_compartir_texto'); compartirTexto(); }
+  else if (a === 'tarjeta-cerrar') cerrarTarjeta();
   else if (a === 'permiso') { Notification.requestPermission().then(function(){ sincronizarPush(true); vistaAlertas(); }); }
   else if (a === 'crear-alerta') {
     if (!borrador.dirs.length) return;
@@ -1855,6 +2025,7 @@ document.addEventListener('click', function(e){
   else if (b.hasAttribute('data-nivel')) { document.querySelectorAll('[data-nivel]').forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); }
   else if (b.hasAttribute('data-pspot')) { document.querySelectorAll('[data-pspot]').forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); }
 });
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') cerrarTarjeta(); });
 document.addEventListener('input', function(e){
   if (e.target.id === 'pPeso') document.getElementById('pPesoV').textContent = e.target.value + ' kg';
 });
@@ -1882,6 +2053,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.28', fecha: '16/11', cambios: ['Nuevo en Hoy: botón Historia. Arma una imagen lista para Instagram o WhatsApp con la foto de tu spot, los nudos, las ráfagas y de dónde viene el viento.']},
   {v: '1.27', fecha: '13/11', cambios: ['Nuevo en Mi spot: mapa satelital con el viento medido en las estaciones de alrededor y, si viene más viento, la línea del frente acercándose a tu spot.']},
   {v: '1.26', fecha: '13/11', cambios: ['Las marcas que patrocinan Bramador ahora aparecen todas juntas en Hoy.', 'En El río queda una sola cámara de Perú Beach.', 'Las actualizaciones ya no muestran cartel ni aviso.']},
   {v: '1.25', fecha: '15/11', cambios: ['Nuevo: "El viento viene llegando". Si en los aeropuertos, el Pilote Norden o el Náutico ya sopla fuerte del lado de donde viene el viento, Bramador te avisa cuánto llega a tu spot y en cuántos minutos.', 'Cámaras ordenadas: la de La Pocho Bay ahora figura como Perú Beach, y la de Náutica como San Isidro.']},
