@@ -195,6 +195,28 @@ function agua(){
     return isFinite(t) ? t : null;
   });
 }
+// Agua medida por satélite frente a cada spot (GOES-19, cada hora, sin nubes).
+// El número que se muestra es el promedio de las últimas 24 h: así no salta entre
+// la siesta (el agua de arriba se calienta) y la madrugada. Si no hay dato del
+// satélite en 3 días (nublado), queda el modelo marino de la boca del río.
+function aguaSat(){ return traer('/api/agua', 'aguasat', 30 * 60e3); }
+function aguaSpot(id){
+  return Promise.all([aguaSat().catch(function(){ return null; }), agua().catch(function(){ return null; })]).then(function(r){
+    var x = r[0] && r[0].spots && r[0].spots[id];
+    if (x && isFinite(x.c) && Date.now() - x.t < 72 * 3600e3) {
+      var c = isFinite(x.dia) && x.dia != null ? x.dia : x.c, dif = x.dia != null && x.antes != null ? x.dia - x.antes : 0;
+      return {c: c, t: x.t, fuente: 'sat', tend: dif >= 0.8 ? 'sube' : dif <= -0.8 ? 'baja' : null};
+    }
+    return r[1] != null ? {c: r[1], t: null, fuente: 'modelo', tend: null} : null;
+  });
+}
+function aguaHtml(spot, a){
+  if (!a) return '';
+  var cuando = a.t ? (hoyISO(a.t) === hoyISO() ? 'hoy ' : nombreDia(hoyISO(a.t)) + ' ') + hhmm(a.t).slice(0, 2) + ' h' : '';
+  return '<div class="agua vidrio"><div class="agua__n"><small>AGUA</small><b>' + String(Math.round(a.c * 10) / 10).replace('.', ',') + '°</b></div>' +
+    '<div class="agua__txt"><b>' + esc(traje(a.c)) + (a.tend ? ' · <span class="' + (a.tend === 'sube' ? 'sube' : 'baja') + '">' + (a.tend === 'sube' ? '▲ se está calentando' : '▼ se está enfriando') + '</span>' : '') + '</b>' +
+    '<span>' + (a.fuente === 'sat' ? 'Medida por satélite frente a ' + esc(spot.n) + ' · promedio del día · último dato ' + cuando : 'Estimada por modelo (el satélite no ve el agua por las nubes)') + '</span></div></div>';
+}
 // Clima de 20 años en San Isidro (ERA5): base de la tendencia del mes y de Temporada.
 function climatologia(){
   var fin = (new Date().getFullYear() - 1) + '-12-31', ini = (new Date().getFullYear() - 20) + '-01-01';
@@ -453,7 +475,7 @@ function vistaHoy(){ var t = turno;
     '<div class="hero__velo"></div><div class="hero__top">' + marca() + '</div>' +
     '<div class="hero__pie"><p class="veredicto veredicto--no" style="opacity:.4">···</p></div></section>' +
     '<p class="cargando">Leyendo el viento del río…</p>');
-  Promise.all([pronostico(), agua().catch(function(){ return null; }), mareas().catch(function(){ return []; }),
+  Promise.all([pronostico(), aguaSpot(spot.id).catch(function(){ return null; }), mareas().catch(function(){ return []; }),
                spot.id === 'sanisidro' || spot.id === 'peru' || spot.id === 'martinez' ? cnsi().catch(function(){ return null; }) : Promise.resolve(null),
                rayos().catch(function(){ return null; })])
   .then(function(r){
@@ -510,7 +532,7 @@ function vistaHoy(){ var t = turno;
       '<div id="rayosBox">' + rayosHtml(spot, ray) + '</div><div id="cambioBox"></div><div id="llegaBox"></div>' +
       '<div id="patrocina" class="patrocina" hidden></div>' +
       '<div class="datos">' +
-        '<div class="dato"><small>AGUA</small><b>' + (aguaT != null ? r0(aguaT) + '° · ' + traje(aguaT) : '—') + '</b></div>' +
+        '<a class="dato" href="#/spot/' + spot.id + '"><small>AGUA</small><b>' + (aguaT ? r0(aguaT.c) + '° · ' + traje(aguaT.c) : '—') + '</b></a>' +
         '<a class="dato" href="#/spot/' + spot.id + '"><small>MAREA</small><b>' + (sigMarea ? (sigMarea.alta ? '▲ ' : '▼ ') + hhmm(sigMarea.t) : '—') + '</b></a>' +
         '<div class="dato"><small>LUZ</small><b>' + (luzMin > 0 ? Math.floor(luzMin / 60) + ' h ' + String(luzMin % 60).padStart(2, '0') : 'de noche') + '</b></div>' +
         '<a class="dato" href="#/perfil"><small>ALA HOY</small><b>' + (alaHoy ? alaHoy + ' m' : '—') + '</b></a>' +
@@ -777,8 +799,8 @@ function vistaSpot(id){ var t = turno;
   }).join('') + '</div>';
   pintar('<div class="spot-cab"><div class="hero__foto" style="background-image:url(' + foto(spot.foto) + ')"></div><div class="hero__velo"></div>' +
     '<div class="spot-cab__txt"><div><h1>' + esc(spot.n) + '</h1><p>' + esc(spot.sub) + '</p></div></div></div>' + sel + '<p class="cargando">Cargando…</p>');
-  Promise.all([pronostico(), mareas().catch(function(){ return []; }), climatologia().catch(function(){ return null; })]).then(function(r){
-    var d = r[0][spot.id], mar = r[1], clima = r[2];
+  Promise.all([pronostico(), mareas().catch(function(){ return []; }), climatologia().catch(function(){ return null; }), aguaSpot(spot.id).catch(function(){ return null; })]).then(function(r){
+    var d = r[0][spot.id], mar = r[1], clima = r[2], aguaS = r[3];
     if (!d) throw new Error();
     var cur = d.current, pico = picoDia(spot, d, hoyISO());
     repSpot = spot.id; repKn = cur.wind_speed_10m;
@@ -819,7 +841,7 @@ function vistaSpot(id){ var t = turno;
       '<div class="spot-ahora"><b>' + r0(cur.wind_speed_10m) + '</b> kn ' + rumbo(cur.wind_direction_10m) + ' <span>· ráfagas <b>' + r0(cur.wind_gusts_10m) + '</b></span>' +
         (rachado(cur.wind_speed_10m, cur.wind_gusts_10m) ? ' <em class="rachado">⚠ Rachado</em>' : '') + '</div><p>' + (pico ? 'Pico del día: ' + hhmm(pico.ms) + ' · ' + r0(pico.kn) + ' kn' + (pico.ev.ok ? ' · ala de ' + ala(pico.kn, p.peso) + ' m' : '') : esc(spot.sub)) + '</p></div>' +
       brujula(cur.wind_direction_10m, spot.arco, 96) + '</div></div>' + sel +
-      '<div id="rayosBox"></div><div id="cambioBox"></div>' + mapaLlegaHtml() + reportesHtml(spot) +
+      '<div id="rayosBox"></div><div id="cambioBox"></div>' + mapaLlegaHtml() + aguaHtml(spot, aguaS) + reportesHtml(spot) +
       solTira(d) +
       '<div class="tarj vidrio"><p class="tit">Próximas 24 horas</p><div class="barras">' + barras.map(function(b, j){
         return '<div class="barra">' + (tormenta(b.code) ? '<small>⚡</small>' : b.pp >= 50 ? '<small>💧</small>' : '') +
@@ -2154,6 +2176,7 @@ document.addEventListener('submit', function(e){
 // y poner el mismo número en version.json.
 // La app se actualiza sola al abrirla; la primera vez que abre la versión nueva, muestra qué cambió.
 var NOVEDADES = [
+  {v: '1.30', fecha: '18/11', cambios: ['Temperatura del agua medida por satélite frente a cada spot, con el traje que conviene y si el agua se está calentando o enfriando. La ves en Hoy y en Mi spot.']},
   {v: '1.29', fecha: '17/11', cambios: ['Rayos en vivo: Bramador mira los rayos que detecta el satélite cada 20 segundos. Si caen a menos de 15 km de tu spot te dice que salgas del agua, y si una tormenta eléctrica se acerca te avisa cuánto falta.', 'En el mapa de Mi spot ves los rayos de la última media hora.']},
   {v: '1.28', fecha: '16/11', cambios: ['Nuevo en Hoy: botón Historia. Arma una imagen lista para Instagram o WhatsApp con la foto de tu spot, los nudos, las ráfagas y de dónde viene el viento.']},
   {v: '1.27', fecha: '13/11', cambios: ['Nuevo en Mi spot: mapa satelital con el viento medido en las estaciones de alrededor y, si viene más viento, la línea del frente acercándose a tu spot.']},

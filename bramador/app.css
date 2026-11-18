@@ -444,3 +444,11 @@ button{font:inherit;color:inherit}
 .rayos__s{display:block;font-size:13px;line-height:1.35;color:rgba(255,255,255,.82)}
 @keyframes rayoLate{0%,100%{box-shadow:0 0 0 0 rgba(255,90,44,0)}50%{box-shadow:0 0 0 6px rgba(255,90,44,.25)}}
 @media (prefers-reduced-motion:reduce){.rayos--peligro{animation:none}}
+/* Agua medida por satélite (Mi spot) */
+.agua{display:flex;align-items:center;gap:14px;margin:12px 16px 0;padding:12px 14px}
+.agua__n small{display:block;font-size:10px;font-weight:800;letter-spacing:.08em;color:var(--gris)}
+.agua__n b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:38px;line-height:1;color:#5BC0F8}
+.agua__txt b{display:block;font-size:15px;font-weight:800}
+.agua__txt span{display:block;font-size:12px;line-height:1.35;color:var(--gris);margin-top:2px}
+.agua__txt b span{display:inline;font-size:13px;margin:0}
+.agua .sube{color:#FF8A3D}.agua .baja{color:#5BC0F8}
