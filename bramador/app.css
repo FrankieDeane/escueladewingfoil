@@ -452,3 +452,12 @@ button{font:inherit;color:inherit}
 .agua__txt span{display:block;font-size:12px;line-height:1.35;color:var(--gris);margin-top:2px}
 .agua__txt b span{display:inline;font-size:13px;margin:0}
 .agua .sube{color:#FF8A3D}.agua .baja{color:#5BC0F8}
+/* El río real contra la tabla */
+.rio-nums{display:flex;gap:18px;margin-bottom:6px}
+.rio-nums small{display:block;font-size:10px;font-weight:800;letter-spacing:.08em;color:var(--gris)}
+.rio-nums b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:24px;line-height:1.1}
+.rio-nums b.bajante{color:#FF8A3D}.rio-nums b.crecido{color:#5BC0F8}
+.rio-aviso{display:block;margin:12px 16px 0;padding:11px 14px;border-radius:16px;text-decoration:none;color:#fff;background:var(--vidrio);border:1px solid rgba(255,138,61,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.rio-aviso--crecido{border-color:rgba(91,192,248,.6)}
+.rio-aviso b{display:block;font-size:15px;line-height:1.25}
+.rio-aviso span{display:block;font-size:12.5px;line-height:1.35;color:rgba(255,255,255,.78);margin-top:3px}
