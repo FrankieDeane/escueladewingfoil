@@ -9,7 +9,7 @@ import { getStore } from '@netlify/blobs';
 // "Alturas horarias"). No manda CORS, así que se lee acá, una vez cada 10
 // minutos para todos, y se guarda en blobs.
 const ESTACION = 'SFER';
-const BASES = ['https://www.hidro.gov.ar', 'https://www.hidro.gob.ar'];
+const BASES = ['https://www.hidro.gob.ar']; // la misma API que usa el gráfico de su página (js/grafico-alturas.js)
 const CACHE_MS = 10 * 60e3;
 const TIMEOUT_MS = 8000;
 
@@ -41,7 +41,7 @@ async function leerSHN() {
     try {
       const ctrl = new AbortController();
       const corte = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
-      const r = await fetch(`${base}/api/v1/AlturasHorarias/ValoresGrafico/${ESTACION}/${marca(Date.now())}`,
+      const r = await fetch(`${base}/api/v1/AlturasHorarias/${ESTACION}/${marca(Date.now())}`,
         { signal: ctrl.signal, headers: { 'User-Agent': 'bramador-wind-app', Accept: 'application/json' } });
       clearTimeout(corte);
       if (!r.ok) throw new Error('HTTP ' + r.status);
